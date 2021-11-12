@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>tesseract_gui</name>
+  <version>0.1.0</version>
+  <description>The tesseract_gui package</description>
+  <maintainer email="Levi.Armstrong@swri.org">Levi Armstrong</maintainer>
+  <license>LGPL-2.1</license>
+  <author>Levi Armstrong</author>
+
+  <!-- Following recommendations of REP 136 -->
+  <buildtool_depend>cmake</buildtool_depend>
+  <build_depend>ros_industrial_cmake_boilerplate</build_depend>
+  <build_depend>cmake_common_scripts</build_depend>
+
+  <depend>tesseract_scene_graph</depend>
+  <depend>tesseract_common</depend>
+  <depend>tesseract_support</depend>
+  <depend>tesseract_urdf</depend>
+
+  <export>
+    <build_type>cmake</build_type>
+  </export>
+</package>

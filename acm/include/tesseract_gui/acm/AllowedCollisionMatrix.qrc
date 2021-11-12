@@ -1,0 +1,7 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+  <qresource prefix="/AllowedCollisionMatrix">
+      <file alias="AllowedCollisionMatrix.qml">qml/AllowedCollisionMatrix.qml</file>
+      <file alias="AllowedCollisionMatrixForm.ui.qml">qml/AllowedCollisionMatrixForm.ui.qml</file>
+  </qresource>
+</RCC>

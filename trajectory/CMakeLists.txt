@@ -1,0 +1,56 @@
+
+find_package(tesseract_common REQUIRED)
+find_package(tesseract_visualization REQUIRED)
+find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
+find_package(Qwt REQUIRED)
+
+# Load variable for clang tidy args, compiler options and cxx version
+tesseract_variables()
+
+QT5_WRAP_CPP(TRAJ_MODEL_headers_MOC include/tesseract_gui/trajectory/joint_trajectory_model.h)
+
+add_library(${PROJECT_NAME}_joint_trajectory_model SHARED
+  ${TRAJ_MODEL_headers_MOC}
+  src/joint_trajectory_model.cpp)
+target_link_libraries(${PROJECT_NAME}_joint_trajectory_model PUBLIC
+  tesseract::tesseract_common
+  Qt5::Core Qt5::Gui)
+target_include_directories(${PROJECT_NAME}_joint_trajectory_model PUBLIC
+    "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
+    "$<INSTALL_INTERFACE:include>")
+
+QT5_WRAP_CPP(TRAJ_WIDGET_headers_MOC include/tesseract_gui/trajectory/trajectory_widget.h)
+QT5_WRAP_UI(TRAJ_WIDGET_headers_UI include/tesseract_gui/trajectory/trajectory_widget.ui)
+QT5_ADD_RESOURCES(TRAJ_WIDGET_resources_RCC include/tesseract_gui/trajectory/trajectory.qrc)
+
+add_library(${PROJECT_NAME}_joint_trajectory_widget SHARED
+  ${TRAJ_WIDGET_headers_MOC}
+  ${TRAJ_WIDGET_headers_UI}
+  ${TRAJ_WIDGET_resources_RCC}
+  src/trajectory_widget.cpp)
+
+target_link_libraries(${PROJECT_NAME}_joint_trajectory_widget PUBLIC
+  tesseract::tesseract_common
+  tesseract::tesseract_visualization
+  Qt5::Core
+  Qt5::Gui
+  Qt5::Widgets
+  Qwt::Qwt)
+target_include_directories(${PROJECT_NAME}_joint_trajectory_widget PUBLIC
+    "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
+    "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/trajectory>"
+    "$<INSTALL_INTERFACE:include>")
+
+add_executable(${PROJECT_NAME}_joint_trajectory_demo demo/joint_trajectory_demo.cpp )
+target_link_libraries(${PROJECT_NAME}_joint_trajectory_demo PRIVATE
+  ${PROJECT_NAME}_joint_trajectory_model
+  ${PROJECT_NAME}_joint_trajectory_widget)
+
+# Mark cpp header files for installation
+install(DIRECTORY include/${PROJECT_NAME}
+  DESTINATION include
+  FILES_MATCHING PATTERN "*.h" PATTERN "*.qml" PATTERN "*.qrc"
+  PATTERN ".svn" EXCLUDE
+)
+
+install_targets(TARGETS ${PROJECT_NAME}_joint_trajectory_model ${PROJECT_NAME}_joint_trajectory_widget ${PROJECT_NAME}_joint_trajectory_demo)

@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/tesseract_gui">
+        <file>trajectory.png</file>
+        <file>robotic-arm.png</file>
+        <file>programming.png</file>
+        <file>chart.png</file>
+    </qresource>
+</RCC>

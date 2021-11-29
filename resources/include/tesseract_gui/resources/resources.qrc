@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/tesseract_gui">
+        <file>svg/trash.svg</file>
+        <file>svg/pencil-edit.svg</file>
+        <file>svg/Fx.svg</file>
+        <file>svg/add_column.svg</file>
+        <file>svg/add_row.svg</file>
+        <file>svg/zoom_horizontal.svg</file>
+        <file>svg/zoom_max.svg</file>
+        <file>svg/zoom_vertical.svg</file>
+        <file>svg/copy.svg</file>
+        <file>svg/paste.svg</file>
+        <file>svg/plot_image.svg</file>
+        <file>svg/save.svg</file>
+        <file>svg/move_view.svg</file>
+    </qresource>
+</RCC>

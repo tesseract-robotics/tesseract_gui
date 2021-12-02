@@ -34,6 +34,8 @@ private slots:
 private:
   std::unique_ptr<Ui::PlotWidgetTransforms> ui;
 
+  std::unordered_map<std::string, std::unique_ptr<TransformFunction>> _transform_functions;
+
   std::unique_ptr<PlotWidget> _plotwidget;
   PlotWidget* _plotwidget_origin;
 

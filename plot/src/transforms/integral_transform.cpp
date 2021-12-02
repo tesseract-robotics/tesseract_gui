@@ -1,16 +1,44 @@
-#include "first_derivative.h"
+/**
+ * @author Davide Faconti <davide.faconti@gmail.com>
+ *
+ * @copyright Copyright (C) 2015-2018 Davide Faconti <davide.faconti@gmail.com>
+ *
+ * @par License
+ * GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
+ * @par
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ * @par
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * @par
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+#include <tesseract_gui/plot/transforms/integral_transform.h>
 #include <QFormLayout>
 #include <QDoubleValidator>
+#include "ui_integral_transform.h"
 
-FirstDerivative::FirstDerivative()
-  : _widget(new QWidget()), ui(new Ui::FirstDerivariveForm), _dT(0.0)
+namespace tesseract_gui
 {
-  ui->setupUi(_widget);
+
+IntegralTransform::IntegralTransform()
+  : _widget(std::make_unique<QWidget>())
+  , ui(std::make_unique<Ui::IntegralTransform>())
+  , _dT(0.0)
+{
+  ui->setupUi(_widget.get());
   ui->lineEditCustom->setValidator(
       new QDoubleValidator(0.0001, 1000, 4, ui->lineEditCustom));
 
   connect(ui->buttonCompute, &QPushButton::clicked, this,
-          &FirstDerivative::on_buttonCompute_clicked);
+          &IntegralTransform::on_buttonCompute_clicked);
 
   connect(ui->lineEditCustom, &QLineEdit::editingFinished, this, [=]() {
     _dT = ui->lineEditCustom->text().toDouble();
@@ -34,13 +62,9 @@ FirstDerivative::FirstDerivative()
   });
 }
 
-FirstDerivative::~FirstDerivative()
-{
-  delete ui;
-  delete _widget;
-}
+IntegralTransform::~IntegralTransform() = default;
 
-std::optional<PlotData::Point> FirstDerivative::calculateNextPoint(size_t index)
+std::optional<PlotData::Point> IntegralTransform::calculateNextPoint(size_t index)
 {
   if (index == 0)
   {
@@ -57,12 +81,13 @@ std::optional<PlotData::Point> FirstDerivative::calculateNextPoint(size_t index)
     return {};
   }
 
-  double der = (p.y - prev.y) / dt;
-  PlotData::Point out = { prev.x, der };
+  double val = (p.y + prev.y) * dt / (2.0);
+  _accumulated_value += val;
+  PlotData::Point out = { p.x, _accumulated_value };
   return out;
 }
 
-QWidget* FirstDerivative::optionsWidget()
+QWidget* IntegralTransform::optionsWidget()
 {
   const size_t data_size = dataSource()->size();
 
@@ -70,45 +95,16 @@ QWidget* FirstDerivative::optionsWidget()
   {
     _widget->setEnabled(false);
   }
-  return _widget;
+  return _widget.get();
 }
 
-bool FirstDerivative::xmlSaveState(QDomDocument& doc, QDomElement& parent_element) const
+void IntegralTransform::reset()
 {
-  QDomElement widget_el = doc.createElement("options");
-
-  if (ui->radioActual->isChecked())
-  {
-    widget_el.setAttribute("radioChecked", "radioActual");
-  }
-  else
-  {
-    widget_el.setAttribute("radioChecked", "radioCustom");
-  }
-  widget_el.setAttribute("lineEdit", ui->lineEditCustom->text());
-
-  parent_element.appendChild(widget_el);
-  return true;
+  _accumulated_value = 0.0;
+  TransformFunction_SISO::reset();
 }
 
-bool FirstDerivative::xmlLoadState(const QDomElement& parent_element)
-{
-  QDomElement widget_el = parent_element.firstChildElement("options");
-
-  ui->lineEditCustom->setText(widget_el.attribute("lineEdit"));
-
-  if (widget_el.attribute("radioChecked") == "radioActual")
-  {
-    ui->radioActual->setChecked(true);
-  }
-  else
-  {
-    ui->radioCustom->setChecked(true);
-  }
-  return true;
-}
-
-void FirstDerivative::on_buttonCompute_clicked()
+void IntegralTransform::on_buttonCompute_clicked()
 {
   if (!dataSource() || dataSource()->size() < 2)
   {
@@ -150,4 +146,5 @@ void FirstDerivative::on_buttonCompute_clicked()
     _dT = estimated_dt;
     emit parametersChanged();
   }
+}
 }

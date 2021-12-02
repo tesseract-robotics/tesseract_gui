@@ -1,15 +1,39 @@
-#include "moving_average_filter.h"
+/**
+ * @author Davide Faconti <davide.faconti@gmail.com>
+ *
+ * @copyright Copyright (C) 2015-2018 Davide Faconti <davide.faconti@gmail.com>
+ *
+ * @par License
+ * GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
+ * @par
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ * @par
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * @par
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+#include <tesseract_gui/plot/transforms/moving_average_filter.h>
 #include "ui_moving_average_filter.h"
 #include <numeric>
 #include <QCheckBox>
 
+namespace tesseract_gui
+{
 MovingAverageFilter::MovingAverageFilter()
-  : ui(new Ui::MovingAverageFilter)
-  , _widget(new QWidget())
+  : ui(std::make_unique<Ui::MovingAverageFilter>())
+  , _widget(std::make_unique<QWidget>())
   , _buffer(1)
   , _ring_view(_buffer.begin(), _buffer.end())
 {
-  ui->setupUi(_widget);
+  ui->setupUi(_widget.get());
 
   connect(ui->spinBoxSamples, qOverload<int>(&QSpinBox::valueChanged), this,
           [=](int) { emit parametersChanged(); });
@@ -18,11 +42,7 @@ MovingAverageFilter::MovingAverageFilter()
           [=]() { emit parametersChanged(); });
 }
 
-MovingAverageFilter::~MovingAverageFilter()
-{
-  delete ui;
-  delete _widget;
-}
+MovingAverageFilter::~MovingAverageFilter() = default;
 
 void MovingAverageFilter::reset()
 {
@@ -67,25 +87,6 @@ std::optional<PlotData::Point> MovingAverageFilter::calculateNextPoint(size_t in
 
 QWidget* MovingAverageFilter::optionsWidget()
 {
-  return _widget;
+  return _widget.get();
 }
-
-bool MovingAverageFilter::xmlSaveState(QDomDocument& doc,
-                                       QDomElement& parent_element) const
-{
-  QDomElement widget_el = doc.createElement("options");
-  widget_el.setAttribute("value", ui->spinBoxSamples->value());
-  widget_el.setAttribute("compensate_offset",
-                         ui->checkBoxTimeOffset->isChecked() ? "true" : "false");
-  parent_element.appendChild(widget_el);
-  return true;
-}
-
-bool MovingAverageFilter::xmlLoadState(const QDomElement& parent_element)
-{
-  QDomElement widget_el = parent_element.firstChildElement("options");
-  ui->spinBoxSamples->setValue(widget_el.attribute("value").toInt());
-  bool checked = widget_el.attribute("compensate_offset") == "true";
-  ui->checkBoxTimeOffset->setChecked(checked);
-  return true;
 }

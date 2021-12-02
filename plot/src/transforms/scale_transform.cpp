@@ -1,9 +1,35 @@
-#include "scale_transform.h"
+/**
+ * @author Davide Faconti <davide.faconti@gmail.com>
+ *
+ * @copyright Copyright (C) 2015-2018 Davide Faconti <davide.faconti@gmail.com>
+ *
+ * @par License
+ * GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
+ * @par
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ * @par
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * @par
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+#include <tesseract_gui/plot/transforms/scale_transform.h>
 #include "ui_scale_transform.h"
 
-ScaleTransform::ScaleTransform() : _widget(new QWidget()), ui(new Ui::ScaleTransform)
+namespace tesseract_gui
 {
-  ui->setupUi(_widget);
+ScaleTransform::ScaleTransform()
+  : _widget(std::make_unique<QWidget>())
+  , ui(std::make_unique<Ui::ScaleTransform>())
+{
+  ui->setupUi(_widget.get());
 
   //  ui->lineEditValue->setValidator( new QDoubleValidator() );
 
@@ -27,11 +53,7 @@ ScaleTransform::ScaleTransform() : _widget(new QWidget()), ui(new Ui::ScaleTrans
           [=]() { emit parametersChanged(); });
 }
 
-ScaleTransform::~ScaleTransform()
-{
-  delete ui;
-  delete _widget;
-}
+ScaleTransform::~ScaleTransform()=default;
 
 const char* ScaleTransform::name() const
 {
@@ -40,27 +62,7 @@ const char* ScaleTransform::name() const
 
 QWidget* ScaleTransform::optionsWidget()
 {
-  return _widget;
-}
-
-bool ScaleTransform::xmlSaveState(QDomDocument& doc, QDomElement& parent_element) const
-{
-  QDomElement widget_el = doc.createElement("options");
-  widget_el.setAttribute("time_offset", ui->lineEditTimeOffset->text());
-  widget_el.setAttribute("value_offset", ui->lineEditValueOffset->text());
-  widget_el.setAttribute("value_scale", ui->lineEditValueScale->text());
-  parent_element.appendChild(widget_el);
-
-  return true;
-}
-
-bool ScaleTransform::xmlLoadState(const QDomElement& parent_element)
-{
-  QDomElement widget_el = parent_element.firstChildElement("options");
-  ui->lineEditTimeOffset->setText(widget_el.attribute("time_offset"));
-  ui->lineEditValueOffset->setText(widget_el.attribute("value_offset"));
-  ui->lineEditValueScale->setText(widget_el.attribute("value_scale"));
-  return true;
+  return _widget.get();
 }
 
 std::optional<PlotData::Point> ScaleTransform::calculateNextPoint(size_t index)
@@ -72,4 +74,5 @@ std::optional<PlotData::Point> ScaleTransform::calculateNextPoint(size_t index)
   const auto& p = dataSource()->at(index);
   PlotData::Point out = { p.x + off_x, scale * p.y + off_y };
   return out;
+}
 }

@@ -13,5 +13,9 @@
         <file>svg/plot_image.svg</file>
         <file>svg/save.svg</file>
         <file>svg/move_view.svg</file>
+        <file>themes/Takezo/Takezo.qss</file>
+        <file>svg/collapse.svg</file>
+        <file>svg/expand.svg</file>
+        <file>svg/close-button.svg</file>
     </qresource>
 </RCC>

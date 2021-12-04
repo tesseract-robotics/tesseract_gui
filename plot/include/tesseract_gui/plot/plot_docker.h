@@ -104,7 +104,7 @@ public Q_SLOTS:
   DockWidget* splitVertical();
 
 private:
-  PlotWidget* _plot_widget = nullptr;
+  std::unique_ptr<PlotWidget> _plot_widget = nullptr;
 
   DraggableToolbar* _toolbar;
 

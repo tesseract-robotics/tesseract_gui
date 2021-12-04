@@ -90,6 +90,12 @@ public:
 
   virtual void setModeXY(bool enable);
 
+  void setTitle(const QString& title);
+
+  void setXAxisTitle(const QString& title);
+
+  void setYAxisTitle(const QString& title);
+
   void setLegendSize(int size);
 
   void setLegendAlignment(Qt::Alignment alignment);

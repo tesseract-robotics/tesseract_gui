@@ -4,7 +4,7 @@
 #include <tesseract_common/macros.h>
 TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #ifndef Q_MOC_RUN
-#include <tesseract_scene_graph/allowed_collision_matrix.h>
+#include <tesseract_common/allowed_collision_matrix.h>
 #include <QStandardItemModel>
 #include <QMetaType>
 #endif
@@ -27,7 +27,7 @@ public:
   AllowedCollisionMatrixModel &operator=(const AllowedCollisionMatrixModel &other);
   ~AllowedCollisionMatrixModel() override = default;
 
-  Q_INVOKABLE void setAllowedCollisionMatrix(const tesseract_scene_graph::AllowedCollisionMatrix& acm);
+  Q_INVOKABLE void setAllowedCollisionMatrix(const tesseract_common::AllowedCollisionMatrix& acm);
   Q_INVOKABLE void add(const QString& link1_name, const QString& link2_name, const QString& reason);
   Q_INVOKABLE void clear();
 
@@ -36,7 +36,7 @@ public:
   bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
 
 
-  tesseract_scene_graph::AllowedCollisionMatrix getAllowedCollisionMatrix() const;
+  tesseract_common::AllowedCollisionMatrix getAllowedCollisionMatrix() const;
 
 public Q_SLOTS:
   void onEntrySelected(int row);
@@ -48,7 +48,7 @@ Q_SIGNALS:
   void entrySelected(QString link1_name, QString link2_name, QString reason);
 
 private:
-  tesseract_scene_graph::AllowedCollisionMatrix acm_;
+  tesseract_common::AllowedCollisionMatrix acm_;
 };
 }
 Q_DECLARE_METATYPE(tesseract_gui::AllowedCollisionMatrixModel)

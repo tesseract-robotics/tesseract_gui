@@ -731,6 +731,21 @@ PlotWidgetBase::CurveInfo* PlotWidgetBase::curveFromTitle(const QString& title)
   return nullptr;
 }
 
+void PlotWidgetBase::setTitle(const QString& title)
+{
+  qwtPlot()->setTitle(title);
+}
+
+void PlotWidgetBase::setXAxisTitle(const QString& title)
+{
+  qwtPlot()->setAxisTitle(QwtPlot::xBottom, title);
+}
+
+void PlotWidgetBase::setYAxisTitle(const QString& title)
+{
+  qwtPlot()->setAxisTitle(QwtPlot::yLeft, title);
+}
+
 void PlotWidgetBase::setLegendSize(int size)
 {
   auto font = p->legend->font();

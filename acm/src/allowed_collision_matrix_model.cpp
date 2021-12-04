@@ -29,7 +29,7 @@ QHash<int, QByteArray> AllowedCollisionMatrixModel::roleNames() const
     return roles;
 }
 
-void AllowedCollisionMatrixModel::setAllowedCollisionMatrix(const tesseract_scene_graph::AllowedCollisionMatrix& acm)
+void AllowedCollisionMatrixModel::setAllowedCollisionMatrix(const tesseract_common::AllowedCollisionMatrix& acm)
 {
   QStandardItemModel::clear();
   acm_ = acm;
@@ -99,7 +99,7 @@ void AllowedCollisionMatrixModel::onEntrySelected(int row)
   emit entrySelected(link1_name, link2_name, reason);
 }
 
-tesseract_scene_graph::AllowedCollisionMatrix AllowedCollisionMatrixModel::getAllowedCollisionMatrix() const
+tesseract_common::AllowedCollisionMatrix AllowedCollisionMatrixModel::getAllowedCollisionMatrix() const
 {
   return acm_;
 }

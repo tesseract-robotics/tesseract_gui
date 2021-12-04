@@ -182,10 +182,7 @@ DockWidget::DockWidget(PlotDataMapRef& datamap, QWidget* parent)
   : ads::CDockWidget("Plot", parent), _datamap(datamap)
 {
   setFrameShape(QFrame::NoFrame);
-
-  static int plot_count = 0;
-  QString plot_name = QString("_plot_%1_").arg(plot_count++);
-  _plot_widget = new PlotWidget(datamap, this);
+  _plot_widget = std::make_unique<PlotWidget>(datamap, this);
   setWidget(_plot_widget->widget());
   setFeature(ads::CDockWidget::DockWidgetFloatable, false);
   setFeature(ads::CDockWidget::DockWidgetDeleteOnClose, true);
@@ -200,9 +197,9 @@ DockWidget::DockWidget(PlotDataMapRef& datamap, QWidget* parent)
   connect(_toolbar->buttonSplitVertical(), &QPushButton::clicked, this,
           &DockWidget::splitVertical);
 
-  connect(_plot_widget, &PlotWidget::splitHorizontal, this, &DockWidget::splitHorizontal);
+  connect(_plot_widget.get(), &PlotWidget::splitHorizontal, this, &DockWidget::splitHorizontal);
 
-  connect(_plot_widget, &PlotWidget::splitVertical, this, &DockWidget::splitVertical);
+  connect(_plot_widget.get(), &PlotWidget::splitVertical, this, &DockWidget::splitVertical);
 
   auto FullscreenAction = [=]() {
     PlotDocker* parent_docker = static_cast<PlotDocker*>(dockManager());
@@ -274,7 +271,7 @@ DockWidget* DockWidget::splitVertical()
 
 PlotWidget* DockWidget::plotWidget()
 {
-  return _plot_widget;
+  return _plot_widget.get();
 }
 
 DraggableToolbar* DockWidget::toolBar()
@@ -404,13 +401,12 @@ bool DraggableToolbar::eventFilter(QObject* object, QEvent* event)
 
 void DraggableToolbar::on_stylesheetChanged(QString theme)
 {
-  _expand_icon = LoadSvg(":/resources/svg/expand.svg", theme);
-  _collapse_icon = LoadSvg(":/resources/svg/collapse.svg", theme);
+  _expand_icon = LoadSvg(":/tesseract_gui/svg/expand.svg", theme);
+  _collapse_icon = LoadSvg(":/tesseract_gui/svg/collapse.svg", theme);
   setButtonIcon(ui->buttonFullscreen, _fullscreen_mode ? _collapse_icon : _expand_icon);
-  setButtonIcon(ui->buttonClose, LoadSvg(":/resources/svg/close-button.svg", theme));
-  setButtonIcon(ui->buttonSplitHorizontal,
-                LoadSvg(":/resources/svg/add_column.svg", theme));
-  setButtonIcon(ui->buttonSplitVertical, LoadSvg(":/resources/svg/add_row.svg", theme));
+  setButtonIcon(ui->buttonClose, LoadSvg(":/tesseract_gui/svg/close-button.svg", theme));
+  setButtonIcon(ui->buttonSplitHorizontal, LoadSvg(":/tesseract_gui/svg/add_column.svg", theme));
+  setButtonIcon(ui->buttonSplitVertical, LoadSvg(":/tesseract_gui/svg/add_row.svg", theme));
 }
 
 void DraggableToolbar::leaveEvent(QEvent* ev)

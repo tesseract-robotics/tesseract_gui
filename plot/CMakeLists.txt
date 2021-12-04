@@ -27,8 +27,9 @@ QT5_WRAP_CPP(PLOT_headers_MOC
   include/tesseract_gui/plot/plot_widget_editor.h
   include/tesseract_gui/plot/plot_widget_transforms.h
   include/tesseract_gui/plot/plot_zoomer.h
-  include/tesseract_gui/plot/transform_function.h
   include/tesseract_gui/plot/plot_docker.h
+  include/tesseract_gui/plot/plot_subplots.h
+  include/tesseract_gui/plot/transform_function.h
   include/tesseract_gui/plot/transforms/transform_selector.h
   )
 
@@ -45,6 +46,7 @@ add_library(${PROJECT_NAME}_plot SHARED
   src/plot_widget_transforms.cpp
   src/plot_zoomer.cpp
   src/plot_docker.cpp
+  src/plot_subplots.cpp
   src/point_series_xy.cpp
   src/timeseries_qwt.cpp
   src/transform_function.cpp
@@ -80,6 +82,20 @@ target_include_directories(${PROJECT_NAME}_plot_demo PUBLIC
     "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
     "$<INSTALL_INTERFACE:include>")
 
+add_executable(${PROJECT_NAME}_plot_docker_demo demo/plot_docker_demo.cpp )
+target_link_libraries(${PROJECT_NAME}_plot_docker_demo PRIVATE
+  ${PROJECT_NAME}_plot)
+target_include_directories(${PROJECT_NAME}_plot_docker_demo PUBLIC
+    "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
+    "$<INSTALL_INTERFACE:include>")
+
+add_executable(${PROJECT_NAME}_plot_subplots_demo demo/plot_subplots_demo.cpp )
+target_link_libraries(${PROJECT_NAME}_plot_subplots_demo PRIVATE
+  ${PROJECT_NAME}_plot)
+target_include_directories(${PROJECT_NAME}_plot_subplots_demo PUBLIC
+    "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
+    "$<INSTALL_INTERFACE:include>")
+
 # Mark cpp header files for installation
 install(DIRECTORY include/${PROJECT_NAME}
   DESTINATION include
@@ -87,4 +103,9 @@ install(DIRECTORY include/${PROJECT_NAME}
   PATTERN ".svn" EXCLUDE
 )
 
-install_targets(TARGETS ${PROJECT_NAME}_plot ${PROJECT_NAME}_plot_demo qt_advanced_docking)
+install_targets(TARGETS
+  ${PROJECT_NAME}_plot
+  ${PROJECT_NAME}_plot_demo
+  ${PROJECT_NAME}_plot_docker_demo
+  ${PROJECT_NAME}_plot_subplots_demo
+  qt_advanced_docking)

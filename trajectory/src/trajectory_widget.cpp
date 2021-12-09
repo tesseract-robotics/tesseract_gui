@@ -1,10 +1,12 @@
 #include "ui_trajectory_widget.h"
 #include <tesseract_gui/trajectory/trajectory_widget.h>
+#include <tesseract_gui/plot/plot_subplots.h>
 #include <tesseract_visualization/trajectory_player.h>
 #include <QTimer>
-#include <qwt/qwt_plot.h>
-#include <qwt/qwt_plot_grid.h>
-#include <qwt/qwt_plot_curve.h>
+#include <set>
+//#include <qwt/qwt_plot.h>
+//#include <qwt/qwt_plot_grid.h>
+//#include <qwt/qwt_plot_curve.h>
 
 
 const double SLIDER_RESOLUTION = 0.001;
@@ -53,7 +55,8 @@ void TrajectoryWidget::onCurrentRowChanged(const QModelIndex &current, const QMo
     case JointTrajectoryModel::TRAJECTORY:
     {
       current_trajectory_ = model_->getJointTrajectory(current);
-      player_->setTrajectory(current_trajectory_);
+      /** @todo need to use the initial state */
+      player_->setTrajectory(current_trajectory_.trajectory);
 
       enablePlayer();
 
@@ -61,12 +64,12 @@ void TrajectoryWidget::onCurrentRowChanged(const QModelIndex &current, const QMo
     }
     case JointTrajectoryModel::TRAJECTORY_SET:
     {
-      const std::vector<tesseract_common::JointTrajectory>& trajectory_set = model_->getJointTrajectorySet(current);
-      current_trajectory_.clear();
-      for (const auto& t : trajectory_set)
-        current_trajectory_.insert(current_trajectory_.end(), t.begin(), t.end());
+//      const tesseract_common::JointTrajectorySet& trajectory_set = model_->getJointTrajectorySet(current);
+//      current_trajectory_.clear();
+//      for (const auto& t : trajectory_set)
+//        current_trajectory_.insert(current_trajectory_.end(), t.begin(), t.end());
 
-      player_->setTrajectory(current_trajectory_);
+//      player_->setTrajectory(current_trajectory_);
       enablePlayer();
       break;
     }
@@ -113,17 +116,29 @@ void TrajectoryWidget::onSliderValueChanged(int value)
 
 void TrajectoryWidget::onPlotTrajectoryClicked()
 {
-  std::size_t cnt = current_trajectory_.size();
+  plot_data_map_.clear();
+//  tesseract_gui::PlotData& cosine_data = plot_data_map_.getOrCreateNumeric("cosine");
+//  tesseract_gui::PlotData& sine_data = plot_data_map_.getOrCreateNumeric("sine");
+
+//  for (int i = 0; i < int((2 * M_PI)/0.01); ++i)
+//  {
+//    cosine_data.pushBack(tesseract_gui::PlotDataXY::Point(i * 0.01, std::cos(i*0.01)));
+//    sine_data.pushBack(tesseract_gui::PlotDataXY::Point(i * 0.01, std::sin(i*0.01)));
+//  }
+
+
+
+  std::size_t cnt = current_trajectory_.trajectory.size();
   std::vector<double> x;
   std::vector<std::vector<double>> position;
   std::vector<std::vector<double>> velocity;
   std::vector<std::vector<double>> acceleration;
-  position.resize(current_trajectory_[0].joint_names.size());
-  velocity.resize(current_trajectory_[0].joint_names.size());
-  acceleration.resize(current_trajectory_[0].joint_names.size());
+  position.resize(current_trajectory_.trajectory[0].joint_names.size());
+  velocity.resize(current_trajectory_.trajectory[0].joint_names.size());
+  acceleration.resize(current_trajectory_.trajectory[0].joint_names.size());
 
   double ct{0};
-  for (const auto& state : current_trajectory_)
+  for (const auto& state : current_trajectory_.trajectory)
   {
     x.push_back(++ct);
     for (Eigen::Index i = 0; i < position.size(); ++i)
@@ -133,6 +148,8 @@ void TrajectoryWidget::onPlotTrajectoryClicked()
       acceleration[i].push_back(state.acceleration(i));
     }
   }
+
+//  auto* position_subplots = new tesseract_gui::PlotSubplots(data)
 
   position_plot_ = std::make_unique<QwtPlot>();
   velocity_plot_ = std::make_unique<QwtPlot>();

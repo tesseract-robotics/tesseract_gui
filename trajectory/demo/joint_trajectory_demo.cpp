@@ -13,7 +13,7 @@ int main(int argc, char ** argv)
 {
     QApplication app(argc, argv);
 
-    std::vector<tesseract_common::JointTrajectory> trajectories;
+    tesseract_common::JointTrajectorySet trajectory_set;
     for (int i = 0; i < 5; ++i)
     {
       tesseract_common::JointTrajectory trajectory;
@@ -35,15 +35,15 @@ int main(int argc, char ** argv)
         }
         trajectory.push_back(state);
       }
-      trajectories.push_back(trajectory);
+      trajectory_set.appendJointTrajectory(trajectory, "description");
     }
 
     auto* model = new tesseract_gui::JointTrajectoryModel();
-    model->addTrajectorySet("set1", trajectories);
-    model->addTrajectorySet("set2", trajectories);
-    model->addTrajectorySet("set3", trajectories);
+    model->addJointTrajectorySet("set1", trajectory_set);
+    model->addJointTrajectorySet("set2", trajectory_set);
+    model->addJointTrajectorySet("set3", trajectory_set);
 
-    model->removeTrajectorySet("set2");
+    model->removeJointTrajectorySet("set2");
 
     tesseract_gui::TrajectoryWidget widget;
     widget.setModel(model);

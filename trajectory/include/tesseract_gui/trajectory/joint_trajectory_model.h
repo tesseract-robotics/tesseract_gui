@@ -5,6 +5,7 @@
 TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #ifndef Q_MOC_RUN
 #include <tesseract_common/joint_state.h>
+#include <tesseract_common/joint_trajectory_set.h>
 #include <QStandardItemModel>
 #endif
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
@@ -34,18 +35,18 @@ public:
    * @brief setTrajectories
    * @param trajectories
    */
-  void addTrajectorySet(const QString& key, const std::vector<tesseract_common::JointTrajectory>& trajectories);
+  void addJointTrajectorySet(const QString& key, const tesseract_common::JointTrajectorySet& trajectory_set);
 
-  void removeTrajectorySet(const QString& key);
+  void removeJointTrajectorySet(const QString& key);
 
   const tesseract_common::JointState& getJointState(const QModelIndex& row) const;
-  const tesseract_common::JointTrajectory& getJointTrajectory(const QModelIndex& row) const;
-  const std::vector<tesseract_common::JointTrajectory>& getJointTrajectorySet(const QModelIndex& row) const;
+  const tesseract_common::JointTrajectoryInfo& getJointTrajectory(const QModelIndex& row) const;
+  const tesseract_common::JointTrajectorySet& getJointTrajectorySet(const QModelIndex& row) const;
 
   void clear();
 
 private:
-  std::map<QString, std::vector<tesseract_common::JointTrajectory>> trajectory_sets_;
+  std::map<QString, tesseract_common::JointTrajectorySet> trajectory_sets_;
   QIcon trajectory_icon_;
   QIcon trajectory_state_icon_;
   QIcon trajectory_set_icon_;
@@ -54,32 +55,33 @@ private:
 class JointStateItem : public QStandardItem
 {
 public:
-  JointStateItem(tesseract_common::JointState& state);
-  explicit JointStateItem(const QString &text, tesseract_common::JointState& state);
-  JointStateItem(const QIcon &icon, const QString &text, tesseract_common::JointState& state);
+  JointStateItem(tesseract_common::JointTrajectoryInfo& parent_trajectory, tesseract_common::JointState& state);
+  explicit JointStateItem(const QString &text, tesseract_common::JointTrajectoryInfo& parent_trajectory, tesseract_common::JointState& state);
+  JointStateItem(const QIcon &icon, const QString &text, tesseract_common::JointTrajectoryInfo& parent_trajectory, tesseract_common::JointState& state);
   int type() const override;
 
+  tesseract_common::JointTrajectoryInfo& parent_trajectory;
   tesseract_common::JointState& state;
 };
 
 class JointTrajectoryItem : public QStandardItem
 {
 public:
-  JointTrajectoryItem(tesseract_common::JointTrajectory& trajectory);
-  explicit JointTrajectoryItem(const QString &text, tesseract_common::JointTrajectory& trajectory);
-  JointTrajectoryItem(const QIcon &icon, const QString &text, tesseract_common::JointTrajectory& trajectory);
+  JointTrajectoryItem(tesseract_common::JointTrajectoryInfo& trajectory);
+  explicit JointTrajectoryItem(const QString &text, tesseract_common::JointTrajectoryInfo& trajectory);
+  JointTrajectoryItem(const QIcon &icon, const QString &text, tesseract_common::JointTrajectoryInfo& trajectory);
   int type() const override;
-  tesseract_common::JointTrajectory& trajectory;
+  tesseract_common::JointTrajectoryInfo& trajectory;
 };
 
 class JointTrajectorySetItem : public QStandardItem
 {
 public:
-  JointTrajectorySetItem(std::vector<tesseract_common::JointTrajectory>& trajectory_set);
-  explicit JointTrajectorySetItem(const QString &text, std::vector<tesseract_common::JointTrajectory>& trajectory_set);
-  JointTrajectorySetItem(const QIcon &icon, const QString &text, std::vector<tesseract_common::JointTrajectory>& trajectory_set);
+  JointTrajectorySetItem(tesseract_common::JointTrajectorySet& trajectory_set);
+  explicit JointTrajectorySetItem(const QString &text, tesseract_common::JointTrajectorySet &trajectory_set);
+  JointTrajectorySetItem(const QIcon &icon, const QString &text, tesseract_common::JointTrajectorySet& trajectory_set);
   int type() const override;
-  std::vector<tesseract_common::JointTrajectory>& trajectory_set;
+  tesseract_common::JointTrajectorySet& trajectory_set;
 };
 }
 

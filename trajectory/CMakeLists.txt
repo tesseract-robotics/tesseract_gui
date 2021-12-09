@@ -35,11 +35,13 @@ target_link_libraries(${PROJECT_NAME}_joint_trajectory_widget PUBLIC
   Qt5::Core
   Qt5::Gui
   Qt5::Widgets
-  Qwt::Qwt)
+  Qwt::Qwt
+  ${PROJECT_NAME}_plot)
 target_include_directories(${PROJECT_NAME}_joint_trajectory_widget PUBLIC
     "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
     "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/trajectory>"
     "$<INSTALL_INTERFACE:include>")
+add_dependencies(${PROJECT_NAME}_joint_trajectory_widget ${PROJECT_NAME}_plot)
 
 add_executable(${PROJECT_NAME}_joint_trajectory_demo demo/joint_trajectory_demo.cpp )
 target_link_libraries(${PROJECT_NAME}_joint_trajectory_demo PRIVATE

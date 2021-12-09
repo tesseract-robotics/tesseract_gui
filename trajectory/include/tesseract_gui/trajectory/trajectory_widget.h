@@ -12,6 +12,7 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 #include <QDockWidget>
 #include <QItemSelectionModel>
 #include <tesseract_gui/trajectory/joint_trajectory_model.h>
+#include <tesseract_gui/plot/plot_data.h>
 
 namespace Ui {
 class TrajectoryWidget;
@@ -56,7 +57,8 @@ private:
   std::unique_ptr<QwtPlot> velocity_plot_;
   std::unique_ptr<QwtPlot> acceleration_plot_;
   double current_duration_{0};
-  tesseract_common::JointTrajectory current_trajectory_;
+  tesseract_common::JointTrajectoryInfo current_trajectory_;
+  tesseract_gui::PlotDataMapRef plot_data_map_;
 
   void enablePlayer();
   void disablePlayer();

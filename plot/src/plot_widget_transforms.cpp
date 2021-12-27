@@ -11,13 +11,6 @@
 #include <QDebug>
 #include <qwt/qwt_text.h>
 
-#include <tesseract_gui/plot/transforms/first_derivative.h>
-#include <tesseract_gui/plot/transforms/integral_transform.h>
-#include <tesseract_gui/plot/transforms/moving_average_filter.h>
-#include <tesseract_gui/plot/transforms/moving_rms.h>
-#include <tesseract_gui/plot/transforms/outlier_removal.h>
-#include <tesseract_gui/plot/transforms/scale_transform.h>
-
 namespace tesseract_gui
 {
 
@@ -49,46 +42,11 @@ DialogTransformEditor::DialogTransformEditor(PlotWidget* plotwidget)
 
   ui->listCurves->setStyleSheet("QListView::item:selected { background: #ddeeff; }");
 
-  {
-    auto tf = std::make_unique<FirstDerivative>();
-    std::string name = tf->name();
-    ui->listTransforms->addItem(QString::fromStdString(name));
-    _transform_functions[name] = std::move(tf);
-  }
+  auto names = TransformFactory::registeredTransforms();
 
+  for (const auto& name : names)
   {
-    auto tf = std::make_unique<IntegralTransform>();
-    std::string name = tf->name();
     ui->listTransforms->addItem(QString::fromStdString(name));
-    _transform_functions[name] = std::move(tf);
-  }
-
-  {
-    auto tf = std::make_unique<MovingAverageFilter>();
-    std::string name = tf->name();
-    ui->listTransforms->addItem(QString::fromStdString(name));
-    _transform_functions[name] = std::move(tf);
-  }
-
-  {
-    auto tf = std::make_unique<MovingRMS>();
-    std::string name = tf->name();
-    ui->listTransforms->addItem(QString::fromStdString(name));
-    _transform_functions[name] = std::move(tf);
-  }
-
-  {
-    auto tf = std::make_unique<OutlierRemovalFilter>();
-    std::string name = tf->name();
-    ui->listTransforms->addItem(QString::fromStdString(name));
-    _transform_functions[name] = std::move(tf);
-  }
-
-  {
-    auto tf = std::make_unique<ScaleTransform>();
-    std::string name = tf->name();
-    ui->listTransforms->addItem(QString::fromStdString(name));
-    _transform_functions[name] = std::move(tf);
   }
 
   if (ui->listCurves->count() != 0)

@@ -1,4 +1,4 @@
-#include <tesseract_gui/trajectory/joint_trajectory_model.h>
+#include <tesseract_gui/joint_trajectory/joint_trajectory_model.h>
 
 namespace tesseract_gui
 {
@@ -6,9 +6,9 @@ JointTrajectoryModel::JointTrajectoryModel(QObject *parent)
   : QStandardItemModel(parent)
 {
   clear();
-  trajectory_icon_ = QIcon(":/tesseract_gui/trajectory.png");
-  trajectory_state_icon_ = QIcon(":/tesseract_gui/robotic-arm.png");
-  trajectory_set_icon_ = QIcon(":/tesseract_gui/programming.png");
+  trajectory_icon_ = QIcon(":/tesseract_gui/png/trajectory.png");
+  trajectory_state_icon_ = QIcon(":/tesseract_gui/png/robotic-arm.png");
+  trajectory_set_icon_ = QIcon(":/tesseract_gui/png/programming.png");
 }
 JointTrajectoryModel::JointTrajectoryModel(const JointTrajectoryModel &other)
 : QStandardItemModel(other.d_ptr->parent)

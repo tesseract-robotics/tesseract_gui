@@ -1,5 +1,5 @@
-#ifndef TESSERACT_GUI_TRAJECTORY_TRAJECTORY_WIDGET_H
-#define TESSERACT_GUI_TRAJECTORY_TRAJECTORY_WIDGET_H
+#ifndef TESSERACT_GUI_JOINT_TRAJECTORY_JOINT_TRAJECTORY_WIDGET_H
+#define TESSERACT_GUI_JOINT_TRAJECTORY_JOINT_TRAJECTORY_WIDGET_H
 
 #include <tesseract_common/macros.h>
 TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
@@ -9,13 +9,12 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #endif
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
-#include <QDockWidget>
+#include <QWidget>
 #include <QItemSelectionModel>
-#include <tesseract_gui/trajectory/joint_trajectory_model.h>
-#include <tesseract_gui/plot/plot_data.h>
+#include <tesseract_gui/joint_trajectory/joint_trajectory_model.h>
 
 namespace Ui {
-class TrajectoryWidget;
+class JointTrajectoryWidget;
 }
 
 namespace tesseract_visualization
@@ -23,17 +22,16 @@ namespace tesseract_visualization
 class TrajectoryPlayer;
 }
 
-class QwtPlot;
-
 namespace tesseract_gui
 {
-class TrajectoryWidget : public QDockWidget
+class JointTrajectoryPlotDialog;
+class JointTrajectoryWidget : public QWidget
 {
   Q_OBJECT
 
 public:
-  explicit TrajectoryWidget(QWidget *parent = nullptr);
-  ~TrajectoryWidget();
+  explicit JointTrajectoryWidget(QWidget *parent = nullptr);
+  ~JointTrajectoryWidget();
 
   void setModel(JointTrajectoryModel* model);
 
@@ -49,16 +47,13 @@ private Q_SLOTS:
   void onPlotTrajectoryClicked();
 
 private:
-  std::unique_ptr<Ui::TrajectoryWidget> ui_;
+  std::unique_ptr<Ui::JointTrajectoryWidget> ui_;
   JointTrajectoryModel* model_;
   std::unique_ptr<tesseract_visualization::TrajectoryPlayer> player_;
   std::unique_ptr<QTimer> player_timer_;
-  std::unique_ptr<QwtPlot> position_plot_;
-  std::unique_ptr<QwtPlot> velocity_plot_;
-  std::unique_ptr<QwtPlot> acceleration_plot_;
+  std::unique_ptr<JointTrajectoryPlotDialog> plot_dialog_;
   double current_duration_{0};
   tesseract_common::JointTrajectoryInfo current_trajectory_;
-  tesseract_gui::PlotDataMapRef plot_data_map_;
 
   void enablePlayer();
   void disablePlayer();
@@ -66,4 +61,4 @@ private:
 
 }
 
-#endif // TESSERACT_GUI_TRAJECTORY_TRAJECTORY_WIDGET_H
+#endif // TESSERACT_GUI_JOINT_TRAJECTORY_JOINT_TRAJECTORY_WIDGET_H

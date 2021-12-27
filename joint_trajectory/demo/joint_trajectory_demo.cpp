@@ -6,14 +6,16 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <QDebug>
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
-#include <tesseract_gui/trajectory/joint_trajectory_model.h>
-#include <tesseract_gui/trajectory/trajectory_widget.h>
+#include <tesseract_gui/joint_trajectory/joint_trajectory_model.h>
+#include <tesseract_gui/joint_trajectory/joint_trajectory_widget.h>
 
 int main(int argc, char ** argv)
 {
     QApplication app(argc, argv);
 
-    tesseract_common::JointTrajectorySet trajectory_set;
+    std::unordered_map<std::string, double> initial_state {{"joint_1", 0}, {"joint_2",0}, {"joint_3",0}, {"joint_4",0}, {"joint_5",0}};
+
+    tesseract_common::JointTrajectorySet trajectory_set(initial_state);
     for (int i = 0; i < 5; ++i)
     {
       tesseract_common::JointTrajectory trajectory;
@@ -45,7 +47,7 @@ int main(int argc, char ** argv)
 
     model->removeJointTrajectorySet("set2");
 
-    tesseract_gui::TrajectoryWidget widget;
+    tesseract_gui::JointTrajectoryWidget widget;
     widget.setModel(model);
     widget.show();
 

@@ -135,6 +135,41 @@ protected:
   double _last_timestamp = -std::numeric_limits<double>::max();
 };
 
-}  // namespace PJ
+class TransformFactory : public QObject
+{
+public:
+  TransformFactory()
+  {
+  }
+
+private:
+  TransformFactory(const TransformFactory&) = delete;
+  TransformFactory& operator=(const TransformFactory&) = delete;
+
+  std::map<std::string, std::function<TransformFunction::Ptr()>> creators_;
+  std::set<std::string> names_;
+
+  static TransformFactory* instance();
+
+public:
+  static const std::set<std::string>& registeredTransforms();
+
+  template <typename T>
+  static void registerTransform()
+  {
+    T temp;
+    std::string name = temp.name();
+    instance()->names_.insert(name);
+    instance()->creators_[name] = []() { return std::make_shared<T>(); };
+  }
+
+  static TransformFunction::Ptr create(const std::string& name);
+};
+
+}  // namespace tesseract_gui
+
+Q_DECLARE_OPAQUE_POINTER(tesseract_gui::TransformFactory*)
+Q_DECLARE_METATYPE(tesseract_gui::TransformFactory*)
+Q_GLOBAL_STATIC(tesseract_gui::TransformFactory, transform_factory_ptr_from_macro_)
 
 #endif // TESSERACT_GUI_PLOT_TRANSFORM_FUNCTION_H

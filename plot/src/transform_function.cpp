@@ -102,4 +102,38 @@ const PlotData* TransformFunction_SISO::dataSource() const
   return _src_vector.front();
 }
 
+TransformFunction::Ptr TransformFactory::create(const std::string& name)
+{
+  auto it = instance()->creators_.find(name);
+  if (it == instance()->creators_.end())
+  {
+    return {};
+  }
+  return it->second();
+}
+
+TransformFactory* TransformFactory::instance()
+{
+  static TransformFactory* _ptr(nullptr);
+  if (!qApp->property("TransformFactory").isValid() && !_ptr)
+  {
+    _ptr = transform_factory_ptr_from_macro_;
+    qApp->setProperty("TransformFactory", QVariant::fromValue(_ptr));
+  }
+  else if (!_ptr)
+  {
+    _ptr = qvariant_cast<TransformFactory*>(qApp->property("TransformFactory"));
+  }
+  else if (!qApp->property("TransformFactory").isValid())
+  {
+    qApp->setProperty("TransformFactory", QVariant::fromValue(_ptr));
+  }
+  return _ptr;
+}
+
+const std::set<std::string>& TransformFactory::registeredTransforms()
+{
+  return instance()->names_;
+}
+
 }  // namespace tesseract_gui

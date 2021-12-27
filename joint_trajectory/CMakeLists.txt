@@ -7,7 +7,7 @@ find_package(Qwt REQUIRED)
 # Load variable for clang tidy args, compiler options and cxx version
 tesseract_variables()
 
-QT5_WRAP_CPP(TRAJ_MODEL_headers_MOC include/tesseract_gui/trajectory/joint_trajectory_model.h)
+QT5_WRAP_CPP(TRAJ_MODEL_headers_MOC include/tesseract_gui/joint_trajectory/joint_trajectory_model.h)
 
 add_library(${PROJECT_NAME}_joint_trajectory_model SHARED
   ${TRAJ_MODEL_headers_MOC}
@@ -19,15 +19,19 @@ target_include_directories(${PROJECT_NAME}_joint_trajectory_model PUBLIC
     "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
     "$<INSTALL_INTERFACE:include>")
 
-QT5_WRAP_CPP(TRAJ_WIDGET_headers_MOC include/tesseract_gui/trajectory/trajectory_widget.h)
-QT5_WRAP_UI(TRAJ_WIDGET_headers_UI include/tesseract_gui/trajectory/trajectory_widget.ui)
-QT5_ADD_RESOURCES(TRAJ_WIDGET_resources_RCC include/tesseract_gui/trajectory/trajectory.qrc)
+QT5_WRAP_CPP(TRAJ_WIDGET_headers_MOC
+  include/tesseract_gui/joint_trajectory/joint_trajectory_widget.h
+  include/tesseract_gui/joint_trajectory/joint_trajectory_plot_dialog.h)
+QT5_WRAP_UI(TRAJ_WIDGET_headers_UI
+  include/tesseract_gui/joint_trajectory/joint_trajectory_widget.ui
+  include/tesseract_gui/joint_trajectory/joint_trajectory_plot_dialog.ui)
 
 add_library(${PROJECT_NAME}_joint_trajectory_widget SHARED
   ${TRAJ_WIDGET_headers_MOC}
   ${TRAJ_WIDGET_headers_UI}
   ${TRAJ_WIDGET_resources_RCC}
-  src/trajectory_widget.cpp)
+  src/joint_trajectory_widget.cpp
+  src/joint_trajectory_plot_dialog.cpp)
 
 target_link_libraries(${PROJECT_NAME}_joint_trajectory_widget PUBLIC
   tesseract::tesseract_common
@@ -36,12 +40,13 @@ target_link_libraries(${PROJECT_NAME}_joint_trajectory_widget PUBLIC
   Qt5::Gui
   Qt5::Widgets
   Qwt::Qwt
-  ${PROJECT_NAME}_plot)
+  ${PROJECT_NAME}_plot
+  ${PROJECT_NAME}_resources)
 target_include_directories(${PROJECT_NAME}_joint_trajectory_widget PUBLIC
     "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
-    "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/trajectory>"
+    "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/joint_trajectory>"
     "$<INSTALL_INTERFACE:include>")
-add_dependencies(${PROJECT_NAME}_joint_trajectory_widget ${PROJECT_NAME}_plot)
+add_dependencies(${PROJECT_NAME}_joint_trajectory_widget ${PROJECT_NAME}_plot ${PROJECT_NAME}_resources)
 
 add_executable(${PROJECT_NAME}_joint_trajectory_demo demo/joint_trajectory_demo.cpp )
 target_link_libraries(${PROJECT_NAME}_joint_trajectory_demo PRIVATE

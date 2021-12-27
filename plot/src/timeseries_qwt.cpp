@@ -29,6 +29,8 @@
 
 namespace tesseract_gui
 {
+
+
 RangeOpt QwtTimeseries::getVisualizationRangeY(Range range_X)
 {
   int first_index = _ts_data->getIndexFromX(range_X.min);
@@ -91,10 +93,10 @@ void TransformedTimeseries::setTransform(QString transform_ID)
   }
   else
   {
-//    _dst_data.clear();
-//    _transform = TransformFactory::create(transform_ID.toStdString());
-//    std::vector<PlotData*> dest = { &_dst_data };
-//    _transform->setData(nullptr, { _src_data }, dest);
+    _dst_data.clear();
+    _transform = TransformFactory::create(transform_ID.toStdString());
+    std::vector<PlotData*> dest = { &_dst_data };
+    _transform->setData(nullptr, { _src_data }, dest);
   }
 }
 

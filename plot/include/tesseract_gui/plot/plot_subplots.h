@@ -16,8 +16,15 @@ public:
   PlotSubplots(PlotDataMapRef& datamap, int rows, int cols, QWidget* parent = nullptr);
 
   PlotWidget* getSubplot(int row, int col);
+  int rows() const;
+  int cols() const;
+
+public Q_SLOTS:
+  void replot();
 
 private:
+  int rows_{0};
+  int cols_{0};
   std::vector<std::vector<std::unique_ptr<PlotWidget>>> subplots_;
 };
 }

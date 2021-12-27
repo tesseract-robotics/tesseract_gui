@@ -8,6 +8,8 @@ namespace tesseract_gui
 
 PlotSubplots::PlotSubplots(PlotDataMapRef& datamap, int rows, int cols, QWidget* parent)
   : QWidget(parent)
+  , rows_(rows)
+  , cols_(cols)
 {
   if (rows < 1)
     throw std::runtime_error("PlotSubplots, rows must be greater than zero!");
@@ -44,4 +46,17 @@ PlotWidget* PlotSubplots::getSubplot(int row, int col)
   return subplots_.at(row).at(col).get();
 }
 
+int PlotSubplots::rows() const { return rows_;}
+int PlotSubplots::cols() const { return cols_;}
+
+void PlotSubplots::replot()
+{
+  for (std::size_t r = 0; r < rows_; ++r)
+  {
+    for  (std::size_t c = 0; c < cols_; ++c)
+    {
+      subplots_.at(r).at(c)->replot();
+    }
+  }
+}
 }

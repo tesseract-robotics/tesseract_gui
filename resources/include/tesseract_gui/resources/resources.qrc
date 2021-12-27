@@ -17,5 +17,9 @@
         <file>svg/collapse.svg</file>
         <file>svg/expand.svg</file>
         <file>svg/close-button.svg</file>
+        <file>png/chart.png</file>
+        <file>png/programming.png</file>
+        <file>png/robotic-arm.png</file>
+        <file>png/trajectory.png</file>
     </qresource>
 </RCC>

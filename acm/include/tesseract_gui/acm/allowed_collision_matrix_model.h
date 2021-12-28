@@ -16,12 +16,6 @@ class AllowedCollisionMatrixModel : public QStandardItemModel
 {
     Q_OBJECT
 public:
-  enum AllowedCollisionMatrixRoles {
-      Link1Role = Qt::UserRole + 1,
-      Link2Role = Qt::UserRole + 2,
-      ReasonRole = Qt::UserRole + 3
-  };
-
   AllowedCollisionMatrixModel(QObject *parent = nullptr);
   AllowedCollisionMatrixModel(const AllowedCollisionMatrixModel &other);
   AllowedCollisionMatrixModel &operator=(const AllowedCollisionMatrixModel &other);
@@ -31,21 +25,16 @@ public:
   Q_INVOKABLE void add(const QString& link1_name, const QString& link2_name, const QString& reason);
   Q_INVOKABLE void clear();
 
-  QHash<int, QByteArray> roleNames() const override;
-
   bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
-
 
   tesseract_common::AllowedCollisionMatrix getAllowedCollisionMatrix() const;
 
-public Q_SLOTS:
-  void onEntrySelected(int row);
+  QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
 Q_SIGNALS:
 
   void entryRemoved(QString link1_name, QString link2_name);
   void entryAdded(QString link1_name, QString link2_name, QString reason);
-  void entrySelected(QString link1_name, QString link2_name, QString reason);
 
 private:
   tesseract_common::AllowedCollisionMatrix acm_;

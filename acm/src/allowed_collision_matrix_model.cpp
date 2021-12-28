@@ -6,6 +6,7 @@ namespace tesseract_gui
 AllowedCollisionMatrixModel::AllowedCollisionMatrixModel(QObject *parent)
   : QStandardItemModel(parent)
 {
+  setColumnCount(3);
 }
 
 AllowedCollisionMatrixModel::AllowedCollisionMatrixModel(const AllowedCollisionMatrixModel &other)
@@ -20,15 +21,6 @@ AllowedCollisionMatrixModel &AllowedCollisionMatrixModel::operator=(const Allowe
   return *this;
 }
 
-QHash<int, QByteArray> AllowedCollisionMatrixModel::roleNames() const
-{
-    QHash<int, QByteArray> roles;
-    roles[Link1Role] = "link1";
-    roles[Link2Role] = "link2";
-    roles[ReasonRole] = "reason";
-    return roles;
-}
-
 void AllowedCollisionMatrixModel::setAllowedCollisionMatrix(const tesseract_common::AllowedCollisionMatrix& acm)
 {
   QStandardItemModel::clear();
@@ -36,10 +28,10 @@ void AllowedCollisionMatrixModel::setAllowedCollisionMatrix(const tesseract_comm
   QStandardItem *parent_item = this->invisibleRootItem();
   for (const auto& ac : acm.getAllAllowedCollisions())
   {
-    auto item = new QStandardItem();
-    item->setData(QString::fromStdString(ac.first.first), AllowedCollisionMatrixRoles::Link1Role);
-    item->setData(QString::fromStdString(ac.first.second), AllowedCollisionMatrixRoles::Link2Role);
-    item->setData(QString::fromStdString(ac.second), AllowedCollisionMatrixRoles::ReasonRole);
+    QList<QStandardItem*> item;
+    item.push_back(new QStandardItem(QString::fromStdString(ac.first.first)));
+    item.push_back(new QStandardItem(QString::fromStdString(ac.first.second)));
+    item.push_back(new QStandardItem(QString::fromStdString(ac.second)));
     parent_item->appendRow(item);
   }
   sort(0);
@@ -49,10 +41,10 @@ void AllowedCollisionMatrixModel::add(const QString& link1_name, const QString& 
 {
   acm_.addAllowedCollision(link1_name.toStdString(), link2_name.toStdString(), reason.toStdString());
   QStandardItem *parent_item = this->invisibleRootItem();
-  auto item = new QStandardItem();
-  item->setData(link1_name, AllowedCollisionMatrixRoles::Link1Role);
-  item->setData(link2_name, AllowedCollisionMatrixRoles::Link2Role);
-  item->setData(reason, AllowedCollisionMatrixRoles::ReasonRole);
+  QList<QStandardItem*> item;
+  item.push_back(new QStandardItem(link1_name));
+  item.push_back(new QStandardItem(link2_name));
+  item.push_back(new QStandardItem(reason));
   parent_item->appendRow(item);
   sort(0);
 
@@ -67,9 +59,8 @@ bool AllowedCollisionMatrixModel::removeRows(int row, int count, const QModelInd
 {
   if (row >= 0)
   {
-    QStandardItem *row_item = item(row);
-    QString link1_name = row_item->data(AllowedCollisionMatrixRoles::Link1Role).toString();
-    QString link2_name = row_item->data(AllowedCollisionMatrixRoles::Link2Role).toString();
+    QString link1_name = item(row, 0)->text();
+    QString link2_name = item(row, 1)->text();
     acm_.removeAllowedCollision(link1_name.toStdString(), link2_name.toStdString());
 
     bool success = QStandardItemModel::removeRows(row, count, parent);
@@ -90,18 +81,25 @@ void AllowedCollisionMatrixModel::clear()
   acm_.clearAllowedCollisions();
 }
 
-void AllowedCollisionMatrixModel::onEntrySelected(int row)
-{
-  QStandardItem *row_item = item(row);
-  QString link1_name = row_item->data(AllowedCollisionMatrixRoles::Link1Role).toString();
-  QString link2_name = row_item->data(AllowedCollisionMatrixRoles::Link2Role).toString();
-  QString reason = row_item->data(AllowedCollisionMatrixRoles::ReasonRole).toString();
-  emit entrySelected(link1_name, link2_name, reason);
-}
-
 tesseract_common::AllowedCollisionMatrix AllowedCollisionMatrixModel::getAllowedCollisionMatrix() const
 {
   return acm_;
+}
+
+QVariant AllowedCollisionMatrixModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+  if (role == Qt::DisplayRole && orientation == Qt::Horizontal)
+  {
+      switch (section) {
+      case 0:
+          return QString("Link 1");
+      case 1:
+          return QString("Link 2");
+      case 2:
+          return QString("Reason");
+      }
+  }
+  return QVariant();
 }
 
 }

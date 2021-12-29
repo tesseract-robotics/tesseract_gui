@@ -12,7 +12,7 @@ if(WIN32)
 endif()
 
 add_subdirectory(3rdparty/Qt-Advanced-Docking)
-add_subdirectory(resources)
+add_subdirectory(common)
 add_subdirectory(acm)
 add_subdirectory(joint_slider)
 add_subdirectory(plot)

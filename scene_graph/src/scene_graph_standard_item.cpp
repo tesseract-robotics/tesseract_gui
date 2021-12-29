@@ -1,7 +1,7 @@
 #include <tesseract_gui/scene_graph/scene_graph_standard_item.h>
 #include <tesseract_gui/scene_graph/link_standard_item.h>
 #include <tesseract_gui/scene_graph/joint_standard_item.h>
-#include <tesseract_gui/scene_graph/types.h>
+#include <tesseract_gui/common/standard_item_type.h>
 
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, SCENE_GRAPH_ICON, (":/tesseract_gui/ignition/model.png"));
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, LINK_VECTOR_ICON, (":/tesseract_gui/ignition/link_vector.png"));
@@ -33,7 +33,7 @@ SceneGraphStandardItem::SceneGraphStandardItem(const QIcon &icon, const QString 
 
 int SceneGraphStandardItem::type() const
 {
-  return static_cast<int>(SceneGraphItemType::SCENE_GRAPH);
+  return static_cast<int>(StandardItemType::SCENE_GRAPH);
 }
 
 void SceneGraphStandardItem::ctor()

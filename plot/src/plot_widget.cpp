@@ -67,7 +67,7 @@
 #include <tesseract_gui/plot/plot_magnifier.h>
 #include <tesseract_gui/plot/plot_legend.h>
 #include <tesseract_gui/plot/point_series_xy.h>
-#include <tesseract_gui/resources/svg_util.h>
+#include <tesseract_gui/common/svg_util.h>
 
 class TimeScaleDraw : public QwtScaleDraw
 {

@@ -1,6 +1,6 @@
 #include <tesseract_gui/scene_graph/polygon_mesh_standard_item.h>
 #include <tesseract_geometry/impl/convex_mesh.h>
-#include <tesseract_gui/scene_graph/types.h>
+#include <tesseract_gui/common/standard_item_type.h>
 
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, POLYGON_MESH_ICON, (":/tesseract_gui/png/mesh.png"));
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, MESH_ICON, (":/tesseract_gui/png/surface.png"));
@@ -34,7 +34,7 @@ PolygonMeshStandardItem::PolygonMeshStandardItem(const QIcon &icon, const QStrin
 
 int PolygonMeshStandardItem::type() const
 {
-  return static_cast<int>(SceneGraphItemType::POLYGON_MESH);
+  return static_cast<int>(StandardItemType::POLYGON_MESH);
 }
 
 void PolygonMeshStandardItem::ctor()

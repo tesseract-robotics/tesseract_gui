@@ -1,5 +1,5 @@
 #include <tesseract_gui/scene_graph/material_standard_item.h>
-#include <tesseract_gui/scene_graph/types.h>
+#include <tesseract_gui/common/standard_item_type.h>
 
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, MATERIAL_ICON, (":/tesseract_gui/png/color.png"));
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, COLOR_ICON, (":/tesseract_gui/png/rgb.png"));
@@ -32,7 +32,7 @@ MaterialStandardItem::MaterialStandardItem(const QIcon &icon, const QString &tex
 
 int MaterialStandardItem::type() const
 {
-  return static_cast<int>(SceneGraphItemType::MATERIAL);
+  return static_cast<int>(StandardItemType::MATERIAL);
 }
 
 void MaterialStandardItem::ctor()

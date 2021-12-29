@@ -24,7 +24,7 @@
 #error "QT_NO_SVGRENDERER defined"
 #endif
 
-#include <tesseract_gui/resources/svg_util.h>
+#include <tesseract_gui/common/svg_util.h>
 
 #include <QtSvg>
 #include <QFile>

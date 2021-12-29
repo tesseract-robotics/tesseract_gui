@@ -1,12 +1,13 @@
-#ifndef TESSERACT_GUI_SCENE_GRAPH_TYPES_H
-#define TESSERACT_GUI_SCENE_GRAPH_TYPES_H
+#ifndef TESSERACT_GUI_COMMON_STANDARD_ITEMS_TYPES_H
+#define TESSERACT_GUI_COMMON_STANDARD_ITEMS_TYPES_H
 
 #include <QStandardItem>
 
 namespace tesseract_gui
 {
-enum class SceneGraphItemType : int
+enum class StandardItemType : int
 {
+  // Scene Graph Types
   MATERIAL     = QStandardItem::UserType + 1,
   INERTIAL     = QStandardItem::UserType + 2,
   ORIGIN       = QStandardItem::UserType + 3,
@@ -31,4 +32,5 @@ enum class SceneGraphItemType : int
   OCTREE       = QStandardItem::UserType + 23
 };
 }
-#endif // TESSERACT_GUI_SCENE_GRAPH_TYPES_H
+
+#endif // TESSERACT_GUI_COMMON_STANDARD_ITEMS_TYPES_H

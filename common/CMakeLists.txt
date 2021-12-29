@@ -4,18 +4,18 @@ find_package(Qt5 COMPONENTS Core Gui Svg REQUIRED)
 # Load variable for clang tidy args, compiler options and cxx version
 tesseract_variables()
 
-QT5_ADD_RESOURCES(RESOURCES_resources_RCC include/tesseract_gui/resources/resources.qrc)
+QT5_ADD_RESOURCES(RESOURCES_common_RCC include/tesseract_gui/common/resources/resources.qrc)
 
-add_library(${PROJECT_NAME}_resources SHARED
-  ${RESOURCES_resources_RCC}
+add_library(${PROJECT_NAME}_common SHARED
+  ${RESOURCES_common_RCC}
   src/svg_util.cpp)
-target_cxx_version(${PROJECT_NAME}_resources PUBLIC VERSION ${TESSERACT_CXX_VERSION})
-target_link_libraries(${PROJECT_NAME}_resources PUBLIC
+target_cxx_version(${PROJECT_NAME}_common PUBLIC VERSION ${TESSERACT_CXX_VERSION})
+target_link_libraries(${PROJECT_NAME}_common PUBLIC
   Qt5::Core
   Qt5::Gui
   Qt5::Svg
   tesseract::tesseract_common)
-target_include_directories(${PROJECT_NAME}_resources PUBLIC
+target_include_directories(${PROJECT_NAME}_common PUBLIC
     "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
     "$<INSTALL_INTERFACE:include>")
 
@@ -25,4 +25,4 @@ install(DIRECTORY include/${PROJECT_NAME}
   PATTERN ".svn" EXCLUDE
 )
 
-install_targets(TARGETS ${PROJECT_NAME}_resources)
+install_targets(TARGETS ${PROJECT_NAME}_common)

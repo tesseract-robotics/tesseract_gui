@@ -30,12 +30,12 @@ target_link_libraries(${PROJECT_NAME}_demo_app PUBLIC
   Qt5::Xml
   tesseract::tesseract_common
   qt_advanced_docking
-  ${PROJECT_NAME}_resources)
+  ${PROJECT_NAME}_common)
 target_include_directories(${PROJECT_NAME}_demo_app PUBLIC
     "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
     "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/demo_app>"
     "$<INSTALL_INTERFACE:include>")
-add_dependencies(${PROJECT_NAME}_demo_app ${PROJECT_NAME}_resources qt_advanced_docking)
+add_dependencies(${PROJECT_NAME}_demo_app ${PROJECT_NAME}_common qt_advanced_docking)
 
 add_executable(${PROJECT_NAME}_demo_app_demo src/main.cpp )
 target_link_libraries(${PROJECT_NAME}_demo_app_demo PRIVATE ${PROJECT_NAME}_demo_app)

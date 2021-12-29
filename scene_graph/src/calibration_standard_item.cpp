@@ -1,5 +1,5 @@
 #include <tesseract_gui/scene_graph/calibration_standard_item.h>
-#include <tesseract_gui/scene_graph/types.h>
+#include <tesseract_gui/common/standard_item_type.h>
 
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, CALIBRATION_ICON, (":/tesseract_gui/png/calibration.png"));
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, NUMERIC_ICON, (":/tesseract_gui/png/numeric.png"));
@@ -29,7 +29,7 @@ CalibrationStandardItem::CalibrationStandardItem(const QIcon &icon, const QStrin
 
 int CalibrationStandardItem::type() const
 {
-  return static_cast<int>(SceneGraphItemType::CALIBRATION);
+  return static_cast<int>(StandardItemType::CALIBRATION);
 }
 
 void CalibrationStandardItem::ctor()

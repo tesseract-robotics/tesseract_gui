@@ -1,6 +1,6 @@
 #include <tesseract_gui/scene_graph/inertial_standard_item.h>
 #include <tesseract_gui/scene_graph/origin_standard_item.h>
-#include <tesseract_gui/scene_graph/types.h>
+#include <tesseract_gui/common/standard_item_type.h>
 
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, NUMERIC_ICON, (":/tesseract_gui/png/numeric.png"));
 
@@ -28,7 +28,7 @@ InertialStandardItem::InertialStandardItem(const QIcon &icon, const QString &tex
 
 int InertialStandardItem::type() const
 {
-  return static_cast<int>(SceneGraphItemType::INERTIAL);
+  return static_cast<int>(StandardItemType::INERTIAL);
 }
 
 void InertialStandardItem::ctor()

@@ -9,7 +9,7 @@
 #include <tesseract_gui/scene_graph/sphere_standard_item.h>
 #include <tesseract_gui/scene_graph/polygon_mesh_standard_item.h>
 #include <tesseract_gui/scene_graph/octree_standard_item.h>
-#include <tesseract_gui/scene_graph/types.h>
+#include <tesseract_gui/common/standard_item_type.h>
 
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, VISUAL_ICON, (":/tesseract_gui/ignition/visual.png"));
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, TEXT_ICON, (":/tesseract_gui/png/text.png"));
@@ -39,7 +39,7 @@ VisualStandardItem::VisualStandardItem(const QIcon &icon, const QString &text, t
 
 int VisualStandardItem::type() const
 {
-  return static_cast<int>(SceneGraphItemType::VISUAL);
+  return static_cast<int>(StandardItemType::VISUAL);
 }
 
 void VisualStandardItem::ctor()

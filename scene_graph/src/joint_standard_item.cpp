@@ -5,7 +5,7 @@
 #include <tesseract_gui/scene_graph/safety_standard_item.h>
 #include <tesseract_gui/scene_graph/calibration_standard_item.h>
 #include <tesseract_gui/scene_graph/mimic_standard_item.h>
-#include <tesseract_gui/scene_graph/types.h>
+#include <tesseract_gui/common/standard_item_type.h>
 
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, JOINT_ICON, (":/tesseract_gui/ignition/joint.png"));
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, AXIS_ICON, (":/tesseract_gui/png/axis.png"));
@@ -49,7 +49,7 @@ JointStandardItem::JointStandardItem(const QIcon &icon, const QString &text, tes
 
 int JointStandardItem::type() const
 {
-  return static_cast<int>(SceneGraphItemType::JOINT);
+  return static_cast<int>(StandardItemType::JOINT);
 }
 
 void JointStandardItem::ctor()

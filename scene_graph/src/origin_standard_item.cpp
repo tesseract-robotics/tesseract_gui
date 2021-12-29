@@ -1,5 +1,5 @@
 #include <tesseract_gui/scene_graph/origin_standard_item.h>
-#include <tesseract_gui/scene_graph/types.h>
+#include <tesseract_gui/common/standard_item_type.h>
 
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, ORIGIN_ICON, (":/tesseract_gui/png/origin.png"));
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, POSITION_ICON, (":/tesseract_gui/png/position.png"));
@@ -31,7 +31,7 @@ OriginStandardItem::OriginStandardItem(const QIcon &icon, const QString &text, E
 
 int OriginStandardItem::type() const
 {
-  return static_cast<int>(SceneGraphItemType::ORIGIN);
+  return static_cast<int>(StandardItemType::ORIGIN);
 }
 
 void OriginStandardItem::ctor()

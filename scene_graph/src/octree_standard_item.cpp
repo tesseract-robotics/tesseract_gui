@@ -1,5 +1,5 @@
 #include <tesseract_gui/scene_graph/octree_standard_item.h>
-#include <tesseract_gui/scene_graph/types.h>
+#include <tesseract_gui/common/standard_item_type.h>
 
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, OCTREE_ICON, (":/tesseract_gui/png/octree.png"));
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, NUMERIC_ICON, (":/tesseract_gui/png/numeric.png"));
@@ -32,7 +32,7 @@ OctreeStandardItem::OctreeStandardItem(const QIcon &icon, const QString &text, t
 
 int OctreeStandardItem::type() const
 {
-  return static_cast<int>(SceneGraphItemType::OCTREE);
+  return static_cast<int>(StandardItemType::OCTREE);
 }
 
 void OctreeStandardItem::ctor()

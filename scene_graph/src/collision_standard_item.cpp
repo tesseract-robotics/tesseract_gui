@@ -8,7 +8,7 @@
 #include <tesseract_gui/scene_graph/sphere_standard_item.h>
 #include <tesseract_gui/scene_graph/polygon_mesh_standard_item.h>
 #include <tesseract_gui/scene_graph/octree_standard_item.h>
-#include <tesseract_gui/scene_graph/types.h>
+#include <tesseract_gui/common/standard_item_type.h>
 
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, COLLISION_ICON, (":/tesseract_gui/ignition/collision.png"));
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, TEXT_ICON, (":/tesseract_gui/png/text.png"));
@@ -37,7 +37,7 @@ CollisionStandardItem::CollisionStandardItem(const QIcon &icon, const QString &t
 
 int CollisionStandardItem::type() const
 {
-  return static_cast<int>(SceneGraphItemType::COLLISION);
+  return static_cast<int>(StandardItemType::COLLISION);
 }
 
 void CollisionStandardItem::ctor()

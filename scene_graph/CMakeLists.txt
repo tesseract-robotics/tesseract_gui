@@ -36,18 +36,18 @@ target_link_libraries(${PROJECT_NAME}_scene_graph_model PUBLIC
   tesseract::tesseract_scene_graph
   tesseract::tesseract_common
   Qt5::Core Qt5::Gui Qt5::Widgets
-  ${PROJECT_NAME}_resources)
+  ${PROJECT_NAME}_common)
 target_include_directories(${PROJECT_NAME}_scene_graph_model PUBLIC
     "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
     "$<INSTALL_INTERFACE:include>")
-add_dependencies(${PROJECT_NAME}_scene_graph_model ${PROJECT_NAME}_resources)
+add_dependencies(${PROJECT_NAME}_scene_graph_model ${PROJECT_NAME}_common)
 
 add_executable(${PROJECT_NAME}_scene_graph_demo demo/scene_graph_demo.cpp )
 target_link_libraries(${PROJECT_NAME}_scene_graph_demo PRIVATE
   tesseract::tesseract_support
   tesseract::tesseract_urdf
   ${PROJECT_NAME}_scene_graph_model
-  ${PROJECT_NAME}_resources)
+  ${PROJECT_NAME}_common)
 
 # Mark cpp header files for installation
 install(DIRECTORY include/${PROJECT_NAME}

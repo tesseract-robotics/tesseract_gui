@@ -22,7 +22,7 @@
  */
 #include <tesseract_gui/plot/plot_docker.h>
 #include <tesseract_gui/plot/plot_widget_editor.h>
-#include <tesseract_gui/resources/svg_util.h>
+#include <tesseract_gui/common/svg_util.h>
 #include "Qads/DockSplitter.h"
 #include <QPushButton>
 #include <QBoxLayout>

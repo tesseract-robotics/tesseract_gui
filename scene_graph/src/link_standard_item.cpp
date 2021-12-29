@@ -2,7 +2,7 @@
 #include <tesseract_gui/scene_graph/inertial_standard_item.h>
 #include <tesseract_gui/scene_graph/visual_standard_item.h>
 #include <tesseract_gui/scene_graph/collision_standard_item.h>
-#include <tesseract_gui/scene_graph/types.h>
+#include <tesseract_gui/common/standard_item_type.h>
 
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, LINK_ICON, (":/tesseract_gui/ignition/link.png"));
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, TEXT_ICON, (":/tesseract_gui/png/text.png"));
@@ -34,7 +34,7 @@ LinkStandardItem::LinkStandardItem(const QIcon &icon, const QString &text, tesse
 
 int LinkStandardItem::type() const
 {
-  return static_cast<int>(SceneGraphItemType::LINK);
+  return static_cast<int>(StandardItemType::LINK);
 }
 
 void LinkStandardItem::ctor()

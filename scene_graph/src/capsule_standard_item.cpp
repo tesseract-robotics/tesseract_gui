@@ -1,5 +1,5 @@
 #include <tesseract_gui/scene_graph/capsule_standard_item.h>
-#include <tesseract_gui/scene_graph/types.h>
+#include <tesseract_gui/common/standard_item_type.h>
 
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, CAPSULE_ICON, (":/tesseract_gui/png/capsule.png"));
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, NUMERIC_ICON, (":/tesseract_gui/png/numeric.png"));
@@ -29,7 +29,7 @@ CapsuleStandardItem::CapsuleStandardItem(const QIcon &icon, const QString &text,
 
 int CapsuleStandardItem::type() const
 {
-  return static_cast<int>(SceneGraphItemType::CAPSULE);
+  return static_cast<int>(StandardItemType::CAPSULE);
 }
 
 void CapsuleStandardItem::ctor()

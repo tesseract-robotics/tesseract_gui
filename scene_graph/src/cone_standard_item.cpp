@@ -1,5 +1,5 @@
 #include <tesseract_gui/scene_graph/cone_standard_item.h>
-#include <tesseract_gui/scene_graph/types.h>
+#include <tesseract_gui/common/standard_item_type.h>
 
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, CONE_ICON, (":/tesseract_gui/png/cone.png"));
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, NUMERIC_ICON, (":/tesseract_gui/png/numeric.png"));
@@ -29,7 +29,7 @@ ConeStandardItem::ConeStandardItem(const QIcon &icon, const QString &text, tesse
 
 int ConeStandardItem::type() const
 {
-  return static_cast<int>(SceneGraphItemType::CONE);
+  return static_cast<int>(StandardItemType::CONE);
 }
 
 void ConeStandardItem::ctor()

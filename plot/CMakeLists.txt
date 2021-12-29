@@ -68,12 +68,12 @@ target_link_libraries(${PROJECT_NAME}_plot PUBLIC
   Qwt::Qwt
   tesseract::tesseract_common
   qt_advanced_docking
-  ${PROJECT_NAME}_resources)
+  ${PROJECT_NAME}_common)
 target_include_directories(${PROJECT_NAME}_plot PUBLIC
     "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
     "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/plot>"
     "$<INSTALL_INTERFACE:include>")
-add_dependencies(${PROJECT_NAME}_plot ${PROJECT_NAME}_resources qt_advanced_docking)
+add_dependencies(${PROJECT_NAME}_plot ${PROJECT_NAME}_common qt_advanced_docking)
 
 add_executable(${PROJECT_NAME}_plot_demo demo/plot_demo.cpp )
 target_link_libraries(${PROJECT_NAME}_plot_demo PRIVATE

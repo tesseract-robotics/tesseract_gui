@@ -22,7 +22,6 @@ target_include_directories(${PROJECT_NAME}_resources PUBLIC
 # Mark cpp header files for installation
 install(DIRECTORY include/${PROJECT_NAME}
   DESTINATION include
-  FILES_MATCHING PATTERN "*.h" PATTERN "*.qml" PATTERN "*.qrc"
   PATTERN ".svn" EXCLUDE
 )
 

@@ -16,7 +16,7 @@ add_subdirectory(resources)
 add_subdirectory(acm)
 add_subdirectory(joint_slider)
 add_subdirectory(plot)
-#add_subdirectory(scene_graph)
+add_subdirectory(scene_graph)
 add_subdirectory(joint_trajectory)
 add_subdirectory(demo_app)
 

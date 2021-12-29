@@ -21,5 +21,58 @@
         <file>png/programming.png</file>
         <file>png/robotic-arm.png</file>
         <file>png/trajectory.png</file>
+        <file>ignition/actor.png</file>
+        <file>ignition/chevron-down.svg</file>
+        <file>ignition/chevron-right.svg</file>
+        <file>ignition/collision.png</file>
+        <file>ignition/joint.png</file>
+        <file>ignition/light.png</file>
+        <file>ignition/link.png</file>
+        <file>ignition/lock.svg</file>
+        <file>ignition/minus.png</file>
+        <file>ignition/model.png</file>
+        <file>ignition/plus.png</file>
+        <file>ignition/plus-link.png</file>
+        <file>ignition/plus-sensor.png</file>
+        <file>ignition/sensor.png</file>
+        <file>ignition/unlock.svg</file>
+        <file>ignition/visual.png</file>
+        <file>png/origin.png</file>
+        <file>png/calibration.png</file>
+        <file>png/dynamics.png</file>
+        <file>png/safety.png</file>
+        <file>png/color.png</file>
+        <file>png/graph.png</file>
+        <file>png/orientation.png</file>
+        <file>png/position.png</file>
+        <file>ignition/link_vector.png</file>
+        <file>ignition/joint_vector.png</file>
+        <file>ignition/collision_vector.png</file>
+        <file>ignition/visual_vector.png</file>
+        <file>png/limits.png</file>
+        <file>png/axis.png</file>
+        <file>png/mesh.png</file>
+        <file>png/shapes.png</file>
+        <file>png/cone.png</file>
+        <file>png/sphere.png</file>
+        <file>png/anchor.png</file>
+        <file>ignition/joint_fixed.png</file>
+        <file>ignition/joint_revolute.png</file>
+        <file>ignition/joint_prismatic.png</file>
+        <file>ignition/joint_continous.png</file>
+        <file>png/revolute.png</file>
+        <file>ignition/joint_unknown.png</file>
+        <file>png/prismatic.png</file>
+        <file>png/continuous.png</file>
+        <file>png/warning.png</file>
+        <file>png/text.png</file>
+        <file>png/url.png</file>
+        <file>png/rgb.png</file>
+        <file>png/numeric.png</file>
+        <file>png/cylinder.png</file>
+        <file>png/octree.png</file>
+        <file>png/cube.png</file>
+        <file>png/capsule.png</file>
+        <file>png/surface.png</file>
     </qresource>
 </RCC>

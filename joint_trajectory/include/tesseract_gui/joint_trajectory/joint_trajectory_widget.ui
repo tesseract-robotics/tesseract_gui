@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>DockWidget</string>
+   <string>Joint Trajectory Widget</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -139,7 +139,8 @@
          <string/>
         </property>
         <property name="icon">
-         <iconset theme=":/tesseract_gui/png/chart.png"/>
+         <iconset theme=":/tesseract_gui/png/chart.png">
+          <normaloff>.</normaloff>.</iconset>
         </property>
        </widget>
       </item>

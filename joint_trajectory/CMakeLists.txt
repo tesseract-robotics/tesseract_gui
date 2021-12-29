@@ -2,7 +2,6 @@
 find_package(tesseract_common REQUIRED)
 find_package(tesseract_visualization REQUIRED)
 find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
-find_package(Qwt REQUIRED)
 
 # Load variable for clang tidy args, compiler options and cxx version
 tesseract_variables()
@@ -14,10 +13,12 @@ add_library(${PROJECT_NAME}_joint_trajectory_model SHARED
   src/joint_trajectory_model.cpp)
 target_link_libraries(${PROJECT_NAME}_joint_trajectory_model PUBLIC
   tesseract::tesseract_common
-  Qt5::Core Qt5::Gui)
+  Qt5::Core Qt5::Gui
+  ${PROJECT_NAME}_resources)
 target_include_directories(${PROJECT_NAME}_joint_trajectory_model PUBLIC
     "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
     "$<INSTALL_INTERFACE:include>")
+add_dependencies(${PROJECT_NAME}_joint_trajectory_model ${PROJECT_NAME}_resources)
 
 QT5_WRAP_CPP(TRAJ_WIDGET_headers_MOC
   include/tesseract_gui/joint_trajectory/joint_trajectory_widget.h
@@ -29,7 +30,6 @@ QT5_WRAP_UI(TRAJ_WIDGET_headers_UI
 add_library(${PROJECT_NAME}_joint_trajectory_widget SHARED
   ${TRAJ_WIDGET_headers_MOC}
   ${TRAJ_WIDGET_headers_UI}
-  ${TRAJ_WIDGET_resources_RCC}
   src/joint_trajectory_widget.cpp
   src/joint_trajectory_plot_dialog.cpp)
 
@@ -39,7 +39,6 @@ target_link_libraries(${PROJECT_NAME}_joint_trajectory_widget PUBLIC
   Qt5::Core
   Qt5::Gui
   Qt5::Widgets
-  Qwt::Qwt
   ${PROJECT_NAME}_plot
   ${PROJECT_NAME}_resources)
 target_include_directories(${PROJECT_NAME}_joint_trajectory_widget PUBLIC

@@ -47,9 +47,6 @@ public:
 
 private:
   std::map<QString, tesseract_common::JointTrajectorySet> trajectory_sets_;
-  QIcon trajectory_icon_;
-  QIcon trajectory_state_icon_;
-  QIcon trajectory_set_icon_;
 };
 
 class JointStateItem : public QStandardItem
@@ -62,16 +59,20 @@ public:
 
   tesseract_common::JointTrajectoryInfo& parent_trajectory;
   tesseract_common::JointState& state;
+private:
+  void ctor();
 };
 
 class JointTrajectoryItem : public QStandardItem
 {
 public:
-  JointTrajectoryItem(tesseract_common::JointTrajectoryInfo& trajectory);
-  explicit JointTrajectoryItem(const QString &text, tesseract_common::JointTrajectoryInfo& trajectory);
-  JointTrajectoryItem(const QIcon &icon, const QString &text, tesseract_common::JointTrajectoryInfo& trajectory);
+  JointTrajectoryItem(tesseract_common::JointTrajectoryInfo& trajectory_info);
+  explicit JointTrajectoryItem(const QString &text, tesseract_common::JointTrajectoryInfo& trajectory_info);
+  JointTrajectoryItem(const QIcon &icon, const QString &text, tesseract_common::JointTrajectoryInfo& trajectory_info);
   int type() const override;
-  tesseract_common::JointTrajectoryInfo& trajectory;
+  tesseract_common::JointTrajectoryInfo& trajectory_info;
+private:
+  void ctor();
 };
 
 class JointTrajectorySetItem : public QStandardItem
@@ -82,6 +83,8 @@ public:
   JointTrajectorySetItem(const QIcon &icon, const QString &text, tesseract_common::JointTrajectorySet& trajectory_set);
   int type() const override;
   tesseract_common::JointTrajectorySet& trajectory_set;
+private:
+  void ctor();
 };
 }
 

@@ -18,6 +18,7 @@ add_subdirectory(joint_slider)
 add_subdirectory(plot)
 add_subdirectory(scene_graph)
 add_subdirectory(joint_trajectory)
+add_subdirectory(kinematic_group)
 add_subdirectory(demo_app)
 
 install(FILES "${CMAKE_CURRENT_LIST_DIR}/cmake/FindQwt.cmake" DESTINATION lib/cmake/${PROJECT_NAME})

@@ -8,7 +8,7 @@ find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
 # Load variable for clang tidy args, compiler options and cxx version
 tesseract_variables()
 
-add_library(${PROJECT_NAME}_scene_graph_model SHARED
+add_library(${PROJECT_NAME}_scene_graph SHARED
   src/calibration_standard_item.cpp
   src/collision_standard_item.cpp
   src/dynamics_standard_item.cpp
@@ -32,21 +32,21 @@ add_library(${PROJECT_NAME}_scene_graph_model SHARED
   src/octree_standard_item.cpp
 )
 
-target_link_libraries(${PROJECT_NAME}_scene_graph_model PUBLIC
+target_link_libraries(${PROJECT_NAME}_scene_graph PUBLIC
   tesseract::tesseract_scene_graph
   tesseract::tesseract_common
   Qt5::Core Qt5::Gui Qt5::Widgets
   ${PROJECT_NAME}_common)
-target_include_directories(${PROJECT_NAME}_scene_graph_model PUBLIC
+target_include_directories(${PROJECT_NAME}_scene_graph PUBLIC
     "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
     "$<INSTALL_INTERFACE:include>")
-add_dependencies(${PROJECT_NAME}_scene_graph_model ${PROJECT_NAME}_common)
+add_dependencies(${PROJECT_NAME}_scene_graph ${PROJECT_NAME}_common)
 
 add_executable(${PROJECT_NAME}_scene_graph_demo demo/scene_graph_demo.cpp )
 target_link_libraries(${PROJECT_NAME}_scene_graph_demo PRIVATE
   tesseract::tesseract_support
   tesseract::tesseract_urdf
-  ${PROJECT_NAME}_scene_graph_model
+  ${PROJECT_NAME}_scene_graph
   ${PROJECT_NAME}_common)
 
 # Mark cpp header files for installation
@@ -56,4 +56,4 @@ install(DIRECTORY include/${PROJECT_NAME}
   PATTERN ".svn" EXCLUDE
 )
 
-install_targets(TARGETS ${PROJECT_NAME}_scene_graph_model ${PROJECT_NAME}_scene_graph_demo)
+install_targets(TARGETS ${PROJECT_NAME}_scene_graph ${PROJECT_NAME}_scene_graph_demo)

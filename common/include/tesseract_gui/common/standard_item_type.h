@@ -29,7 +29,14 @@ enum class StandardItemType : int
   PLANE        = QStandardItem::UserType + 20,
   SPHERE       = QStandardItem::UserType + 21,
   POLYGON_MESH = QStandardItem::UserType + 22,
-  OCTREE       = QStandardItem::UserType + 23
+  OCTREE       = QStandardItem::UserType + 23,
+
+  // SRDF Types
+  OPW_PARAMS   = QStandardItem::UserType + 24,
+  TCP          = QStandardItem::UserType + 25,
+  CHAIN_GROUP  = QStandardItem::UserType + 26,
+  JOINT_GROUP  = QStandardItem::UserType + 27,
+  LINK_GROUP   = QStandardItem::UserType + 28
 };
 }
 

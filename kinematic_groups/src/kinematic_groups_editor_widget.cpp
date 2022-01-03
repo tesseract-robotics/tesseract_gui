@@ -1,19 +1,19 @@
-#include <tesseract_gui/kinematic_group/kinematic_group_editor_widget.h>
+#include <tesseract_gui/kinematic_groups/kinematic_groups_editor_widget.h>
 #include <tesseract_gui/common/standard_item_type.h>
-#include "ui_kinematic_group_editor_widget.h"
+#include "ui_kinematic_groups_editor_widget.h"
 
 
 
 namespace tesseract_gui
 {
-KinematicGroupEditorWidget::KinematicGroupEditorWidget(QStringList joint_names,
+KinematicGroupsEditorWidget::KinematicGroupsEditorWidget(QStringList joint_names,
                                                        QStringList link_names,
                                                        ChainGroupValidator chain_group_validator,
                                                        JointGroupValidator joint_group_validator,
                                                        LinkGroupValidator link_group_validator,
                                                        QWidget *parent)
   : QWidget(parent)
-  , ui_(std::make_unique<Ui::KinematicGroupEditorWidget>())
+  , ui_(std::make_unique<Ui::KinematicGroupsEditorWidget>())
   , chain_group_validator_(chain_group_validator)
   , joint_group_validator_(joint_group_validator)
   , link_group_validator_(link_group_validator)
@@ -38,15 +38,15 @@ KinematicGroupEditorWidget::KinematicGroupEditorWidget(QStringList joint_names,
   connect(ui_->removeLinkPushButton, SIGNAL(clicked()), this, SLOT(onRemoveLink()));
 }
 
-KinematicGroupEditorWidget::~KinematicGroupEditorWidget() = default;
+KinematicGroupsEditorWidget::~KinematicGroupsEditorWidget() = default;
 
-void KinematicGroupEditorWidget::setModel(KinematicGroupModel* model)
+void KinematicGroupsEditorWidget::setModel(KinematicGroupsModel* model)
 {
   group_model_ = model;
   ui_->kinGroupTreeView->setModel(group_model_);
 }
 
-void KinematicGroupEditorWidget::onAddGroup()
+void KinematicGroupsEditorWidget::onAddGroup()
 {
   QString group_name = ui_->groupNameLineEdit->text();
   if (group_name.isEmpty())
@@ -78,7 +78,7 @@ void KinematicGroupEditorWidget::onAddGroup()
       return;
 
     tesseract_srdf::JointGroup group;
-    for (const auto& joint : joints)
+    for (auto& joint : joints)
       group.push_back(joint.toStdString());
 
     group_model_->addJointGroup(group_name, group);
@@ -97,7 +97,7 @@ void KinematicGroupEditorWidget::onAddGroup()
       return;
 
     tesseract_srdf::LinkGroup group;
-    for (const auto& link : links)
+    for (auto& link : links)
       group.push_back(link.toStdString());
 
     group_model_->addLinkGroup(group_name, group);
@@ -108,7 +108,7 @@ void KinematicGroupEditorWidget::onAddGroup()
   }
 }
 
-void KinematicGroupEditorWidget::onRemoveGroup()
+void KinematicGroupsEditorWidget::onRemoveGroup()
 {
   QModelIndexList selection = ui_->kinGroupTreeView->selectionModel()->selectedIndexes();
   int row_cnt = selection.count();
@@ -124,12 +124,12 @@ void KinematicGroupEditorWidget::onRemoveGroup()
   }
 }
 
-void KinematicGroupEditorWidget::onAddJoint()
+void KinematicGroupsEditorWidget::onAddJoint()
 {
   ui_->jointListWidget->addItem(ui_->jointComboBox->currentText());
 }
 
-void KinematicGroupEditorWidget::onRemoveJoint()
+void KinematicGroupsEditorWidget::onRemoveJoint()
 {
   QList<QListWidgetItem*> items = ui_->jointListWidget->selectedItems();
   for (auto* item : items)
@@ -139,12 +139,12 @@ void KinematicGroupEditorWidget::onRemoveJoint()
   }
 }
 
-void KinematicGroupEditorWidget::onAddLink()
+void KinematicGroupsEditorWidget::onAddLink()
 {
   ui_->linkListWidget->addItem(ui_->linkComboBox->currentText());
 }
 
-void KinematicGroupEditorWidget::onRemoveLink()
+void KinematicGroupsEditorWidget::onRemoveLink()
 {
   QList<QListWidgetItem*> items = ui_->linkListWidget->selectedItems();
   for (auto* item : items)

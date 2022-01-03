@@ -1,7 +1,6 @@
 #ifndef TESSERACT_GUI_KINEMATIC_GROUP_MODEL_H
 #define TESSERACT_GUI_KINEMATIC_GROUP_MODEL_H
 
-
 #include <tesseract_common/macros.h>
 TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #ifndef Q_MOC_RUN
@@ -55,31 +54,32 @@ private:
   void ctor();
 };
 
-class KinematicGroupModel : public QStandardItemModel
+class KinematicGroupsModel : public QStandardItemModel
 {
   Q_OBJECT
 
 public:
 
-  explicit KinematicGroupModel(QObject *parent = nullptr);
-  KinematicGroupModel(const KinematicGroupModel &other);
-  KinematicGroupModel &operator=(const KinematicGroupModel &other);
+  explicit KinematicGroupsModel(QObject *parent = nullptr);
+  KinematicGroupsModel(const KinematicGroupsModel &other);
+  KinematicGroupsModel &operator=(const KinematicGroupsModel &other);
 
   void addChainGroup(QString group_name, tesseract_srdf::ChainGroup group);
   void addJointGroup(QString group_name, tesseract_srdf::JointGroup group);
   void addLinkGroup(QString group_name, tesseract_srdf::LinkGroup group);
 
   void removeGroup(QString group_name);
+  void clear();
 
+  const tesseract_srdf::GroupNames& getGroupNames() const;
   const tesseract_srdf::ChainGroups& getChainGroups() const;
   const tesseract_srdf::JointGroups& getJointGroups() const;
   const tesseract_srdf::LinkGroups& getLinkGroups() const;
 
-//  const tesseract_common::JointState& getJointState(const QModelIndex& row) const;
-//  const tesseract_common::JointTrajectoryInfo& getJointTrajectory(const QModelIndex& row) const;
-//  const tesseract_common::JointTrajectorySet& getJointTrajectorySet(const QModelIndex& row) const;
-
-  void clear();
+Q_SIGNALS:
+  void groupRemoved(QString group_name);
+  void groupAdded(QString group_name);
+  void cleared();
 
 private:
   tesseract_srdf::GroupNames group_names_;

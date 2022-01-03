@@ -10,13 +10,13 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #endif
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
-#include <tesseract_gui/kinematic_group/kinematic_group_model.h>
+#include <tesseract_gui/kinematic_groups/kinematic_groups_model.h>
 #include <QWidget>
 #include <QStandardItemModel>
 #include <QStringListModel>
 
 namespace Ui {
-class KinematicGroupEditorWidget;
+class KinematicGroupsEditorWidget;
 }
 
 namespace tesseract_gui
@@ -25,20 +25,20 @@ using ChainGroupValidator = std::function<bool(QString, QString)>;
 using JointGroupValidator = std::function<bool(QStringList)>;
 using LinkGroupValidator = std::function<bool(QStringList)>;
 
-class KinematicGroupEditorWidget : public QWidget
+class KinematicGroupsEditorWidget : public QWidget
 {
   Q_OBJECT
 
 public:
-  explicit KinematicGroupEditorWidget(QStringList joint_names,
+  explicit KinematicGroupsEditorWidget(QStringList joint_names,
                                       QStringList link_names,
                                       ChainGroupValidator chain_group_validator = nullptr,
                                       JointGroupValidator joint_group_validator = nullptr,
                                       LinkGroupValidator link_group_validator = nullptr,
                                       QWidget *parent = nullptr);
-  ~KinematicGroupEditorWidget();
+  ~KinematicGroupsEditorWidget();
 
-  void setModel(KinematicGroupModel* model);
+  void setModel(KinematicGroupsModel* model);
 
 public Q_SLOTS:
   void onAddGroup();
@@ -49,10 +49,10 @@ public Q_SLOTS:
   void onRemoveLink();
 
 private:
-  std::unique_ptr<Ui::KinematicGroupEditorWidget> ui_;
+  std::unique_ptr<Ui::KinematicGroupsEditorWidget> ui_;
   QStringListModel link_names_model_;
   QStringListModel joint_names_model_;
-  KinematicGroupModel* group_model_;
+  KinematicGroupsModel* group_model_;
   ChainGroupValidator chain_group_validator_;
   JointGroupValidator joint_group_validator_;
   LinkGroupValidator link_group_validator_;

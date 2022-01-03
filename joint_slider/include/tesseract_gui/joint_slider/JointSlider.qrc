@@ -1,7 +1,0 @@
-<!DOCTYPE RCC>
-<RCC version="1.0">
-  <qresource prefix="/JointSlider">
-      <file alias="JointSlider.qml">qml/JointSlider.qml</file>
-      <file alias="JointSliderForm.ui.qml">qml/JointSliderForm.ui.qml</file>
-  </qresource>
-</RCC>

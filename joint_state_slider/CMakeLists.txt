@@ -1,0 +1,43 @@
+
+find_package(tesseract_common REQUIRED)
+find_package(tesseract_scene_graph REQUIRED)
+find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
+
+# Load variable for clang tidy args, compiler options and cxx version
+tesseract_variables()
+
+QT5_WRAP_CPP(JOINT_STATE_SLIDER_WIDGET_headers_MOC
+  include/tesseract_gui/joint_state_slider/joint_state_slider_widget.h)
+QT5_WRAP_UI(JOINT_STATE_SLIDER_WIDGET_headers_UI
+  include/tesseract_gui/joint_state_slider/joint_state_slider_widget.ui)
+
+add_library(${PROJECT_NAME}_joint_state_slider_widget SHARED
+  ${JOINT_STATE_SLIDER_WIDGET_headers_MOC}
+  ${JOINT_STATE_SLIDER_WIDGET_headers_UI}
+  src/joint_state_slider_widget.cpp)
+target_link_libraries(${PROJECT_NAME}_joint_state_slider_widget PUBLIC
+  Qt5::Core Qt5::Gui Qt5::Widgets
+  tesseract::tesseract_scene_graph
+  tesseract::tesseract_common)
+target_include_directories(${PROJECT_NAME}_joint_state_slider_widget PUBLIC
+    "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
+    "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/joint_state_slider>"
+    "$<INSTALL_INTERFACE:include>")
+
+find_package(tesseract_support REQUIRED)
+find_package(tesseract_urdf REQUIRED)
+
+add_executable(${PROJECT_NAME}_joint_state_slider_demo demo/joint_state_slider_demo.cpp)
+target_link_libraries(${PROJECT_NAME}_joint_state_slider_demo PRIVATE
+  ${PROJECT_NAME}_joint_state_slider_widget
+  tesseract::tesseract_support
+  tesseract::tesseract_urdf)
+
+# Mark cpp header files for installation
+install(DIRECTORY include/${PROJECT_NAME}
+  DESTINATION include
+  FILES_MATCHING PATTERN "*.h" PATTERN "*.qml" PATTERN "*.qrc"
+  PATTERN ".svn" EXCLUDE
+)
+
+install_targets(TARGETS ${PROJECT_NAME}_joint_state_slider_widget ${PROJECT_NAME}_joint_state_slider_demo)

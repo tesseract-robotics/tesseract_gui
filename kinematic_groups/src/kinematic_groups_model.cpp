@@ -1,4 +1,4 @@
-#include <tesseract_gui/kinematic_group/kinematic_group_model.h>
+#include <tesseract_gui/kinematic_groups/kinematic_groups_model.h>
 #include <tesseract_gui/common/standard_item_type.h>
 
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, ROBOT_ICON, (":/tesseract_gui/png/robotic-arm.png"));
@@ -124,12 +124,12 @@ void LinkGroupStandardItem::ctor()
   }
 }
 
-KinematicGroupModel::KinematicGroupModel(QObject *parent)
+KinematicGroupsModel::KinematicGroupsModel(QObject *parent)
   : QStandardItemModel(parent)
 {
   clear();
 }
-KinematicGroupModel::KinematicGroupModel(const KinematicGroupModel &other)
+KinematicGroupsModel::KinematicGroupsModel(const KinematicGroupsModel &other)
 : QStandardItemModel(other.d_ptr->parent)
 {
   this->group_names_ = other.group_names_;
@@ -137,7 +137,7 @@ KinematicGroupModel::KinematicGroupModel(const KinematicGroupModel &other)
   this->joint_groups_ =  other.joint_groups_;
   this->link_groups_ =  other.link_groups_;
 }
-KinematicGroupModel &KinematicGroupModel::operator=(const KinematicGroupModel &other)
+KinematicGroupsModel &KinematicGroupsModel::operator=(const KinematicGroupsModel &other)
 {
   this->group_names_ = other.group_names_;
   this->chain_groups_ =  other.chain_groups_;
@@ -146,7 +146,7 @@ KinematicGroupModel &KinematicGroupModel::operator=(const KinematicGroupModel &o
   return *this;
 }
 
-void KinematicGroupModel::clear()
+void KinematicGroupsModel::clear()
 {
   QStandardItemModel::clear();
   setColumnCount(2);
@@ -155,9 +155,11 @@ void KinematicGroupModel::clear()
   appendRow(new QStandardItem(CHAIN_GROUPS_KEY));
   appendRow(new QStandardItem(JOINT_GROUPS_KEY));
   appendRow(new QStandardItem(LINK_GROUPS_KEY));
+
+  Q_EMIT cleared();
 }
 
-void KinematicGroupModel::addChainGroup(QString group_name, tesseract_srdf::ChainGroup group)
+void KinematicGroupsModel::addChainGroup(QString group_name, tesseract_srdf::ChainGroup group)
 {
   if(group_names_.find(group_name.toStdString()) != group_names_.end())
     removeGroup(group_name);
@@ -167,9 +169,11 @@ void KinematicGroupModel::addChainGroup(QString group_name, tesseract_srdf::Chai
 
   chain_groups_[group_name.toStdString()] = group;
   group_names_.insert(group_name.toStdString());
+
+  Q_EMIT groupAdded(group_name);
 }
 
-void KinematicGroupModel::addJointGroup(QString group_name, tesseract_srdf::JointGroup group)
+void KinematicGroupsModel::addJointGroup(QString group_name, tesseract_srdf::JointGroup group)
 {
   if(group_names_.find(group_name.toStdString()) != group_names_.end())
     removeGroup(group_name);
@@ -179,9 +183,11 @@ void KinematicGroupModel::addJointGroup(QString group_name, tesseract_srdf::Join
 
   joint_groups_[group_name.toStdString()] = group;
   group_names_.insert(group_name.toStdString());
+
+  Q_EMIT groupAdded(group_name);
 }
 
-void KinematicGroupModel::addLinkGroup(QString group_name, tesseract_srdf::LinkGroup group)
+void KinematicGroupsModel::addLinkGroup(QString group_name, tesseract_srdf::LinkGroup group)
 {
   if(group_names_.find(group_name.toStdString()) != group_names_.end())
     removeGroup(group_name);
@@ -191,9 +197,11 @@ void KinematicGroupModel::addLinkGroup(QString group_name, tesseract_srdf::LinkG
 
   link_groups_[group_name.toStdString()] = group;
   group_names_.insert(group_name.toStdString());
+
+  Q_EMIT groupAdded(group_name);
 }
 
-void KinematicGroupModel::removeGroup(QString group_name)
+void KinematicGroupsModel::removeGroup(QString group_name)
 {
   group_names_.erase(group_name.toStdString());
 
@@ -238,19 +246,26 @@ void KinematicGroupModel::removeGroup(QString group_name)
     if(it != link_groups_.end())
       link_groups_.erase(it);
   }
+
+  Q_EMIT groupRemoved(group_name);
 }
 
-const tesseract_srdf::ChainGroups& KinematicGroupModel::getChainGroups() const
+const tesseract_srdf::GroupNames& KinematicGroupsModel::getGroupNames() const
+{
+  return group_names_;
+}
+
+const tesseract_srdf::ChainGroups& KinematicGroupsModel::getChainGroups() const
 {
   return chain_groups_;
 }
 
-const tesseract_srdf::JointGroups& KinematicGroupModel::getJointGroups() const
+const tesseract_srdf::JointGroups& KinematicGroupsModel::getJointGroups() const
 {
   return joint_groups_;
 }
 
-const tesseract_srdf::LinkGroups& KinematicGroupModel::getLinkGroups() const
+const tesseract_srdf::LinkGroups& KinematicGroupsModel::getLinkGroups() const
 {
   return link_groups_;
 }

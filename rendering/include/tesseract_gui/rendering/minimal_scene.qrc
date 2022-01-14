@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/tesseract_gui">
+        <file>minimal_scene.qrc</file>
+    </qresource>
+</RCC>

@@ -10,6 +10,7 @@ add_library(${PROJECT_NAME}_common SHARED
   ${RESOURCES_common_RCC}
   src/entity_manager.cpp
   src/gui_utils.cpp
+  src/joint_trajectory_set.cpp
   src/svg_util.cpp)
 target_cxx_version(${PROJECT_NAME}_common PUBLIC VERSION ${TESSERACT_CXX_VERSION})
 target_link_libraries(${PROJECT_NAME}_common PUBLIC

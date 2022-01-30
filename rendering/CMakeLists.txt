@@ -22,6 +22,7 @@ add_library(${PROJECT_NAME}_rendering_widget SHARED
   ${MINIMAL_SCENE_resources_RCC}
   src/minimal_scene.cpp)
 target_link_libraries(${PROJECT_NAME}_rendering_widget PUBLIC
+  ${PROJECT_NAME}_common
   ignition-common4::ignition-common4-profiler
   ignition-common4::ignition-common4-events
   ignition-common4::ignition-common4-av

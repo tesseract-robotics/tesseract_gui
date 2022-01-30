@@ -65,8 +65,10 @@ Rectangle {
     if (undefined === parent)
       return;
 
-      width = Qt.binding(function() {return parent.parent.width})
-      height = Qt.binding(function() {return parent.parent.height})
+      width = Qt.binding(function() {return parent.width})
+      height = Qt.binding(function() {return parent.height})
+//        width = Qt.binding(function() {return parent.parent.width})
+//        height = Qt.binding(function() {return parent.parent.height})
   }
 
   DropArea {

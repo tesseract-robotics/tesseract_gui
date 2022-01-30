@@ -16,6 +16,7 @@
 */
 
 #include <tesseract_gui/rendering/minimal_scene.h>
+#include <tesseract_gui/common/gui_utils.h>
 
 #include <algorithm>
 #include <map>
@@ -302,21 +303,24 @@ void IgnRenderer::Render(RenderSync *_renderSync)
   // view control
   this->HandleMouseEvent();
 
-  if (ignition::gui::App())
+  if (tesseract_gui::getApp())
   {
-    ignition::gui::App()->sendEvent(
-        ignition::gui::App()->findChild<ignition::gui::MainWindow *>(),
-        new ignition::gui::events::PreRender());
+    tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), new ignition::gui::events::PreRender());
+
+//    ignition::gui::App()->sendEvent(
+//        ignition::gui::App()->findChild<ignition::gui::MainWindow *>(),
+//        new ignition::gui::events::PreRender());
   }
 
   // update and render to texture
   this->dataPtr->camera->Update();
 
-  if (ignition::gui::App())
+  if (tesseract_gui::getApp())
   {
-    ignition::gui::App()->sendEvent(
-        ignition::gui::App()->findChild<ignition::gui::MainWindow *>(),
-        new ignition::gui::events::Render());
+    tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), new ignition::gui::events::Render());
+//    ignition::gui::App()->sendEvent(
+//        ignition::gui::App()->findChild<ignition::gui::MainWindow *>(),
+//        new ignition::gui::events::Render());
   }
   _renderSync->ReleaseQtThreadFromBlock(lock);
 }

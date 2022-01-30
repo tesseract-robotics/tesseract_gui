@@ -33,7 +33,6 @@
 #endif
 #include <ignition/msgs.hh>
 
-#include <ignition/rendering/Capsule.hh>
 #include <ignition/rendering/RenderEngine.hh>
 #include <ignition/rendering/RenderingIface.hh>
 #include <ignition/rendering/Scene.hh>
@@ -49,6 +48,8 @@
 #include <ignition/gui/GuiEvents.hh>
 #include <ignition/gui/MainWindow.hh>
 
+#include <tesseract_gui/common/gui_utils.h>
+#include <tesseract_gui/transport_scene_manager/transport_conversions.h>
 #include <tesseract_gui/transport_scene_manager/transport_scene_manager.h>
 
 /// \brief Private data class for TransportSceneManager
@@ -98,20 +99,6 @@ class tesseract_gui::TransportSceneManagerPrivate
   /// \param[in] _msg Visual msg
   /// \return Visual visual created from the msg
   public: ignition::rendering::VisualPtr LoadVisual(const ignition::msgs::Visual &_msg);
-
-  /// \brief Load a geometry from a geometry msg
-  /// \param[in] _msg Geometry msg
-  /// \param[out] _scale Geometry scale that will be set based on msg param
-  /// \param[out] _localPose Additional local pose to be applied after the
-  /// visual's pose
-  /// \return Geometry object created from the msg
-  public: ignition::rendering::GeometryPtr LoadGeometry(const ignition::msgs::Geometry &_msg,
-      ignition::math::Vector3d &_scale, ignition::math::Pose3d &_localPose);
-
-  /// \brief Load a material from a material msg
-  /// \param[in] _msg Material msg
-  /// \return Material object created from the msg
-  public: ignition::rendering::MaterialPtr LoadMaterial(const ignition::msgs::Material &_msg);
 
   /// \brief Load a light from a light msg
   /// \param[in] _msg Light msg
@@ -172,12 +159,31 @@ using namespace tesseract_gui;
 TransportSceneManager::TransportSceneManager()
   : QObject(), dataPtr(new TransportSceneManagerPrivate)
 {
-  ignition::gui::App()->findChild<ignition::gui::MainWindow *>()->installEventFilter(this);
+  tesseract_gui::getApp()->installEventFilter(this);
+//  ignition::gui::App()->findChild<ignition::gui::MainWindow *>()->installEventFilter(this);
 }
 
 /////////////////////////////////////////////////
 TransportSceneManager::~TransportSceneManager()
 {
+}
+
+TransportSceneManager::TransportSceneManager(const std::string& scene_topic,
+                                             const std::string& pose_topic,
+                                             const std::string& deletion_topic,
+                                             const std::string& service)
+{
+  if (!scene_topic.empty())
+    this->dataPtr->sceneTopic = scene_topic;
+
+  if (!pose_topic.empty())
+    this->dataPtr->poseTopic = pose_topic;
+
+  if (!deletion_topic.empty())
+    this->dataPtr->deletionTopic = deletion_topic;
+
+  if (!service.empty())
+    this->dataPtr->service = service;
 }
 
 ///////////////////////////////////////////////////
@@ -276,7 +282,7 @@ bool TransportSceneManager::eventFilter(QObject *_obj, QEvent *_event)
 /////////////////////////////////////////////////
 void TransportSceneManagerPrivate::Request()
 {
-  // wait for the service to be advertized
+  // wait for the service to be advertised
   std::vector<ignition::transport::ServicePublisher> publishers;
   const std::chrono::duration<double> sleepDuration{1.0};
   const std::size_t tries = 30;
@@ -454,356 +460,32 @@ void TransportSceneManagerPrivate::LoadScene(const ignition::msgs::Scene &_msg)
 ignition::rendering::VisualPtr TransportSceneManagerPrivate::LoadModel(
     const ignition::msgs::Model &_msg)
 {
-  ignition::rendering::VisualPtr modelVis;
-  if (!_msg.name().empty() && !this->scene->HasVisualName(_msg.name()))
-  {
-    modelVis = this->scene->CreateVisual(_msg.name());
-  }
-  else
-  {
-    modelVis = this->scene->CreateVisual();
-  }
-
-  if (_msg.has_pose())
-    modelVis->SetLocalPose(ignition::msgs::Convert(_msg.pose()));
+  ignition::rendering::VisualPtr modelVis = loadModel(*(this->scene), _msg);
   this->visuals[_msg.id()] = modelVis;
-
-  // load links
-  for (int i = 0; i < _msg.link_size(); ++i)
-  {
-    ignition::rendering::VisualPtr linkVis = this->LoadLink(_msg.link(i));
-    if (linkVis)
-      modelVis->AddChild(linkVis);
-    else
-      ignerr << "Failed to load link: " << _msg.link(i).name() << std::endl;
-  }
-
-  // load nested models
-  for (int i = 0; i < _msg.model_size(); ++i)
-  {
-    ignition::rendering::VisualPtr nestedModelVis = this->LoadModel(_msg.model(i));
-    if (nestedModelVis)
-      modelVis->AddChild(nestedModelVis);
-    else
-      ignerr << "Failed to load nested model: " << _msg.model(i).name()
-             << std::endl;
-  }
-
   return modelVis;
 }
 
 /////////////////////////////////////////////////
 ignition::rendering::VisualPtr TransportSceneManagerPrivate::LoadLink(const ignition::msgs::Link &_msg)
 {
-  ignition::rendering::VisualPtr linkVis;
-  if (!_msg.name().empty() && !this->scene->HasVisualName(_msg.name()))
-  {
-    linkVis = this->scene->CreateVisual(_msg.name());
-  }
-  else
-  {
-    linkVis = this->scene->CreateVisual();
-  }
-
-  if (_msg.has_pose())
-    linkVis->SetLocalPose(ignition::msgs::Convert(_msg.pose()));
+  ignition::rendering::VisualPtr linkVis = loadLink(*(this->scene), _msg);
   this->visuals[_msg.id()] = linkVis;
-
-  // load visuals
-  for (int i = 0; i < _msg.visual_size(); ++i)
-  {
-    ignition::rendering::VisualPtr visualVis = this->LoadVisual(_msg.visual(i));
-    if (visualVis)
-      linkVis->AddChild(visualVis);
-    else
-      ignerr << "Failed to load visual: " << _msg.visual(i).name() << std::endl;
-  }
-
-  // load lights
-  for (int i = 0; i < _msg.light_size(); ++i)
-  {
-    ignition::rendering::LightPtr light = this->LoadLight(_msg.light(i));
-    if (light)
-      linkVis->AddChild(light);
-    else
-      ignerr << "Failed to load light: " << _msg.light(i).name() << std::endl;
-  }
-
   return linkVis;
 }
 
 /////////////////////////////////////////////////
 ignition::rendering::VisualPtr TransportSceneManagerPrivate::LoadVisual(const ignition::msgs::Visual &_msg)
 {
-  if (!_msg.has_geometry())
-    return ignition::rendering::VisualPtr();
-
-  ignition::rendering::VisualPtr visualVis;
-  if (!_msg.name().empty() && !this->scene->HasVisualName(_msg.name()))
-  {
-    visualVis = this->scene->CreateVisual(_msg.name());
-  }
-  else
-  {
-    visualVis = this->scene->CreateVisual();
-  }
-
+  ignition::rendering::VisualPtr visualVis = loadVisual(*(this->scene), _msg);
   this->visuals[_msg.id()] = visualVis;
-
-  ignition::math::Vector3d scale = ignition::math::Vector3d::One;
-  ignition::math::Pose3d localPose;
-  ignition::rendering::GeometryPtr geom =
-      this->LoadGeometry(_msg.geometry(), scale, localPose);
-
-  if (_msg.has_pose())
-    visualVis->SetLocalPose(ignition::msgs::Convert(_msg.pose()) * localPose);
-  else
-    visualVis->SetLocalPose(localPose);
-
-  if (geom)
-  {
-    // store the local pose
-    this->localPoses[_msg.id()] = localPose;
-
-    visualVis->AddGeometry(geom);
-    visualVis->SetLocalScale(scale);
-
-    // set material
-    ignition::rendering::MaterialPtr material{nullptr};
-    if (_msg.has_material())
-    {
-      material = this->LoadMaterial(_msg.material());
-    }
-    // Don't set a default material for meshes because they
-    // may have their own
-    // TODO(anyone) support overriding mesh material
-    else if (!_msg.geometry().has_mesh())
-    {
-      // create default material
-      material = this->scene->Material("ign-grey");
-      if (!material)
-      {
-        material = this->scene->CreateMaterial("ign-grey");
-        material->SetAmbient(0.3, 0.3, 0.3);
-        material->SetDiffuse(0.7, 0.7, 0.7);
-        material->SetSpecular(1.0, 1.0, 1.0);
-        material->SetRoughness(0.2f);
-        material->SetMetalness(1.0f);
-      }
-    }
-    else
-    {
-      // meshes created by mesh loader may have their own materials
-      // update/override their properties based on input sdf element values
-      auto mesh = std::dynamic_pointer_cast<ignition::rendering::Mesh>(geom);
-      for (unsigned int i = 0; i < mesh->SubMeshCount(); ++i)
-      {
-        auto submesh = mesh->SubMeshByIndex(i);
-        auto submeshMat = submesh->Material();
-        if (submeshMat)
-        {
-          double productAlpha = (1.0-_msg.transparency()) *
-              (1.0 - submeshMat->Transparency());
-          submeshMat->SetTransparency(1 - productAlpha);
-          submeshMat->SetCastShadows(_msg.cast_shadows());
-        }
-      }
-    }
-
-    if (material)
-    {
-      // set transparency
-      material->SetTransparency(_msg.transparency());
-
-      // cast shadows
-      material->SetCastShadows(_msg.cast_shadows());
-
-      geom->SetMaterial(material);
-      // todo(anyone) SetMaterial function clones the input material.
-      // but does not take ownership of it so we need to destroy it here.
-      // This is not ideal. We should let ign-rendering handle the lifetime
-      // of this material
-      this->scene->DestroyMaterial(material);
-    }
-  }
-  else
-  {
-    ignerr << "Failed to load geometry for visual: " << _msg.name()
-           << std::endl;
-  }
-
+  this->localPoses[_msg.id()] = visualVis->LocalPose();
   return visualVis;
-}
-
-/////////////////////////////////////////////////
-ignition::rendering::GeometryPtr TransportSceneManagerPrivate::LoadGeometry(
-    const ignition::msgs::Geometry &_msg,
-    ignition::math::Vector3d &_scale,
-    ignition::math::Pose3d &_localPose)
-{
-  ignition::math::Vector3d scale = ignition::math::Vector3d::One;
-  ignition::math::Pose3d localPose = ignition::math::Pose3d::Zero;
-  ignition::rendering::GeometryPtr geom{nullptr};
-  if (_msg.has_box())
-  {
-    geom = this->scene->CreateBox();
-    if (_msg.box().has_size())
-      scale = ignition::msgs::Convert(_msg.box().size());
-  }
-  else if (_msg.has_cylinder())
-  {
-    geom = this->scene->CreateCylinder();
-    scale.X() = _msg.cylinder().radius() * 2;
-    scale.Y() = scale.X();
-    scale.Z() = _msg.cylinder().length();
-  }
-  else if (_msg.has_capsule())
-  {
-    auto capsule = this->scene->CreateCapsule();
-    capsule->SetRadius(_msg.capsule().radius());
-    capsule->SetLength(_msg.capsule().length());
-    geom = capsule;
-
-    scale.X() = _msg.capsule().radius() * 2;
-    scale.Y() = scale.X();
-    scale.Z() = _msg.capsule().length() + scale.X();
-  }
-  else if (_msg.has_ellipsoid())
-  {
-    geom = this->scene->CreateSphere();
-    scale.X() = _msg.ellipsoid().radii().x() * 2;
-    scale.Y() = _msg.ellipsoid().radii().y() * 2;
-    scale.Z() = _msg.ellipsoid().radii().z() * 2;
-  }
-  else if (_msg.has_plane())
-  {
-    geom = this->scene->CreatePlane();
-
-    if (_msg.plane().has_size())
-    {
-      scale.X() = _msg.plane().size().x();
-      scale.Y() = _msg.plane().size().y();
-    }
-
-    if (_msg.plane().has_normal())
-    {
-      // Create a rotation for the plane mesh to account for the normal vector.
-      // The rotation is the angle between the +z(0,0,1) vector and the
-      // normal, which are both expressed in the local (Visual) frame.
-      ignition::math::Vector3d normal = ignition::msgs::Convert(_msg.plane().normal());
-      localPose.Rot().From2Axes(ignition::math::Vector3d::UnitZ, normal.Normalized());
-    }
-  }
-  else if (_msg.has_sphere())
-  {
-    geom = this->scene->CreateSphere();
-    scale.X() = _msg.sphere().radius() * 2;
-    scale.Y() = scale.X();
-    scale.Z() = scale.X();
-  }
-  else if (_msg.has_mesh())
-  {
-    if (_msg.mesh().filename().empty())
-    {
-      ignerr << "Mesh geometry missing filename" << std::endl;
-      return geom;
-    }
-    ignition::rendering::MeshDescriptor descriptor;
-
-    // Assume absolute path to mesh file
-    descriptor.meshName = _msg.mesh().filename();
-
-    ignition::common::MeshManager* meshManager =
-        ignition::common::MeshManager::Instance();
-    descriptor.mesh = meshManager->Load(descriptor.meshName);
-    geom = this->scene->CreateMesh(descriptor);
-
-    scale = ignition::msgs::Convert(_msg.mesh().scale());
-  }
-  else
-  {
-    ignerr << "Unsupported geometry type" << std::endl;
-  }
-  _scale = scale;
-  _localPose = localPose;
-  return geom;
-}
-
-/////////////////////////////////////////////////
-ignition::rendering::MaterialPtr TransportSceneManagerPrivate::LoadMaterial(const ignition::msgs::Material &_msg)
-{
-  ignition::rendering::MaterialPtr material = this->scene->CreateMaterial();
-  if (_msg.has_ambient())
-  {
-    material->SetAmbient(ignition::msgs::Convert(_msg.ambient()));
-  }
-  if (_msg.has_diffuse())
-  {
-    material->SetDiffuse(ignition::msgs::Convert(_msg.diffuse()));
-  }
-  if (_msg.has_specular())
-  {
-    material->SetDiffuse(ignition::msgs::Convert(_msg.specular()));
-  }
-  if (_msg.has_emissive())
-  {
-    material->SetEmissive(ignition::msgs::Convert(_msg.emissive()));
-  }
-
-  return material;
 }
 
 /////////////////////////////////////////////////
 ignition::rendering::LightPtr TransportSceneManagerPrivate::LoadLight(const ignition::msgs::Light &_msg)
 {
-  ignition::rendering::LightPtr light;
-
-  switch (_msg.type())
-  {
-    case ignition::msgs::Light_LightType_POINT:
-      light = this->scene->CreatePointLight();
-      break;
-    case ignition::msgs::Light_LightType_SPOT:
-    {
-      light = this->scene->CreateSpotLight();
-      ignition::rendering::SpotLightPtr spotLight =
-          std::dynamic_pointer_cast<ignition::rendering::SpotLight>(light);
-      spotLight->SetInnerAngle(_msg.spot_inner_angle());
-      spotLight->SetOuterAngle(_msg.spot_outer_angle());
-      spotLight->SetFalloff(_msg.spot_falloff());
-      break;
-    }
-    case ignition::msgs::Light_LightType_DIRECTIONAL:
-    {
-      light = this->scene->CreateDirectionalLight();
-      ignition::rendering::DirectionalLightPtr dirLight =
-          std::dynamic_pointer_cast<ignition::rendering::DirectionalLight>(light);
-
-      if (_msg.has_direction())
-        dirLight->SetDirection(ignition::msgs::Convert(_msg.direction()));
-      break;
-    }
-    default:
-      ignerr << "Light type not supported" << std::endl;
-      return light;
-  }
-
-  if (_msg.has_pose())
-    light->SetLocalPose(ignition::msgs::Convert(_msg.pose()));
-
-  if (_msg.has_diffuse())
-    light->SetDiffuseColor(ignition::msgs::Convert(_msg.diffuse()));
-
-  if (_msg.has_specular())
-    light->SetSpecularColor(ignition::msgs::Convert(_msg.specular()));
-
-  light->SetAttenuationConstant(_msg.attenuation_constant());
-  light->SetAttenuationLinear(_msg.attenuation_linear());
-  light->SetAttenuationQuadratic(_msg.attenuation_quadratic());
-  light->SetAttenuationRange(_msg.range());
-
-  light->SetCastShadows(_msg.cast_shadows());
-
+  ignition::rendering::LightPtr light = loadLight(*(this->scene), _msg);
   this->lights[_msg.id()] = light;
   return light;
 }

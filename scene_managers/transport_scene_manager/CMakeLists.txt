@@ -17,9 +17,12 @@ QT5_WRAP_CPP(TRANSPORT_SCENE_MANAGER_headers_MOC
 
 add_library(${PROJECT_NAME}_transport_scene_manager SHARED
   ${TRANSPORT_SCENE_MANAGER_headers_MOC}
+  src/transport_conversions.cpp
   src/transport_scene_manager.cpp
   src/transport_marker_manager.cpp)
 target_link_libraries(${PROJECT_NAME}_transport_scene_manager PUBLIC
+  ${PROJECT_NAME}_common
+  tesseract::tesseract_common
   ignition-common4::ignition-common4-profiler
   ignition-common4::ignition-common4-events
   ignition-common4::ignition-common4-av
@@ -32,11 +35,18 @@ target_include_directories(${PROJECT_NAME}_transport_scene_manager PUBLIC
     "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
     "$<INSTALL_INTERFACE:include>")
 
-#add_executable(${PROJECT_NAME}_rendering_demo demo/rendering_demo.cpp)
-#target_link_libraries(${PROJECT_NAME}_rendering_demo PRIVATE
-#  ${PROJECT_NAME}_rendering_widget
-#  tesseract::tesseract_common
-#  Qt5::Core Qt5::Widgets Qt5::QuickWidgets)
+
+find_package(Qt5 COMPONENTS Core Widgets QuickWidgets REQUIRED)
+find_package(tesseract_urdf REQUIRED)
+find_package(tesseract_support REQUIRED)
+add_executable(${PROJECT_NAME}_transport_scene_manager_demo demo/transport_scene_manager_demo.cpp)
+target_link_libraries(${PROJECT_NAME}_transport_scene_manager_demo PRIVATE
+  ${PROJECT_NAME}_transport_scene_manager
+  ${PROJECT_NAME}_rendering_widget
+  tesseract::tesseract_common
+  tesseract::tesseract_urdf
+  tesseract::tesseract_support
+  Qt5::Core Qt5::Widgets Qt5::QuickWidgets)
 
 # Mark cpp header files for installation
 install(DIRECTORY include/${PROJECT_NAME}
@@ -45,4 +55,4 @@ install(DIRECTORY include/${PROJECT_NAME}
   PATTERN ".svn" EXCLUDE
 )
 
-install_targets(TARGETS ${PROJECT_NAME}_transport_scene_manager)
+install_targets(TARGETS ${PROJECT_NAME}_transport_scene_manager ${PROJECT_NAME}_transport_scene_manager_demo)

@@ -14,13 +14,16 @@ find_package(Qt5 COMPONENTS Core Widgets QuickWidgets Quick QuickControls2 REQUI
 # Load variable for clang tidy args, compiler options and cxx version
 tesseract_variables()
 
-QT5_WRAP_CPP(MINIMAL_SCENE_headers_MOC include/tesseract_gui/rendering/minimal_scene.h)
+QT5_WRAP_CPP(MINIMAL_SCENE_headers_MOC
+  include/tesseract_gui/rendering/minimal_scene.h
+  include/tesseract_gui/rendering/interactive_view_control.h)
 QT5_ADD_RESOURCES(MINIMAL_SCENE_resources_RCC include/tesseract_gui/rendering/minimal_scene.qrc)
 
 add_library(${PROJECT_NAME}_rendering_widget SHARED
   ${MINIMAL_SCENE_headers_MOC}
   ${MINIMAL_SCENE_resources_RCC}
-  src/minimal_scene.cpp)
+  src/minimal_scene.cpp
+  src/interactive_view_control.cpp)
 target_link_libraries(${PROJECT_NAME}_rendering_widget PUBLIC
   ${PROJECT_NAME}_common
   ignition-common4::ignition-common4-profiler

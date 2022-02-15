@@ -23,6 +23,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <QWidget>
 
 #include <ignition/common/Console.hh>
 #include <ignition/common/KeyEvent.hh>
@@ -41,6 +42,7 @@
 #include <ignition/rendering/RenderEngine.hh>
 #include <ignition/rendering/RenderingIface.hh>
 #include <ignition/rendering/Scene.hh>
+#include <ignition/rendering/Grid.hh>
 
 #ifdef _MSC_VER
 #pragma warning(pop)
@@ -372,7 +374,8 @@ void IgnRenderer::BroadcastDrop()
     return;
   ignition::gui::events::DropOnScene dropOnSceneEvent(
     this->dataPtr->dropText, this->dataPtr->mouseDropPos);
-  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &dropOnSceneEvent);
+  tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &dropOnSceneEvent);
+//  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &dropOnSceneEvent);
   this->dataPtr->dropDirty = false;
 }
 
@@ -385,14 +388,16 @@ void IgnRenderer::BroadcastHoverPos()
   auto pos = this->ScreenToScene(this->dataPtr->mouseHoverPos);
 
   ignition::gui::events::HoverToScene hoverToSceneEvent(pos);
-  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &hoverToSceneEvent);
+  tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &hoverToSceneEvent);
+//  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &hoverToSceneEvent);
 
   ignition::common::MouseEvent hoverMouseEvent = this->dataPtr->mouseEvent;
   hoverMouseEvent.SetPos(this->dataPtr->mouseHoverPos);
   hoverMouseEvent.SetDragging(false);
   hoverMouseEvent.SetType(ignition::common::MouseEvent::MOVE);
   ignition::gui::events::HoverOnScene hoverOnSceneEvent(hoverMouseEvent);
-  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &hoverOnSceneEvent);
+  tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &hoverOnSceneEvent);
+//  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &hoverOnSceneEvent);
 
   this->dataPtr->hoverDirty = false;
 }
@@ -408,7 +413,8 @@ void IgnRenderer::BroadcastDrag()
     return;
 
   ignition::gui::events::DragOnScene dragEvent(this->dataPtr->mouseEvent);
-  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &dragEvent);
+  tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &dragEvent);
+//  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &dragEvent);
 
   this->dataPtr->mouseDirty = false;
 }
@@ -426,10 +432,12 @@ void IgnRenderer::BroadcastLeftClick()
   auto pos = this->ScreenToScene(this->dataPtr->mouseEvent.Pos());
 
   ignition::gui::events::LeftClickToScene leftClickToSceneEvent(pos);
-  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &leftClickToSceneEvent);
+  tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &leftClickToSceneEvent);
+//  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &leftClickToSceneEvent);
 
   ignition::gui::events::LeftClickOnScene leftClickOnSceneEvent(this->dataPtr->mouseEvent);
-  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &leftClickOnSceneEvent);
+  tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &leftClickOnSceneEvent);
+//  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &leftClickOnSceneEvent);
 
   this->dataPtr->mouseDirty = false;
 }
@@ -447,10 +455,12 @@ void IgnRenderer::BroadcastRightClick()
   auto pos = this->ScreenToScene(this->dataPtr->mouseEvent.Pos());
 
   ignition::gui::events::RightClickToScene rightClickToSceneEvent(pos);
-  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &rightClickToSceneEvent);
+  tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &rightClickToSceneEvent);
+//  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &rightClickToSceneEvent);
 
   ignition::gui::events::RightClickOnScene rightClickOnSceneEvent(this->dataPtr->mouseEvent);
-  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &rightClickOnSceneEvent);
+  tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &rightClickOnSceneEvent);
+//  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &rightClickOnSceneEvent);
 
   this->dataPtr->mouseDirty = false;
 }
@@ -465,7 +475,8 @@ void IgnRenderer::BroadcastMousePress()
     return;
 
   ignition::gui::events::MousePressOnScene event(this->dataPtr->mouseEvent);
-  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &event);
+  tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &event);
+//  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &event);
 
   this->dataPtr->mouseDirty = false;
 }
@@ -480,7 +491,8 @@ void IgnRenderer::BroadcastScroll()
     return;
 
   ignition::gui::events::ScrollOnScene scrollOnSceneEvent(this->dataPtr->mouseEvent);
-  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &scrollOnSceneEvent);
+  tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &scrollOnSceneEvent);
+//  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &scrollOnSceneEvent);
 
   this->dataPtr->mouseDirty = false;
 }
@@ -492,7 +504,8 @@ void IgnRenderer::BroadcastKeyRelease()
     return;
 
   ignition::gui::events::KeyReleaseOnScene keyRelease(this->dataPtr->keyEvent);
-  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &keyRelease);
+  tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &keyRelease);
+//  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &keyRelease);
 
   this->dataPtr->keyEvent.SetType(ignition::common::KeyEvent::NO_EVENT);
 }
@@ -504,7 +517,8 @@ void IgnRenderer::BroadcastKeyPress()
     return;
 
   ignition::gui::events::KeyPressOnScene keyPress(this->dataPtr->keyEvent);
-  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &keyPress);
+  tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &keyPress);
+//  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &keyPress);
 
   this->dataPtr->keyEvent.SetType(ignition::common::KeyEvent::NO_EVENT);
 }
@@ -517,9 +531,10 @@ void IgnRenderer::Initialize()
 
   std::map<std::string, std::string> params;
   params["useCurrentGLContext"] = "1";
-  params["winID"] = std::to_string(
-    ignition::gui::App()->findChild<ignition::gui::MainWindow *>()->
-      QuickWindow()->winId());
+//  params["winID"] = std::to_string(tesseract_gui::getApp()->activeWindow()->winId());
+//  params["winID"] = std::to_string(
+//    ignition::gui::App()->findChild<ignition::gui::MainWindow *>()->
+//      QuickWindow()-winId());
   auto engine = ignition::rendering::engine(this->engineName, params);
   if (!engine)
   {
@@ -541,6 +556,45 @@ void IgnRenderer::Initialize()
   if (this->skyEnable)
   {
     scene->SetSkyEnabled(true);
+  }
+
+  if (this->gridEnable)
+  {
+    ignition::rendering::VisualPtr visual = scene->VisualByName("tesseract_grid");
+    if (visual == nullptr)
+    {
+      ignition::rendering::VisualPtr root = scene->RootVisual();
+
+      // create gray material
+      ignition::rendering::MaterialPtr gray = scene->CreateMaterial();
+      gray->SetAmbient(0.7, 0.7, 0.7);
+      gray->SetDiffuse(0.7, 0.7, 0.7);
+      gray->SetSpecular(0.7, 0.7, 0.7);
+
+      // create grid visual
+      unsigned id = 1000; //static_cast<unsigned>(this->dataPtr->entity_manager.addVisual("tesseract_grid"));
+      ignition::rendering::VisualPtr visual = scene->CreateVisual(id, "tesseract_grid");
+      ignition::rendering::GridPtr gridGeom = scene->CreateGrid();
+      if (!gridGeom)
+      {
+        ignwarn << "Failed to create grid for scene ["
+          << scene->Name() << "] on engine ["
+            << scene->Engine()->Name() << "]"
+              << std::endl;
+        return;
+      }
+      gridGeom->SetCellCount(20);
+      gridGeom->SetCellLength(1);
+      gridGeom->SetVerticalCellCount(0);
+      visual->AddGeometry(gridGeom);
+      visual->SetLocalPosition(0, 0, 0.015);
+      visual->SetMaterial(gray);
+      root->AddChild(visual);
+    }
+    else
+    {
+      visual->SetVisible(true);
+    }
   }
 
   auto root = scene->RootVisual();
@@ -996,12 +1050,18 @@ void RenderWindowItem::SetSkyEnabled(const bool &_sky)
   this->dataPtr->renderThread->ignRenderer.skyEnable = _sky;
 }
 
+void RenderWindowItem::SetGridEnabled(bool _grid)
+{
+  this->dataPtr->renderThread->ignRenderer.gridEnable = _grid;
+}
+
 /////////////////////////////////////////////////
 MinimalScene::MinimalScene()
   : QObject()
   , dataPtr(ignition::utils::MakeUniqueImpl<Implementation>())
 {
   qmlRegisterType<RenderWindowItem>("RenderWindow", 1, 0, "RenderWindow");
+  qDebug() << "This is a test";
 }
 
 /////////////////////////////////////////////////
@@ -1154,17 +1214,15 @@ MinimalScene::MinimalScene()
 //}
 
 /////////////////////////////////////////////////
-void RenderWindowItem::OnHovered(const ignition::math::Vector2i &_hoverPos)
+void RenderWindowItem::OnHovered(int _mouseX, int _mouseY)
 {
-  this->dataPtr->renderThread->ignRenderer.NewHoverEvent(_hoverPos);
+  this->dataPtr->renderThread->ignRenderer.NewHoverEvent({_mouseX, _mouseY});
 }
 
 /////////////////////////////////////////////////
-void RenderWindowItem::OnDropped(const QString &_drop,
-    const ignition::math::Vector2i &_dropPos)
+void RenderWindowItem::OnDropped(const QString &_drop, int _mouseX, int _mouseY)
 {
-  this->dataPtr->renderThread->ignRenderer.NewDropEvent(
-    _drop.toStdString(), _dropPos);
+  this->dataPtr->renderThread->ignRenderer.NewDropEvent(_drop.toStdString(), {_mouseX, _mouseY});
 }
 
 /////////////////////////////////////////////////
@@ -1250,22 +1308,25 @@ void RenderWindowItem::HandleKeyRelease(const ignition::common::KeyEvent &_e)
 }
 
 /////////////////////////////////////////////////
-void MinimalScene::OnHovered(int _mouseX, int _mouseY)
+void MinimalScene::onHovered(int _mouseX, int _mouseY)
 {
 //  auto renderWindow = this->PluginItem()->findChild<RenderWindowItem *>();
-//  renderWindow->OnHovered({_mouseX, _mouseY});
+  auto renderWindow = tesseract_gui::getApp()->findChild<RenderWindowItem *>();
+  renderWindow->OnHovered(_mouseX, _mouseY);
 }
 
 /////////////////////////////////////////////////
-void MinimalScene::OnDropped(const QString &_drop, int _mouseX, int _mouseY)
+void MinimalScene::onDropped(const QString &_drop, int _mouseX, int _mouseY)
 {
 //  auto renderWindow = this->PluginItem()->findChild<RenderWindowItem *>();
-//  renderWindow->OnDropped(_drop, {_mouseX, _mouseY});
+  auto renderWindow = tesseract_gui::getApp()->findChild<RenderWindowItem *>();
+  renderWindow->OnDropped(_drop, _mouseX, _mouseY);
 }
 
 /////////////////////////////////////////////////
-void MinimalScene::OnFocusWindow()
+void MinimalScene::onFocusWindow()
 {
 //  auto renderWindow = this->PluginItem()->findChild<RenderWindowItem *>();
-//  renderWindow->forceActiveFocus();
+  auto renderWindow = tesseract_gui::getApp()->findChild<RenderWindowItem *>();
+  renderWindow->forceActiveFocus();
 }

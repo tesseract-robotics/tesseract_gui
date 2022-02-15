@@ -4,7 +4,8 @@
 #include <tesseract_common/macros.h>
 TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #ifndef Q_MOC_RUN
-#include <tesseract_common/joint_trajectory_set.h>
+//#include <tesseract_common/joint_trajectory_set.h>
+#include <tesseract_gui/common/joint_trajectory_set.h>
 #include <memory>
 #endif
 TESSERACT_COMMON_IGNORE_WARNINGS_POP

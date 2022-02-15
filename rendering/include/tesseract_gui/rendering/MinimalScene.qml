@@ -37,10 +37,12 @@ Rectangle {
     hoverEnabled: true
     acceptedButtons: Qt.NoButton
     onEntered: {
-      MinimalScene.OnFocusWindow()
+//        renderWindow.OnFocusWindow()
+        renderWindow.forceActiveFocus();
     }
     onPositionChanged: {
-      MinimalScene.OnHovered(mouseArea.mouseX, mouseArea.mouseY);
+//      new MinimalScene.OnHovered(mouseArea.mouseX, mouseArea.mouseY);
+        renderWindow.OnHovered(mouseArea.mouseX, mouseArea.mouseY)
     }
   }
 
@@ -48,34 +50,35 @@ Rectangle {
     id: renderWindow
     objectName: "rw"
     anchors.fill: parent
-  }
 
-  /*
-   * Gamma correction for sRGB output. Enabled when engine is set to ogre2
-   */
-  GammaAdjust {
-      anchors.fill: renderWindow
-      source: renderWindow
-      gamma: 2.4
-      enabled: gammaCorrect
-      visible: gammaCorrect
-  }
+    /*
+     * Gamma correction for sRGB output. Enabled when engine is set to ogre2
+     */
+    GammaAdjust {
+        anchors.fill: renderWindow
+        source: renderWindow
+        gamma: 2.4
+        enabled: gammaCorrect
+        visible: gammaCorrect
+    }
 
-  onParentChanged: {
-    if (undefined === parent)
-      return;
+    onParentChanged: {
+      if (undefined === parent)
+        return;
 
       width = Qt.binding(function() {return parent.width})
       height = Qt.binding(function() {return parent.height})
-//        width = Qt.binding(function() {return parent.parent.width})
-//        height = Qt.binding(function() {return parent.parent.height})
-  }
+//          width = Qt.binding(function() {return parent.parent.width})
+//          height = Qt.binding(function() {return parent.parent.height})
+    }
 
-  DropArea {
-  anchors.fill: renderWindow
+    DropArea {
+    anchors.fill: renderWindow
 
-  onDropped: {
-    MinimalScene.OnDropped(drop.text, drag.x, drag.y)
+    onDropped: {
+//      MinimalScene.onDropped(drop.text, drag.x, drag.y)
+        renderWindow.OnDropped(drop.text, drag.x, drag.y)
+    }
   }
 }
 }

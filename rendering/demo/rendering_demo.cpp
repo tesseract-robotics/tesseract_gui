@@ -7,6 +7,7 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <tesseract_gui/rendering/minimal_scene.h>
+#include <tesseract_gui/rendering/interactive_view_control.h>
 
 int main(int argc, char ** argv)
 {
@@ -17,15 +18,24 @@ int main(int argc, char ** argv)
 
     qmlRegisterType<tesseract_gui::RenderWindowItem>("RenderWindow", 1, 0, "RenderWindow");
 
-    QQuickWidget widget;
-//    widget.setResizeMode(QQuickWidget::SizeRootObjectToView);
-//    QUrl url(":/tesseract_gui/MinimalScene.qml");
-    QUrl url = QUrl::fromLocalFile("/home/levi/catkin_ws/tesseract_gui_ws/devel/include/tesseract_gui/rendering/MinimalScene.qml");
-    widget.setSource(url);
-    widget.show();
+    QUrl url("/home/levi/catkin_ws/tesseract_gui_ws/devel/include/tesseract_gui/rendering/MinimalScene.qml");
 
-    QList<QQmlError> errors = widget.errors();
-    for (const auto& error : errors)
-      qCritical() << error.toString();
+//    QQuickWidget widget;
+//    widget.setResizeMode(QQuickWidget::SizeRootObjectToView);
+////    QUrl url(":/tesseract_gui/MinimalScene.qml");
+//    widget.setSource(url);
+//    widget.show();
+
+    QQuickView view;
+    view.setResizeMode(QQuickView::SizeRootObjectToView);
+    view.setSource(url);
+    view.show();
+
+    tesseract_gui::InteractiveViewControl view_control;
+    app.installEventFilter(&view_control);
+
+//    QList<QQmlError> errors = view.errors();
+//    for (const auto& error : errors)
+//      qCritical() << error.toString();
     return app.exec();
 }

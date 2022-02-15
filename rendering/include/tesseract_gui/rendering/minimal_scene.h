@@ -73,17 +73,17 @@ namespace tesseract_gui
     /// \brief Callback when the mouse hovers to a new position.
     /// \param[in] _mouseX x coordinate of the hovered mouse position.
     /// \param[in] _mouseY y coordinate of the hovered mouse position.
-    public slots: void OnHovered(int _mouseX, int _mouseY);
+    public slots: void onHovered(int _mouseX, int _mouseY);
 
     /// \brief Callback when the mouse enters the render window to
     /// focus the window for mouse/key events
-    public slots: void OnFocusWindow();
+    public slots: void onFocusWindow();
 
     /// \brief Callback when receives a drop event.
     /// \param[in] _drop Dropped string.
     /// \param[in] _mouseX x coordinate of mouse position.
     /// \param[in] _mouseY y coordinate of mouse position.
-    public slots: void OnDropped(const QString &_drop,
+    public slots: void onDropped(const QString &_drop,
         int _mouseX, int _mouseY);
 
 //    // Documentation inherited
@@ -231,6 +231,9 @@ namespace tesseract_gui
     /// \brief True if sky is enabled;
     public: bool skyEnable = false;
 
+    /// \brief True if grid is enabled;
+    public: bool gridEnable = true;
+
     /// \internal
     /// \brief Pointer to private data.
     IGN_UTILS_UNIQUE_IMPL_PTR(dataPtr)
@@ -336,17 +339,23 @@ namespace tesseract_gui
     /// \brief Called when the mouse hovers to a new position.
     /// \param[in] _hoverPos 2D coordinates of the hovered mouse position on
     /// the render window.
-    public: void OnHovered(const ignition::math::Vector2i &_hoverPos);
+    public: Q_INVOKABLE void OnHovered(int _mouseX, int _mouseY);
+//    public: void OnHovered(const ignition::math::Vector2i &_hoverPos);
 
     /// \brief Callback when receives a drop event.
     /// \param[in] _drop Dropped string.
     /// \param[in] _dropPos x coordinate of mouse position.
-    public: void OnDropped(const QString &_drop,
-        const ignition::math::Vector2i &_dropPos);
+    public: Q_INVOKABLE void OnDropped(const QString &_drop, int _mouseX, int _mouseY);
+
+//    public: void OnDropped(const QString &_drop,
+//        const ignition::math::Vector2i &_dropPos);
 
     /// \brief Set if sky is enabled
     /// \param[in] _sky True to enable the sky, false otherwise.
     public: void SetSkyEnabled(const bool &_sky);
+
+    /// \brief Show grid view in the scene
+    public: void SetGridEnabled(bool _grid);
 
     /// \brief Slot called when thread is ready to be started
     public Q_SLOTS: void Ready();

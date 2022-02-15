@@ -34,7 +34,8 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <tesseract_common/utils.h>
 #include <tesseract_common/serialization.h>
-#include <tesseract_common/joint_trajectory_set.h>
+//#include <tesseract_common/joint_trajectory_set.h>
+#include <tesseract_gui/common/joint_trajectory_set.h>
 
 namespace tesseract_common
 {

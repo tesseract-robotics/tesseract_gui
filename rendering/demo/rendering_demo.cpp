@@ -4,6 +4,7 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <QApplication>
 #include <QDebug>
 #include <QtQuickWidgets/QtQuickWidgets>
+#include <QOpenGLContext>
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <tesseract_gui/rendering/minimal_scene.h>

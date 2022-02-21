@@ -36,17 +36,17 @@ target_include_directories(${PROJECT_NAME}_transport_scene_manager PUBLIC
     "$<INSTALL_INTERFACE:include>")
 
 
-find_package(Qt5 COMPONENTS Core Widgets QuickWidgets REQUIRED)
+find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
 find_package(tesseract_urdf REQUIRED)
 find_package(tesseract_support REQUIRED)
 add_executable(${PROJECT_NAME}_transport_scene_manager_demo demo/transport_scene_manager_demo.cpp)
 target_link_libraries(${PROJECT_NAME}_transport_scene_manager_demo PRIVATE
   ${PROJECT_NAME}_transport_scene_manager
-  ${PROJECT_NAME}_rendering_widget
+  ${PROJECT_NAME}_simple_render_widget
   tesseract::tesseract_common
   tesseract::tesseract_urdf
   tesseract::tesseract_support
-  Qt5::Core Qt5::Widgets Qt5::QuickWidgets)
+  Qt5::Core Qt5::Widgets)
 
 # Mark cpp header files for installation
 install(DIRECTORY include/${PROJECT_NAME}

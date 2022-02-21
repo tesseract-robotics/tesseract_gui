@@ -19,8 +19,7 @@
 #define TESSERACT_GUI_RENDERING_INTERACTIVE_VIEW_CONTROL_H
 
 #include <memory>
-
-#include "ignition/gui/Plugin.hh"
+#include <QObject>
 
 namespace tesseract_gui
 {

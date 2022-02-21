@@ -34,6 +34,7 @@ public:
   /// synchronize Qt and worker thread (this)
   ignition::rendering::Image Render();
 
+  /// \brief Resize the camera
   void Resize(int width, int height);
 
   /// \brief Initialize the render engine
@@ -62,11 +63,6 @@ public:
   /// \brief Handle key release event for snapping
   /// \param[in] _e The key event to process.
   void HandleKeyRelease(const ignition::common::KeyEvent &_e);
-
-  /// Values is constantly constantly cycled/swapped/changed
-  /// from a worker thread
-  /// Don't read this directly
-  GLuint textureId;
 
   /// \brief Render engine to use
   std::string engineName = "ogre";
@@ -237,8 +233,11 @@ public:
   /// \param[in] _dropPos x coordinate of mouse position.
   void OnDropped(const QString &_drop, int _mouseX, int _mouseY);
 
-//    public: void OnDropped(const QString &_drop,
-//        const ignition::math::Vector2i &_dropPos);
+  /**
+   * @brief This triggers an update
+   * @details For some reason this is required on resize.
+   */
+  void OnResized();
 
   /// \brief Set if sky is enabled
   /// \param[in] _sky True to enable the sky, false otherwise.
@@ -274,11 +273,14 @@ protected:
   // Documentation inherited
   void wheelEvent(QWheelEvent *_e) override;
 
+  // Documentation inherited
   void initializeGL() override;
-  void resizeGL(int w, int h) override;
-  void paintGL() override;
-  bool event(QEvent *e) override;
 
+  // Documentation inherited
+  void resizeGL(int w, int h) override;
+
+  // Documentation inherited
+  void paintGL() override;
 
   /// \internal
   /// \brief Pointer to private data.

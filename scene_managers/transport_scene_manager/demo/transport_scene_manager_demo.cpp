@@ -3,8 +3,10 @@
 TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <QApplication>
 #include <QDebug>
-#include <QtQuickWidgets/QtQuickWidgets>
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
+
+#include <tesseract_gui/rendering/simple_render_widget.h>
+#include <tesseract_gui/rendering/interactive_view_control.h>
 
 #include <tesseract_common/resource_locator.h>
 #include <tesseract_urdf/urdf_parser.h>
@@ -43,17 +45,17 @@ int main(int argc, char ** argv)
     QApplication app(argc, argv);
 
     Q_INIT_RESOURCE(resources);
-    Q_INIT_RESOURCE(minimal_scene);
 
     std::string path = std::string(TESSERACT_SUPPORT_DIR) + "/urdf/lbr_iiwa_14_r820.urdf";
 
     tesseract_common::SimpleResourceLocator locator(locateResource);
     auto scene_graph = tesseract_urdf::parseURDFFile(path, locator);
 
-    QQuickWidget widget;
-    widget.setResizeMode(QQuickWidget::SizeRootObjectToView);
-    widget.setSource(QUrl(":/tesseract_gui/MinimalScene.qml"));
+    tesseract_gui::SimpleRenderWidget widget;
     widget.show();
+
+    tesseract_gui::InteractiveViewControl view_control;
+    app.installEventFilter(&view_control);
 
     auto scene_manager = std::make_unique<tesseract_gui::TransportSceneManager>();
 

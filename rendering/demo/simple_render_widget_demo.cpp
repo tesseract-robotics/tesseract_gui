@@ -15,12 +15,10 @@ int main(int argc, char ** argv)
     Q_INIT_RESOURCE(resources);
 
     tesseract_gui::SimpleRenderWidget widget;
-//    widget.setResizeMode(QQuickWidget::SizeRootObjectToView);
     widget.show();
 
     tesseract_gui::InteractiveViewControl view_control;
     app.installEventFilter(&view_control);
-
 
     return app.exec();
 }

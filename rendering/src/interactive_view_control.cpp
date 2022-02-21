@@ -17,6 +17,7 @@
 
 #include <string>
 #include <mutex>
+#include <QGuiApplication>
 
 #include <ignition/common/MouseEvent.hh>
 

@@ -118,28 +118,16 @@ ignition::rendering::Image SimpleRenderer::Render()
   if (!initialized)
     return ignition::rendering::Image();
 
-//  if (this->textureDirty)
-//  {
-    // TODO(anyone) If SwapFromThread gets implemented,
-    // then we only need to lock when texture is dirty
-    // (but we still need to lock the whole routine if
-    // debugging from RenderDoc or if user is not willing
-    // to sacrifice VRAM)
-    //
-    // std::unique_lock<std::mutex> lock(renderSync->mutex);
-    // _renderSync->WaitForQtThreadAndBlock(lock);
-//    this->dataPtr->camera->SetImageWidth(this->textureSize.width());
-//    this->dataPtr->camera->SetImageHeight(this->textureSize.height());
-//    this->dataPtr->camera->SetAspectRatio(this->textureSize.width() / this->textureSize.height());
+  if (this->textureDirty)
+  {
+    std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
+    this->dataPtr->camera->SetImageWidth(this->textureSize.width());
+    this->dataPtr->camera->SetImageHeight(this->textureSize.height());
+    this->dataPtr->camera->SetAspectRatio(this->textureSize.width() / this->textureSize.height());
     // setting the size should cause the render texture to be rebuilt
-//    this->dataPtr->camera->PreRender();
-//    this->textureDirty = false;
-
-//    // TODO(anyone) See SwapFromThread comments
-//    // _renderSync->ReleaseQtThreadFromBlock(lock);
-////  }
-
-//  this->textureId = this->dataPtr->camera->RenderTextureGLId();
+    this->dataPtr->camera->PreRender();
+    this->textureDirty = false;
+  }
 
   // view control
   this->HandleMouseEvent();
@@ -147,32 +135,18 @@ ignition::rendering::Image SimpleRenderer::Render()
   if (tesseract_gui::getApp())
   {
     tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), new ignition::gui::events::PreRender());
-
-//    ignition::gui::App()->sendEvent(
-//        ignition::gui::App()->findChild<ignition::gui::MainWindow *>(),
-//        new ignition::gui::events::PreRender());
   }
 
   ignition::rendering::Image image;
   {
     std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
     image = this->dataPtr->camera->CreateImage();
-  //  this->dataPtr->image = std::make_shared<ignition::rendering::Image>(image);
-  //  this->dataPtr->camera->Update();
     this->dataPtr->camera->Capture(image);
-
-//    auto* data = image.Data<unsigned char>();
-//    ignition::common::Image tmp;
-//    tmp.SetFromData(data, this->textureSize.width(), this->textureSize.height(), ignition::common::Image::RGB_INT8);
-//    tmp.SavePNG("/tmp/ign_image.png");
   }
 
   if (tesseract_gui::getApp())
   {
     tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), new ignition::gui::events::Render());
-//    ignition::gui::App()->sendEvent(
-//        ignition::gui::App()->findChild<ignition::gui::MainWindow *>(),
-//        new ignition::gui::events::Render());
   }
 
   return image;
@@ -182,6 +156,7 @@ void SimpleRenderer::Resize(int width, int height)
 {
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
   this->textureSize = QSize(width, height);
+  this->textureDirty = true;
 }
 
 /////////////////////////////////////////////////
@@ -232,7 +207,6 @@ void SimpleRenderer::BroadcastDrop()
   ignition::gui::events::DropOnScene dropOnSceneEvent(
     this->dataPtr->dropText, this->dataPtr->mouseDropPos);
   tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &dropOnSceneEvent);
-//  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &dropOnSceneEvent);
   this->dataPtr->dropDirty = false;
 }
 
@@ -246,7 +220,6 @@ void SimpleRenderer::BroadcastHoverPos()
 
   ignition::gui::events::HoverToScene hoverToSceneEvent(pos);
   tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &hoverToSceneEvent);
-//  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &hoverToSceneEvent);
 
   ignition::common::MouseEvent hoverMouseEvent = this->dataPtr->mouseEvent;
   hoverMouseEvent.SetPos(this->dataPtr->mouseHoverPos);
@@ -254,7 +227,6 @@ void SimpleRenderer::BroadcastHoverPos()
   hoverMouseEvent.SetType(ignition::common::MouseEvent::MOVE);
   ignition::gui::events::HoverOnScene hoverOnSceneEvent(hoverMouseEvent);
   tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &hoverOnSceneEvent);
-//  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &hoverOnSceneEvent);
 
   this->dataPtr->hoverDirty = false;
 }
@@ -271,7 +243,6 @@ void SimpleRenderer::BroadcastDrag()
 
   ignition::gui::events::DragOnScene dragEvent(this->dataPtr->mouseEvent);
   tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &dragEvent);
-//  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &dragEvent);
 
   this->dataPtr->mouseDirty = false;
 }
@@ -290,11 +261,9 @@ void SimpleRenderer::BroadcastLeftClick()
 
   ignition::gui::events::LeftClickToScene leftClickToSceneEvent(pos);
   tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &leftClickToSceneEvent);
-//  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &leftClickToSceneEvent);
 
   ignition::gui::events::LeftClickOnScene leftClickOnSceneEvent(this->dataPtr->mouseEvent);
   tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &leftClickOnSceneEvent);
-//  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &leftClickOnSceneEvent);
 
   this->dataPtr->mouseDirty = false;
 }
@@ -313,11 +282,9 @@ void SimpleRenderer::BroadcastRightClick()
 
   ignition::gui::events::RightClickToScene rightClickToSceneEvent(pos);
   tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &rightClickToSceneEvent);
-//  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &rightClickToSceneEvent);
 
   ignition::gui::events::RightClickOnScene rightClickOnSceneEvent(this->dataPtr->mouseEvent);
   tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &rightClickOnSceneEvent);
-//  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &rightClickOnSceneEvent);
 
   this->dataPtr->mouseDirty = false;
 }
@@ -333,7 +300,6 @@ void SimpleRenderer::BroadcastMousePress()
 
   ignition::gui::events::MousePressOnScene event(this->dataPtr->mouseEvent);
   tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &event);
-//  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &event);
 
   this->dataPtr->mouseDirty = false;
 }
@@ -349,7 +315,6 @@ void SimpleRenderer::BroadcastScroll()
 
   ignition::gui::events::ScrollOnScene scrollOnSceneEvent(this->dataPtr->mouseEvent);
   tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &scrollOnSceneEvent);
-//  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &scrollOnSceneEvent);
 
   this->dataPtr->mouseDirty = false;
 }
@@ -362,7 +327,6 @@ void SimpleRenderer::BroadcastKeyRelease()
 
   ignition::gui::events::KeyReleaseOnScene keyRelease(this->dataPtr->keyEvent);
   tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &keyRelease);
-//  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &keyRelease);
 
   this->dataPtr->keyEvent.SetType(ignition::common::KeyEvent::NO_EVENT);
 }
@@ -375,7 +339,6 @@ void SimpleRenderer::BroadcastKeyPress()
 
   ignition::gui::events::KeyPressOnScene keyPress(this->dataPtr->keyEvent);
   tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &keyPress);
-//  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &keyPress);
 
   this->dataPtr->keyEvent.SetType(ignition::common::KeyEvent::NO_EVENT);
 }
@@ -467,19 +430,6 @@ void SimpleRenderer::Initialize()
   this->dataPtr->camera->SetImageHeight(this->textureSize.height());
   this->dataPtr->camera->SetAntiAliasing(8);
   this->dataPtr->camera->SetHFOV(M_PI * 0.5);
-
-  ignition::rendering::Image image = this->dataPtr->camera->CreateImage();
-  this->dataPtr->camera->Capture(image);
-
-  auto* data = image.Data<unsigned char>();
-  ignition::common::Image tmp;
-  tmp.SetFromData(data, this->textureSize.width(), this->textureSize.height(), ignition::common::Image::RGB_INT8);
-  tmp.SavePNG("/tmp/ign_image.png");
-
-//  // setting the size and calling PreRender should cause the render texture to
-//  // be rebuilt
-//  this->dataPtr->camera->PreRender();
-//  this->textureId = this->dataPtr->camera->RenderTextureGLId();
 
   // Ray Query
   this->dataPtr->rayQuery = this->dataPtr->camera->Scene()->CreateRayQuery();
@@ -582,7 +532,7 @@ SimpleRenderWidget::SimpleRenderWidget(QWidget *_parent)
   : QOpenGLWidget(_parent)
   , dataPtr(std::make_unique<SimpleRenderWidgetImpl>())
 {
-//  this->connect(this, &QOpenGLWidget::mousePressEvent, this, &SimpleRenderWidget::mousePressEvent);
+  connect(this, &QOpenGLWidget::resized, this, &SimpleRenderWidget::OnResized);
 }
 
 /////////////////////////////////////////////////
@@ -617,29 +567,22 @@ void SimpleRenderWidget::resizeGL(int w, int h)
 /////////////////////////////////////////////////
 void SimpleRenderWidget::paintGL()
 {
-
-//  std::lock_guard<std::mutex> lock(this->dataPtr->renderer.mutex);
   ignition::rendering::Image image = this->dataPtr->renderer.Render();
   auto* data = image.Data<unsigned char>();
 
-//  QOpenGLContext *current = context();
+//  ignition::common::Image tmp;
+//  tmp.SetFromData(data, this->width(), this->height(), ignition::common::Image::RGB_INT8);
+//  tmp.SavePNG("/tmp/ign_image.png");
+
   // Some GL implementations require that the currently bound context is
   // made non-current before we set up sharing, so we doneCurrent here
-  // and makeCurrent down below while setting up our own context.
+  // and makeCurrent down below while setting up our own context
   doneCurrent();
-  glClearColor(0.5, 0.5, 0.5, 1);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  glPixelZoom(1, -1);
-  glRasterPos2f(-1, 1);
-  glDrawPixels(this->width(), this->height(), GL_RGB, GL_UNSIGNED_BYTE, data);
-
-//  glutSwapBuffers();
-
-//  glActiveTexture(GL_TEXTURE0);
-//  glBindTexture(GL_TEXTURE_2D, this->dataPtr->renderer.textureId);
-//  current->swapBuffers(this);
-
-//  f->glActiveTexture(this->dataPtr->renderer.textureId);
+//  glClearColor(0.5, 0.5, 0.5, 1);
+//  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//  glPixelZoom(1, -1);
+//  glRasterPos2f(-1, 1);
+  glDrawPixels(this->width(), this->height(), GL_RGBA, GL_UNSIGNED_BYTE, data);
   makeCurrent();
 }
 
@@ -874,12 +817,19 @@ void SimpleRenderWidget::SetGridEnabled(bool _grid)
 void SimpleRenderWidget::OnHovered(int _mouseX, int _mouseY)
 {
   this->dataPtr->renderer.NewHoverEvent({_mouseX, _mouseY});
+  update();
 }
 
 /////////////////////////////////////////////////
 void SimpleRenderWidget::OnDropped(const QString &_drop, int _mouseX, int _mouseY)
 {
   this->dataPtr->renderer.NewDropEvent(_drop.toStdString(), {_mouseX, _mouseY});
+  update();
+}
+
+void SimpleRenderWidget::OnResized()
+{
+  update();
 }
 
 /////////////////////////////////////////////////
@@ -890,6 +840,7 @@ void SimpleRenderWidget::mousePressEvent(QMouseEvent *_e)
 
   this->dataPtr->renderer.NewMouseEvent(
       this->dataPtr->mouseEvent);
+  update();
 }
 
 ////////////////////////////////////////////////
@@ -900,6 +851,7 @@ void SimpleRenderWidget::keyPressEvent(QKeyEvent *_e)
 
   auto event = ignition::gui::convert(*_e);
   this->HandleKeyPress(event);
+  update();
 }
 
 ////////////////////////////////////////////////
@@ -910,6 +862,7 @@ void SimpleRenderWidget::keyReleaseEvent(QKeyEvent *_e)
 
   auto event = ignition::gui::convert(*_e);
   this->HandleKeyPress(event);
+  update();
 }
 
 ////////////////////////////////////////////////
@@ -925,6 +878,7 @@ void SimpleRenderWidget::mouseReleaseEvent(QMouseEvent *_e)
 
   this->dataPtr->renderer.NewMouseEvent(
       this->dataPtr->mouseEvent);
+  update();
 }
 
 ////////////////////////////////////////////////
@@ -940,6 +894,7 @@ void SimpleRenderWidget::mouseMoveEvent(QMouseEvent *_e)
 
   this->dataPtr->renderer.NewMouseEvent(
       this->dataPtr->mouseEvent);
+  update();
 }
 
 ////////////////////////////////////////////////
@@ -950,17 +905,20 @@ void SimpleRenderWidget::wheelEvent(QWheelEvent *_e)
   this->dataPtr->mouseEvent = ignition::gui::convert(*_e);
   this->dataPtr->renderer.NewMouseEvent(
     this->dataPtr->mouseEvent);
+  update();
 }
 
 ////////////////////////////////////////////////
 void SimpleRenderWidget::HandleKeyPress(const ignition::common::KeyEvent &_e)
 {
   this->dataPtr->renderer.HandleKeyPress(_e);
+  update();
 }
 
 ////////////////////////////////////////////////
 void SimpleRenderWidget::HandleKeyRelease(const ignition::common::KeyEvent &_e)
 {
   this->dataPtr->renderer.HandleKeyRelease(_e);
+  update();
 }
 }

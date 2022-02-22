@@ -25,7 +25,7 @@ namespace tesseract_gui
 {
   class TransportMarkerManagerPrivate;
 
-  /// \brief This plugin will be in charge of handeling the markers in the
+  /// \brief This plugin will be in charge of handling the markers in the
   /// scene. It will allow to add, modify or remove markers.
   ///
   /// ## Parameters

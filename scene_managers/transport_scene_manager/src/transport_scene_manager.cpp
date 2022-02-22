@@ -159,8 +159,6 @@ using namespace tesseract_gui;
 TransportSceneManager::TransportSceneManager()
   : QObject(), dataPtr(new TransportSceneManagerPrivate)
 {
-  tesseract_gui::getApp()->installEventFilter(this);
-//  ignition::gui::App()->findChild<ignition::gui::MainWindow *>()->installEventFilter(this);
 }
 
 /////////////////////////////////////////////////

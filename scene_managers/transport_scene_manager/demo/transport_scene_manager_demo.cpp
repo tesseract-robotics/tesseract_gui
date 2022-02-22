@@ -57,7 +57,10 @@ int main(int argc, char ** argv)
     tesseract_gui::InteractiveViewControl view_control;
     app.installEventFilter(&view_control);
 
-    auto scene_manager = std::make_unique<tesseract_gui::TransportSceneManager>();
+    /** @todo Need to look into how this is suppose to be leverage with minimum scene */
+    /** @todo Need to add service and topic to construction to stop freezing */
+    tesseract_gui::TransportSceneManager scene_manager;
+//    app.installEventFilter(&scene_manager);
 
     return app.exec();
 }

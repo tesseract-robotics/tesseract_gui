@@ -578,10 +578,6 @@ void SimpleRenderWidget::paintGL()
   // made non-current before we set up sharing, so we doneCurrent here
   // and makeCurrent down below while setting up our own context
   doneCurrent();
-//  glClearColor(0.5, 0.5, 0.5, 1);
-//  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//  glPixelZoom(1, -1);
-//  glRasterPos2f(-1, 1);
   glDrawPixels(this->width(), this->height(), GL_RGBA, GL_UNSIGNED_BYTE, data);
   makeCurrent();
 }
@@ -626,30 +622,6 @@ void SimpleRenderWidget::SetCameraNearClip(double _near)
 void SimpleRenderWidget::SetCameraFarClip(double _far)
 {
   this->dataPtr->renderer.cameraFarClip = _far;
-}
-
-/////////////////////////////////////////////////
-void SimpleRenderWidget::SetSceneService(const std::string &_service)
-{
-  this->dataPtr->renderer.sceneService = _service;
-}
-
-/////////////////////////////////////////////////
-void SimpleRenderWidget::SetPoseTopic(const std::string &_topic)
-{
-  this->dataPtr->renderer.poseTopic = _topic;
-}
-
-/////////////////////////////////////////////////
-void SimpleRenderWidget::SetDeletionTopic(const std::string &_topic)
-{
-  this->dataPtr->renderer.deletionTopic = _topic;
-}
-
-/////////////////////////////////////////////////
-void SimpleRenderWidget::SetSceneTopic(const std::string &_topic)
-{
-  this->dataPtr->renderer.sceneTopic = _topic;
 }
 
 /////////////////////////////////////////////////
@@ -765,34 +737,6 @@ void SimpleRenderWidget::SetGridEnabled(bool _grid)
 //          renderWindow->SetCameraFarClip(f);
 //        }
 //      }
-//    }
-
-//    elem = _pluginElem->FirstChildElement("service");
-//    if (nullptr != elem && nullptr != elem->GetText())
-//    {
-//      std::string service = elem->GetText();
-//      renderWindow->SetSceneService(service);
-//    }
-
-//    elem = _pluginElem->FirstChildElement("pose_topic");
-//    if (nullptr != elem && nullptr != elem->GetText())
-//    {
-//      std::string topic = elem->GetText();
-//      renderWindow->SetPoseTopic(topic);
-//    }
-
-//    elem = _pluginElem->FirstChildElement("deletion_topic");
-//    if (nullptr != elem && nullptr != elem->GetText())
-//    {
-//      std::string topic = elem->GetText();
-//      renderWindow->SetDeletionTopic(topic);
-//    }
-
-//    elem = _pluginElem->FirstChildElement("scene_topic");
-//    if (nullptr != elem && nullptr != elem->GetText())
-//    {
-//      std::string topic = elem->GetText();
-//      renderWindow->SetSceneTopic(topic);
 //    }
 
 //    elem = _pluginElem->FirstChildElement("sky");

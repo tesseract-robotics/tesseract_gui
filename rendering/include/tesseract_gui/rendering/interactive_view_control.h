@@ -47,22 +47,22 @@ class InteractiveViewControlPrivate;
 class InteractiveViewControl : public QObject
 {
   Q_OBJECT
-
+public:
   /// \brief Constructor
-  public: InteractiveViewControl();
+  InteractiveViewControl();
 
   /// \brief Destructor
-  public: virtual ~InteractiveViewControl();
+  virtual ~InteractiveViewControl();
 
 //    // Documentation inherited
-//    public: virtual void LoadConfig(const tinyxml2::XMLElement *_pluginElem) override;
-
+//    virtual void LoadConfig(const tinyxml2::XMLElement *_pluginElem) override;
+private:
   // Documentation inherited
-  private: bool eventFilter(QObject *_obj, QEvent *_event) override;
+  bool eventFilter(QObject *_obj, QEvent *_event) override;
 
   /// \internal
   /// \brief Pointer to private data.
-  private: std::unique_ptr<InteractiveViewControlPrivate> dataPtr;
+  std::unique_ptr<InteractiveViewControlPrivate> dataPtr;
 };
 }
 

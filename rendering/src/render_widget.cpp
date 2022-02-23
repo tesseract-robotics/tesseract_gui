@@ -194,6 +194,9 @@ public:
   /// \brief See RenderSync
   TesseractRenderSync renderSync;
 
+  /// \brief See TextureNode
+  TextureNode* textureNode;
+
   /// \brief List of threads
   static QList<QThread *> threads;
 
@@ -321,6 +324,7 @@ void TesseractRenderer::Render(TesseractRenderSync *_renderSync)
 //        ignition::gui::App()->findChild<ignition::gui::MainWindow *>(),
 //        new ignition::gui::events::Render());
   }
+
   _renderSync->ReleaseQtThreadFromBlock(lock);
 }
 
@@ -607,8 +611,7 @@ void TesseractRenderer::Initialize()
   this->dataPtr->camera->SetImageHeight(this->textureSize.height());
   this->dataPtr->camera->SetAntiAliasing(8);
   this->dataPtr->camera->SetHFOV(M_PI * 0.5);
-  // setting the size and calling PreRender should cause the render texture to
-  // be rebuilt
+  // setting the size and calling PreRender should cause the render texture to be rebuilt
   this->dataPtr->camera->PreRender();
   this->textureId = this->dataPtr->camera->RenderTextureGLId();
 
@@ -666,8 +669,7 @@ void TesseractRenderer::NewMouseEvent(const ignition::common::MouseEvent &_e)
 }
 
 /////////////////////////////////////////////////
-ignition::math::Vector3d TesseractRenderer::ScreenToScene(
-    const ignition::math::Vector2i &_screenPos) const
+ignition::math::Vector3d TesseractRenderer::ScreenToScene(const ignition::math::Vector2i &_screenPos) const
 {
   // TODO(ahcorde): Replace this code with function in ign-rendering
   // Require this commit
@@ -682,8 +684,7 @@ ignition::math::Vector3d TesseractRenderer::ScreenToScene(
   double ny = 1.0 - 2.0 * _screenPos.Y() / height;
 
   // Make a ray query
-  this->dataPtr->rayQuery->SetFromCamera(
-      this->dataPtr->camera, ignition::math::Vector2d(nx, ny));
+  this->dataPtr->rayQuery->SetFromCamera(this->dataPtr->camera, ignition::math::Vector2d(nx, ny));
 
   auto result = this->dataPtr->rayQuery->ClosestPoint();
   if (result)
@@ -718,6 +719,8 @@ void RenderThread::RenderNext(TesseractRenderSync *_renderSync)
     ignerr << "Unable to initialize renderer" << std::endl;
     return;
   }
+
+  emit ContextWanted();
 
   this->renderer.Render(_renderSync);
 
@@ -764,16 +767,11 @@ TextureNode::TextureNode(RenderWidget *_window, TesseractRenderSync &_renderSync
     : renderSync(_renderSync), window(_window)
 {
 
-//  // Our texture node must have a texture, so use the default 0 texture.
-//#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
-//  this->texture = this->window->createTextureFromId(0, QSize(1, 1));
-//#else
-//  void * nativeLayout;
-//  this->texture = this->window->createTextureFromNativeObject(
-//      QQuickWindow::NativeObjectTexture, &nativeLayout, 0, QSize(1, 1),
-//      QQuickWindow::TextureIsOpaque);
-//#endif
-//  this->setTexture(this->texture);
+  // Our texture node must have a texture, so use the default 0 texture.
+  this->texture = new QOpenGLTexture(QImage());
+//  this->texture->bind(0);
+//  this->texture->setSize(1, 1);
+  // this->window->createTextureFromId(0, QSize(1, 1));
 }
 
 /////////////////////////////////////////////////
@@ -798,64 +796,50 @@ void TextureNode::NewTexture(uint _id, const QSize &_size)
 /////////////////////////////////////////////////
 void TextureNode::PrepareNode()
 {
-//  this->mutex.lock();
-//  uint newId = this->id;
-//  QSize sz = this->size;
-//  this->id = 0;
-//  this->mutex.unlock();
-//  if (newId)
-//  {
-//    delete this->texture;
-//    // note: include QQuickWindow::TextureHasAlphaChannel if the rendered
-//    // content has alpha.
-//#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
-//    this->texture = this->window->createTextureFromId(
-//        newId, sz, QQuickWindow::TextureIsOpaque);
-//#else
-//    // TODO(anyone) Use createTextureFromNativeObject
-//    // https://github.com/ignitionrobotics/ign-gui/issues/113
-//#ifndef _WIN32
-//# pragma GCC diagnostic push
-//# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-//#endif
-//    this->texture = this->window->createTextureFromId(
-//        newId, sz, QQuickWindow::TextureIsOpaque);
-//#ifndef _WIN32
-//# pragma GCC diagnostic pop
-//#endif
-
-//#endif
+  this->mutex.lock();
+  uint newId = this->id;
+  QSize sz = this->size;
+  this->id = 0;
+  this->mutex.unlock();
+  if (newId)
+  {
+    delete this->texture;
+    // note: include QQuickWindow::TextureHasAlphaChannel if the rendered
+    // content has alpha.
+    this->texture = new QOpenGLTexture(QImage());
+//    this->texture->bind(newId);
+//    this->texture->setSize(sz.width(), sz.height());
 //    this->setTexture(this->texture);
 
 //    this->markDirty(DirtyMaterial);
 
-//    // This will notify the rendering thread that the texture is now being
-//    // rendered and it can start rendering to the other one.
-//    // emit TextureInUse(&this->renderSync); See comment below
-//  }
-//  // NOTE: The original code from Qt samples only emitted when
-//  // newId is not null.
-//  //
-//  // This is correct... for their case.
-//  // However we need to synchronize the threads when resolution changes,
-//  // and we're also currently doing everything in lockstep (i.e. both Qt
-//  // and worker thread are serialized,
-//  // see https://github.com/ignitionrobotics/ign-rendering/issues/304 )
-//  //
-//  // We need to emit even if newId == 0 because it's safe as long as both
-//  // threads are forcefully serialized and otherwise we may get a
-//  // deadlock (this func. called twice in a row with the worker thread still
-//  // finishing the 1st iteration, may result in a deadlock for newer versions
-//  // of Qt; as WaitForWorkerThread will be called with no corresponding
-//  // WaitForQtThreadAndBlock as the worker thread thinks there are
-//  // no more jobs to do.
-//  //
-//  // If we want these to run in worker thread and stay resolution-synchronized,
-//  // we probably should use a different method of signals and slots
-//  // to send work to the worker thread and get results back
-//  emit TextureInUse(&this->renderSync);
+    // This will notify the rendering thread that the texture is now being
+    // rendered and it can start rendering to the other one.
+    // emit TextureInUse(&this->renderSync); See comment below
+  }
+  // NOTE: The original code from Qt samples only emitted when
+  // newId is not null.
+  //
+  // This is correct... for their case.
+  // However we need to synchronize the threads when resolution changes,
+  // and we're also currently doing everything in lockstep (i.e. both Qt
+  // and worker thread are serialized,
+  // see https://github.com/ignitionrobotics/ign-rendering/issues/304 )
+  //
+  // We need to emit even if newId == 0 because it's safe as long as both
+  // threads are forcefully serialized and otherwise we may get a
+  // deadlock (this func. called twice in a row with the worker thread still
+  // finishing the 1st iteration, may result in a deadlock for newer versions
+  // of Qt; as WaitForWorkerThread will be called with no corresponding
+  // WaitForQtThreadAndBlock as the worker thread thinks there are
+  // no more jobs to do.
+  //
+  // If we want these to run in worker thread and stay resolution-synchronized,
+  // we probably should use a different method of signals and slots
+  // to send work to the worker thread and get results back
+  emit TextureInUse(&this->renderSync);
 
-//  this->renderSync.WaitForWorkerThread();
+  this->renderSync.WaitForWorkerThread();
 }
 
 /////////////////////////////////////////////////
@@ -863,9 +847,17 @@ RenderWidget::RenderWidget(QWidget *_parent)
   : QOpenGLWidget(_parent)
   , dataPtr(ignition::utils::MakeUniqueImpl<Implementation>())
 {
+  connect(this, &QOpenGLWidget::aboutToCompose, this, &RenderWidget::onAboutToCompose);
+  connect(this, &QOpenGLWidget::frameSwapped, this, &RenderWidget::onFrameSwapped);
+  connect(this, &QOpenGLWidget::aboutToResize, this, &RenderWidget::onAboutToResize);
+  connect(this, &QOpenGLWidget::resized, this, &RenderWidget::onResized);
+
 //  this->setAcceptedMouseButtons(Qt::AllButtons);
 //  this->setFlag(ItemHasContents);
   this->dataPtr->renderThread = new RenderThread();
+
+  connect(this->dataPtr->renderThread, &RenderThread::TextureReady, this, &RenderWidget::onTextureReady);
+  connect(this->dataPtr->renderThread, &RenderThread::ContextWanted, this, &RenderWidget::grabContext);
 }
 
 /////////////////////////////////////////////////
@@ -896,17 +888,20 @@ void RenderWidget::Ready()
 
   this->dataPtr->renderThread->moveToThread(this->dataPtr->renderThread);
 
-//  this->connect(this, &QQuickItem::widthChanged,
-//      this->dataPtr->renderThread, &RenderThread::SizeChanged);
-//  this->connect(this, &QQuickItem::heightChanged,
-//      this->dataPtr->renderThread, &RenderThread::SizeChanged);
+  this->connect(this, &QOpenGLWidget::resized,
+      this->dataPtr->renderThread, &RenderThread::SizeChanged);
 
   this->dataPtr->renderThread->start();
+  this->dataPtr->renderThread->RenderNext(&this->dataPtr->renderSync);
   this->update();
 }
 
-/////////////////////////////////////////////////
-void RenderWidget::paintGL()
+void RenderWidget::onAboutToCompose()
+{
+//  this->dataPtr->renderSync.WaitForWorkerThread();
+}
+
+void RenderWidget::onFrameSwapped()
 {
   if (!this->dataPtr->renderThread->context)
   {
@@ -927,7 +922,99 @@ void RenderWidget::paintGL()
     QMetaObject::invokeMethod(this, "Ready");
     return;
   }
+
+//  if (!this->dataPtr->textureNode)
+//  {
+//    this->dataPtr->textureNode = new TextureNode(this, this->dataPtr->renderSync);
+//    this->dataPtr->connections << this->connect(this->dataPtr->renderThread,
+//        &RenderThread::TextureReady, this->dataPtr->textureNode, &TextureNode::NewTexture,
+//        Qt::DirectConnection);
+//    this->dataPtr->connections << this->connect(this->dataPtr->textureNode,
+//        &tesseract_gui::TextureNode::PendingNewTexture, this, [this](){this->update();}, Qt::QueuedConnection);
+//    this->dataPtr->connections << this->connect(this,
+//        &QOpenGLWidget::aboutToCompose, this->dataPtr->textureNode, &TextureNode::PrepareNode,
+//        Qt::DirectConnection);
+//    this->dataPtr->connections << this->connect(this->dataPtr->textureNode,
+//        &TextureNode::TextureInUse, this->dataPtr->renderThread,
+//        &RenderThread::RenderNext, Qt::QueuedConnection);
+
+//    // Get the production of FBO textures started..
+//    QMetaObject::invokeMethod(this->dataPtr->renderThread, "RenderNext",
+//      Qt::QueuedConnection,
+//      Q_ARG(TesseractRenderSync*, &this->dataPtr->textureNode->renderSync));
+//  }
 }
+void RenderWidget::onAboutToResize()
+{
+
+}
+
+void RenderWidget::onResized()
+{
+
+}
+
+void RenderWidget::onTextureReady()
+{
+  QOpenGLContext *current = context();
+  current->moveToThread(qGuiApp->thread());
+  update();
+  this->dataPtr->renderThread->RenderNext(&this->dataPtr->renderSync);
+}
+
+void RenderWidget::grabContext()
+{
+  this->dataPtr->renderSync.WaitForWorkerThread();
+  context()->moveToThread(this->dataPtr->renderThread);
+}
+
+
+/////////////////////////////////////////////////
+//void RenderWidget::paintGL()
+//{
+//  if (!this->dataPtr->renderThread->context)
+//  {
+//    QOpenGLContext *current = context();
+//    // Some GL implementations require that the currently bound context is
+//    // made non-current before we set up sharing, so we doneCurrent here
+//    // and makeCurrent down below while setting up our own context.
+//    doneCurrent();
+
+//    this->dataPtr->renderThread->context = new QOpenGLContext();
+//    this->dataPtr->renderThread->context->setFormat(current->format());
+//    this->dataPtr->renderThread->context->setShareContext(current);
+//    this->dataPtr->renderThread->context->create();
+//    this->dataPtr->renderThread->context->moveToThread(this->dataPtr->renderThread);
+
+//    makeCurrent();
+
+//    QMetaObject::invokeMethod(this, "Ready");
+//    return;
+//  }
+
+//  if (!this->dataPtr->textureNode)
+//  {
+//    this->dataPtr->textureNode = new TextureNode(this, this->dataPtr->renderSync);
+//    this->dataPtr->connections << this->connect(this->dataPtr->renderThread,
+//        &RenderThread::TextureReady, this->dataPtr->textureNode, &TextureNode::NewTexture,
+//        Qt::DirectConnection);
+//    this->dataPtr->connections << this->connect(this->dataPtr->textureNode,
+//        &tesseract_gui::TextureNode::PendingNewTexture, this, [this](){this->update();}, Qt::QueuedConnection);
+//    this->dataPtr->connections << this->connect(this,
+//        &QOpenGLWidget::aboutToCompose, this->dataPtr->textureNode, &TextureNode::PrepareNode,
+//        Qt::DirectConnection);
+//    this->dataPtr->connections << this->connect(this->dataPtr->textureNode,
+//        &TextureNode::TextureInUse, this->dataPtr->renderThread,
+//        &RenderThread::RenderNext, Qt::QueuedConnection);
+
+//    // Get the production of FBO textures started..
+//    QMetaObject::invokeMethod(this->dataPtr->renderThread, "RenderNext",
+//      Qt::QueuedConnection,
+//      Q_ARG(TesseractRenderSync*, &this->dataPtr->textureNode->renderSync));
+//  }
+
+////  node->setRect(this->boundingRect());
+//}
 
 /////////////////////////////////////////////////
 void RenderWidget::SetBackgroundColor(const ignition::math::Color &_color)
@@ -969,30 +1056,6 @@ void RenderWidget::SetCameraNearClip(double _near)
 void RenderWidget::SetCameraFarClip(double _far)
 {
   this->dataPtr->renderThread->renderer.cameraFarClip = _far;
-}
-
-/////////////////////////////////////////////////
-void RenderWidget::SetSceneService(const std::string &_service)
-{
-  this->dataPtr->renderThread->renderer.sceneService = _service;
-}
-
-/////////////////////////////////////////////////
-void RenderWidget::SetPoseTopic(const std::string &_topic)
-{
-  this->dataPtr->renderThread->renderer.poseTopic = _topic;
-}
-
-/////////////////////////////////////////////////
-void RenderWidget::SetDeletionTopic(const std::string &_topic)
-{
-  this->dataPtr->renderThread->renderer.deletionTopic = _topic;
-}
-
-/////////////////////////////////////////////////
-void RenderWidget::SetSceneTopic(const std::string &_topic)
-{
-  this->dataPtr->renderThread->renderer.sceneTopic = _topic;
 }
 
 /////////////////////////////////////////////////
@@ -1110,34 +1173,6 @@ void RenderWidget::SetGridEnabled(bool _grid)
 //      }
 //    }
 
-//    elem = _pluginElem->FirstChildElement("service");
-//    if (nullptr != elem && nullptr != elem->GetText())
-//    {
-//      std::string service = elem->GetText();
-//      renderWindow->SetSceneService(service);
-//    }
-
-//    elem = _pluginElem->FirstChildElement("pose_topic");
-//    if (nullptr != elem && nullptr != elem->GetText())
-//    {
-//      std::string topic = elem->GetText();
-//      renderWindow->SetPoseTopic(topic);
-//    }
-
-//    elem = _pluginElem->FirstChildElement("deletion_topic");
-//    if (nullptr != elem && nullptr != elem->GetText())
-//    {
-//      std::string topic = elem->GetText();
-//      renderWindow->SetDeletionTopic(topic);
-//    }
-
-//    elem = _pluginElem->FirstChildElement("scene_topic");
-//    if (nullptr != elem && nullptr != elem->GetText())
-//    {
-//      std::string topic = elem->GetText();
-//      renderWindow->SetSceneTopic(topic);
-//    }
-
 //    elem = _pluginElem->FirstChildElement("sky");
 //    if (nullptr != elem && nullptr != elem->GetText())
 //    {
@@ -1160,12 +1195,14 @@ void RenderWidget::SetGridEnabled(bool _grid)
 void RenderWidget::OnHovered(int _mouseX, int _mouseY)
 {
   this->dataPtr->renderThread->renderer.NewHoverEvent({_mouseX, _mouseY});
+  update();
 }
 
 /////////////////////////////////////////////////
 void RenderWidget::OnDropped(const QString &_drop, int _mouseX, int _mouseY)
 {
   this->dataPtr->renderThread->renderer.NewDropEvent(_drop.toStdString(), {_mouseX, _mouseY});
+  update();
 }
 
 /////////////////////////////////////////////////
@@ -1174,8 +1211,8 @@ void RenderWidget::mousePressEvent(QMouseEvent *_e)
   this->dataPtr->mouseEvent = ignition::gui::convert(*_e);
   this->dataPtr->mouseEvent.SetPressPos(this->dataPtr->mouseEvent.Pos());
 
-  this->dataPtr->renderThread->renderer.NewMouseEvent(
-      this->dataPtr->mouseEvent);
+  this->dataPtr->renderThread->renderer.NewMouseEvent(this->dataPtr->mouseEvent);
+  update();
 }
 
 ////////////////////////////////////////////////
@@ -1186,6 +1223,7 @@ void RenderWidget::keyPressEvent(QKeyEvent *_e)
 
   auto event = ignition::gui::convert(*_e);
   this->HandleKeyPress(event);
+  update();
 }
 
 ////////////////////////////////////////////////
@@ -1196,6 +1234,7 @@ void RenderWidget::keyReleaseEvent(QKeyEvent *_e)
 
   auto event = ignition::gui::convert(*_e);
   this->HandleKeyPress(event);
+  update();
 }
 
 ////////////////////////////////////////////////
@@ -1209,8 +1248,8 @@ void RenderWidget::mouseReleaseEvent(QMouseEvent *_e)
   this->dataPtr->mouseEvent.SetPressPos(pressPos);
   this->dataPtr->mouseEvent.SetDragging(dragging);
 
-  this->dataPtr->renderThread->renderer.NewMouseEvent(
-      this->dataPtr->mouseEvent);
+  this->dataPtr->renderThread->renderer.NewMouseEvent(this->dataPtr->mouseEvent);
+  update();
 }
 
 ////////////////////////////////////////////////
@@ -1224,8 +1263,8 @@ void RenderWidget::mouseMoveEvent(QMouseEvent *_e)
   if (this->dataPtr->mouseEvent.Dragging())
     this->dataPtr->mouseEvent.SetPressPos(pressPos);
 
-  this->dataPtr->renderThread->renderer.NewMouseEvent(
-      this->dataPtr->mouseEvent);
+  this->dataPtr->renderThread->renderer.NewMouseEvent(this->dataPtr->mouseEvent);
+  update();
 }
 
 ////////////////////////////////////////////////
@@ -1234,20 +1273,22 @@ void RenderWidget::wheelEvent(QWheelEvent *_e)
 //  this->forceActiveFocus();
 
   this->dataPtr->mouseEvent = ignition::gui::convert(*_e);
-  this->dataPtr->renderThread->renderer.NewMouseEvent(
-    this->dataPtr->mouseEvent);
+  this->dataPtr->renderThread->renderer.NewMouseEvent(this->dataPtr->mouseEvent);
+  update();
 }
 
 ////////////////////////////////////////////////
 void RenderWidget::HandleKeyPress(const ignition::common::KeyEvent &_e)
 {
   this->dataPtr->renderThread->renderer.HandleKeyPress(_e);
+  update();
 }
 
 ////////////////////////////////////////////////
 void RenderWidget::HandleKeyRelease(const ignition::common::KeyEvent &_e)
 {
   this->dataPtr->renderThread->renderer.HandleKeyRelease(_e);
+  update();
 }
 
 ///////////////////////////////////////////////////

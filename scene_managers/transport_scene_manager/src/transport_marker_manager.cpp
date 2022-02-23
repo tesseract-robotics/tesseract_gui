@@ -50,92 +50,93 @@
 /// \brief Private data class for TransportMarkerManager
 class tesseract_gui::TransportMarkerManagerPrivate
 {
+public:
   /// \brief Update markers based on msgs received
-  public: void OnRender();
+  void OnRender();
 
   /// \brief Initialize services and subscriptions
-  public: void Initialize();
+  void Initialize();
 
   /// \brief Processes a marker message.
   /// \param[in] _msg The message data.
   /// \return True if the marker was processed successfully.
-  public: bool ProcessMarkerMsg(const ignition::msgs::Marker &_msg);
+  bool ProcessMarkerMsg(const ignition::msgs::Marker &_msg);
 
   /// \brief Services callback that returns a list of markers.
   /// \param[out] _rep Service reply
   /// \return True on success.
-  public: bool OnList(ignition::msgs::Marker_V &_rep);
+  bool OnList(ignition::msgs::Marker_V &_rep);
 
   /// \brief Callback that receives marker messages.
   /// \param[in] _req The marker message.
-  public: void OnMarkerMsg(const ignition::msgs::Marker &_req);
+  void OnMarkerMsg(const ignition::msgs::Marker &_req);
 
   /// \brief Callback that receives multiple marker messages.
   /// \param[in] _req The vector of marker messages
   /// \param[in] _res Response data
   /// \return True if the request is received
-  public: bool OnMarkerMsgArray(const ignition::msgs::Marker_V &_req,
+  bool OnMarkerMsgArray(const ignition::msgs::Marker_V &_req,
               ignition::msgs::Boolean &_res);
 
   /// \brief Subscriber callback when new world statistics are received
-  public: void OnWorldStatsMsg(const ignition::msgs::WorldStatistics &_msg);
+  void OnWorldStatsMsg(const ignition::msgs::WorldStatistics &_msg);
 
   /// \brief Sets Visual from marker message.
   /// \param[in] _msg The message data.
   /// \param[out] _visualPtr The visual pointer to set.
-  public: void SetVisual(const ignition::msgs::Marker &_msg,
+  void SetVisual(const ignition::msgs::Marker &_msg,
                          const ignition::rendering::VisualPtr &_visualPtr);
 
   /// \brief Sets Marker from marker message.
   /// \param[in] _msg The message data.
   /// \param[out] _markerPtr The message pointer to set.
-  public: void SetMarker(const ignition::msgs::Marker &_msg,
+  void SetMarker(const ignition::msgs::Marker &_msg,
                          const ignition::rendering::MarkerPtr &_markerPtr);
 
   /// \brief Converts an ignition msg material to ignition rendering
   //         material.
   //  \param[in] _msg The message data.
   //  \return Converted rendering material, if any.
-  public: ignition::rendering::MaterialPtr MsgToMaterial(
+  ignition::rendering::MaterialPtr MsgToMaterial(
     const ignition::msgs::Marker &_msg);
 
   /// \brief Converts an ignition msg render type to ignition rendering
   /// \param[in] _msg The message data
   /// \return Converted rendering type, if any.
-  public: ignition::rendering::MarkerType MsgToType(
+  ignition::rendering::MarkerType MsgToType(
                     const ignition::msgs::Marker &_msg);
 
   //// \brief Pointer to the rendering scene
-  public: ignition::rendering::ScenePtr scene{nullptr};
+  ignition::rendering::ScenePtr scene{nullptr};
 
   /// \brief Mutex to protect message list.
-  public: std::mutex mutex;
+  std::mutex mutex;
 
   /// \brief List of marker message to process.
-  public: std::list<ignition::msgs::Marker> markerMsgs;
+  std::list<ignition::msgs::Marker> markerMsgs;
 
   /// \brief Map of visuals
-  public: std::map<std::string,
+  std::map<std::string,
       std::map<uint64_t, ignition::rendering::VisualPtr>> visuals;
 
   /// \brief Ignition node
-  public: ignition::transport::Node node;
+  ignition::transport::Node node;
 
   /// \brief Topic name for the marker service
-  public: std::string topicName = "/marker";
+  std::string topicName = "/marker";
 
   /// \brief Sim time according to world stats message
-  public: std::chrono::steady_clock::duration simTime;
+  std::chrono::steady_clock::duration simTime;
 
   /// \brief Previous sim time received
-  public: std::chrono::steady_clock::duration lastSimTime;
+  std::chrono::steady_clock::duration lastSimTime;
 
   /// \brief The last marker message received
-  public: ignition::msgs::Marker msg;
+  ignition::msgs::Marker msg;
 
   /// \brief True to print console warnings if the user tries to perform an
   /// action with an inexistent marker.
-  public: bool warnOnActionFailure{true};
+  bool warnOnActionFailure{true};
 };
 
 using namespace tesseract_gui;
@@ -215,12 +216,12 @@ void TransportMarkerManagerPrivate::OnRender()
     for (auto it = mit->second.cbegin();
          it != mit->second.cend(); ++it)
     {
-      if (it->second->GeometryCount() == 0u)
+      if (it->second->GeometryCount() == 0U)
         continue;
 
       ignition::rendering::MarkerPtr markerPtr =
             std::dynamic_pointer_cast<ignition::rendering::Marker>
-            (it->second->GeometryByIndex(0u));
+            (it->second->GeometryByIndex(0U));
       if (markerPtr != nullptr)
       {
         if (markerPtr->Lifetime().count() != 0 &&
@@ -250,9 +251,9 @@ bool TransportMarkerManagerPrivate::OnList(ignition::msgs::Marker_V &_rep)
   _rep.clear_marker();
 
   // Create the list of visuals
-  for (auto mIter : this->visuals)
+  for (const auto& mIter : this->visuals)
   {
-    for (auto iter : mIter.second)
+    for (const auto& iter : mIter.second)
     {
       ignition::msgs::Marker *markerMsg = _rep.add_marker();
       markerMsg->set_ns(mIter.first);
@@ -294,7 +295,7 @@ bool TransportMarkerManagerPrivate::ProcessMarkerMsg(const ignition::msgs::Marke
   auto nsIter = this->visuals.find(ns);
 
   // If an id is given
-  size_t id;
+  size_t id{0};
   if (_msg.id() != 0)
   {
     id = _msg.id();
@@ -325,7 +326,7 @@ bool TransportMarkerManagerPrivate::ProcessMarkerMsg(const ignition::msgs::Marke
     if (nsIter != this->visuals.end() &&
         visualIter != nsIter->second.end())
     {
-      if (visualIter->second->GeometryCount() > 0u)
+      if (visualIter->second->GeometryCount() > 0U)
       {
         // TODO(anyone): Update so that multiple markers can
         //               be attached to one visual
@@ -413,10 +414,11 @@ bool TransportMarkerManagerPrivate::ProcessMarkerMsg(const ignition::msgs::Marke
       }
       return false;
     }
+
     // Remove all markers in the specified namespace
-    else if (nsIter != this->visuals.end())
+    if (nsIter != this->visuals.end())
     {
-      for (auto it : nsIter->second)
+      for (const auto& it : nsIter->second)
       {
         this->scene->DestroyVisual(it.second);
       }
@@ -429,7 +431,7 @@ bool TransportMarkerManagerPrivate::ProcessMarkerMsg(const ignition::msgs::Marke
       for (nsIter = this->visuals.begin();
            nsIter != this->visuals.end(); ++nsIter)
       {
-        for (auto it : nsIter->second)
+        for (const auto& it : nsIter->second)
         {
           this->scene->DestroyVisual(it.second);
         }
@@ -530,7 +532,7 @@ void TransportMarkerManagerPrivate::SetMarker(const ignition::msgs::Marker &_msg
   }
 
   // Assume the presence of points means we clear old ones
-  if (_msg.point().size() > 0)
+  if (!_msg.point().empty())
   {
     _markerPtr->ClearPoints();
   }
@@ -656,14 +658,12 @@ void TransportMarkerManagerPrivate::OnWorldStatsMsg(
 
 /////////////////////////////////////////////////
 TransportMarkerManager::TransportMarkerManager()
-  : QObject(), dataPtr(new TransportMarkerManagerPrivate)
+  : dataPtr(new TransportMarkerManagerPrivate)
 {
 }
 
 /////////////////////////////////////////////////
-TransportMarkerManager::~TransportMarkerManager()
-{
-}
+TransportMarkerManager::~TransportMarkerManager() = default;
 
 /////////////////////////////////////////////////
 //void TransportMarkerManager::LoadConfig(const tinyxml2::XMLElement * _pluginElem)

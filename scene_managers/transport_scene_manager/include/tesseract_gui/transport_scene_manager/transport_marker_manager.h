@@ -37,23 +37,23 @@ namespace tesseract_gui
   class TransportMarkerManager : public QObject
   {
     Q_OBJECT
-
+  public:
     /// \brief Constructor
-    public: TransportMarkerManager();
+    TransportMarkerManager();
 
     /// \brief Destructor
-    public: virtual ~TransportMarkerManager();
+    virtual ~TransportMarkerManager();
 
 //    // Documentation inherited
-//    public: virtual void LoadConfig(const tinyxml2::XMLElement *_pluginElem)
+//    virtual void LoadConfig(const tinyxml2::XMLElement *_pluginElem)
 //        override;
-
+  private:
     // Documentation inherited
-    private: bool eventFilter(QObject *_obj, QEvent *_event) override;
+    bool eventFilter(QObject *_obj, QEvent *_event) override;
 
     /// \internal
     /// \brief Pointer to private data.
-    private: std::unique_ptr<TransportMarkerManagerPrivate> dataPtr;
+    std::unique_ptr<TransportMarkerManagerPrivate> dataPtr;
   };
 }
 

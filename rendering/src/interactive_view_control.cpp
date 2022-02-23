@@ -39,59 +39,60 @@
 /// \brief Private data class for InteractiveViewControl
 class tesseract_gui::InteractiveViewControlPrivate
 {
+public:
   /// \brief Perform rendering calls in the rendering thread.
-  public: void OnRender();
+  void OnRender();
 
   /// \brief Callback for camera view controller request
   /// \param[in] _msg Request message to set the camera view controller
   /// \param[in] _res Response data
   /// \return True if the request is received
-  public: bool OnViewControl(const ignition::msgs::StringMsg &_msg, ignition::msgs::Boolean &_res);
+  bool OnViewControl(const ignition::msgs::StringMsg &_msg, ignition::msgs::Boolean &_res);
 
   /// \brief Flag to indicate if mouse event is dirty
-  public: bool mouseDirty = false;
+  bool mouseDirty = false;
 
   /// \brief True to block orbiting with the mouse.
-  public: bool blockOrbit = false;
+  bool blockOrbit = false;
 
   /// \brief Mouse event
-  public: ignition::common::MouseEvent mouseEvent;
+  ignition::common::MouseEvent mouseEvent;
 
   /// \brief Mouse move distance since last event.
-  public: ignition::math::Vector2d drag;
+  ignition::math::Vector2d drag;
 
   /// \brief User camera
-  public: ignition::rendering::CameraPtr camera{nullptr};
+  ignition::rendering::CameraPtr camera{nullptr};
 
   /// \brief View control focus target
-  public: ignition::math::Vector3d target;
+  ignition::math::Vector3d target;
 
   /// \brief Orbit view controller
-  public: ignition::rendering::OrbitViewController orbitViewControl;
+  ignition::rendering::OrbitViewController orbitViewControl;
 
   /// \brief Ortho view controller
-  public: ignition::rendering::OrthoViewController orthoViewControl;
+  ignition::rendering::OrthoViewController orthoViewControl;
 
   /// \brief Camera view controller
-  public: ignition::rendering::ViewController *viewControl{nullptr};
+  ignition::rendering::ViewController *viewControl{nullptr};
 
   /// \brief Mutex to protect View Controllers
-  public: std::mutex mutex;
+  std::mutex mutex;
 
   /// \brief View controller
-  public: std::string viewController{"orbit"};
+  std::string viewController{"orbit"};
 
   /// \brief Camera view control service
-  public: std::string cameraViewControlService;
+  std::string cameraViewControlService;
 
   /// \brief Ray query for mouse clicks
-  public: ignition::rendering::RayQueryPtr rayQuery{nullptr};
+  ignition::rendering::RayQueryPtr rayQuery{nullptr};
 
   //// \brief Pointer to the rendering scene
-  public: ignition::rendering::ScenePtr scene{nullptr};
+  ignition::rendering::ScenePtr scene{nullptr};
 
   /// \brief Transport node for making transform control requests
-  public: ignition::transport::Node node;
+  ignition::transport::Node node;
 };
 
 using namespace tesseract_gui;
@@ -204,7 +205,7 @@ void InteractiveViewControlPrivate::OnRender()
     else if (this->mouseEvent.Buttons() & ignition::common::MouseEvent::RIGHT)
     {
       double hfov = this->camera->HFOV().Radian();
-      double vfov = 2.0f * atan(tan(hfov / 2.0f) / this->camera->AspectRatio());
+      double vfov = 2.0f * atan(tan(hfov / 2.0F) / this->camera->AspectRatio());
       double distance = this->camera->WorldPosition().Distance(this->target);
       double amount = ((-this->drag.Y() /
           static_cast<double>(this->camera->ImageHeight()))
@@ -241,7 +242,7 @@ bool InteractiveViewControlPrivate::OnViewControl(const ignition::msgs::StringMs
 
 /////////////////////////////////////////////////
 InteractiveViewControl::InteractiveViewControl()
-  : QObject(), dataPtr(std::make_unique<InteractiveViewControlPrivate>())
+  : dataPtr(std::make_unique<InteractiveViewControlPrivate>())
 {
 }
 
@@ -272,7 +273,7 @@ bool InteractiveViewControl::eventFilter(QObject *_obj, QEvent *_event)
   }
   else if (_event->type() == ignition::gui::events::LeftClickOnScene::kType)
   {
-    auto leftClickOnScene =
+    auto* leftClickOnScene =
       reinterpret_cast<ignition::gui::events::LeftClickOnScene *>(_event);
     this->dataPtr->mouseDirty = true;
 
@@ -281,7 +282,7 @@ bool InteractiveViewControl::eventFilter(QObject *_obj, QEvent *_event)
   }
   else if (_event->type() == ignition::gui::events::MousePressOnScene::kType)
   {
-    auto pressOnScene =
+    auto* pressOnScene =
       reinterpret_cast<ignition::gui::events::MousePressOnScene *>(_event);
     this->dataPtr->mouseDirty = true;
 
@@ -290,7 +291,7 @@ bool InteractiveViewControl::eventFilter(QObject *_obj, QEvent *_event)
   }
   else if (_event->type() == ignition::gui::events::DragOnScene::kType)
   {
-    auto dragOnScene =
+    auto* dragOnScene =
       reinterpret_cast<ignition::gui::events::DragOnScene *>(_event);
     this->dataPtr->mouseDirty = true;
 
@@ -304,7 +305,7 @@ bool InteractiveViewControl::eventFilter(QObject *_obj, QEvent *_event)
   }
   else if (_event->type() == ignition::gui::events::ScrollOnScene::kType)
   {
-    auto scrollOnScene =
+    auto* scrollOnScene =
       reinterpret_cast<ignition::gui::events::ScrollOnScene *>(_event);
     this->dataPtr->mouseDirty = true;
 
@@ -316,7 +317,7 @@ bool InteractiveViewControl::eventFilter(QObject *_obj, QEvent *_event)
   }
   else if (_event->type() == ignition::gui::events::BlockOrbit::kType)
   {
-    auto blockOrbit = reinterpret_cast<ignition::gui::events::BlockOrbit *>(
+    auto* blockOrbit = reinterpret_cast<ignition::gui::events::BlockOrbit *>(
       _event);
     this->dataPtr->blockOrbit = blockOrbit->Block();
   }

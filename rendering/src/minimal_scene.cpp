@@ -1021,30 +1021,6 @@ void RenderWindowItem::SetCameraFarClip(double _far)
 }
 
 /////////////////////////////////////////////////
-void RenderWindowItem::SetSceneService(const std::string &_service)
-{
-  this->dataPtr->renderThread->ignRenderer.sceneService = _service;
-}
-
-/////////////////////////////////////////////////
-void RenderWindowItem::SetPoseTopic(const std::string &_topic)
-{
-  this->dataPtr->renderThread->ignRenderer.poseTopic = _topic;
-}
-
-/////////////////////////////////////////////////
-void RenderWindowItem::SetDeletionTopic(const std::string &_topic)
-{
-  this->dataPtr->renderThread->ignRenderer.deletionTopic = _topic;
-}
-
-/////////////////////////////////////////////////
-void RenderWindowItem::SetSceneTopic(const std::string &_topic)
-{
-  this->dataPtr->renderThread->ignRenderer.sceneTopic = _topic;
-}
-
-/////////////////////////////////////////////////
 void RenderWindowItem::SetSkyEnabled(const bool &_sky)
 {
   this->dataPtr->renderThread->ignRenderer.skyEnable = _sky;
@@ -1165,34 +1141,6 @@ MinimalScene::MinimalScene()
 //          renderWindow->SetCameraFarClip(f);
 //        }
 //      }
-//    }
-
-//    elem = _pluginElem->FirstChildElement("service");
-//    if (nullptr != elem && nullptr != elem->GetText())
-//    {
-//      std::string service = elem->GetText();
-//      renderWindow->SetSceneService(service);
-//    }
-
-//    elem = _pluginElem->FirstChildElement("pose_topic");
-//    if (nullptr != elem && nullptr != elem->GetText())
-//    {
-//      std::string topic = elem->GetText();
-//      renderWindow->SetPoseTopic(topic);
-//    }
-
-//    elem = _pluginElem->FirstChildElement("deletion_topic");
-//    if (nullptr != elem && nullptr != elem->GetText())
-//    {
-//      std::string topic = elem->GetText();
-//      renderWindow->SetDeletionTopic(topic);
-//    }
-
-//    elem = _pluginElem->FirstChildElement("scene_topic");
-//    if (nullptr != elem && nullptr != elem->GetText())
-//    {
-//      std::string topic = elem->GetText();
-//      renderWindow->SetSceneTopic(topic);
 //    }
 
 //    elem = _pluginElem->FirstChildElement("sky");

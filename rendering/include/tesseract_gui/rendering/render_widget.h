@@ -105,23 +105,6 @@ public:
   /// \brief Flag to indicate texture size has changed.
   bool textureDirty = false;
 
-  /// \brief Scene service. If not empty, a request will be made to get the
-  /// scene information using this service and the renderer will populate the
-  /// scene based on the response data
-  std::string sceneService;
-
-  /// \brief Scene pose topic. If not empty, a node will subcribe to this
-  /// topic to get pose updates of objects in the scene
-  std::string poseTopic;
-
-  /// \brief Ign-transport deletion topic name
-  std::string deletionTopic;
-
-  /// \brief Ign-transport scene topic name
-  /// New scene messages will be published to this topic when an entities are
-  /// added
-  std::string sceneTopic;
-
   /// \brief True if sky is enabled;
   bool skyEnable = false;
 
@@ -202,7 +185,10 @@ public:
   /// to be displayed
   /// \param[in] _id GLuid of the opengl texture
   /// \param[in] _size Size of the texture
-Q_SIGNALS: void TextureReady(uint _id, const QSize &_size);
+
+signals:
+    void TextureReady(uint _id, const QSize &_size);
+    void ContextWanted();
 
 
 };
@@ -210,7 +196,7 @@ Q_SIGNALS: void TextureReady(uint _id, const QSize &_size);
 class RenderWidget;
 
 /// \brief Texture node for displaying the render texture from ign-renderer
-class TextureNode : public QObject, protected QOpenGLFunctions
+class TextureNode : public QObject
 {
   Q_OBJECT
 
@@ -298,29 +284,6 @@ public:
   /// \param[in] _far Far clipping plane distance
   void SetCameraFarClip(double _far);
 
-  /// \brief Set scene service to use in this render window
-  /// A service call will be made using ign-transport to get scene
-  /// data using this service
-  /// \param[in] _service Scene service name
-  void SetSceneService(const std::string &_service);
-
-  /// \brief Set pose topic to use for updating objects in the scene
-  /// The renderer will subscribe to this topic to get pose messages of
-  /// visuals in the scene
-  /// \param[in] _topic Pose topic
-  void SetPoseTopic(const std::string &_topic);
-
-  /// \brief Set deletion topic to use for deleting objects from the scene
-  /// The renderer will subscribe to this topic to get notified when entities
-  /// in the scene get deleted
-  /// \param[in] _topic Deletion topic
-  void SetDeletionTopic(const std::string &_topic);
-
-  /// \brief Set the scene topic to use for updating objects in the scene
-  /// The renderer will subscribe to this topic to get updates scene messages
-  /// \param[in] _topic Scene topic
-  void SetSceneTopic(const std::string &_topic);
-
   /// \brief Called when the mouse hovers to a new position.
   /// \param[in] _hoverPos 2D coordinates of the hovered mouse position on
   /// the render window.
@@ -353,6 +316,19 @@ public:
   /// \param[in] _e The key event to process.
   void HandleKeyRelease(const ignition::common::KeyEvent &_e);
 
+signals:
+    void renderRequested();
+
+public slots:
+    void grabContext();
+
+private slots:
+    void onAboutToCompose();
+    void onFrameSwapped();
+    void onAboutToResize();
+    void onResized();
+    void onTextureReady();
+
 protected:
   // Documentation inherited
   void mousePressEvent(QMouseEvent *_e) override;
@@ -372,8 +348,6 @@ protected:
   // Documentation inherited
   void wheelEvent(QWheelEvent *_e) override;
 
-  void paintEvent(QPaintEvent *) override { }
-
   /// \brief Overrides the paint event to render the render engine
   /// camera view
   /// \param[in] _oldNode The node passed in previous updatePaintNode
@@ -382,7 +356,9 @@ protected:
   /// \return Updated node.
 //  QSGNode *updatePaintNode(QSGNode *_oldNode, QQuickItem::UpdatePaintNodeData *_data) override;
 
-  void paintGL() override;
+//  void paintGL() override;
+
+  void paintEvent(QPaintEvent *) override { }
 
   /// \internal
   /// \brief Pointer to private data.

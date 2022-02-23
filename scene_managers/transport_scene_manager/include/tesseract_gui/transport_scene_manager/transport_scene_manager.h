@@ -36,28 +36,29 @@ namespace tesseract_gui
   class TransportSceneManager : public QObject
   {
     Q_OBJECT
-
+  public:
     /// \brief Constructor
-    public: TransportSceneManager();
+    TransportSceneManager();
 
     /// \brief Destructor
-    public: virtual ~TransportSceneManager();
+    virtual ~TransportSceneManager();
 
-  public: TransportSceneManager(const std::string& scene_topic,
-                                const std::string& pose_topic,
-                                const std::string& deletion_topic,
-                                const std::string& service);
+    TransportSceneManager(const std::string& scene_topic,
+                          const std::string& pose_topic,
+                          const std::string& deletion_topic,
+                          const std::string& service);
 
 //    // Documentation inherited
 //    public: virtual void LoadConfig(const tinyxml2::XMLElement *_pluginElem)
 //        override;
 
+  private:
     // Documentation inherited
-    private: bool eventFilter(QObject *_obj, QEvent *_event) override;
+    bool eventFilter(QObject *_obj, QEvent *_event) override;
 
     /// \internal
     /// \brief Pointer to private data.
-    private: std::unique_ptr<TransportSceneManagerPrivate> dataPtr;
+    std::unique_ptr<TransportSceneManagerPrivate> dataPtr;
   };
 }
 

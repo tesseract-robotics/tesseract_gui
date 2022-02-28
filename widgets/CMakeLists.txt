@@ -1,0 +1,11 @@
+cmake_minimum_required(VERSION 3.6.0)
+
+add_subdirectory(acm)
+add_subdirectory(joint_state_slider)
+add_subdirectory(plot)
+add_subdirectory(scene_graph)
+add_subdirectory(joint_trajectory)
+add_subdirectory(kinematic_groups)
+add_subdirectory(rendering)
+add_subdirectory(scene_managers)
+add_subdirectory(environment)

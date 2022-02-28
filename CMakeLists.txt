@@ -12,16 +12,10 @@ if(WIN32)
 endif()
 
 add_subdirectory(3rdparty/Qt-Advanced-Docking)
+add_subdirectory(widgets)
 add_subdirectory(common)
-add_subdirectory(acm)
-add_subdirectory(joint_state_slider)
-add_subdirectory(plot)
-add_subdirectory(scene_graph)
-add_subdirectory(joint_trajectory)
-add_subdirectory(kinematic_groups)
-add_subdirectory(rendering)
 add_subdirectory(demo_app)
-add_subdirectory(scene_managers)
+add_subdirectory(app)
 
 install(FILES "${CMAKE_CURRENT_LIST_DIR}/cmake/FindQwt.cmake" DESTINATION lib/cmake/${PROJECT_NAME})
 

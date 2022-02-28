@@ -159,6 +159,21 @@ void KinematicGroupsModel::clear()
   Q_EMIT cleared();
 }
 
+void KinematicGroupsModel::set(const tesseract_srdf::ChainGroups& chain_groups,
+                               const tesseract_srdf::JointGroups& joint_groups,
+                               const tesseract_srdf::LinkGroups& link_groups)
+{
+  clear();
+  for (const auto& group : chain_groups)
+    addChainGroup(QString::fromStdString(group.first), group.second);
+
+  for (const auto& group : joint_groups)
+    addJointGroup(QString::fromStdString(group.first), group.second);
+
+  for (const auto& group : link_groups)
+    addLinkGroup(QString::fromStdString(group.first), group.second);
+}
+
 void KinematicGroupsModel::addChainGroup(QString group_name, tesseract_srdf::ChainGroup group)
 {
   if(group_names_.find(group_name.toStdString()) != group_names_.end())

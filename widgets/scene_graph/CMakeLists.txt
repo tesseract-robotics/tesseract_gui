@@ -18,6 +18,7 @@ add_library(${PROJECT_NAME}_scene_graph SHARED
   src/origin_standard_item.cpp
   src/safety_standard_item.cpp
   src/scene_graph_standard_item.cpp
+  src/scene_state_standard_item.cpp
   src/visual_standard_item.cpp
   src/box_standard_item.cpp
   src/capsule_standard_item.cpp

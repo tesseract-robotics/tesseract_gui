@@ -14,7 +14,8 @@ add_library(${PROJECT_NAME}_kinematic_groups SHARED
   src/opw_params_standard_item.cpp
   src/tcp_standard_item.cpp
   src/kinematic_groups_model.cpp
-  src/groups_joint_states_model.cpp)
+  src/groups_joint_states_model.cpp
+  src/groups_tcps_standard_item.cpp)
 target_link_libraries(${PROJECT_NAME}_kinematic_groups PUBLIC
   tesseract::tesseract_common
   tesseract::tesseract_kinematics_opw

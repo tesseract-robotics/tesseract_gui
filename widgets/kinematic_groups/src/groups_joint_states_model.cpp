@@ -38,10 +38,11 @@ void GroupsJointStateStandardItem::ctor()
   setColumnCount(2);
   for (const auto& s : state)
   {
-    QStandardItem* p_name = new QStandardItem(*NUMERIC_ICON(), QString::fromStdString(s.first));
-    QStandardItem* p_value = new QStandardItem(QString("%1").arg(s.second));
+    auto* p_name = new QStandardItem(*NUMERIC_ICON(), QString::fromStdString(s.first));
+    auto* p_value = new QStandardItem(QString("%1").arg(s.second));
     appendRow({p_name, p_value});
   }
+  sortChildren(0);
 }
 
 GroupsJointStatesModel::GroupsJointStatesModel(QObject *parent)
@@ -65,6 +66,16 @@ void GroupsJointStatesModel::clear()
   QStandardItemModel::clear();
   setColumnCount(2);
   setHorizontalHeaderLabels({"Name", "Values"});
+}
+
+void GroupsJointStatesModel::set(const tesseract_srdf::GroupJointStates& group_joint_states)
+{
+  clear();
+  for (const auto& group : group_joint_states)
+  {
+    for (const auto& state : group.second)
+      addGroupJointState(QString::fromStdString(group.first), QString::fromStdString(state.first), state.second);
+  }
 }
 
 void GroupsJointStatesModel::addGroupJointState(QString group_name, QString state_name, tesseract_srdf::GroupsJointState state)

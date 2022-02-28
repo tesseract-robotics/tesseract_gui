@@ -64,6 +64,9 @@ public:
   KinematicGroupsModel(const KinematicGroupsModel &other);
   KinematicGroupsModel &operator=(const KinematicGroupsModel &other);
 
+  void set(const tesseract_srdf::ChainGroups& chain_groups,
+           const tesseract_srdf::JointGroups& joint_groups,
+           const tesseract_srdf::LinkGroups& link_groups);
   void addChainGroup(QString group_name, tesseract_srdf::ChainGroup group);
   void addJointGroup(QString group_name, tesseract_srdf::JointGroup group);
   void addLinkGroup(QString group_name, tesseract_srdf::LinkGroup group);

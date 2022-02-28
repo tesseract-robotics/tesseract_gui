@@ -15,9 +15,9 @@ namespace tesseract_gui
 class OriginStandardItem : public QStandardItem
 {
 public:
-  OriginStandardItem(Eigen::Isometry3d& origin);
+  explicit OriginStandardItem(Eigen::Isometry3d& origin);
   explicit OriginStandardItem(const QString &text, Eigen::Isometry3d& origin);
-  OriginStandardItem(const QIcon &icon, const QString &text, Eigen::Isometry3d& origin);
+  explicit OriginStandardItem(const QIcon &icon, const QString &text, Eigen::Isometry3d& origin);
   int type() const override;
 
   Eigen::Isometry3d& origin;

@@ -2,6 +2,10 @@
 #include "ui_environment_widget.h"
 
 #include <tesseract_gui/scene_graph/scene_graph_standard_item.h>
+#include <tesseract_gui/scene_graph/scene_state_standard_item.h>
+#include <tesseract_gui/kinematic_groups/kinematic_groups_model.h>
+#include <tesseract_gui/kinematic_groups/groups_tcps_standard_item.h>
+#include <tesseract_gui/kinematic_groups/groups_joint_states_model.h>
 #include <tesseract_gui/acm/allowed_collision_matrix_model.h>
 #include <unordered_map>
 #include <QStandardItemModel>
@@ -14,6 +18,10 @@ struct EnvironmentWidgetImpl
   QMap<QString, tesseract_environment::Environment::ConstPtr> environments;
   QStringListModel names_model;
   QStandardItemModel scene_model;
+  QStandardItemModel state_model;
+  KinematicGroupsModel group_model;
+  QStandardItemModel groups_tcps_model;
+  GroupsJointStatesModel groups_states_model;
   AllowedCollisionMatrixModel acm_model;
 };
 
@@ -25,6 +33,10 @@ EnvironmentWidget::EnvironmentWidget(QWidget *parent)
   ui->setupUi(this);
   ui->env_combo_box->setModel(&data_->names_model);
   ui->scene_tree_view->setModel(&data_->scene_model);
+  ui->state_tree_view->setModel(&data_->state_model);
+  ui->groups_tree_view->setModel(&data_->group_model);
+  ui->groups_tcps_tree_view->setModel(&data_->groups_tcps_model);
+  ui->groups_states_tree_view->setModel(&data_->groups_states_model);
   ui->acm_tree_view->setModel(&data_->acm_model);
 
   connect(ui->env_combo_box, SIGNAL(currentTextChanged(QString)), this, SLOT(onCurrentEnvironmentChanged(QString)));
@@ -70,11 +82,40 @@ void EnvironmentWidget::onCurrentEnvironmentChanged(const QString& env_name)
   auto it = data_->environments.find(env_name);
   if (it != data_->environments.end())
   {
+    // Scene Graph
     data_->scene_model.clear();
-    auto* item = new tesseract_gui::SceneGraphStandardItem(it.value()->getSceneGraph()->clone());
-    data_->scene_model.appendRow(item);
+    data_->scene_model.setColumnCount(2);
+    data_->scene_model.setHorizontalHeaderLabels({"Name", "Values"});
+    auto* scene_item = new tesseract_gui::SceneGraphStandardItem(it.value()->getSceneGraph()->clone());
+    data_->scene_model.appendRow(scene_item);
 
+    // Scene State
+    data_->state_model.clear();
+    data_->state_model.setColumnCount(2);
+    data_->state_model.setHorizontalHeaderLabels({"Name", "Values"});
+    auto* state_item = new tesseract_gui::SceneStateStandardItem(it.value()->getState());
+    data_->state_model.appendRow(state_item);
+
+    // Allowed Collision Matrix
     data_->acm_model.setAllowedCollisionMatrix(*it.value()->getAllowedCollisionMatrix());
+
+    auto kin_info = it.value()->getKinematicsInformation();
+
+    // Kinematic Groups
+    data_->group_model.set(kin_info.chain_groups, kin_info.joint_groups, kin_info.link_groups);
+
+    // Groups States
+    data_->groups_states_model.set(kin_info.group_states);
+
+    // Tool Center Points
+    data_->groups_tcps_model.clear();
+    data_->scene_model.setColumnCount(2);
+    data_->scene_model.setHorizontalHeaderLabels({"Name", "Values"});
+    for (const auto& group : kin_info.group_tcps)
+    {
+      auto* group_tcps_item = new GroupsTCPsStandardItem(QString::fromStdString(group.first), group.second);
+      data_->groups_tcps_model.appendRow(group_tcps_item);
+    }
   }
 }
 

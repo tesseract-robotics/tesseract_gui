@@ -37,7 +37,13 @@ enum class StandardItemType : int
   CHAIN_GROUP             = QStandardItem::UserType + 26,
   JOINT_GROUP             = QStandardItem::UserType + 27,
   LINK_GROUP              = QStandardItem::UserType + 28,
-  GROUPS_JOINT_STATE      = QStandardItem::UserType + 29
+  GROUPS_JOINT_STATE      = QStandardItem::UserType + 29,
+
+  // Scene State
+  SCENE_STATE                 = QStandardItem::UserType + 30,
+//  SCENE_STATE_JOINT_VALUE     = SCENE_STATE + 1,
+//  SCENE_STATE_LINK_TRANSFORM  = SCENE_STATE + 2,
+//  SCENE_STATE_JOINT_TRANSFORM = SCENE_STATE + 3
 };
 }
 

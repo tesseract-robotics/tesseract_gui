@@ -37,6 +37,7 @@ public:
   GroupsJointStatesModel(const GroupsJointStatesModel &other);
   GroupsJointStatesModel &operator=(const GroupsJointStatesModel &other);
 
+  void set(const tesseract_srdf::GroupJointStates& group_joint_states);
   void addGroupJointState(QString group_name, QString state_name, tesseract_srdf::GroupsJointState state);
   void removeGroupJointState(QString group_name, QString state_name);
   void clear();

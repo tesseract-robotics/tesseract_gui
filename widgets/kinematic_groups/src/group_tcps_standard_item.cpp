@@ -52,7 +52,7 @@ void GroupTCPsStandardItem::addGroupTCPItem(const QString& group_name, const QSt
   {
     group_item = new QStandardItem(*ROBOT_ICON(), group_name);
     group_items_[group_name.toStdString()] = group_item;
-    appendRow(group_item);
+    appendRow({group_item, new QStandardItem()}); // Must have two columns so QTreeView::setRootIndex will have two columns
   }
 
   group_item->appendRow(new TCPStandardItem(tcp_name, tcp));

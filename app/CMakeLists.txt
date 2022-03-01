@@ -27,7 +27,7 @@ target_link_libraries(tesseract_robotics_studio PRIVATE
   ${PROJECT_NAME}_interactive_view_control # for example
   tesseract::tesseract_support # for example
   tesseract::tesseract_urdf # for example
-  ${PROJECT_NAME}_scene_graph # for example
+  ${PROJECT_NAME}_environment # for example
   ignition-msgs8::ignition-msgs8
   Qt5::Core Qt5::Widgets Qt5::Gui)
 target_include_directories(tesseract_robotics_studio PRIVATE

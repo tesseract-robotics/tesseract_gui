@@ -108,6 +108,9 @@ void EnvironmentWidget::onCurrentEnvironmentChanged(const QString& env_name)
     data_->group_states_model.set(kin_info.group_states);
     // This hides the root element
     ui->group_states_tree_view->setRootIndex(data_->group_states_model.index(0,0));
+    ui->group_states_tree_view->showColumn(1);
+//    data_->group_states_model.setColumnCount(2);
+//    data_->group_states_model.setHorizontalHeaderLabels({"Name", "Values"});
 
     // Tool Center Points
     data_->group_tcps_model.set(kin_info.group_tcps);

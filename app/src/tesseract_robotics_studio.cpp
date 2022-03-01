@@ -3,7 +3,7 @@
 #include "ui_tesseract_robotics_studio.h"
 
 #include <tesseract_gui/rendering/simple_render_widget.h>
-#include <tesseract_gui/scene_graph/scene_graph_standard_item.h>
+#include <tesseract_gui/environment/environment_widget.h>
 #include <QTreeView>
 #include <QVBoxLayout>
 #include <tesseract_urdf/urdf_parser.h>
@@ -68,26 +68,21 @@ TesseractRoboticsStudio::TesseractRoboticsStudio(QWidget *parent)
   }
 
   {
-    std::string path = std::string(TESSERACT_SUPPORT_DIR) + "/urdf/lbr_iiwa_14_r820.urdf";
+    auto locator = std::make_shared<tesseract_common::SimpleResourceLocator>(locateResource);
+    tesseract_common::fs::path urdf_path = std::string(TESSERACT_SUPPORT_DIR) + "/urdf/lbr_iiwa_14_r820.urdf";
+    tesseract_common::fs::path srdf_path = std::string(TESSERACT_SUPPORT_DIR) + "/urdf/lbr_iiwa_14_r820.srdf";
 
-    tesseract_common::SimpleResourceLocator locator(locateResource);
-    auto scene_graph = tesseract_urdf::parseURDFFile(path, locator);
+    auto env = std::make_shared<tesseract_environment::Environment>();
+    env->init(urdf_path, srdf_path, locator);
 
-    auto* model = new QStandardItemModel();
-    model->setColumnCount(2);
-    model->setHorizontalHeaderLabels({"Name", "Values"});
+    auto* widget = new tesseract_gui::EnvironmentWidget();
+    widget->addEnvironment(env);
 
-    auto* item = new tesseract_gui::SceneGraphStandardItem(std::move(scene_graph));
-    model->appendRow(item);
-
-    auto* w = new QTreeView();
-    w->setModel(model);
-
-    ads::CDockWidget* dock_widget = new ads::CDockWidget("Scene Graph");
-    dock_widget->setWidget(w);
+    ads::CDockWidget* dock_widget = new ads::CDockWidget("Environment");
+    dock_widget->setWidget(widget);
     dock_widget->setFeature(ads::CDockWidget::DockWidgetDeleteOnClose, true);
     dock_widget->setFeature(ads::CDockWidget::DockWidgetFocusable, true);
-    d_->dock_manager->addDockWidgetTab(ads::RightDockWidgetArea, dock_widget);
+    d_->dock_manager->addDockWidgetTab(ads::LeftDockWidgetArea, dock_widget);
   }
 //  d_->dock_manager->addDockWidgetTab(ads::CenterDockWidgetArea, dock_widget);
 }

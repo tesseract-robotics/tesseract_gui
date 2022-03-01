@@ -1,34 +1,30 @@
 #include <tesseract_gui/kinematic_groups/tcp_standard_item.h>
+#include <tesseract_gui/scene_graph/origin_standard_item.h>
 #include <tesseract_gui/common/standard_item_type.h>
 
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, CUBE_ICON, (":/tesseract_gui/png/cube.png"));
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, TEXT_ICON, (":/tesseract_gui/png/text.png"));
+Q_GLOBAL_STATIC_WITH_ARGS(QIcon, ORIGIN_ICON, (":/tesseract_gui/png/origin.png"));
+Q_GLOBAL_STATIC_WITH_ARGS(QIcon, POSITION_ICON, (":/tesseract_gui/png/position.png"));
+Q_GLOBAL_STATIC_WITH_ARGS(QIcon, ORIENTATION_ICON, (":/tesseract_gui/png/orientation.png"));
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, NUMERIC_ICON, (":/tesseract_gui/png/numeric.png"));
 
 namespace tesseract_gui
 {
-TCPStandardItem::TCPStandardItem(QString name, const Eigen::Isometry3d& tcp)
-  : QStandardItem(*CUBE_ICON(), "TCP")
-  , name(std::move(name))
-  , tcp(tcp)
+TCPStandardItem::TCPStandardItem(const Eigen::Isometry3d& tcp)
+  : QStandardItem(*ORIGIN_ICON(), "TCP")
 {
-  ctor();
+  ctor(tcp);
 }
 
-TCPStandardItem::TCPStandardItem(const QString &text, QString name, const Eigen::Isometry3d& tcp)
-  : QStandardItem(*CUBE_ICON(), text)
-  , name(std::move(name))
-  , tcp(tcp)
+TCPStandardItem::TCPStandardItem(const QString &text, const Eigen::Isometry3d& tcp)
+  : QStandardItem(*ORIGIN_ICON(), text)
 {
-  ctor();
+  ctor(tcp);
 }
 
-TCPStandardItem::TCPStandardItem(const QIcon &icon, const QString &text, QString name, const Eigen::Isometry3d& tcp)
+TCPStandardItem::TCPStandardItem(const QIcon &icon, const QString &text, const Eigen::Isometry3d& tcp)
   : QStandardItem(icon, text)
-  , name(std::move(name))
-  , tcp(tcp)
 {
-  ctor();
+  ctor(tcp);
 }
 
 int TCPStandardItem::type() const
@@ -36,15 +32,51 @@ int TCPStandardItem::type() const
   return static_cast<int>(StandardItemType::TCP);
 }
 
-void TCPStandardItem::ctor()
+void TCPStandardItem::ctor(const Eigen::Isometry3d& tcp)
 {
   {
-    auto* n = new QStandardItem(*TEXT_ICON(), "name");
-    auto* value = new QStandardItem(name);
-    appendRow({n, value});
+    auto* position_item = new QStandardItem(*POSITION_ICON(), "position");
+    position_item->setColumnCount(2);
+
+    auto* x_name = new QStandardItem(*NUMERIC_ICON(), "x");
+    auto* x_value = new QStandardItem(QString("%1").arg(tcp.translation().x()));
+    position_item->appendRow({x_name, x_value});
+
+    auto* y_name = new QStandardItem(*NUMERIC_ICON(), "y");
+    auto* y_value = new QStandardItem(QString("%1").arg(tcp.translation().y()));
+    position_item->appendRow({y_name, y_value});
+
+    auto* z_name = new QStandardItem(*NUMERIC_ICON(), "z");
+    auto* z_value = new QStandardItem(QString("%1").arg(tcp.translation().z()));
+    position_item->appendRow({z_name, z_value});
+
+    appendRow(position_item);
   }
 
-  appendRow(new OriginStandardItem("Pose", tcp));
+  {
+    auto* orientation_item = new QStandardItem(*ORIENTATION_ICON(), "orientation");
+    orientation_item->setColumnCount(2);
+
+    Eigen::Quaterniond q(tcp.rotation());
+
+    auto* x_name = new QStandardItem(*NUMERIC_ICON(), "x");
+    auto* x_value = new QStandardItem(QString("%1").arg(q.x()));
+    orientation_item->appendRow({x_name, x_value});
+
+    auto* y_name = new QStandardItem(*NUMERIC_ICON(), "y");
+    auto* y_value = new QStandardItem(QString("%1").arg(q.y()));
+    orientation_item->appendRow({y_name, y_value});
+
+    auto* z_name = new QStandardItem(*NUMERIC_ICON(), "z");
+    auto* z_value = new QStandardItem(QString("%1").arg(q.z()));
+    orientation_item->appendRow({z_name, z_value});
+
+    auto* w_name = new QStandardItem(*NUMERIC_ICON(), "w");
+    auto* w_value = new QStandardItem(QString("%1").arg(q.w()));
+    orientation_item->appendRow({w_name, w_value});
+
+    appendRow(orientation_item);
+  }
 }
 }
 

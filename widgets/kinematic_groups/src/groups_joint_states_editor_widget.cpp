@@ -31,7 +31,7 @@ GroupsJointStatesEditorWidget::GroupsJointStatesEditorWidget(QStringListModel *g
 
 GroupsJointStatesEditorWidget::~GroupsJointStatesEditorWidget() = default;
 
-void GroupsJointStatesEditorWidget::setModel(GroupsJointStatesModel* model)
+void GroupsJointStatesEditorWidget::setModel(tesseract_gui::GroupJointStatesModel *model)
 {
   model_ = model;
   ui_->treeView->setModel(model_);
@@ -60,7 +60,7 @@ void GroupsJointStatesEditorWidget::onRemoveJointState()
   for( int i = row_cnt; i > 0; i--)
   {
     QStandardItem* item = model_->itemFromIndex(selection.at(i-1));
-    if (item->type() == static_cast<int>(StandardItemType::GROUPS_JOINT_STATE))
+    if (item->type() == static_cast<int>(StandardItemType::JOINT_STATE))
       model_->removeGroupJointState(item->parent()->text(), item->text());
   }
 }

@@ -9,33 +9,20 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <QStandardItemModel>
+#include <tesseract_gui/kinematic_groups/group_joint_states_standard_item.h>
 
 namespace tesseract_gui
 {
 
-class GroupsJointStateStandardItem : public QStandardItem
-{
-public:
-  GroupsJointStateStandardItem(tesseract_srdf::GroupsJointState state);
-  explicit GroupsJointStateStandardItem(const QString &text, tesseract_srdf::GroupsJointState state);
-  GroupsJointStateStandardItem(const QIcon &icon, const QString &text, tesseract_srdf::GroupsJointState state);
-  int type() const override;
-
-  tesseract_srdf::GroupsJointState state;
-
-private:
-  void ctor();
-};
-
-class GroupsJointStatesModel : public QStandardItemModel
+class GroupJointStatesModel : public QStandardItemModel
 {
   Q_OBJECT
 
 public:
 
-  explicit GroupsJointStatesModel(QObject *parent = nullptr);
-  GroupsJointStatesModel(const GroupsJointStatesModel &other);
-  GroupsJointStatesModel &operator=(const GroupsJointStatesModel &other);
+  explicit GroupJointStatesModel(QObject *parent = nullptr);
+  GroupJointStatesModel(const GroupJointStatesModel &other);
+  GroupJointStatesModel &operator=(const GroupJointStatesModel &other);
 
   void set(const tesseract_srdf::GroupJointStates& group_joint_states);
   void addGroupJointState(QString group_name, QString state_name, tesseract_srdf::GroupsJointState state);
@@ -45,7 +32,8 @@ public:
   const tesseract_srdf::GroupJointStates& getGroupsJointStates() const;
 
 private:
-  tesseract_srdf::GroupJointStates groups_joint_states_;
+  GroupJointStatesStandardItem* getRoot();
+  const GroupJointStatesStandardItem* getRoot() const;
 };
 
 }

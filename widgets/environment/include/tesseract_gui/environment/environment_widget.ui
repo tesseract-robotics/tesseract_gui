@@ -63,7 +63,7 @@
    <item>
     <widget class="QTabWidget" name="tab_widget">
      <property name="currentIndex">
-      <number>6</number>
+      <number>5</number>
      </property>
      <widget class="QWidget" name="scene_tab">
       <attribute name="title">
@@ -153,7 +153,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="groups_states_tab">
+     <widget class="QWidget" name="group_states_tab">
       <attribute name="title">
        <string>States</string>
       </attribute>
@@ -171,11 +171,11 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="QTreeView" name="groups_states_tree_view"/>
+        <widget class="QTreeView" name="group_states_tree_view"/>
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="groups_tcps_tab">
+     <widget class="QWidget" name="group_tcps_tab">
       <attribute name="title">
        <string>TCPs</string>
       </attribute>
@@ -193,7 +193,7 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="QTreeView" name="groups_tcps_tree_view"/>
+        <widget class="QTreeView" name="group_tcps_tree_view"/>
        </item>
       </layout>
      </widget>

@@ -7,15 +7,19 @@ tesseract_variables()
 
 QT5_WRAP_CPP(KINEMATIC_GROUP_headers_MOC
   include/tesseract_gui/kinematic_groups/kinematic_groups_model.h
-  include/tesseract_gui/kinematic_groups/groups_joint_states_model.h)
+  include/tesseract_gui/kinematic_groups/group_joint_states_model.h
+  include/tesseract_gui/kinematic_groups/group_tcps_model.h)
 
 add_library(${PROJECT_NAME}_kinematic_groups SHARED
   ${KINEMATIC_GROUP_headers_MOC}
   src/opw_params_standard_item.cpp
   src/tcp_standard_item.cpp
+  src/joint_state_standard_item.cpp
   src/kinematic_groups_model.cpp
-  src/groups_joint_states_model.cpp
-  src/groups_tcps_standard_item.cpp)
+  src/group_joint_states_standard_item.cpp
+  src/group_joint_states_model.cpp
+  src/group_tcps_standard_item.cpp
+  src/group_tcps_model.cpp)
 target_link_libraries(${PROJECT_NAME}_kinematic_groups PUBLIC
   tesseract::tesseract_common
   tesseract::tesseract_kinematics_opw

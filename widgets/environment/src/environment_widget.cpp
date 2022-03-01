@@ -4,8 +4,8 @@
 #include <tesseract_gui/scene_graph/scene_graph_standard_item.h>
 #include <tesseract_gui/scene_graph/scene_state_standard_item.h>
 #include <tesseract_gui/kinematic_groups/kinematic_groups_model.h>
-#include <tesseract_gui/kinematic_groups/groups_tcps_standard_item.h>
-#include <tesseract_gui/kinematic_groups/groups_joint_states_model.h>
+#include <tesseract_gui/kinematic_groups/group_tcps_model.h>
+#include <tesseract_gui/kinematic_groups/group_joint_states_model.h>
 #include <tesseract_gui/acm/allowed_collision_matrix_model.h>
 #include <unordered_map>
 #include <QStandardItemModel>
@@ -20,8 +20,8 @@ struct EnvironmentWidgetImpl
   QStandardItemModel scene_model;
   QStandardItemModel state_model;
   KinematicGroupsModel group_model;
-  QStandardItemModel groups_tcps_model;
-  GroupsJointStatesModel groups_states_model;
+  GroupTCPsModel group_tcps_model;
+  GroupJointStatesModel group_states_model;
   AllowedCollisionMatrixModel acm_model;
 };
 
@@ -35,8 +35,8 @@ EnvironmentWidget::EnvironmentWidget(QWidget *parent)
   ui->scene_tree_view->setModel(&data_->scene_model);
   ui->state_tree_view->setModel(&data_->state_model);
   ui->groups_tree_view->setModel(&data_->group_model);
-  ui->groups_tcps_tree_view->setModel(&data_->groups_tcps_model);
-  ui->groups_states_tree_view->setModel(&data_->groups_states_model);
+  ui->group_tcps_tree_view->setModel(&data_->group_tcps_model);
+  ui->group_states_tree_view->setModel(&data_->group_states_model);
   ui->acm_tree_view->setModel(&data_->acm_model);
 
   connect(ui->env_combo_box, SIGNAL(currentTextChanged(QString)), this, SLOT(onCurrentEnvironmentChanged(QString)));
@@ -105,17 +105,14 @@ void EnvironmentWidget::onCurrentEnvironmentChanged(const QString& env_name)
     data_->group_model.set(kin_info.chain_groups, kin_info.joint_groups, kin_info.link_groups);
 
     // Groups States
-    data_->groups_states_model.set(kin_info.group_states);
+    data_->group_states_model.set(kin_info.group_states);
+    // This hides the root element
+    ui->group_states_tree_view->setRootIndex(data_->group_states_model.index(0,0));
 
     // Tool Center Points
-    data_->groups_tcps_model.clear();
-    data_->scene_model.setColumnCount(2);
-    data_->scene_model.setHorizontalHeaderLabels({"Name", "Values"});
-    for (const auto& group : kin_info.group_tcps)
-    {
-      auto* group_tcps_item = new GroupsTCPsStandardItem(QString::fromStdString(group.first), group.second);
-      data_->groups_tcps_model.appendRow(group_tcps_item);
-    }
+    data_->group_tcps_model.set(kin_info.group_tcps);
+    // This hides the root element
+    ui->group_tcps_tree_view->setRootIndex(data_->group_tcps_model.index(0,0));
   }
 }
 

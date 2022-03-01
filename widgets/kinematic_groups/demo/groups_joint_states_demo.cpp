@@ -7,7 +7,7 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <tesseract_gui/kinematic_groups/groups_joint_states_editor_widget.h>
-#include <tesseract_gui/kinematic_groups/groups_joint_states_model.h>
+#include <tesseract_gui/kinematic_groups/group_joint_states_model.h>
 
 #include <tesseract_urdf/urdf_parser.h>
 #include <tesseract_common/resource_locator.h>
@@ -74,7 +74,7 @@ int main(int argc, char ** argv)
     tesseract_common::SimpleResourceLocator locator(locateResource);
     sg = tesseract_urdf::parseURDFFile(path, locator);
 
-    tesseract_gui::GroupsJointStatesModel model;
+    tesseract_gui::GroupJointStatesModel model;
     QStringList list {"group1", "group2"};
     QStringListModel group_names;
     group_names.setStringList(list);

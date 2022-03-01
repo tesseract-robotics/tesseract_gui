@@ -32,15 +32,18 @@ enum class StandardItemType : int
   OCTREE                  = QStandardItem::UserType + 23,
 
   // SRDF Types
-  OPW_PARAMS              = QStandardItem::UserType + 24,
-  TCP                     = QStandardItem::UserType + 25,
-  CHAIN_GROUP             = QStandardItem::UserType + 26,
-  JOINT_GROUP             = QStandardItem::UserType + 27,
-  LINK_GROUP              = QStandardItem::UserType + 28,
-  GROUPS_JOINT_STATE      = QStandardItem::UserType + 29,
+  SRDF                    = QStandardItem::UserType + 24,
+  OPW_PARAMS              = SRDF + 1,
+  GROUP_TCPS              = SRDF + 2,
+  TCP                     = SRDF + 3,
+  CHAIN_GROUP             = SRDF + 4,
+  JOINT_GROUP             = SRDF + 5,
+  LINK_GROUP              = SRDF + 6,
+  GROUP_JOINT_STATES      = SRDF + 7,
+  JOINT_STATE             = SRDF + 8,
 
   // Scene State
-  SCENE_STATE                 = QStandardItem::UserType + 30,
+  SCENE_STATE                 = SRDF + 9,
 //  SCENE_STATE_JOINT_VALUE     = SCENE_STATE + 1,
 //  SCENE_STATE_LINK_TRANSFORM  = SCENE_STATE + 2,
 //  SCENE_STATE_JOINT_TRANSFORM = SCENE_STATE + 3

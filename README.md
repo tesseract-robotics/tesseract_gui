@@ -6,7 +6,6 @@ repo: https://github.com/google/material-design-icons
 search: https://fonts.google.com/icons
 
 ## Icons Provided by Freepik
- 
 <div>Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
   - trajectory.png
   - programming.png
@@ -26,7 +25,10 @@ search: https://fonts.google.com/icons
   - rgb.png
   - numeric.png
   - plane.png
-  
+  - save.png
+  - restore.png
+  - layout.png
+
 <div>Icons made by <a href="https://www.flaticon.com/authors/flat-icons" title="Flat Icons">Flat Icons</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
 - robotic-arm.png
 

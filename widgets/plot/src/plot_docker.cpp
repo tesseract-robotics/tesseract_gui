@@ -23,7 +23,8 @@
 #include <tesseract_gui/plot/plot_docker.h>
 #include <tesseract_gui/plot/plot_widget_editor.h>
 #include <tesseract_gui/common/svg_util.h>
-#include "Qads/DockSplitter.h"
+//#include <Qads/DockSplitter.h>
+#include <DockSplitter.h>
 #include <QPushButton>
 #include <QBoxLayout>
 #include <QMouseEvent>
@@ -346,27 +347,6 @@ void DraggableToolbar::toggleFullscreen()
     ui->buttonSplitHorizontal->setVisible(false);
     ui->buttonSplitVertical->setVisible(false);
   }
-}
-
-void DraggableToolbar::mousePressEvent(QMouseEvent* ev)
-{
-  _parent->dockAreaWidget()->titleBar()->mousePressEvent(ev);
-}
-
-void DraggableToolbar::mouseReleaseEvent(QMouseEvent* ev)
-{
-  _parent->dockAreaWidget()->titleBar()->mouseReleaseEvent(ev);
-}
-
-void DraggableToolbar::mouseMoveEvent(QMouseEvent* ev)
-{
-  ui->buttonFullscreen->setVisible(true);
-  ui->buttonSplitHorizontal->setVisible(!_fullscreen_mode);
-  ui->buttonSplitVertical->setVisible(!_fullscreen_mode);
-  _parent->dockAreaWidget()->titleBar()->mouseMoveEvent(ev);
-
-  ev->accept();
-  QWidget::mouseMoveEvent(ev);
 }
 
 void DraggableToolbar::enterEvent(QEvent* ev)

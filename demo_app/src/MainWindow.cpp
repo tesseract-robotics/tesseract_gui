@@ -71,14 +71,23 @@
 #include <QMap>
 #include <QElapsedTimer>
 
-#include <Qads/DockManager.h>
-#include <Qads/DockWidget.h>
-#include <Qads/DockAreaWidget.h>
-#include <Qads/DockAreaTitleBar.h>
-#include <Qads/DockAreaTabBar.h>
-#include <Qads/FloatingDockContainer.h>
-#include <Qads/DockComponentsFactory.h>
-#include <Qads/DockSplitter.h>
+//#include <Qads/DockManager.h>
+//#include <Qads/DockWidget.h>
+//#include <Qads/DockAreaWidget.h>
+//#include <Qads/DockAreaTitleBar.h>
+//#include <Qads/DockAreaTabBar.h>
+//#include <Qads/FloatingDockContainer.h>
+//#include <Qads/DockComponentsFactory.h>
+//#include <Qads/DockSplitter.h>
+
+#include <DockManager.h>
+#include <DockWidget.h>
+#include <DockAreaWidget.h>
+#include <DockAreaTitleBar.h>
+#include <DockAreaTabBar.h>
+#include <FloatingDockContainer.h>
+#include <DockComponentsFactory.h>
+#include <DockSplitter.h>
 #include <tesseract_gui/demo_app/StatusDialog.h>
 
 

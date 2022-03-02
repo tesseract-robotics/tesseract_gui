@@ -31,14 +31,6 @@ private:
   std::unique_ptr<Ui::TesseractRoboticsStudio> ui;
   std::unique_ptr<TesseractRoboticsStudioPrivate> d_;
 
-  void saveState();
-
-  void savePerspectives();
-
-  void restoreState();
-
-  void restorePerspectives();
-
   friend struct TesseractRoboticsStudioPrivate;
 };
 }

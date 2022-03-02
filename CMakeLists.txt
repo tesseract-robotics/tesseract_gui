@@ -11,7 +11,7 @@ if(WIN32)
   set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 endif()
 
-add_subdirectory(3rdparty/Qt-Advanced-Docking)
+#add_subdirectory(3rdparty/Qt-Advanced-Docking)
 add_subdirectory(widgets)
 add_subdirectory(common)
 add_subdirectory(demo_app)

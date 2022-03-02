@@ -74,5 +74,8 @@
         <file>png/cube.png</file>
         <file>png/capsule.png</file>
         <file>png/surface.png</file>
+        <file>png/layout.png</file>
+        <file>png/restore.png</file>
+        <file>png/save.png</file>
     </qresource>
 </RCC>

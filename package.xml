@@ -10,7 +10,6 @@
   <!-- Following recommendations of REP 136 -->
   <buildtool_depend>cmake</buildtool_depend>
   <build_depend>ros_industrial_cmake_boilerplate</build_depend>
-  <build_depend>cmake_common_scripts</build_depend>
 
   <depend>tesseract_scene_graph</depend>
   <depend>tesseract_common</depend>

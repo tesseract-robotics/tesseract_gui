@@ -23,13 +23,21 @@
 #ifndef TESSERACT_GUI_PLOT_PLOT_DOCKER_H
 #define TESSERACT_GUI_PLOT_PLOT_DOCKER_H
 
-#include "Qads/DockManager.h"
-#include "Qads/DockWidget.h"
-#include "Qads/DockAreaWidget.h"
-#include "Qads/DockAreaTitleBar.h"
-#include "Qads/DockAreaTabBar.h"
-#include "Qads/FloatingDockContainer.h"
-#include "Qads/DockComponentsFactory.h"
+//#include "Qads/DockManager.h"
+//#include "Qads/DockWidget.h"
+//#include "Qads/DockAreaWidget.h"
+//#include "Qads/DockAreaTitleBar.h"
+//#include "Qads/DockAreaTabBar.h"
+//#include "Qads/FloatingDockContainer.h"
+//#include "Qads/DockComponentsFactory.h"
+
+#include <DockManager.h>
+#include <DockWidget.h>
+#include <DockAreaWidget.h>
+#include <DockAreaTitleBar.h>
+#include <DockAreaTabBar.h>
+#include <FloatingDockContainer.h>
+#include <DockComponentsFactory.h>
 #include <tesseract_gui/plot/plot_data.h>
 #include <tesseract_gui/plot/plot_widget.h>
 
@@ -71,9 +79,6 @@ public Q_SLOTS:
   void on_stylesheetChanged(QString theme);
 
 private:
-  void mousePressEvent(QMouseEvent* ev) override;
-  void mouseReleaseEvent(QMouseEvent* ev) override;
-  void mouseMoveEvent(QMouseEvent* ev) override;
   void enterEvent(QEvent*) override;
   void leaveEvent(QEvent*) override;
 

@@ -1,6 +1,7 @@
 find_package(tesseract_common REQUIRED)
 find_package(Qt5 COMPONENTS Core Gui Widgets OpenGL Xml REQUIRED)
 find_package(Qwt REQUIRED)
+find_package(qtadvanceddocking REQUIRED)
 
 # Load variable for clang tidy args, compiler options and cxx version
 tesseract_variables()
@@ -67,13 +68,13 @@ target_link_libraries(${PROJECT_NAME}_plot PUBLIC
   Qt5::Xml
   Qwt::Qwt
   tesseract::tesseract_common
-  qt_advanced_docking
+#  qt_advanced_docking
+  ads::qtadvanceddocking
   ${PROJECT_NAME}_common)
 target_include_directories(${PROJECT_NAME}_plot PUBLIC
     "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
     "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/widgets/plot>"
     "$<INSTALL_INTERFACE:include>")
-add_dependencies(${PROJECT_NAME}_plot ${PROJECT_NAME}_common qt_advanced_docking)
 
 add_subdirectory(demo)
 
@@ -81,5 +82,5 @@ add_subdirectory(demo)
 install(DIRECTORY include/${PROJECT_NAME} DESTINATION include)
 
 install_targets(TARGETS
-  ${PROJECT_NAME}_plot
-  qt_advanced_docking)
+  ${PROJECT_NAME}_plot)
+#  qt_advanced_docking)

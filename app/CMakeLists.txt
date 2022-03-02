@@ -1,6 +1,7 @@
 find_package(tesseract_common REQUIRED)
 find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
 find_package(Qwt REQUIRED)
+find_package(qtadvanceddocking REQUIRED)
 
 find_package(ignition-msgs8 REQUIRED)
 find_package(tesseract_support REQUIRED)
@@ -21,7 +22,8 @@ add_executable(tesseract_robotics_studio
   src/tesseract_robotics_studio.cpp )
 target_link_libraries(tesseract_robotics_studio PRIVATE
   tesseract::tesseract_common
-  qt_advanced_docking
+  ads::qtadvanceddocking
+#  qt_advanced_docking
   ${PROJECT_NAME}_common
   ${PROJECT_NAME}_simple_render_widget # for example
   ${PROJECT_NAME}_interactive_view_control # for example

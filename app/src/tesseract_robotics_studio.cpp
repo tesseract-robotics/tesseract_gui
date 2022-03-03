@@ -5,8 +5,6 @@
 
 #include <tesseract_gui/rendering/simple_render_widget.h>
 #include <tesseract_gui/environment/environment_widget.h>
-#include <QTreeView>
-#include <QVBoxLayout>
 #include <QSettings>
 #include <QWidgetAction>
 #include <QComboBox>

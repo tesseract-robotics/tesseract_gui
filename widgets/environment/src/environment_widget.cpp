@@ -40,6 +40,19 @@ EnvironmentWidget::EnvironmentWidget(QWidget *parent)
   ui->acm_tree_view->setModel(&data_->acm_model);
 
   connect(ui->env_combo_box, SIGNAL(currentTextChanged(QString)), this, SLOT(onCurrentEnvironmentChanged(QString)));
+
+  connect(ui->scene_tree_view, &QTreeView::collapsed, [this](){ui->scene_tree_view->resizeColumnToContents(0);});
+  connect(ui->scene_tree_view, &QTreeView::expanded, [this](){ui->scene_tree_view->resizeColumnToContents(0);});
+  connect(ui->state_tree_view, &QTreeView::collapsed, [this](){ui->state_tree_view->resizeColumnToContents(0);});
+  connect(ui->state_tree_view, &QTreeView::expanded, [this](){ui->state_tree_view->resizeColumnToContents(0);});
+  connect(ui->groups_tree_view, &QTreeView::collapsed, [this](){ui->groups_tree_view->resizeColumnToContents(0);});
+  connect(ui->groups_tree_view, &QTreeView::expanded, [this](){ui->groups_tree_view->resizeColumnToContents(0);});
+  connect(ui->group_tcps_tree_view, &QTreeView::collapsed, [this](){ui->group_tcps_tree_view->resizeColumnToContents(0);});
+  connect(ui->group_tcps_tree_view, &QTreeView::expanded, [this](){ui->group_tcps_tree_view->resizeColumnToContents(0);});
+  connect(ui->group_states_tree_view, &QTreeView::collapsed, [this](){ui->group_states_tree_view->resizeColumnToContents(0);});
+  connect(ui->group_states_tree_view, &QTreeView::expanded, [this](){ui->group_states_tree_view->resizeColumnToContents(0);});
+  connect(ui->acm_tree_view, &QTreeView::collapsed, [this](){ui->acm_tree_view->resizeColumnToContents(0);});
+  connect(ui->acm_tree_view, &QTreeView::expanded, [this](){ui->acm_tree_view->resizeColumnToContents(0);});
 }
 
 EnvironmentWidget::~EnvironmentWidget() = default;
@@ -108,14 +121,19 @@ void EnvironmentWidget::onCurrentEnvironmentChanged(const QString& env_name)
     data_->group_states_model.set(kin_info.group_states);
     // This hides the root element
     ui->group_states_tree_view->setRootIndex(data_->group_states_model.index(0,0));
-    ui->group_states_tree_view->showColumn(1);
-//    data_->group_states_model.setColumnCount(2);
-//    data_->group_states_model.setHorizontalHeaderLabels({"Name", "Values"});
 
     // Tool Center Points
     data_->group_tcps_model.set(kin_info.group_tcps);
     // This hides the root element
     ui->group_tcps_tree_view->setRootIndex(data_->group_tcps_model.index(0,0));
+
+    // New data may have been added so resize first column
+    ui->scene_tree_view->resizeColumnToContents(0);
+    ui->state_tree_view->resizeColumnToContents(0);
+    ui->groups_tree_view->resizeColumnToContents(0);
+    ui->group_tcps_tree_view->resizeColumnToContents(0);
+    ui->group_states_tree_view->resizeColumnToContents(0);
+    ui->acm_tree_view->resizeColumnToContents(0);
   }
 }
 

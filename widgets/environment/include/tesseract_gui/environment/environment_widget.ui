@@ -63,7 +63,7 @@
    <item>
     <widget class="QTabWidget" name="tab_widget">
      <property name="currentIndex">
-      <number>5</number>
+      <number>6</number>
      </property>
      <widget class="QWidget" name="scene_tab">
       <attribute name="title">
@@ -83,7 +83,11 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="QTreeView" name="scene_tree_view"/>
+        <widget class="QTreeView" name="scene_tree_view">
+         <property name="editTriggers">
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -105,7 +109,11 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="QTreeView" name="state_tree_view"/>
+        <widget class="QTreeView" name="state_tree_view">
+         <property name="editTriggers">
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -127,7 +135,11 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="QTreeView" name="acm_tree_view"/>
+        <widget class="QTreeView" name="acm_tree_view">
+         <property name="editTriggers">
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -149,7 +161,11 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="QTreeView" name="groups_tree_view"/>
+        <widget class="QTreeView" name="groups_tree_view">
+         <property name="editTriggers">
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -171,7 +187,11 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="QTreeView" name="group_states_tree_view"/>
+        <widget class="QTreeView" name="group_states_tree_view">
+         <property name="editTriggers">
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -193,7 +213,11 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="QTreeView" name="group_tcps_tree_view"/>
+        <widget class="QTreeView" name="group_tcps_tree_view">
+         <property name="editTriggers">
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -215,7 +239,11 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="QTreeView" name="cmd_history_tree_view"/>
+        <widget class="QTreeView" name="cmd_history_tree_view">
+         <property name="editTriggers">
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>

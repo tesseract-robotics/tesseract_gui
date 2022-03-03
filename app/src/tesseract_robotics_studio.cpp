@@ -126,6 +126,7 @@ TesseractRoboticsStudio::TesseractRoboticsStudio(QWidget *parent)
   setWindowTitle(QApplication::applicationName());
 
   d_->dock_manager = new ads::CDockManager(this);
+  d_->dock_manager->setStyleSheet("");
 
   // Setup actions
   ui->actionSave_State->setIcon(QIcon(":/tesseract_gui/png/save.png"));

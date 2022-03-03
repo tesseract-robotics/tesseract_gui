@@ -1,6 +1,11 @@
 # tesseract_gui
 Tesseract Qt UI Components
 
+## Themes
+- Editor: https://github.com/HappySeaFox/qsseditor
+- https://github.com/ColinDuquesnoy/QDarkStyleSheet
+- https://qss-stock.devsecstudio.com/templates.php
+
 ## Material Design Icons
 repo: https://github.com/google/material-design-icons
 search: https://fonts.google.com/icons

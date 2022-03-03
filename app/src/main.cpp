@@ -22,9 +22,14 @@ int main(int argc, char *argv[])
   QApplication::setQuitOnLastWindowClosed(true);
 
   Q_INIT_RESOURCE(tesseract_gui_resources);
+  Q_INIT_RESOURCE(qdarkstyle_dark);
+  Q_INIT_RESOURCE(qdarkstyle_light);
 
   { //open qss file
-    QFile file(":/tesseract_gui/themes/Takezo/Takezo.qss");
+//    QFile file(":/tesseract_gui/themes/VisualScript/VisualScript.qss");
+//    QFile file(":/tesseract_gui/themes/Combinear/Combinear.qss");
+    QFile file(":/qdarkstyle/dark/qdarkstyle_dark.qss");
+//    QFile file(":/qdarkstyle/light/qdarkstyle_light.qss");
     file.open(QFile::ReadOnly);
 
     QString styleSheet { QLatin1String(file.readAll()) };

@@ -4,7 +4,10 @@ find_package(Qt5 COMPONENTS Core Gui Svg REQUIRED)
 # Load variable for clang tidy args, compiler options and cxx version
 tesseract_variables()
 
-QT5_ADD_RESOURCES(RESOURCES_common_RCC include/tesseract_gui/common/resources/tesseract_gui_resources.qrc)
+QT5_ADD_RESOURCES(RESOURCES_common_RCC
+  include/tesseract_gui/common/resources/tesseract_gui_resources.qrc
+  include/tesseract_gui/common/resources/themes/qdarkstyle/dark/qdarkstyle_dark.qrc
+  include/tesseract_gui/common/resources/themes/qdarkstyle/light/qdarkstyle_light.qrc)
 
 add_library(${PROJECT_NAME}_common SHARED
   ${RESOURCES_common_RCC}

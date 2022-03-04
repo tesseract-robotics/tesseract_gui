@@ -4,13 +4,16 @@
 #include "ui_tesseract_robotics_studio.h"
 
 #include <tesseract_gui/rendering/simple_render_widget.h>
+#include <tesseract_gui/rendering/interactive_view_control.h>
 #include <tesseract_gui/environment/environment_widget.h>
+
+#include <tesseract_urdf/urdf_parser.h>
+#include <tesseract_common/resource_locator.h>
+
 #include <QSettings>
 #include <QWidgetAction>
 #include <QComboBox>
 #include <QInputDialog>
-#include <tesseract_urdf/urdf_parser.h>
-#include <tesseract_common/resource_locator.h>
 
 namespace tesseract_gui
 {
@@ -42,6 +45,22 @@ std::string locateResource(const std::string& url)
   return mod_url;
 }
 
+struct SceneInfo
+{
+  SceneInfo(std::string scene_name, std::string scene_namespace)
+    : scene_name(std::move(scene_name))
+    , scene_namespace(std::move(scene_namespace))
+    , key((scene_namespace.empty()) ? this->scene_name : this->scene_namespace + "::" + this->scene_name)
+  {
+    qobject_cast<QApplication *>(qGuiApp)->installEventFilter(&view_control);
+  }
+
+  const std::string scene_name;
+  const std::string scene_namespace;
+  const std::string key;
+  tesseract_gui::InteractiveViewControl view_control;
+};
+
 struct TesseractRoboticsStudioPrivate
 {
   TesseractRoboticsStudioPrivate(TesseractRoboticsStudio* app) : app(app)
@@ -52,6 +71,7 @@ struct TesseractRoboticsStudioPrivate
   ads::CDockManager* dock_manager {nullptr};
   QWidgetAction* perspective_list_action {nullptr};
   QComboBox* perspective_comboBox {nullptr};
+  std::unordered_map<std::string, std::shared_ptr<SceneInfo>> scene_infos;
 
   /** @brief Saves the dock manager state and the main window geometry */
   void saveState();
@@ -142,15 +162,6 @@ TesseractRoboticsStudio::TesseractRoboticsStudio(QWidget *parent)
   connect(d_->perspective_comboBox, SIGNAL(activated(const QString&)), d_->dock_manager, SLOT(openPerspective(const QString&)));
 
   {
-    SimpleRenderWidget* w = new SimpleRenderWidget();
-    ads::CDockWidget* dock_widget = new ads::CDockWidget("Scene");
-    dock_widget->setWidget(w);
-    dock_widget->setFeature(ads::CDockWidget::DockWidgetDeleteOnClose, true);
-    dock_widget->setFeature(ads::CDockWidget::DockWidgetFocusable, true);
-    d_->dock_manager->setCentralWidget(dock_widget);
-  }
-
-  {
     auto locator = std::make_shared<tesseract_common::SimpleResourceLocator>(locateResource);
     tesseract_common::fs::path urdf_path = std::string(TESSERACT_SUPPORT_DIR) + "/urdf/lbr_iiwa_14_r820.urdf";
     tesseract_common::fs::path srdf_path = std::string(TESSERACT_SUPPORT_DIR) + "/urdf/lbr_iiwa_14_r820.srdf";
@@ -158,23 +169,46 @@ TesseractRoboticsStudio::TesseractRoboticsStudio(QWidget *parent)
     auto env = std::make_shared<tesseract_environment::Environment>();
     env->init(urdf_path, srdf_path, locator);
 
-    auto* widget = new tesseract_gui::EnvironmentWidget();
-    widget->addEnvironment(env);
+    if (createScene(env->getName()))
+    {
+      auto* widget = new tesseract_gui::EnvironmentWidget();
+      widget->addEnvironment(env);
 
-    ads::CDockWidget* dock_widget = new ads::CDockWidget("Environment");
-    dock_widget->setWidget(widget);
-    dock_widget->setFeature(ads::CDockWidget::DockWidgetDeleteOnClose, true);
-    dock_widget->setFeature(ads::CDockWidget::DockWidgetFocusable, true);
-    d_->dock_manager->addDockWidgetTab(ads::LeftDockWidgetArea, dock_widget);
+      ads::CDockWidget* dock_widget = new ads::CDockWidget("Environment");
+      dock_widget->setWidget(widget);
+      dock_widget->setFeature(ads::CDockWidget::DockWidgetDeleteOnClose, true);
+      dock_widget->setFeature(ads::CDockWidget::DockWidgetFocusable, true);
+      d_->dock_manager->addDockWidgetTab(ads::LeftDockWidgetArea, dock_widget);
+    }
   }
 
-  d_->restoreState();
+//  d_->restoreState(); If this is enabled widgets do not show up if name change
   d_->restorePerspectives();
-//  d_->dock_manager->addDockWidgetTab(ads::CenterDockWidgetArea, dock_widget);
 }
 
 TesseractRoboticsStudio::~TesseractRoboticsStudio() = default;
 
+bool TesseractRoboticsStudio::createScene(const std::string& scene_name, const std::string& scene_namespace) const
+{
+  auto scene_info = std::make_shared<SceneInfo>(scene_name, scene_namespace);
+  auto it = d_->scene_infos.find(scene_info->key);
+  if (it != d_->scene_infos.end())
+    return false;
+
+  SimpleRenderWidget* w = new SimpleRenderWidget();
+  ads::CDockWidget* dock_widget = new ads::CDockWidget(QString::fromStdString(scene_info->key));
+  dock_widget->setWidget(w);
+  dock_widget->setFeature(ads::CDockWidget::DockWidgetDeleteOnClose, true);
+  dock_widget->setFeature(ads::CDockWidget::DockWidgetFocusable, true);
+  d_->dock_manager->addDockWidgetTab(ads::CenterDockWidgetArea, dock_widget);
+  d_->scene_infos[scene_info->key] = scene_info;
+  return true;
+}
+
+const std::unordered_map<std::string, std::shared_ptr<SceneInfo>>& TesseractRoboticsStudio::getSceneInfos() const
+{
+  return d_->scene_infos;
+}
 
 
 }

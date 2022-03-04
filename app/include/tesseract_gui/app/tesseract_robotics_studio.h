@@ -17,6 +17,7 @@ class TesseractRoboticsStudio;
 namespace tesseract_gui
 {
 struct TesseractRoboticsStudioPrivate;
+struct SceneInfo;
 
 class TesseractRoboticsStudio : public QMainWindow
 {
@@ -26,6 +27,8 @@ public:
   explicit TesseractRoboticsStudio(QWidget *parent = nullptr);
   ~TesseractRoboticsStudio();
 
+  bool createScene(const std::string& scene_name, const std::string& scene_namespace = "") const;
+  const std::unordered_map<std::string, std::shared_ptr<SceneInfo>>& getSceneInfos() const;
 
 private:
   std::unique_ptr<Ui::TesseractRoboticsStudio> ui;

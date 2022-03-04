@@ -112,9 +112,8 @@ void EnvironmentWidget::onCurrentEnvironmentChanged(const QString& env_name)
     // Allowed Collision Matrix
     data_->acm_model.setAllowedCollisionMatrix(*it.value()->getAllowedCollisionMatrix());
 
-    auto kin_info = it.value()->getKinematicsInformation();
-
     // Kinematic Groups
+    auto kin_info = it.value()->getKinematicsInformation();
     data_->group_model.set(kin_info.chain_groups, kin_info.joint_groups, kin_info.link_groups);
 
     // Groups States

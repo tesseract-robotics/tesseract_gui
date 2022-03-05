@@ -1,0 +1,4 @@
+- git:
+    local-name: Qt-Advanced-Docking-System
+    uri: https://github.com/Levi-Armstrong/Qt-Advanced-Docking-System.git
+    version: ros

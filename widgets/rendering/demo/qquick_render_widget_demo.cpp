@@ -32,7 +32,7 @@ int main(int argc, char ** argv)
     view.setSource(url);
     view.show();
 
-    tesseract_gui::InteractiveViewControl view_control;
+    tesseract_gui::InteractiveViewControl view_control("scene");
     app.installEventFilter(&view_control);
 
 //    QList<QQmlError> errors = view.errors();

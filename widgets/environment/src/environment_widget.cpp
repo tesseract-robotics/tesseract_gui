@@ -136,4 +136,15 @@ void EnvironmentWidget::onCurrentEnvironmentChanged(const QString& env_name)
   }
 }
 
+//bool EnvironmentWidget::eventFilter(QObject *_obj, QEvent *_event)
+//{
+//  if (_event->type() == ignition::gui::events::Render::kType)
+//  {
+//    this->dataPtr->OnRender();
+//  }
+
+//  // Standard event processing
+//  return QObject::eventFilter(_obj, _event);
+//}
+
 }

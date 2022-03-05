@@ -31,6 +31,9 @@ private:
   std::unique_ptr<Ui::EnvironmentWidget> ui;
   std::unique_ptr<EnvironmentWidgetImpl> data_;
 
+  // Documentation inherited
+//  bool eventFilter(QObject *_obj, QEvent *_event) override;
+
 };
 }
 

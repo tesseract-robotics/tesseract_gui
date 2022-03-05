@@ -14,10 +14,11 @@ int main(int argc, char ** argv)
 
     Q_INIT_RESOURCE(tesseract_gui_resources);
 
-    tesseract_gui::SimpleRenderWidget widget;
+    std::string scene_name = "scene";
+    tesseract_gui::SimpleRenderWidget widget(scene_name);
     widget.show();
 
-    tesseract_gui::InteractiveViewControl view_control;
+    tesseract_gui::InteractiveViewControl view_control(scene_name);
     app.installEventFilter(&view_control);
 
     return app.exec();

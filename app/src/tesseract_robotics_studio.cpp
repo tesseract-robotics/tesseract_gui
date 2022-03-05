@@ -51,14 +51,16 @@ struct SceneInfo
     : scene_name(std::move(scene_name))
     , scene_namespace(std::move(scene_namespace))
     , key((scene_namespace.empty()) ? this->scene_name : this->scene_namespace + "::" + this->scene_name)
+    , view_control(std::make_unique<tesseract_gui::InteractiveViewControl>(key))
   {
-    qobject_cast<QApplication *>(qGuiApp)->installEventFilter(&view_control);
+    qobject_cast<QApplication *>(qGuiApp)->installEventFilter(view_control.get());
   }
 
   const std::string scene_name;
   const std::string scene_namespace;
   const std::string key;
-  tesseract_gui::InteractiveViewControl view_control;
+  SimpleRenderWidget* render_widget;
+  std::unique_ptr<tesseract_gui::InteractiveViewControl> view_control;
 };
 
 struct TesseractRoboticsStudioPrivate
@@ -195,9 +197,9 @@ bool TesseractRoboticsStudio::createScene(const std::string& scene_name, const s
   if (it != d_->scene_infos.end())
     return false;
 
-  SimpleRenderWidget* w = new SimpleRenderWidget();
+  scene_info->render_widget = new SimpleRenderWidget(scene_info->key);
   ads::CDockWidget* dock_widget = new ads::CDockWidget(QString::fromStdString(scene_info->key));
-  dock_widget->setWidget(w);
+  dock_widget->setWidget(scene_info->render_widget);
   dock_widget->setFeature(ads::CDockWidget::DockWidgetDeleteOnClose, true);
   dock_widget->setFeature(ads::CDockWidget::DockWidgetFocusable, true);
   d_->dock_manager->addDockWidgetTab(ads::CenterDockWidgetArea, dock_widget);

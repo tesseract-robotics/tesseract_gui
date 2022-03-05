@@ -38,12 +38,13 @@ namespace tesseract_gui
     Q_OBJECT
   public:
     /// \brief Constructor
-    TransportSceneManager();
+    TransportSceneManager(const std::string& scene_name);
 
     /// \brief Destructor
     virtual ~TransportSceneManager();
 
-    TransportSceneManager(const std::string& scene_topic,
+    TransportSceneManager(const std::string& scene_name,
+                          const std::string& scene_topic,
                           const std::string& pose_topic,
                           const std::string& deletion_topic,
                           const std::string& service);

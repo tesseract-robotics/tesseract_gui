@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
   tesseract_gui::TesseractRoboticsStudio widget;
   widget.show();
 
-  tesseract_gui::InteractiveViewControl view_control;
+  tesseract_gui::InteractiveViewControl view_control("scene");
   app.installEventFilter(&view_control);
 
   return app.exec();

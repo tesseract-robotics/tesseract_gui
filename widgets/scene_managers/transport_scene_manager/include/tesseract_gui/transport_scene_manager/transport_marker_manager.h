@@ -39,7 +39,7 @@ namespace tesseract_gui
     Q_OBJECT
   public:
     /// \brief Constructor
-    TransportMarkerManager();
+    TransportMarkerManager(const std::string& scene_name);
 
     /// \brief Destructor
     virtual ~TransportMarkerManager();

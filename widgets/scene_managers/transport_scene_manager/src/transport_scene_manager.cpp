@@ -43,12 +43,8 @@
 
 #include <ignition/transport/Node.hh>
 
-#include <ignition/gui/Application.hh>
-#include <ignition/gui/Conversions.hh>
-#include <ignition/gui/GuiEvents.hh>
-#include <ignition/gui/MainWindow.hh>
-
 #include <tesseract_gui/common/gui_utils.h>
+#include <tesseract_gui/common/gui_events.h>
 #include <tesseract_gui/transport_scene_manager/transport_conversions.h>
 #include <tesseract_gui/transport_scene_manager/transport_scene_manager.h>
 
@@ -125,6 +121,9 @@ public:
   //// \brief Ign-transport scene topic name
   std::string sceneTopic;
 
+  //// \brief The scene name
+  std::string scene_name;
+
   //// \brief Pointer to the rendering scene
   ignition::rendering::ScenePtr scene{nullptr};
 
@@ -160,19 +159,24 @@ public:
 using namespace tesseract_gui;
 
 /////////////////////////////////////////////////
-TransportSceneManager::TransportSceneManager()
+TransportSceneManager::TransportSceneManager(const std::string &scene_name)
   : dataPtr(new TransportSceneManagerPrivate)
 {
+  this->dataPtr->scene_name = scene_name;
 }
 
 /////////////////////////////////////////////////
 TransportSceneManager::~TransportSceneManager() = default;
 
-TransportSceneManager::TransportSceneManager(const std::string& scene_topic,
+TransportSceneManager::TransportSceneManager(const std::string& scene_name,
+                                             const std::string& scene_topic,
                                              const std::string& pose_topic,
                                              const std::string& deletion_topic,
                                              const std::string& service)
+  : dataPtr(new TransportSceneManagerPrivate)
 {
+  this->dataPtr->scene_name = scene_name;
+
   if (!scene_topic.empty())
     this->dataPtr->sceneTopic = scene_topic;
 
@@ -274,7 +278,7 @@ void TransportSceneManagerPrivate::InitializeTransport()
 /////////////////////////////////////////////////
 bool TransportSceneManager::eventFilter(QObject *_obj, QEvent *_event)
 {
-  if (_event->type() == ignition::gui::events::Render::kType)
+  if (_event->type() == events::Render::kType)
   {
     this->dataPtr->OnRender();
   }
@@ -338,7 +342,7 @@ void TransportSceneManagerPrivate::OnRender()
 {
   if (nullptr == this->scene)
   {
-    this->scene = ignition::rendering::sceneFromFirstRenderEngine();
+    this->scene = sceneFromFirstRenderEngine(this->scene_name);
     if (nullptr == this->scene)
       return;
 

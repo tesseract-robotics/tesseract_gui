@@ -49,7 +49,7 @@ class InteractiveViewControl : public QObject
   Q_OBJECT
 public:
   /// \brief Constructor
-  InteractiveViewControl();
+  InteractiveViewControl(const std::string& scene_name);
 
   /// \brief Destructor
   virtual ~InteractiveViewControl();

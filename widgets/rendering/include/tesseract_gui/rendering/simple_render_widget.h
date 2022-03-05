@@ -150,7 +150,7 @@ class SimpleRenderWidget : public QOpenGLWidget, protected QOpenGLFunctions
 public:
   /// \brief Constructor
   /// \param[in] _parent Parent item
-  explicit SimpleRenderWidget(QWidget* _parent = nullptr);
+  explicit SimpleRenderWidget(const std::string& scene_name, QWidget* _parent = nullptr);
 
   ~SimpleRenderWidget();
 

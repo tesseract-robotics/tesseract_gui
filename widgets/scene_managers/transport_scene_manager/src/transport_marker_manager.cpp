@@ -40,11 +40,8 @@
 
 #include <ignition/transport/Node.hh>
 
-#include <ignition/gui/Application.hh>
-#include <ignition/gui/GuiEvents.hh>
-#include <ignition/gui/Helpers.hh>
-#include <ignition/gui/MainWindow.hh>
-
+#include <tesseract_gui/common/gui_events.h>
+#include <tesseract_gui/common/gui_utils.h>
 #include <tesseract_gui/transport_scene_manager/transport_marker_manager.h>
 
 /// \brief Private data class for TransportMarkerManager
@@ -105,6 +102,9 @@ public:
   /// \return Converted rendering type, if any.
   ignition::rendering::MarkerType MsgToType(
                     const ignition::msgs::Marker &_msg);
+
+  /// \brief The scene name
+  std::string scene_name;
 
   //// \brief Pointer to the rendering scene
   ignition::rendering::ScenePtr scene{nullptr};
@@ -193,7 +193,7 @@ void TransportMarkerManagerPrivate::OnRender()
 {
   if (!this->scene)
   {
-    this->scene = ignition::rendering::sceneFromFirstRenderEngine();
+    this->scene = sceneFromFirstRenderEngine(this->scene_name);
     if (nullptr == this->scene)
       return;
 
@@ -657,9 +657,10 @@ void TransportMarkerManagerPrivate::OnWorldStatsMsg(
 }
 
 /////////////////////////////////////////////////
-TransportMarkerManager::TransportMarkerManager()
+TransportMarkerManager::TransportMarkerManager(const std::string& scene_name)
   : dataPtr(new TransportMarkerManagerPrivate)
 {
+  dataPtr->scene_name = scene_name;
 }
 
 /////////////////////////////////////////////////
@@ -759,7 +760,7 @@ TransportMarkerManager::~TransportMarkerManager() = default;
 /////////////////////////////////////////////////
 bool TransportMarkerManager::eventFilter(QObject *_obj, QEvent *_event)
 {
-  if (_event->type() == ignition::gui::events::Render::kType)
+  if (_event->type() == events::Render::kType)
   {
     this->dataPtr->OnRender();
   }

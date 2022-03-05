@@ -17,6 +17,8 @@
 
 #include <tesseract_gui/rendering/simple_render_widget.h>
 #include <tesseract_gui/common/gui_utils.h>
+#include <tesseract_gui/common/gui_events.h>
+#include <tesseract_gui/common/conversions.h>
 
 #include <algorithm>
 #include <map>
@@ -24,13 +26,6 @@
 #include <string>
 #include <vector>
 #include <QWidget>
-
-#include <ignition/common/Console.hh>
-#include <ignition/common/KeyEvent.hh>
-#include <ignition/common/MouseEvent.hh>
-#include <ignition/common/Image.hh>
-#include <ignition/math/Vector2.hh>
-#include <ignition/math/Vector3.hh>
 
 // TODO(louise) Remove these pragmas once ign-rendering
 // is disabling the warnings
@@ -44,19 +39,11 @@
 #include <ignition/rendering/RenderingIface.hh>
 #include <ignition/rendering/Scene.hh>
 #include <ignition/rendering/Grid.hh>
-#include <ignition/rendering/OrbitViewController.hh>
+#include <ignition/common/Console.hh>
 
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
-
-#include <ignition/gui/Application.hh>
-#include <ignition/gui/Conversions.hh>
-#include <ignition/gui/GuiEvents.hh>
-#include <ignition/gui/Helpers.hh>
-#include <ignition/gui/MainWindow.hh>
-
-
 
 namespace tesseract_gui
 {
@@ -85,9 +72,6 @@ public:
 
   /// \brief User camera
   ignition::rendering::CameraPtr camera{nullptr};
-
-  /// \brief Camera orbit controller
-  ignition::rendering::OrbitViewController viewControl;
 
   /// \brief The currently hovered mouse position in screen coordinates
   ignition::math::Vector2i mouseHoverPos{ignition::math::Vector2i::Zero};
@@ -134,7 +118,7 @@ ignition::rendering::Image SimpleRenderer::Render()
 
   if (tesseract_gui::getApp())
   {
-    tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), new ignition::gui::events::PreRender());
+    tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), new events::PreRender(this->sceneName));
   }
 
   ignition::rendering::Image image;
@@ -146,7 +130,7 @@ ignition::rendering::Image SimpleRenderer::Render()
 
   if (tesseract_gui::getApp())
   {
-    tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), new ignition::gui::events::Render());
+    tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), new events::Render(this->sceneName));
   }
 
   return image;
@@ -204,8 +188,8 @@ void SimpleRenderer::BroadcastDrop()
 {
   if (!this->dataPtr->dropDirty)
     return;
-  ignition::gui::events::DropOnScene dropOnSceneEvent(
-    this->dataPtr->dropText, this->dataPtr->mouseDropPos);
+  events::DropOnScene dropOnSceneEvent(
+    this->dataPtr->dropText, this->dataPtr->mouseDropPos, this->sceneName);
   tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &dropOnSceneEvent);
   this->dataPtr->dropDirty = false;
 }
@@ -218,14 +202,14 @@ void SimpleRenderer::BroadcastHoverPos()
 
   auto pos = this->ScreenToScene(this->dataPtr->mouseHoverPos);
 
-  ignition::gui::events::HoverToScene hoverToSceneEvent(pos);
+  events::HoverToScene hoverToSceneEvent(pos, this->sceneName);
   tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &hoverToSceneEvent);
 
   ignition::common::MouseEvent hoverMouseEvent = this->dataPtr->mouseEvent;
   hoverMouseEvent.SetPos(this->dataPtr->mouseHoverPos);
   hoverMouseEvent.SetDragging(false);
   hoverMouseEvent.SetType(ignition::common::MouseEvent::MOVE);
-  ignition::gui::events::HoverOnScene hoverOnSceneEvent(hoverMouseEvent);
+  events::HoverOnScene hoverOnSceneEvent(hoverMouseEvent, this->sceneName);
   tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &hoverOnSceneEvent);
 
   this->dataPtr->hoverDirty = false;
@@ -241,7 +225,7 @@ void SimpleRenderer::BroadcastDrag()
   if (!this->dataPtr->mouseEvent.Dragging())
     return;
 
-  ignition::gui::events::DragOnScene dragEvent(this->dataPtr->mouseEvent);
+  events::DragOnScene dragEvent(this->dataPtr->mouseEvent, this->sceneName);
   tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &dragEvent);
 
   this->dataPtr->mouseDirty = false;
@@ -259,10 +243,10 @@ void SimpleRenderer::BroadcastLeftClick()
 
   auto pos = this->ScreenToScene(this->dataPtr->mouseEvent.Pos());
 
-  ignition::gui::events::LeftClickToScene leftClickToSceneEvent(pos);
+  events::LeftClickToScene leftClickToSceneEvent(pos, this->sceneName);
   tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &leftClickToSceneEvent);
 
-  ignition::gui::events::LeftClickOnScene leftClickOnSceneEvent(this->dataPtr->mouseEvent);
+  events::LeftClickOnScene leftClickOnSceneEvent(this->dataPtr->mouseEvent, this->sceneName);
   tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &leftClickOnSceneEvent);
 
   this->dataPtr->mouseDirty = false;
@@ -280,10 +264,10 @@ void SimpleRenderer::BroadcastRightClick()
 
   auto pos = this->ScreenToScene(this->dataPtr->mouseEvent.Pos());
 
-  ignition::gui::events::RightClickToScene rightClickToSceneEvent(pos);
+  events::RightClickToScene rightClickToSceneEvent(pos, this->sceneName);
   tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &rightClickToSceneEvent);
 
-  ignition::gui::events::RightClickOnScene rightClickOnSceneEvent(this->dataPtr->mouseEvent);
+  events::RightClickOnScene rightClickOnSceneEvent(this->dataPtr->mouseEvent, this->sceneName);
   tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &rightClickOnSceneEvent);
 
   this->dataPtr->mouseDirty = false;
@@ -298,7 +282,7 @@ void SimpleRenderer::BroadcastMousePress()
   if (this->dataPtr->mouseEvent.Type() != ignition::common::MouseEvent::PRESS)
     return;
 
-  ignition::gui::events::MousePressOnScene event(this->dataPtr->mouseEvent);
+  events::MousePressOnScene event(this->dataPtr->mouseEvent, this->sceneName);
   tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &event);
 
   this->dataPtr->mouseDirty = false;
@@ -313,7 +297,7 @@ void SimpleRenderer::BroadcastScroll()
   if (this->dataPtr->mouseEvent.Type() != ignition::common::MouseEvent::SCROLL)
     return;
 
-  ignition::gui::events::ScrollOnScene scrollOnSceneEvent(this->dataPtr->mouseEvent);
+  events::ScrollOnScene scrollOnSceneEvent(this->dataPtr->mouseEvent, this->sceneName);
   tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &scrollOnSceneEvent);
 
   this->dataPtr->mouseDirty = false;
@@ -325,7 +309,7 @@ void SimpleRenderer::BroadcastKeyRelease()
   if (this->dataPtr->keyEvent.Type() != ignition::common::KeyEvent::RELEASE)
     return;
 
-  ignition::gui::events::KeyReleaseOnScene keyRelease(this->dataPtr->keyEvent);
+  events::KeyReleaseOnScene keyRelease(this->dataPtr->keyEvent, this->sceneName);
   tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &keyRelease);
 
   this->dataPtr->keyEvent.SetType(ignition::common::KeyEvent::NO_EVENT);
@@ -337,7 +321,7 @@ void SimpleRenderer::BroadcastKeyPress()
   if (this->dataPtr->keyEvent.Type() != ignition::common::KeyEvent::PRESS)
     return;
 
-  ignition::gui::events::KeyPressOnScene keyPress(this->dataPtr->keyEvent);
+  events::KeyPressOnScene keyPress(this->dataPtr->keyEvent, this->sceneName);
   tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &keyPress);
 
   this->dataPtr->keyEvent.SetType(ignition::common::KeyEvent::NO_EVENT);
@@ -528,10 +512,11 @@ public:
 };
 
 /////////////////////////////////////////////////
-SimpleRenderWidget::SimpleRenderWidget(QWidget *_parent)
+SimpleRenderWidget::SimpleRenderWidget(const std::string& scene_name, QWidget *_parent)
   : QOpenGLWidget(_parent)
   , dataPtr(std::make_unique<SimpleRenderWidgetImpl>())
 {
+  dataPtr->renderer.sceneName = scene_name;
   connect(this, &QOpenGLWidget::resized, this, &SimpleRenderWidget::OnResized);
 }
 
@@ -783,7 +768,7 @@ void SimpleRenderWidget::OnResized()
 /////////////////////////////////////////////////
 void SimpleRenderWidget::mousePressEvent(QMouseEvent *_e)
 {
-  this->dataPtr->mouseEvent = ignition::gui::convert(*_e);
+  this->dataPtr->mouseEvent = convert(*_e);
   this->dataPtr->mouseEvent.SetPressPos(this->dataPtr->mouseEvent.Pos());
 
   this->dataPtr->renderer.NewMouseEvent(
@@ -797,7 +782,7 @@ void SimpleRenderWidget::keyPressEvent(QKeyEvent *_e)
   if (_e->isAutoRepeat())
     return;
 
-  auto event = ignition::gui::convert(*_e);
+  auto event = convert(*_e);
   this->HandleKeyPress(event);
   update();
 }
@@ -808,7 +793,7 @@ void SimpleRenderWidget::keyReleaseEvent(QKeyEvent *_e)
   if (_e->isAutoRepeat())
     return;
 
-  auto event = ignition::gui::convert(*_e);
+  auto event = convert(*_e);
   this->HandleKeyPress(event);
   update();
 }
@@ -820,7 +805,7 @@ void SimpleRenderWidget::mouseReleaseEvent(QMouseEvent *_e)
   auto pressPos = this->dataPtr->mouseEvent.PressPos();
   auto dragging = this->dataPtr->mouseEvent.Dragging();
 
-  this->dataPtr->mouseEvent = ignition::gui::convert(*_e);
+  this->dataPtr->mouseEvent = convert(*_e);
   this->dataPtr->mouseEvent.SetPressPos(pressPos);
   this->dataPtr->mouseEvent.SetDragging(dragging);
 
@@ -835,7 +820,7 @@ void SimpleRenderWidget::mouseMoveEvent(QMouseEvent *_e)
   // Store values that depend on previous events
   auto pressPos = this->dataPtr->mouseEvent.PressPos();
 
-  this->dataPtr->mouseEvent = ignition::gui::convert(*_e);
+  this->dataPtr->mouseEvent = convert(*_e);
 
   if (this->dataPtr->mouseEvent.Dragging())
     this->dataPtr->mouseEvent.SetPressPos(pressPos);
@@ -850,7 +835,7 @@ void SimpleRenderWidget::wheelEvent(QWheelEvent *_e)
 {
 //  this->forceActiveFocus();
 
-  this->dataPtr->mouseEvent = ignition::gui::convert(*_e);
+  this->dataPtr->mouseEvent = convert(*_e);
   this->dataPtr->renderer.NewMouseEvent(
     this->dataPtr->mouseEvent);
   update();

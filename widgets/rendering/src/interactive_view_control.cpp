@@ -22,7 +22,7 @@
 #include <ignition/common/MouseEvent.hh>
 
 //#include <ignition/gui/Application.hh>
-#include <ignition/gui/GuiEvents.hh>
+//#include <ignition/gui/GuiEvents.hh>
 //#include <ignition/gui/MainWindow.hh>
 
 #include <ignition/rendering/Camera.hh>
@@ -34,6 +34,8 @@
 
 #include <ignition/transport/Node.hh>
 
+#include <tesseract_gui/common/gui_events.h>
+#include <tesseract_gui/common/gui_utils.h>
 #include <tesseract_gui/rendering/interactive_view_control.h>
 
 /// \brief Private data class for InteractiveViewControl
@@ -48,6 +50,9 @@ public:
   /// \param[in] _res Response data
   /// \return True if the request is received
   bool OnViewControl(const ignition::msgs::StringMsg &_msg, ignition::msgs::Boolean &_res);
+
+  /// \brief The scene key the control is associated with
+  std::string scene_name;
 
   /// \brief Flag to indicate if mouse event is dirty
   bool mouseDirty = false;
@@ -102,7 +107,7 @@ void InteractiveViewControlPrivate::OnRender()
 {
   if (!this->scene)
   {
-    this->scene = ignition::rendering::sceneFromFirstRenderEngine();
+    this->scene = sceneFromFirstRenderEngine(this->scene_name);
     if (!this->scene)
       return;
 
@@ -241,9 +246,10 @@ bool InteractiveViewControlPrivate::OnViewControl(const ignition::msgs::StringMs
 }
 
 /////////////////////////////////////////////////
-InteractiveViewControl::InteractiveViewControl()
+InteractiveViewControl::InteractiveViewControl(const std::string &scene_name)
   : dataPtr(std::make_unique<InteractiveViewControlPrivate>())
 {
+  dataPtr->scene_name = scene_name;
 }
 
 /////////////////////////////////////////////////
@@ -267,32 +273,32 @@ InteractiveViewControl::~InteractiveViewControl() = default;
 /////////////////////////////////////////////////
 bool InteractiveViewControl::eventFilter(QObject *_obj, QEvent *_event)
 {
-  if (_event->type() == ignition::gui::events::Render::kType)
+  if (_event->type() == events::Render::kType)
   {
     this->dataPtr->OnRender();
   }
-  else if (_event->type() == ignition::gui::events::LeftClickOnScene::kType)
+  else if (_event->type() == events::LeftClickOnScene::kType)
   {
     auto* leftClickOnScene =
-      reinterpret_cast<ignition::gui::events::LeftClickOnScene *>(_event);
+      reinterpret_cast<events::LeftClickOnScene *>(_event);
     this->dataPtr->mouseDirty = true;
 
     this->dataPtr->drag = ignition::math::Vector2d::Zero;
     this->dataPtr->mouseEvent = leftClickOnScene->Mouse();
   }
-  else if (_event->type() == ignition::gui::events::MousePressOnScene::kType)
+  else if (_event->type() == events::MousePressOnScene::kType)
   {
     auto* pressOnScene =
-      reinterpret_cast<ignition::gui::events::MousePressOnScene *>(_event);
+      reinterpret_cast<events::MousePressOnScene *>(_event);
     this->dataPtr->mouseDirty = true;
 
     this->dataPtr->drag = ignition::math::Vector2d::Zero;
     this->dataPtr->mouseEvent = pressOnScene->Mouse();
   }
-  else if (_event->type() == ignition::gui::events::DragOnScene::kType)
+  else if (_event->type() == events::DragOnScene::kType)
   {
     auto* dragOnScene =
-      reinterpret_cast<ignition::gui::events::DragOnScene *>(_event);
+      reinterpret_cast<events::DragOnScene *>(_event);
     this->dataPtr->mouseDirty = true;
 
     auto dragStart = this->dataPtr->mouseEvent.Pos();
@@ -303,10 +309,10 @@ bool InteractiveViewControl::eventFilter(QObject *_obj, QEvent *_event)
 
     this->dataPtr->mouseEvent = dragOnScene->Mouse();
   }
-  else if (_event->type() == ignition::gui::events::ScrollOnScene::kType)
+  else if (_event->type() == events::ScrollOnScene::kType)
   {
     auto* scrollOnScene =
-      reinterpret_cast<ignition::gui::events::ScrollOnScene *>(_event);
+      reinterpret_cast<events::ScrollOnScene *>(_event);
     this->dataPtr->mouseDirty = true;
 
     this->dataPtr->drag += ignition::math::Vector2d(
@@ -315,9 +321,9 @@ bool InteractiveViewControl::eventFilter(QObject *_obj, QEvent *_event)
 
     this->dataPtr->mouseEvent = scrollOnScene->Mouse();
   }
-  else if (_event->type() == ignition::gui::events::BlockOrbit::kType)
+  else if (_event->type() == events::BlockOrbit::kType)
   {
-    auto* blockOrbit = reinterpret_cast<ignition::gui::events::BlockOrbit *>(
+    auto* blockOrbit = reinterpret_cast<events::BlockOrbit *>(
       _event);
     this->dataPtr->blockOrbit = blockOrbit->Block();
   }

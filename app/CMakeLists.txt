@@ -23,7 +23,6 @@ add_executable(tesseract_robotics_studio
 target_link_libraries(tesseract_robotics_studio PRIVATE
   tesseract::tesseract_common
   ads::qtadvanceddocking
-#  qt_advanced_docking
   ${PROJECT_NAME}_common
   ${PROJECT_NAME}_simple_render_widget # for example
   ${PROJECT_NAME}_interactive_view_control # for example

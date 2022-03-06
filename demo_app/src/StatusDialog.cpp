@@ -14,8 +14,6 @@
 
 #include <DockManager.h>
 #include <DockWidget.h>
-//#include <Qads/DockManager.h>
-//#include <Qads/DockWidget.h>
 #include "ui_StatusDialog.h"
 
 /**

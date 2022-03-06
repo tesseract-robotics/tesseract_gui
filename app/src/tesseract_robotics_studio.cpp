@@ -1,5 +1,4 @@
 #include <tesseract_gui/app/tesseract_robotics_studio.h>
-//#include <Qads/DockManager.h>
 #include <DockManager.h>
 #include "ui_tesseract_robotics_studio.h"
 

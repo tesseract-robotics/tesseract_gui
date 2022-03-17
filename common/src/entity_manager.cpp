@@ -1,83 +1,58 @@
 #include <tesseract_gui/common/entity_manager.h>
+#include <tesseract_gui/common/entity_container.h>
 
 namespace tesseract_gui
 {
-EntityID EntityManager::addModel(const std::string& name)
+
+std::shared_ptr<EntityContainer> EntityManager::getEntityContainer(const std::string& container_name)
 {
-  model_id_map_[name] = ++entity_counter_;
-  return model_id_map_[name];
+  std::unique_lock<std::shared_mutex> lock(mutex_);
+  auto c_it = containers_.find(container_name);
+  if (c_it == containers_.end())
+  {
+    auto container = std::make_shared<EntityContainer>(shared_from_this());
+    containers_[container_name] = container;
+    return container;
+  }
+
+  return c_it->second;
 }
 
-EntityID EntityManager::getModel(const std::string& name) const
+std::shared_ptr<const EntityContainer> EntityManager::getEntityContainer(const std::string& container_name) const
 {
-  auto it = model_id_map_.find(name);
-  if (it == model_id_map_.end())
-    return NULL_ENTITY_ID;
+  std::shared_lock<std::shared_mutex> lock(mutex_);
+  auto c_it = containers_.find(container_name);
+  if (c_it == containers_.end())
+    return nullptr;
 
-  return it->second;
+  return c_it->second;
 }
 
-const EntityMap& EntityManager::getModels() const { return model_id_map_; }
-
-EntityID EntityManager::addLink(const std::string& name)
+EntityID EntityManager::createEntityId()
 {
-  link_id_map_[name] = ++entity_counter_;
-  return link_id_map_[name];
+  std::unique_lock<std::shared_mutex> lock(mutex_);
+  return ++entity_counter_;
 }
 
-EntityID EntityManager::getLink(const std::string& name) const
+bool EntityManager::empty() const
 {
-  auto it = link_id_map_.find(name);
-  if (it == link_id_map_.end())
-    return NULL_ENTITY_ID;
+  std::shared_lock<std::shared_mutex> lock(mutex_);
+  for (const auto& c : containers_)
+  {
+    if (!c.second->empty())
+      return false;
+  }
 
-  return it->second;
+  return true;
 }
-
-const EntityMap& EntityManager::getLinks() const { return link_id_map_; }
-
-EntityID EntityManager::addVisual(const std::string& name)
-{
-  visual_id_map_[name] = ++entity_counter_;
-  return visual_id_map_[name];
-}
-
-EntityID EntityManager::getVisual(const std::string& name) const
-{
-  auto it = visual_id_map_.find(name);
-  if (it == visual_id_map_.end())
-    return NULL_ENTITY_ID;
-
-  return it->second;
-}
-
-const EntityMap& EntityManager::getVisuals() const { return visual_id_map_; }
-
-EntityID EntityManager::addSensor(const std::string& name)
-{
-  sensor_id_map_[name] = ++entity_counter_;
-  return sensor_id_map_[name];
-}
-
-EntityID EntityManager::getSensor(const std::string& name) const
-{
-  auto it = sensor_id_map_.find(name);
-  if (it == sensor_id_map_.end())
-    return NULL_ENTITY_ID;
-
-  return it->second;
-}
-
-const EntityMap& EntityManager::getSensors() const { return sensor_id_map_; }
-
-bool EntityManager::empty() const { return (entity_counter_ == 1000); }
 
 void EntityManager::clear()
 {
-  model_id_map_.clear();
-  link_id_map_.clear();
-  visual_id_map_.clear();
-  sensor_id_map_.clear();
+  std::unique_lock<std::shared_mutex> lock(mutex_);
+  for (auto& c : containers_)
+    c.second->clear();
+
+  containers_.clear();
   entity_counter_ = 1000;
 }
 }  // namespace tesseract_visualization

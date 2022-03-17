@@ -16,6 +16,7 @@ add_library(${PROJECT_NAME}_common SHARED
   ${RESOURCES_common_RCC}
   src/conversions.cpp
   src/entity_manager.cpp
+  src/entity_container.cpp
   src/gui_utils.cpp
   src/gui_events.cpp
   src/joint_trajectory_set.cpp

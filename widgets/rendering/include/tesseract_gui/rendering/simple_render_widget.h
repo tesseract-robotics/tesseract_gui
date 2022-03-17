@@ -186,7 +186,6 @@ public:
   /// \param[in] _hoverPos 2D coordinates of the hovered mouse position on
   /// the render window.
   void OnHovered(int _mouseX, int _mouseY);
-//    public: void OnHovered(const ignition::math::Vector2i &_hoverPos);
 
   /// \brief Callback when receives a drop event.
   /// \param[in] _drop Dropped string.

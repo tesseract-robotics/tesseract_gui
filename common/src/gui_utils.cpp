@@ -50,12 +50,12 @@ ignition::rendering::ScenePtr sceneFromFirstRenderEngine(const std::string& scen
   return scene;
 }
 
-ignition::rendering::ScenePtr sceneFromFirstRenderEngine(const std::string& engin_name, const std::string& scene_name)
+ignition::rendering::ScenePtr sceneFromFirstRenderEngine(const std::string& engine_name, const std::string& scene_name)
 {
-  auto* engine = ignition::rendering::engine(engin_name);
+  auto* engine = ignition::rendering::engine(engine_name);
   if (!engine)
   {
-    ignerr << "Internal error: failed to load engine [" << engin_name << "]." << std::endl;
+    ignerr << "Internal error: failed to load engine [" << engine_name << "]." << std::endl;
     return nullptr;
   }
 

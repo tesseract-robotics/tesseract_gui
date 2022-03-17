@@ -25,10 +25,33 @@ target_include_directories(${PROJECT_NAME}_environment PUBLIC
     "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/widgets/environment>"
     "$<INSTALL_INTERFACE:include>")
 
+
+find_package(ignition-rendering6 REQUIRED)
+find_package(ignition-math6-eigen3 REQUIRED)
+find_package(ignition-common4 REQUIRED)
+
+QT5_WRAP_CPP(IGNITION_ENVIRONMENT_WIDGET_headers_MOC include/tesseract_gui/environment/ignition_environment_widget.h)
+
+add_library(${PROJECT_NAME}_environment_ignition SHARED
+  ${IGNITION_ENVIRONMENT_WIDGET_headers_MOC}
+  src/ignition_environment_widget.cpp
+  src/conversions.cpp)
+target_link_libraries(${PROJECT_NAME}_environment_ignition PUBLIC
+  ${PROJECT_NAME}_environment
+  ${PROJECT_NAME}_common
+  ignition-rendering6::ignition-rendering6
+  ignition-math6::ignition-math6-eigen3
+  ignition-common4::ignition-common4)
+
+target_include_directories(${PROJECT_NAME}_environment_ignition PUBLIC
+    "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
+    "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/widgets/environment>"
+    "$<INSTALL_INTERFACE:include>")
+
 add_subdirectory(demo)
 
 # Mark cpp header files for installation
 install(DIRECTORY include/${PROJECT_NAME} DESTINATION include)
 
 # Install
-install_targets(TARGETS ${PROJECT_NAME}_environment)
+install_targets(TARGETS ${PROJECT_NAME}_environment ${PROJECT_NAME}_environment_ignition)

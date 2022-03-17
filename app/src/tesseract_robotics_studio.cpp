@@ -2,9 +2,8 @@
 #include <DockManager.h>
 #include "ui_tesseract_robotics_studio.h"
 
-#include <tesseract_gui/rendering/simple_render_widget.h>
-#include <tesseract_gui/rendering/interactive_view_control.h>
-#include <tesseract_gui/environment/environment_widget.h>
+
+#include <tesseract_gui/environment/ignition_environment_widget.h>
 
 #include <tesseract_urdf/urdf_parser.h>
 #include <tesseract_common/resource_locator.h>
@@ -44,23 +43,15 @@ std::string locateResource(const std::string& url)
   return mod_url;
 }
 
-struct SceneInfo
+SceneInfo::SceneInfo(std::string scene_name)
+  : scene_name(std::move(scene_name))
+  , entity_manager(std::make_shared<EntityManager>())
+  , view_control(std::make_unique<tesseract_gui::InteractiveViewControl>(this->scene_name))
 {
-  SceneInfo(std::string scene_name, std::string scene_namespace)
-    : scene_name(std::move(scene_name))
-    , scene_namespace(std::move(scene_namespace))
-    , key((scene_namespace.empty()) ? this->scene_name : this->scene_namespace + "::" + this->scene_name)
-    , view_control(std::make_unique<tesseract_gui::InteractiveViewControl>(key))
-  {
-    qobject_cast<QApplication *>(qGuiApp)->installEventFilter(view_control.get());
-  }
+  qobject_cast<QApplication *>(qGuiApp)->installEventFilter(view_control.get());
+}
 
-  const std::string scene_name;
-  const std::string scene_namespace;
-  const std::string key;
-  SimpleRenderWidget* render_widget;
-  std::unique_ptr<tesseract_gui::InteractiveViewControl> view_control;
-};
+
 
 struct TesseractRoboticsStudioPrivate
 {
@@ -167,13 +158,16 @@ TesseractRoboticsStudio::TesseractRoboticsStudio(QWidget *parent)
     tesseract_common::fs::path urdf_path = std::string(TESSERACT_SUPPORT_DIR) + "/urdf/lbr_iiwa_14_r820.urdf";
     tesseract_common::fs::path srdf_path = std::string(TESSERACT_SUPPORT_DIR) + "/urdf/lbr_iiwa_14_r820.srdf";
 
-    auto env = std::make_shared<tesseract_environment::Environment>();
+    auto env = std::make_unique<tesseract_environment::Environment>();
     env->init(urdf_path, srdf_path, locator);
 
-    if (createScene(env->getName()))
+    std::string scene_name = env->getName();
+    SceneInfo::Ptr scene_info = createScene(scene_name);
+    if (scene_info != nullptr)
     {
-      auto* widget = new tesseract_gui::EnvironmentWidget();
-      widget->addEnvironment(env);
+      auto* widget = new tesseract_gui::IgnitionEnvironmentWidget(scene_info->scene_name, *scene_info->entity_manager);
+      widget->setEnvironment(std::move(env));
+      qobject_cast<QApplication *>(qGuiApp)->installEventFilter(widget);
 
       ads::CDockWidget* dock_widget = new ads::CDockWidget("Environment");
       dock_widget->setWidget(widget);
@@ -189,24 +183,24 @@ TesseractRoboticsStudio::TesseractRoboticsStudio(QWidget *parent)
 
 TesseractRoboticsStudio::~TesseractRoboticsStudio() = default;
 
-bool TesseractRoboticsStudio::createScene(const std::string& scene_name, const std::string& scene_namespace) const
+SceneInfo::Ptr TesseractRoboticsStudio::createScene(const std::string& scene_name) const
 {
-  auto scene_info = std::make_shared<SceneInfo>(scene_name, scene_namespace);
-  auto it = d_->scene_infos.find(scene_info->key);
+  auto it = d_->scene_infos.find(scene_name);
   if (it != d_->scene_infos.end())
-    return false;
+    return nullptr;
 
-  scene_info->render_widget = new SimpleRenderWidget(scene_info->key);
-  ads::CDockWidget* dock_widget = new ads::CDockWidget(QString::fromStdString(scene_info->key));
+  auto scene_info = std::make_shared<SceneInfo>(scene_name);
+  scene_info->render_widget = new SimpleRenderWidget(scene_info->scene_name);
+  ads::CDockWidget* dock_widget = new ads::CDockWidget(QString::fromStdString(scene_info->scene_name));
   dock_widget->setWidget(scene_info->render_widget);
   dock_widget->setFeature(ads::CDockWidget::DockWidgetDeleteOnClose, true);
   dock_widget->setFeature(ads::CDockWidget::DockWidgetFocusable, true);
   d_->dock_manager->addDockWidgetTab(ads::CenterDockWidgetArea, dock_widget);
-  d_->scene_infos[scene_info->key] = scene_info;
-  return true;
+  d_->scene_infos[scene_info->scene_name] = scene_info;
+  return scene_info;
 }
 
-const std::unordered_map<std::string, std::shared_ptr<SceneInfo>>& TesseractRoboticsStudio::getSceneInfos() const
+const std::unordered_map<std::string, SceneInfo::Ptr> &TesseractRoboticsStudio::getSceneInfos() const
 {
   return d_->scene_infos;
 }

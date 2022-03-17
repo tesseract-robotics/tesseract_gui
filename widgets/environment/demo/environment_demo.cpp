@@ -43,11 +43,11 @@ int main(int argc, char ** argv)
     tesseract_common::fs::path urdf_path = std::string(TESSERACT_SUPPORT_DIR) + "/urdf/lbr_iiwa_14_r820.urdf";
     tesseract_common::fs::path srdf_path = std::string(TESSERACT_SUPPORT_DIR) + "/urdf/lbr_iiwa_14_r820.srdf";
 
-    auto env = std::make_shared<tesseract_environment::Environment>();
+    auto env = std::make_unique<tesseract_environment::Environment>();
     env->init(urdf_path, srdf_path, locator);
 
     tesseract_gui::EnvironmentWidget widget;
-    widget.addEnvironment(env);
+    widget.setEnvironment(std::move(env));
     widget.show();
 
     return app.exec();

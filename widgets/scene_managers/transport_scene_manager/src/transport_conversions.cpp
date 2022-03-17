@@ -558,7 +558,9 @@ ignition::rendering::GeometryPtr loadGeometry(ignition::rendering::Scene& scene,
   _localPose = localPose;
   return geom;
 }
-ignition::rendering::MaterialPtr loadMaterial(ignition::rendering::Scene& scene, const ignition::msgs::Material &msg)
+ignition::rendering::MaterialPtr loadMaterial(ignition::rendering::Scene& scene,
+                                              tesseract_gui::EntityContainer &entity_container,
+                                              const ignition::msgs::Material &msg)
 {
   ignition::rendering::MaterialPtr material = scene.CreateMaterial();
   if (msg.has_ambient())

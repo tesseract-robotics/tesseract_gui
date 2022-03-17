@@ -20,10 +20,7 @@
 #include <QGuiApplication>
 
 #include <ignition/common/MouseEvent.hh>
-
-//#include <ignition/gui/Application.hh>
-//#include <ignition/gui/GuiEvents.hh>
-//#include <ignition/gui/MainWindow.hh>
+#include <ignition/common/Console.hh>
 
 #include <ignition/rendering/Camera.hh>
 #include <ignition/rendering/OrbitViewController.hh>
@@ -128,8 +125,8 @@ void InteractiveViewControlPrivate::OnRender()
         if (isUserCamera)
         {
           this->camera = cam;
-//          igndbg << "InteractiveViewControl plugin is moving camera ["
-//                 << this->camera->Name() << "]" << std::endl;
+          igndbg << "InteractiveViewControl plugin is moving camera ["
+                 << this->camera->Name() << "]" << std::endl;
           break;
         }
       }
@@ -137,7 +134,7 @@ void InteractiveViewControlPrivate::OnRender()
 
     if (!this->camera)
     {
-//      ignerr << "InteractiveViewControl camera is not available" << std::endl;
+      ignerr << "InteractiveViewControl camera is not available" << std::endl;
       return;
     }
     this->rayQuery = this->camera->Scene()->CreateRayQuery();
@@ -167,8 +164,8 @@ void InteractiveViewControlPrivate::OnRender()
   }
   else
   {
-//    ignerr << "Unknown view controller: " << this->viewController
-//           << ". Defaulting to orbit view controller" << std::endl;
+    ignerr << "Unknown view controller: " << this->viewController
+           << ". Defaulting to orbit view controller" << std::endl;
     this->viewController = "orbit";
     this->viewControl = &this->orbitViewControl;
   }
@@ -229,8 +226,8 @@ bool InteractiveViewControlPrivate::OnViewControl(const ignition::msgs::StringMs
 
   if (_msg.data() != "orbit" && _msg.data() != "ortho")
   {
-//    ignwarn << "View controller type not supported [" << _msg.data() << "]"
-//            << std::endl;
+    ignwarn << "View controller type not supported [" << _msg.data() << "]"
+            << std::endl;
     _res.set_data(false);
     return true;
   }
@@ -275,57 +272,71 @@ bool InteractiveViewControl::eventFilter(QObject *_obj, QEvent *_event)
 {
   if (_event->type() == events::Render::kType)
   {
-    this->dataPtr->OnRender();
+    assert(dynamic_cast<events::Render *>(_event) != nullptr);
+    auto* event = static_cast<events::Render *>(_event);
+    if (event->getSceneName() == this->dataPtr->scene_name)
+    {
+      this->dataPtr->OnRender();
+    }
   }
   else if (_event->type() == events::LeftClickOnScene::kType)
   {
-    auto* leftClickOnScene =
-      reinterpret_cast<events::LeftClickOnScene *>(_event);
-    this->dataPtr->mouseDirty = true;
-
-    this->dataPtr->drag = ignition::math::Vector2d::Zero;
-    this->dataPtr->mouseEvent = leftClickOnScene->Mouse();
+    assert(dynamic_cast<events::LeftClickOnScene *>(_event) != nullptr);
+    auto* event = static_cast<events::LeftClickOnScene *>(_event);
+    if (event->getSceneName() == this->dataPtr->scene_name)
+    {
+      this->dataPtr->mouseDirty = true;
+      this->dataPtr->drag = ignition::math::Vector2d::Zero;
+      this->dataPtr->mouseEvent = event->Mouse();
+    }
   }
   else if (_event->type() == events::MousePressOnScene::kType)
   {
-    auto* pressOnScene =
-      reinterpret_cast<events::MousePressOnScene *>(_event);
-    this->dataPtr->mouseDirty = true;
-
-    this->dataPtr->drag = ignition::math::Vector2d::Zero;
-    this->dataPtr->mouseEvent = pressOnScene->Mouse();
+    assert(dynamic_cast<events::MousePressOnScene *>(_event) != nullptr);
+    auto* event =  static_cast<events::MousePressOnScene *>(_event);
+    if (event->getSceneName() == this->dataPtr->scene_name)
+    {
+      this->dataPtr->mouseDirty = true;
+      this->dataPtr->drag = ignition::math::Vector2d::Zero;
+      this->dataPtr->mouseEvent = event->Mouse();
+    }
   }
   else if (_event->type() == events::DragOnScene::kType)
   {
-    auto* dragOnScene =
-      reinterpret_cast<events::DragOnScene *>(_event);
-    this->dataPtr->mouseDirty = true;
+    assert(dynamic_cast<events::DragOnScene *>(_event) != nullptr);
+    auto* event = reinterpret_cast<events::DragOnScene *>(_event);
+    if (event->getSceneName() == this->dataPtr->scene_name)
+    {
+      this->dataPtr->mouseDirty = true;
 
-    auto dragStart = this->dataPtr->mouseEvent.Pos();
-    auto dragInt = dragOnScene->Mouse().Pos() - dragStart;
-    auto dragDistance = ignition::math::Vector2d(dragInt.X(), dragInt.Y());
+      auto dragStart = this->dataPtr->mouseEvent.Pos();
+      auto dragInt = event->Mouse().Pos() - dragStart;
+      auto dragDistance = ignition::math::Vector2d(dragInt.X(), dragInt.Y());
 
-    this->dataPtr->drag += dragDistance;
+      this->dataPtr->drag += dragDistance;
 
-    this->dataPtr->mouseEvent = dragOnScene->Mouse();
+      this->dataPtr->mouseEvent = event->Mouse();
+    }
   }
   else if (_event->type() == events::ScrollOnScene::kType)
   {
-    auto* scrollOnScene =
-      reinterpret_cast<events::ScrollOnScene *>(_event);
-    this->dataPtr->mouseDirty = true;
-
-    this->dataPtr->drag += ignition::math::Vector2d(
-      scrollOnScene->Mouse().Scroll().X(),
-      scrollOnScene->Mouse().Scroll().Y());
-
-    this->dataPtr->mouseEvent = scrollOnScene->Mouse();
+    assert(dynamic_cast<events::ScrollOnScene *>(_event) != nullptr);
+    auto* event = static_cast<events::ScrollOnScene *>(_event);
+    if (event->getSceneName() == this->dataPtr->scene_name)
+    {
+      this->dataPtr->mouseDirty = true;
+      this->dataPtr->drag += ignition::math::Vector2d(event->Mouse().Scroll().X(), event->Mouse().Scroll().Y());
+      this->dataPtr->mouseEvent = event->Mouse();
+    }
   }
   else if (_event->type() == events::BlockOrbit::kType)
   {
-    auto* blockOrbit = reinterpret_cast<events::BlockOrbit *>(
-      _event);
-    this->dataPtr->blockOrbit = blockOrbit->Block();
+    assert(dynamic_cast<events::BlockOrbit *>(_event) != nullptr);
+    auto* event = static_cast<events::BlockOrbit *>(_event);
+    if (event->getSceneName() == this->dataPtr->scene_name)
+    {
+      this->dataPtr->blockOrbit = event->Block();
+    }
   }
 
   // Standard event processing

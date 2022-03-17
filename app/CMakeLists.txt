@@ -19,7 +19,7 @@ add_executable(tesseract_robotics_studio
   ${TESSERACT_ROBOTICS_STUDIO_headers_MOC}
   ${TESSERACT_ROBOTICS_STUDIO_headers_UI}
   src/main.cpp
-  src/tesseract_robotics_studio.cpp )
+  src/tesseract_robotics_studio.cpp)
 target_link_libraries(tesseract_robotics_studio PRIVATE
   tesseract::tesseract_common
   ads::qtadvanceddocking
@@ -28,7 +28,7 @@ target_link_libraries(tesseract_robotics_studio PRIVATE
   ${PROJECT_NAME}_interactive_view_control # for example
   tesseract::tesseract_support # for example
   tesseract::tesseract_urdf # for example
-  ${PROJECT_NAME}_environment # for example
+  ${PROJECT_NAME}_environment_ignition # for example
   ignition-msgs8::ignition-msgs8
   Qt5::Core Qt5::Widgets Qt5::Gui)
 target_include_directories(tesseract_robotics_studio PRIVATE

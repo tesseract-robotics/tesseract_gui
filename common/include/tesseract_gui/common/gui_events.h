@@ -48,8 +48,10 @@ namespace events
   class Render : public QEvent
   {
   public:
-    Render(const std::string& scene_key);
+    Render(const std::string& scene_name);
     ~Render() override;
+
+    const std::string& getSceneName() const;
 
     /// \brief Unique type for this event.
     static const QEvent::Type kType = QEvent::Type(QEvent::MaxUser);
@@ -74,9 +76,12 @@ namespace events
     SnapIntervals(const ignition::math::Vector3d &_xyz,
                   const ignition::math::Vector3d &_rpy,
                   const ignition::math::Vector3d &_scale,
-                  const std::string& scene_key);
+                  const std::string& scene_name);
 
     ~SnapIntervals() override;
+
+    const std::string& getSceneName() const;
+
 
     /// \brief Get the XYZ snapping values.
     /// \return The XYZ snapping values.
@@ -108,8 +113,10 @@ namespace events
     /// \brief Constructor
     /// \param[in] _description The resource's description as a string, such
     /// as an SDF file.
-    explicit SpawnFromDescription(const std::string &_description, const std::string& scene_key);
+    explicit SpawnFromDescription(const std::string &_description, const std::string& scene_name);
     ~SpawnFromDescription() override;
+
+    const std::string& getSceneName() const;
 
     /// \brief Get the string description of the resource.
     /// \return The resource string
@@ -133,8 +140,10 @@ namespace events
   public:
     /// \brief Constructor
     /// \param[in] _filePath The path to a file.
-    explicit SpawnFromPath(const std::string &_filePath, const std::string& scene_key);
+    explicit SpawnFromPath(const std::string &_filePath, const std::string& scene_name);
     ~SpawnFromPath() override;
+
+    const std::string& getSceneName() const;
 
     /// \brief Get the path of the file.
     /// \return The file path.
@@ -158,8 +167,10 @@ namespace events
     /// \brief Constructor
     /// \param[in] _point The point at which the mouse is hovering within
     /// the scene
-    explicit HoverToScene(const ignition::math::Vector3d &_point, const std::string& scene_key);
+    explicit HoverToScene(const ignition::math::Vector3d &_point, const std::string& scene_name);
     ~HoverToScene() override;
+
+    const std::string& getSceneName() const;
 
     /// \brief Get the point within the scene over which the user is
     /// hovering.
@@ -185,8 +196,10 @@ namespace events
     /// \brief Constructor
     /// \param[in] _point The point which the user has left clicked within
     /// the scene
-    explicit LeftClickToScene(const ignition::math::Vector3d &_point, const std::string& scene_key);
+    explicit LeftClickToScene(const ignition::math::Vector3d &_point, const std::string& scene_name);
     ~LeftClickToScene() override;
+
+    const std::string& getSceneName() const;
 
     /// \brief Get the point within the scene that the user clicked.
     /// \return The 3D point.
@@ -210,8 +223,10 @@ namespace events
     /// \brief Constructor
     /// \param[in] _point The point which the user has right clicked
     /// within the scene
-    explicit RightClickToScene(const ignition::math::Vector3d &_point, const std::string& scene_key);
+    explicit RightClickToScene(const ignition::math::Vector3d &_point, const std::string& scene_name);
     ~RightClickToScene() override;
+
+    const std::string& getSceneName() const;
 
     /// \brief Get the point within the scene that the user clicked.
     /// \return The 3D point.
@@ -236,8 +251,10 @@ namespace events
     /// \brief Constructor
     /// \param[in] _menuEnabled The boolean indicating whether the dropdown
     /// menu should be enabled or disabled.
-    explicit DropdownMenuEnabled(bool _menuEnabled, const std::string& scene_key);
+    explicit DropdownMenuEnabled(bool _menuEnabled, const std::string& scene_name);
     ~DropdownMenuEnabled() override;
+
+    const std::string& getSceneName() const;
 
     /// \brief Gets whether the menu is enabled or not for this event.
     /// \return True if enabling the menu, false if disabling the menu
@@ -260,8 +277,10 @@ namespace events
   public:
     /// \brief Constructor
     /// \param[in] _key The key released event within the scene
-    explicit KeyReleaseOnScene(const ignition::common::KeyEvent &_key, const std::string &scene_key);
+    explicit KeyReleaseOnScene(const ignition::common::KeyEvent &_key, const std::string &scene_name);
     ~KeyReleaseOnScene() override;
+
+    const std::string& getSceneName() const;
 
     /// \brief Get the released key within the scene that the user released.
     /// \return The key code.
@@ -284,8 +303,10 @@ namespace events
   public:
     /// \brief Constructor
     /// \param[in] _key The pressed key within the scene
-    explicit KeyPressOnScene(const ignition::common::KeyEvent &_key, const std::string &scene_key);
+    explicit KeyPressOnScene(const ignition::common::KeyEvent &_key, const std::string &scene_name);
     ~KeyPressOnScene() override;
+
+    const std::string& getSceneName() const;
 
     /// \brief Get the key within the scene that the user pressed
     /// \return The key code.
@@ -311,8 +332,10 @@ namespace events
   public:
     /// \brief Constructor
     /// \param[in] _mouse The left mouse event on the scene
-    explicit LeftClickOnScene(const ignition::common::MouseEvent &_mouse, const std::string &scene_key);
+    explicit LeftClickOnScene(const ignition::common::MouseEvent &_mouse, const std::string &scene_name);
     ~LeftClickOnScene() override;
+
+    const std::string& getSceneName() const;
 
     /// \brief Return the left mouse event
     const ignition::common::MouseEvent &Mouse() const;
@@ -337,8 +360,10 @@ namespace events
   public:
     /// \brief Constructor
     /// \param[in] _mouse The right mouse event on the scene
-    RightClickOnScene(const ignition::common::MouseEvent &_mouse, const std::string &scene_key);
+    RightClickOnScene(const ignition::common::MouseEvent &_mouse, const std::string &scene_name);
     ~RightClickOnScene() override;
+
+    const std::string& getSceneName() const;
 
     /// \brief Return the right mouse event
     public: const ignition::common::MouseEvent &Mouse() const;
@@ -361,8 +386,10 @@ namespace events
   public:
     /// \brief Constructor
     /// \param[in] _block True to block otherwise False
-    explicit BlockOrbit(const bool &_block, const std::string &scene_key);
+    explicit BlockOrbit(const bool &_block, const std::string &scene_name);
     ~BlockOrbit() override;
+
+    const std::string& getSceneName() const;
 
     /// \brief Get the if the event should block the Interactive view
     /// controller
@@ -386,8 +413,10 @@ namespace events
   public:
     /// \brief Constructor
     /// \param[in] _mouse The hover mouse event on the scene
-    explicit HoverOnScene(const ignition::common::MouseEvent &_mouse, const std::string &scene_key);
+    explicit HoverOnScene(const ignition::common::MouseEvent &_mouse, const std::string &scene_name);
     ~HoverOnScene() override;
+
+    const std::string& getSceneName() const;
 
     /// \brief Get the point within the scene over which the user is
     /// hovering.
@@ -410,8 +439,10 @@ namespace events
   public:
     /// \brief Constructor
     /// \param[in] _name The name of the resource to clone
-    explicit SpawnCloneFromName(const std::string &_name, const std::string &scene_key);
+    explicit SpawnCloneFromName(const std::string &_name, const std::string &scene_name);
     ~SpawnCloneFromName() override;
+
+    const std::string& getSceneName() const;
 
     /// \brief Get the name of the resource to be cloned
     /// \return The name of the resource to be cloned
@@ -434,8 +465,10 @@ namespace events
     /// \brief Constructor
     /// \param[in] _dropText Dropped string.
     /// \param[in] _dropMouse x and y  coordinate of mouse position.
-    explicit DropOnScene(const std::string &_dropText, const ignition::math::Vector2i &_dropMouse, const std::string &scene_key);
+    explicit DropOnScene(const std::string &_dropText, const ignition::math::Vector2i &_dropMouse, const std::string &scene_name);
     ~DropOnScene() override;
+
+    const std::string& getSceneName() const;
 
     /// \brief Get the text of the dropped thing on the scene
     /// \return The name of the dropped thing on the scene
@@ -462,8 +495,10 @@ namespace events
   public:
     /// \brief Constructor
     /// \param[in] _mouse The scroll mouse event on the scene
-    explicit ScrollOnScene(const ignition::common::MouseEvent &_mouse, const std::string &scene_key);
+    explicit ScrollOnScene(const ignition::common::MouseEvent &_mouse, const std::string &scene_name);
     ~ScrollOnScene() override;
+
+    const std::string& getSceneName() const;
 
     /// \brief Return the scroll mouse event
     const ignition::common::MouseEvent &Mouse() const;
@@ -485,8 +520,10 @@ namespace events
   public:
     /// \brief Constructor
     /// \param[in] _mouse The drag mouse event on the scene
-    explicit DragOnScene(const ignition::common::MouseEvent &_mouse, const std::string &scene_key);
+    explicit DragOnScene(const ignition::common::MouseEvent &_mouse, const std::string &scene_name);
     ~DragOnScene() override;
+
+    const std::string& getSceneName() const;
 
     /// \brief Get the point within the scene over which the user is
     /// dragging.
@@ -510,8 +547,10 @@ namespace events
   public:
     /// \brief Constructor
     /// \param[in] _mouse The mouse event on the scene
-    MousePressOnScene(const ignition::common::MouseEvent &_mouse, const std::string &scene_key);
+    MousePressOnScene(const ignition::common::MouseEvent &_mouse, const std::string &scene_name);
     ~MousePressOnScene() override;
+
+    const std::string& getSceneName() const;
 
     /// \brief Return the button press mouse event
     const ignition::common::MouseEvent &Mouse() const;
@@ -554,8 +593,10 @@ namespace events
   {
   public:
     /// \brief Constructor
-    PreRender(const std::string &scene_key);
+    PreRender(const std::string &scene_name);
     ~PreRender() override;
+
+    const std::string& getSceneName() const;
 
     /// \brief Unique type for this event.
     static const QEvent::Type kType = QEvent::Type(QEvent::MaxUser - 20);

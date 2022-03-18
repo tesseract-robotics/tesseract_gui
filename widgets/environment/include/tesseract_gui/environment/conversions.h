@@ -22,8 +22,16 @@ ignition::rendering::VisualPtr loadLink(ignition::rendering::Scene& scene,
                                         EntityContainer& entity_container,
                                         const tesseract_scene_graph::Link& link);
 
+ignition::rendering::VisualPtr loadLinkVisuals(ignition::rendering::Scene& scene,
+                                               EntityContainer& entity_container,
+                                               const tesseract_scene_graph::Link& link);
+
+ignition::rendering::VisualPtr loadLinkCollisions(ignition::rendering::Scene& scene,
+                                                  EntityContainer& entity_container,
+                                                  const tesseract_scene_graph::Link& link);
+
 ignition::rendering::VisualPtr loadLinkGeometry(ignition::rendering::Scene& scene,
-                                                LinkEntityContainer& entity_container,
+                                                EntityContainer& entity_container,
                                                 const tesseract_geometry::Geometry& geometry,
                                                 const Eigen::Vector3d& scale,
                                                 const Eigen::Isometry3d& local_pose,

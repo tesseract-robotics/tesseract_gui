@@ -69,9 +69,6 @@ bool IgnitionEnvironmentWidget::eventFilter(QObject *_obj, QEvent *_event)
         {
           if (!entity_container_->empty())
           {
-            for (const auto& id : entity_container_->getLinks())
-              scene->DestroyNodeById(id.second->getId());
-
             for (const auto& id : entity_container_->getVisuals())
               scene->DestroyNodeById(id.second);
 
@@ -162,32 +159,28 @@ bool IgnitionEnvironmentWidget::eventFilter(QObject *_obj, QEvent *_event)
 
           for (const auto& l : link_visible_changes_)
           {
-            auto lc = entity_container_->getLink(l.first);
-            auto visual_node = scene->VisualById(lc->getId());
+            auto lc = entity_container_->getVisual(l.first);
+            auto visual_node = scene->VisualById(lc);
             if (visual_node != nullptr)
               visual_node->SetVisible(l.second);
           }
 
           for (const auto& l : link_visual_visible_changes_)
           {
-            auto lc = entity_container_->getLink(l.first);
-            for (const auto& id : lc->getVisuals())
-            {
-              auto visual_node = scene->VisualById(id);
-              if (visual_node != nullptr)
-                visual_node->SetVisible(l.second);
-            }
+            std::string visual_key = l.first + "::Visuals";
+            auto lc = entity_container_->getVisual(visual_key);
+            auto visual_node = scene->VisualById(lc);
+            if (visual_node != nullptr)
+              visual_node->SetVisible(l.second);
           }
 
           for (const auto& l : link_collision_visible_changes_)
           {
-            auto lc = entity_container_->getLink(l.first);
-            for (const auto& id : lc->getCollisions())
-            {
-              auto visual_node = scene->VisualById(id);
-              if (visual_node != nullptr)
-                visual_node->SetVisible(l.second);
-            }
+            std::string visual_key = l.first + "::Collisions";
+            auto lc = entity_container_->getVisual(visual_key);
+            auto visual_node = scene->VisualById(lc);
+            if (visual_node != nullptr)
+              visual_node->SetVisible(l.second);
           }
         }
         render_dirty_ = false;
@@ -197,7 +190,7 @@ bool IgnitionEnvironmentWidget::eventFilter(QObject *_obj, QEvent *_event)
           tesseract_scene_graph::SceneState state = getEnvironment()->getState();
           for (const auto& pair : state.link_transforms)
           {
-            EntityID id = entity_container_->getLink(pair.first)->getId();
+            EntityID id = entity_container_->getVisual(pair.first);
             scene->VisualById(id)->SetWorldPose(ignition::math::eigen3::convert(pair.second));
           }
         }

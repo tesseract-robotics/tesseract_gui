@@ -28,7 +28,7 @@ std::shared_ptr<const EntityContainer> EntityManager::getEntityContainer(const s
   return c_it->second;
 }
 
-EntityID EntityManager::createEntityId()
+EntityID EntityManager::createEntityID()
 {
   std::unique_lock<std::shared_mutex> lock(mutex_);
   return ++entity_counter_;

@@ -28,7 +28,7 @@ public:
    * @brief Create new entity ID
    * @return A new entity ID
    */
-  EntityID createEntityId();
+  EntityID createEntityID();
 
   /** @brief Check if empty */
   bool empty() const;

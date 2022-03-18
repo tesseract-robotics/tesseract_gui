@@ -18,11 +18,11 @@ public:
 
   /**
    * @brief Get entity container. If it does not exist one is created.
-   * @param container_name The name of the container
+   * @param name The name of the container
    * @return The entity container
    */
-  std::shared_ptr<EntityContainer> getEntityContainer(const std::string& container_name);
-  std::shared_ptr<const EntityContainer> getEntityContainer(const std::string& container_name) const;
+  std::shared_ptr<EntityContainer> getEntityContainer(const std::string& name);
+  std::shared_ptr<const EntityContainer> getEntityContainer(const std::string& name) const;
 
   /**
    * @brief Create new entity ID

@@ -16,7 +16,13 @@ public:
   using Ptr = std::shared_ptr<EntityContainer>;
   using ConstPtr = std::shared_ptr<const EntityContainer>;
 
-  EntityContainer(std::shared_ptr<EntityManager> manager);
+  EntityContainer(std::shared_ptr<EntityManager> manager, std::string name);
+
+  /**
+   * @brief Get the name of the container
+   * @return The container name
+   */
+  std::string getName() const;
 
   /**
    * @brief Create unique entity ID
@@ -72,9 +78,12 @@ public:
 
 private:
   std::shared_ptr<EntityManager> manager_;
-  mutable std::shared_mutex mutex_;
+  std::string name_;
   EntityMap visual_id_map_;          /**< Stores entity id for each visual */
   EntityMap sensor_id_map_;          /**< Stores entity id for each sensor */
+  mutable std::shared_mutex mutex_;
+
+  std::string getKey(const std::string& name) const;
 };
 }
 #endif // TESSERACT_GUI_COMMON_ENTITY_CONTAINER_H

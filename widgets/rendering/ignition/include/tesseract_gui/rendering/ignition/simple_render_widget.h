@@ -80,7 +80,7 @@ public:
   double cameraFarClip = 1000.0;
 
   /// \brief Scene background color
-  ignition::math::Color backgroundColor = ignition::math::Color::Black;
+  ignition::math::Color backgroundColor = ignition::math::Color(0.3f, 0.3f, 0.3f, 1.0f);
 
   /// \brief Ambient color
   ignition::math::Color ambientLight = ignition::math::Color(0.3f, 0.3f, 0.3f, 1.0f);
@@ -89,7 +89,7 @@ public:
   bool initialized = false;
 
   /// \brief Render texture size
-  QSize textureSize = QSize(1024, 1024);
+  QSize textureSize = QSize(1920, 1200);
 
   /// \brief Flag to indicate texture size has changed.
   bool textureDirty = false;

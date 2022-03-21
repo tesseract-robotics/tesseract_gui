@@ -15,7 +15,7 @@
  *
 */
 
-#include <tesseract_gui/rendering/simple_render_widget.h>
+#include <tesseract_gui/rendering/ignition/simple_render_widget.h>
 #include <tesseract_gui/common/gui_utils.h>
 #include <tesseract_gui/common/gui_events.h>
 #include <tesseract_gui/common/conversions.h>
@@ -40,6 +40,7 @@
 #include <ignition/rendering/Scene.hh>
 #include <ignition/rendering/Grid.hh>
 #include <ignition/common/Console.hh>
+#include <ignition/common/Image.hh>
 
 #ifdef _MSC_VER
 #pragma warning(pop)
@@ -107,7 +108,7 @@ ignition::rendering::Image SimpleRenderer::Render()
     std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
     this->dataPtr->camera->SetImageWidth(this->textureSize.width());
     this->dataPtr->camera->SetImageHeight(this->textureSize.height());
-    this->dataPtr->camera->SetAspectRatio(this->textureSize.width() / this->textureSize.height());
+    this->dataPtr->camera->SetAspectRatio(static_cast<double>(this->textureSize.width()) / static_cast<double>(this->textureSize.height()));
     // setting the size should cause the render texture to be rebuilt
     this->dataPtr->camera->PreRender();
     this->textureDirty = false;
@@ -116,9 +117,9 @@ ignition::rendering::Image SimpleRenderer::Render()
   // view control
   this->HandleMouseEvent();
 
-  if (tesseract_gui::getApp())
+  if (tesseract_gui::getApp() != nullptr)
   {
-    tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), new events::PreRender(this->sceneName));
+    QApplication::sendEvent(tesseract_gui::getApp(), new events::PreRender(this->sceneName));
   }
 
   ignition::rendering::Image image;
@@ -128,9 +129,9 @@ ignition::rendering::Image SimpleRenderer::Render()
     this->dataPtr->camera->Capture(image);
   }
 
-  if (tesseract_gui::getApp())
+  if (tesseract_gui::getApp() != nullptr)
   {
-    tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), new events::Render(this->sceneName));
+    QApplication::sendEvent(tesseract_gui::getApp(), new events::Render(this->sceneName));
   }
 
   return image;
@@ -190,7 +191,7 @@ void SimpleRenderer::BroadcastDrop()
     return;
   events::DropOnScene dropOnSceneEvent(
     this->dataPtr->dropText, this->dataPtr->mouseDropPos, this->sceneName);
-  tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &dropOnSceneEvent);
+  QApplication::sendEvent(tesseract_gui::getApp(), &dropOnSceneEvent);
   this->dataPtr->dropDirty = false;
 }
 
@@ -203,14 +204,14 @@ void SimpleRenderer::BroadcastHoverPos()
   auto pos = this->ScreenToScene(this->dataPtr->mouseHoverPos);
 
   events::HoverToScene hoverToSceneEvent(pos, this->sceneName);
-  tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &hoverToSceneEvent);
+  QApplication::sendEvent(tesseract_gui::getApp(), &hoverToSceneEvent);
 
   ignition::common::MouseEvent hoverMouseEvent = this->dataPtr->mouseEvent;
   hoverMouseEvent.SetPos(this->dataPtr->mouseHoverPos);
   hoverMouseEvent.SetDragging(false);
   hoverMouseEvent.SetType(ignition::common::MouseEvent::MOVE);
   events::HoverOnScene hoverOnSceneEvent(hoverMouseEvent, this->sceneName);
-  tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &hoverOnSceneEvent);
+  QApplication::sendEvent(tesseract_gui::getApp(), &hoverOnSceneEvent);
 
   this->dataPtr->hoverDirty = false;
 }
@@ -226,7 +227,7 @@ void SimpleRenderer::BroadcastDrag()
     return;
 
   events::DragOnScene dragEvent(this->dataPtr->mouseEvent, this->sceneName);
-  tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &dragEvent);
+  QApplication::sendEvent(tesseract_gui::getApp(), &dragEvent);
 
   this->dataPtr->mouseDirty = false;
 }
@@ -244,10 +245,10 @@ void SimpleRenderer::BroadcastLeftClick()
   auto pos = this->ScreenToScene(this->dataPtr->mouseEvent.Pos());
 
   events::LeftClickToScene leftClickToSceneEvent(pos, this->sceneName);
-  tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &leftClickToSceneEvent);
+  QApplication::sendEvent(tesseract_gui::getApp(), &leftClickToSceneEvent);
 
   events::LeftClickOnScene leftClickOnSceneEvent(this->dataPtr->mouseEvent, this->sceneName);
-  tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &leftClickOnSceneEvent);
+  QApplication::sendEvent(tesseract_gui::getApp(), &leftClickOnSceneEvent);
 
   this->dataPtr->mouseDirty = false;
 }
@@ -265,10 +266,10 @@ void SimpleRenderer::BroadcastRightClick()
   auto pos = this->ScreenToScene(this->dataPtr->mouseEvent.Pos());
 
   events::RightClickToScene rightClickToSceneEvent(pos, this->sceneName);
-  tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &rightClickToSceneEvent);
+  QApplication::sendEvent(tesseract_gui::getApp(), &rightClickToSceneEvent);
 
   events::RightClickOnScene rightClickOnSceneEvent(this->dataPtr->mouseEvent, this->sceneName);
-  tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &rightClickOnSceneEvent);
+  QApplication::sendEvent(tesseract_gui::getApp(), &rightClickOnSceneEvent);
 
   this->dataPtr->mouseDirty = false;
 }
@@ -283,7 +284,7 @@ void SimpleRenderer::BroadcastMousePress()
     return;
 
   events::MousePressOnScene event(this->dataPtr->mouseEvent, this->sceneName);
-  tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &event);
+  QApplication::sendEvent(tesseract_gui::getApp(), &event);
 
   this->dataPtr->mouseDirty = false;
 }
@@ -298,7 +299,7 @@ void SimpleRenderer::BroadcastScroll()
     return;
 
   events::ScrollOnScene scrollOnSceneEvent(this->dataPtr->mouseEvent, this->sceneName);
-  tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &scrollOnSceneEvent);
+  QApplication::sendEvent(tesseract_gui::getApp(), &scrollOnSceneEvent);
 
   this->dataPtr->mouseDirty = false;
 }
@@ -310,7 +311,7 @@ void SimpleRenderer::BroadcastKeyRelease()
     return;
 
   events::KeyReleaseOnScene keyRelease(this->dataPtr->keyEvent, this->sceneName);
-  tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &keyRelease);
+  QApplication::sendEvent(tesseract_gui::getApp(), &keyRelease);
 
   this->dataPtr->keyEvent.SetType(ignition::common::KeyEvent::NO_EVENT);
 }
@@ -322,7 +323,7 @@ void SimpleRenderer::BroadcastKeyPress()
     return;
 
   events::KeyPressOnScene keyPress(this->dataPtr->keyEvent, this->sceneName);
-  tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &keyPress);
+  QApplication::sendEvent(tesseract_gui::getApp(), &keyPress);
 
   this->dataPtr->keyEvent.SetType(ignition::common::KeyEvent::NO_EVENT);
 }
@@ -333,17 +334,17 @@ void SimpleRenderer::Initialize()
   if (this->initialized)
     return;
 
+  std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
   std::map<std::string, std::string> params;
   params["useCurrentGLContext"] = "1";
 //  params["winID"] = std::to_string(tesseract_gui::getApp()->activeWindow()->winId());
 //  params["winID"] = std::to_string(
 //    ignition::gui::App()->findChild<ignition::gui::MainWindow *>()->
 //      QuickWindow()-winId());
-  auto engine = ignition::rendering::engine(this->engineName, params);
-  if (!engine)
+  auto* engine = ignition::rendering::engine(this->engineName, params);
+  if (engine == nullptr)
   {
-    ignerr << "Engine [" << this->engineName << "] is not supported"
-           << std::endl;
+    ignerr << "Engine [" << this->engineName << "] is not supported" << std::endl;
     return;
   }
 
@@ -415,6 +416,14 @@ void SimpleRenderer::Initialize()
   this->dataPtr->camera->SetAntiAliasing(8);
   this->dataPtr->camera->SetHFOV(M_PI * 0.5);
 
+  /** @todo LEVI Need figure out haw to get the camera by name. */
+  // create directional light
+  ignition::rendering::DirectionalLightPtr light0 = scene->CreateDirectionalLight();
+  light0->SetDirection(1, 0, 0);
+  light0->SetDiffuseColor(0.8, 0.8, 0.8);
+  light0->SetSpecularColor(0.5, 0.5, 0.5);
+  this->dataPtr->camera->AddChild(light0);
+
   // Ray Query
   this->dataPtr->rayQuery = this->dataPtr->camera->Scene()->CreateRayQuery();
 
@@ -424,8 +433,8 @@ void SimpleRenderer::Initialize()
 /////////////////////////////////////////////////
 void SimpleRenderer::Destroy()
 {
-  auto engine = ignition::rendering::engine(this->engineName);
-  if (!engine)
+  auto* engine = ignition::rendering::engine(this->engineName);
+  if (engine == nullptr)
     return;
   auto scene = engine->SceneByName(this->sceneName);
   if (!scene)
@@ -507,6 +516,8 @@ public:
   /// \brief Ign-rendering renderer
   SimpleRenderer renderer;
 
+  GLuint texture{0};
+
   /// \brief List of our QT connections.
   QList<QMetaObject::Connection> connections;
 };
@@ -524,7 +535,7 @@ SimpleRenderWidget::SimpleRenderWidget(const std::string& scene_name, QWidget *_
 SimpleRenderWidget::~SimpleRenderWidget()
 {
   // Disconnect our QT connections.
-  for(auto conn : this->dataPtr->connections)
+  for(const auto& conn : this->dataPtr->connections)
     QObject::disconnect(conn);
 }
 
@@ -545,30 +556,79 @@ void SimpleRenderWidget::initializeGL()
 
 void SimpleRenderWidget::resizeGL(int w, int h)
 {
-  this->dataPtr->renderer.Resize(w, h);
   glViewport(0, 0, w, h);
+  this->dataPtr->renderer.Resize(w, h);
 }
 
 /////////////////////////////////////////////////
 void SimpleRenderWidget::paintGL()
 {
+  makeCurrent();
   ignition::rendering::Image image = this->dataPtr->renderer.Render();
   auto* data = image.Data<unsigned char>();
 
+//  ignerr << "Image, w: " << image.Width() << " h: " << image.Height() << std::endl;
 //  ignition::common::Image tmp;
-//  tmp.SetFromData(data, this->width(), this->height(), ignition::common::Image::RGB_INT8);
+//  tmp.SetFromData(data, image.Width(), image.Height(), ignition::common::Image::RGB_INT8);
 //  tmp.SavePNG("/tmp/ign_image.png");
-
-  // Some GL implementations require that the currently bound context is
-  // made non-current before we set up sharing, so we doneCurrent here
-  // and makeCurrent down below while setting up our own context
   doneCurrent();
-//  glClearColor(0.5, 0.5, 0.5, 1);
-//  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//  glPixelZoom(1, -1);
-//  glRasterPos2f(-1, 1);
-  glDrawPixels(this->width(), this->height(), GL_RGB, GL_UNSIGNED_BYTE, data);
+
   makeCurrent();
+  // The next four commands fix the issue with flipping raster position when using glDrawPixels
+  // though there is still an issue with using the texture which works when using glut
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
+  auto imgw = image.Width();
+  auto imgh = image.Height();
+  glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  bool use_texture{false};
+  if (use_texture)
+  {
+    glEnable(GL_TEXTURE_RECTANGLE);
+    glViewport (0, 0, (GLsizei) imgw, (GLsizei) imgh);
+    glDeleteTextures(1, &(this->dataPtr->texture));
+    glGenTextures (1, &(this->dataPtr->texture));
+    glBindTexture (GL_TEXTURE_RECTANGLE, this->dataPtr->texture);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+    glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
+    glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
+    glTexImage2D (GL_TEXTURE_RECTANGLE, 0, GL_RGB, (GLint)imgw, (GLint)imgh, 0, GL_RGB, GL_UNSIGNED_BYTE, image.Data());
+    glBegin (GL_QUADS);
+    // Bottom left
+    glTexCoord2d (imgw, imgh);
+    glVertex2f(-1, -1);
+
+    // Top left
+    glTexCoord2d (0, imgh);
+    glVertex2f (1, -1);
+
+    // Top right
+    glTexCoord2d (0, 0);
+    glVertex2f (1, 1);
+
+    // Bottom right
+    glTexCoord2d (imgw, 0);
+    glVertex2f (-1, 1);
+    glEnd();
+    glDisable(GL_TEXTURE_RECTANGLE);
+  }
+  else
+  {
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+    glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
+    glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
+
+    glPixelZoom(1, -1);
+    glRasterPos2f(-1, 1);
+    glDrawPixels(imgw, imgh, GL_RGB, GL_UNSIGNED_BYTE, data);
+  }
+
+  doneCurrent();
 }
 
 /////////////////////////////////////////////////

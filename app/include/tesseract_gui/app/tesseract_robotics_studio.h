@@ -10,8 +10,8 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <QMainWindow>
 
-#include <tesseract_gui/rendering/simple_render_widget.h>
-#include <tesseract_gui/rendering/interactive_view_control.h>
+#include <tesseract_gui/rendering/ignition/simple_render_widget.h>
+#include <tesseract_gui/rendering/ignition/interactive_view_control.h>
 #include <tesseract_gui/common/entity_manager.h>
 
 namespace Ui {

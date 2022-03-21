@@ -7,8 +7,8 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <QOpenGLContext>
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
-#include <tesseract_gui/rendering/minimal_scene.h>
-#include <tesseract_gui/rendering/interactive_view_control.h>
+#include <tesseract_gui/rendering/ignition/minimal_scene.h>
+#include <tesseract_gui/rendering/ignition/interactive_view_control.h>
 
 int main(int argc, char ** argv)
 {

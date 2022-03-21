@@ -5,8 +5,6 @@
 #include <QDebug>
 #include <memory>
 
-#include <tesseract_gui/rendering/interactive_view_control.h>
-
 int main(int argc, char *argv[])
 {
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -46,9 +44,6 @@ int main(int argc, char *argv[])
 
   tesseract_gui::TesseractRoboticsStudio widget;
   widget.show();
-
-  tesseract_gui::InteractiveViewControl view_control("scene");
-  app.installEventFilter(&view_control);
 
   return app.exec();
 }

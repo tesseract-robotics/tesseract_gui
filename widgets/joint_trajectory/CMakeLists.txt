@@ -6,7 +6,7 @@ find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
 # Load variable for clang tidy args, compiler options and cxx version
 tesseract_variables()
 
-QT5_WRAP_CPP(TRAJ_MODEL_headers_MOC include/tesseract_gui/joint_trajectory/joint_trajectory_model.h)
+QT5_WRAP_CPP(TRAJ_MODEL_headers_MOC include/tesseract_gui/widgets/joint_trajectory/joint_trajectory_model.h)
 
 add_library(${PROJECT_NAME}_joint_trajectory_model SHARED
   ${TRAJ_MODEL_headers_MOC}
@@ -21,11 +21,11 @@ target_include_directories(${PROJECT_NAME}_joint_trajectory_model PUBLIC
 add_dependencies(${PROJECT_NAME}_joint_trajectory_model ${PROJECT_NAME}_common)
 
 QT5_WRAP_CPP(TRAJ_WIDGET_headers_MOC
-  include/tesseract_gui/joint_trajectory/joint_trajectory_widget.h
-  include/tesseract_gui/joint_trajectory/joint_trajectory_plot_dialog.h)
+  include/tesseract_gui/widgets/joint_trajectory/joint_trajectory_widget.h
+  include/tesseract_gui/widgets/joint_trajectory/joint_trajectory_plot_dialog.h)
 QT5_WRAP_UI(TRAJ_WIDGET_headers_UI
-  include/tesseract_gui/joint_trajectory/joint_trajectory_widget.ui
-  include/tesseract_gui/joint_trajectory/joint_trajectory_plot_dialog.ui)
+  include/tesseract_gui/widgets/joint_trajectory/joint_trajectory_widget.ui
+  include/tesseract_gui/widgets/joint_trajectory/joint_trajectory_plot_dialog.ui)
 
 add_library(${PROJECT_NAME}_joint_trajectory_widget SHARED
   ${TRAJ_WIDGET_headers_MOC}

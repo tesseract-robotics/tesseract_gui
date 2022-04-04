@@ -1,6 +1,6 @@
-#include <tesseract_gui/scene_graph/scene_graph_standard_item.h>
-#include <tesseract_gui/scene_graph/link_standard_item.h>
-#include <tesseract_gui/scene_graph/joint_standard_item.h>
+#include <tesseract_gui/widgets/scene_graph/scene_graph_standard_item.h>
+#include <tesseract_gui/widgets/scene_graph/link_standard_item.h>
+#include <tesseract_gui/widgets/scene_graph/joint_standard_item.h>
 #include <tesseract_gui/common/standard_item_type.h>
 
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, SCENE_GRAPH_ICON, (":/tesseract_gui/ignition/model.png"));

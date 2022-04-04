@@ -6,8 +6,8 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <sstream>
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
-#include <tesseract_gui/acm/allowed_collision_matrix_model.h>
-#include <tesseract_gui/acm/allowed_collision_matrix_widget.h>
+#include <tesseract_gui/widgets/acm/allowed_collision_matrix_model.h>
+#include <tesseract_gui/widgets/acm/allowed_collision_matrix_widget.h>
 
 void onEntrySelected(const tesseract_common::AllowedCollisionEntries& selection)
 {

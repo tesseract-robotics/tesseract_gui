@@ -1,12 +1,12 @@
-#include <tesseract_gui/environment/environment_widget.h>
+#include <tesseract_gui/widgets/environment/environment_widget.h>
 #include "ui_environment_widget.h"
 
-#include <tesseract_gui/scene_graph/scene_graph_standard_item.h>
-#include <tesseract_gui/scene_graph/scene_state_standard_item.h>
-#include <tesseract_gui/kinematic_groups/kinematic_groups_model.h>
-#include <tesseract_gui/kinematic_groups/group_tcps_model.h>
-#include <tesseract_gui/kinematic_groups/group_joint_states_model.h>
-#include <tesseract_gui/acm/allowed_collision_matrix_model.h>
+#include <tesseract_gui/widgets/scene_graph/scene_graph_standard_item.h>
+#include <tesseract_gui/widgets/scene_graph/scene_state_standard_item.h>
+#include <tesseract_gui/widgets/kinematic_groups/kinematic_groups_model.h>
+#include <tesseract_gui/widgets/kinematic_groups/group_tcps_model.h>
+#include <tesseract_gui/widgets/kinematic_groups/group_joint_states_model.h>
+#include <tesseract_gui/widgets/acm/allowed_collision_matrix_model.h>
 #include <tesseract_gui/common/gui_events.h>
 
 #include <QStandardItemModel>

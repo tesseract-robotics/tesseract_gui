@@ -7,31 +7,31 @@ find_package(qtadvanceddocking REQUIRED)
 tesseract_variables()
 
 QT5_WRAP_UI(PLOT_headers_UI
-  include/tesseract_gui/plot/plot_widget_editor.ui
-  include/tesseract_gui/plot/plot_widget_transforms.ui
-  include/tesseract_gui/plot/plot_docker_toolbar.ui
-  include/tesseract_gui/plot/transforms/first_derivative.ui
-  include/tesseract_gui/plot/transforms/integral_transform.ui
-  include/tesseract_gui/plot/transforms/moving_average_filter.ui
-  include/tesseract_gui/plot/transforms/moving_rms.ui
-  include/tesseract_gui/plot/transforms/outlier_removal.ui
-  include/tesseract_gui/plot/transforms/scale_transform.ui
-  include/tesseract_gui/plot/transforms/transform_selector.ui
+  include/tesseract_gui/widgets/plot/plot_widget_editor.ui
+  include/tesseract_gui/widgets/plot/plot_widget_transforms.ui
+  include/tesseract_gui/widgets/plot/plot_docker_toolbar.ui
+  include/tesseract_gui/widgets/plot/transforms/first_derivative.ui
+  include/tesseract_gui/widgets/plot/transforms/integral_transform.ui
+  include/tesseract_gui/widgets/plot/transforms/moving_average_filter.ui
+  include/tesseract_gui/widgets/plot/transforms/moving_rms.ui
+  include/tesseract_gui/widgets/plot/transforms/outlier_removal.ui
+  include/tesseract_gui/widgets/plot/transforms/scale_transform.ui
+  include/tesseract_gui/widgets/plot/transforms/transform_selector.ui
   )
 
 QT5_WRAP_CPP(PLOT_headers_MOC
-  include/tesseract_gui/plot/custom_tracker.h
-  include/tesseract_gui/plot/plot_legend.h
-  include/tesseract_gui/plot/plot_magnifier.h
-  include/tesseract_gui/plot/plot_widget.h
-  include/tesseract_gui/plot/plot_widget_base.h
-  include/tesseract_gui/plot/plot_widget_editor.h
-  include/tesseract_gui/plot/plot_widget_transforms.h
-  include/tesseract_gui/plot/plot_zoomer.h
-  include/tesseract_gui/plot/plot_docker.h
-  include/tesseract_gui/plot/plot_subplots.h
-  include/tesseract_gui/plot/transform_function.h
-  include/tesseract_gui/plot/transforms/transform_selector.h
+  include/tesseract_gui/widgets/plot/custom_tracker.h
+  include/tesseract_gui/widgets/plot/plot_legend.h
+  include/tesseract_gui/widgets/plot/plot_magnifier.h
+  include/tesseract_gui/widgets/plot/plot_widget.h
+  include/tesseract_gui/widgets/plot/plot_widget_base.h
+  include/tesseract_gui/widgets/plot/plot_widget_editor.h
+  include/tesseract_gui/widgets/plot/plot_widget_transforms.h
+  include/tesseract_gui/widgets/plot/plot_zoomer.h
+  include/tesseract_gui/widgets/plot/plot_docker.h
+  include/tesseract_gui/widgets/plot/plot_subplots.h
+  include/tesseract_gui/widgets/plot/transform_function.h
+  include/tesseract_gui/widgets/plot/transforms/transform_selector.h
   )
 
 add_library(${PROJECT_NAME}_plot SHARED
@@ -68,7 +68,6 @@ target_link_libraries(${PROJECT_NAME}_plot PUBLIC
   Qt5::Xml
   Qwt::Qwt
   tesseract::tesseract_common
-#  qt_advanced_docking
   ads::qtadvanceddocking
   ${PROJECT_NAME}_common)
 target_include_directories(${PROJECT_NAME}_plot PUBLIC
@@ -83,4 +82,3 @@ install(DIRECTORY include/${PROJECT_NAME} DESTINATION include)
 
 install_targets(TARGETS
   ${PROJECT_NAME}_plot)
-#  qt_advanced_docking)

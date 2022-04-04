@@ -1,4 +1,4 @@
-#include <tesseract_gui/scene_graph/cone_standard_item.h>
+#include <tesseract_gui/widgets/scene_graph/cone_standard_item.h>
 #include <tesseract_gui/common/standard_item_type.h>
 
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, CONE_ICON, (":/tesseract_gui/png/cone.png"));

@@ -20,11 +20,11 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#include <tesseract_gui/plot/plot_widget_base.h>
-#include <tesseract_gui/plot/timeseries_qwt.h>
-#include <tesseract_gui/plot/plot_magnifier.h>
-#include <tesseract_gui/plot/plot_zoomer.h>
-#include <tesseract_gui/plot/plot_legend.h>
+#include <tesseract_gui/widgets/plot/plot_widget_base.h>
+#include <tesseract_gui/widgets/plot/timeseries_qwt.h>
+#include <tesseract_gui/widgets/plot/plot_magnifier.h>
+#include <tesseract_gui/widgets/plot/plot_zoomer.h>
+#include <tesseract_gui/widgets/plot/plot_legend.h>
 
 #include <qwt/qwt_legend.h>
 #include <qwt/qwt_plot.h>

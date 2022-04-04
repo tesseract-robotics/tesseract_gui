@@ -7,8 +7,8 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <QTreeView>
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
-#include <tesseract_gui/joint_trajectory/joint_trajectory_model.h>
-#include <tesseract_gui/joint_trajectory/joint_trajectory_widget.h>
+#include <tesseract_gui/widgets/joint_trajectory/joint_trajectory_model.h>
+#include <tesseract_gui/widgets/joint_trajectory/joint_trajectory_widget.h>
 
 int main(int argc, char ** argv)
 {

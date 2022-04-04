@@ -6,9 +6,9 @@ find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
 tesseract_variables()
 
 QT5_WRAP_CPP(KINEMATIC_GROUP_headers_MOC
-  include/tesseract_gui/kinematic_groups/kinematic_groups_model.h
-  include/tesseract_gui/kinematic_groups/group_joint_states_model.h
-  include/tesseract_gui/kinematic_groups/group_tcps_model.h)
+  include/tesseract_gui/widgets/kinematic_groups/kinematic_groups_model.h
+  include/tesseract_gui/widgets/kinematic_groups/group_joint_states_model.h
+  include/tesseract_gui/widgets/kinematic_groups/group_tcps_model.h)
 
 add_library(${PROJECT_NAME}_kinematic_groups SHARED
   ${KINEMATIC_GROUP_headers_MOC}
@@ -32,9 +32,9 @@ target_include_directories(${PROJECT_NAME}_kinematic_groups PUBLIC
 add_dependencies(${PROJECT_NAME}_kinematic_groups ${PROJECT_NAME}_common ${PROJECT_NAME}_scene_graph)
 
 QT5_WRAP_CPP(KINEMATIC_GROUP_EDITOR_headers_MOC
-  include/tesseract_gui/kinematic_groups/kinematic_groups_editor_widget.h)
+  include/tesseract_gui/widgets/kinematic_groups/kinematic_groups_editor_widget.h)
 QT5_WRAP_UI(KINEMATIC_GROUP_EDITOR_headers_UI
-  include/tesseract_gui/kinematic_groups/kinematic_groups_editor_widget.ui)
+  include/tesseract_gui/widgets/kinematic_groups/kinematic_groups_editor_widget.ui)
 
 add_library(${PROJECT_NAME}_kinematic_groups_editor_widget SHARED
   ${KINEMATIC_GROUP_EDITOR_headers_MOC}
@@ -51,9 +51,9 @@ target_include_directories(${PROJECT_NAME}_kinematic_groups_editor_widget PUBLIC
 add_dependencies(${PROJECT_NAME}_kinematic_groups_editor_widget ${PROJECT_NAME}_common)
 
 QT5_WRAP_CPP(GROUPS_JOINT_STATES_EDITOR_headers_MOC
-  include/tesseract_gui/kinematic_groups/groups_joint_states_editor_widget.h)
+  include/tesseract_gui/widgets/kinematic_groups/groups_joint_states_editor_widget.h)
 QT5_WRAP_UI(GROUPS_JOINT_STATES_EDITOR_headers_UI
-  include/tesseract_gui/kinematic_groups/groups_joint_states_editor_widget.ui)
+  include/tesseract_gui/widgets/kinematic_groups/groups_joint_states_editor_widget.ui)
 
 add_library(${PROJECT_NAME}_groups_joint_states_editor_widget SHARED
   ${GROUPS_JOINT_STATES_EDITOR_headers_MOC}

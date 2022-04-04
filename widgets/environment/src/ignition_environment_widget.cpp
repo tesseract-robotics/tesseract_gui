@@ -1,5 +1,5 @@
-#include <tesseract_gui/environment/ignition_environment_widget.h>
-#include <tesseract_gui/environment/conversions.h>
+#include <tesseract_gui/widgets/environment/ignition_environment_widget.h>
+#include <tesseract_gui/widgets/environment/conversions.h>
 #include <tesseract_gui/common/entity_container.h>
 #include <tesseract_gui/common/gui_events.h>
 #include <tesseract_gui/common/gui_utils.h>

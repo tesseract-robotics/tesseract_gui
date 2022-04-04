@@ -1,4 +1,4 @@
-#include <tesseract_gui/environment/conversions.h>
+#include <tesseract_gui/widgets/environment/conversions.h>
 #include <tesseract_geometry/geometries.h>
 #include <ignition/math/eigen3/Conversions.hh>
 #include <ignition/common/MeshManager.hh>

@@ -1,4 +1,4 @@
-#include <tesseract_gui/acm/allowed_collision_matrix_model.h>
+#include <tesseract_gui/widgets/acm/allowed_collision_matrix_model.h>
 
 namespace tesseract_gui
 {

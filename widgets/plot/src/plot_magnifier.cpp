@@ -26,7 +26,7 @@
 #include <QWheelEvent>
 #include <QApplication>
 
-#include <tesseract_gui/plot/plot_magnifier.h>
+#include <tesseract_gui/widgets/plot/plot_magnifier.h>
 #include <qwt/qwt_plot.h>
 #include <qwt/qwt_scale_map.h>
 

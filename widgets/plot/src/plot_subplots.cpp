@@ -1,4 +1,4 @@
-#include <tesseract_gui/plot/plot_subplots.h>
+#include <tesseract_gui/widgets/plot/plot_subplots.h>
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QFrame>

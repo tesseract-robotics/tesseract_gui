@@ -56,17 +56,17 @@
 #include <qwt/qwt_series_data.h>
 #include <qwt/qwt_date_scale_draw.h>
 
-#include <tesseract_gui/plot/plot_widget.h>
-#include <tesseract_gui/plot/plot_widget_editor.h>
-#include <tesseract_gui/plot/plot_widget_transforms.h>
+#include <tesseract_gui/widgets/plot/plot_widget.h>
+#include <tesseract_gui/widgets/plot/plot_widget_editor.h>
+#include <tesseract_gui/widgets/plot/plot_widget_transforms.h>
 //#include "suggest_dialog.h"
 //#include "transforms/custom_function.h"
 //#include "transforms/custom_timeseries.h"
 
-#include <tesseract_gui/plot/plot_zoomer.h>
-#include <tesseract_gui/plot/plot_magnifier.h>
-#include <tesseract_gui/plot/plot_legend.h>
-#include <tesseract_gui/plot/point_series_xy.h>
+#include <tesseract_gui/widgets/plot/plot_zoomer.h>
+#include <tesseract_gui/widgets/plot/plot_magnifier.h>
+#include <tesseract_gui/widgets/plot/plot_legend.h>
+#include <tesseract_gui/widgets/plot/point_series_xy.h>
 #include <tesseract_gui/common/svg_util.h>
 
 class TimeScaleDraw : public QwtScaleDraw

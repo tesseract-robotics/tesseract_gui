@@ -1,7 +1,7 @@
-#include <tesseract_gui/scene_graph/link_standard_item.h>
-#include <tesseract_gui/scene_graph/inertial_standard_item.h>
-#include <tesseract_gui/scene_graph/visual_standard_item.h>
-#include <tesseract_gui/scene_graph/collision_standard_item.h>
+#include <tesseract_gui/widgets/scene_graph/link_standard_item.h>
+#include <tesseract_gui/widgets/scene_graph/inertial_standard_item.h>
+#include <tesseract_gui/widgets/scene_graph/visual_standard_item.h>
+#include <tesseract_gui/widgets/scene_graph/collision_standard_item.h>
 #include <tesseract_gui/common/standard_item_type.h>
 
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, LINK_ICON, (":/tesseract_gui/ignition/link.png"));

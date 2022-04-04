@@ -7,9 +7,9 @@ find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
 tesseract_variables()
 
 QT5_WRAP_CPP(JOINT_STATE_SLIDER_WIDGET_headers_MOC
-  include/tesseract_gui/joint_state_slider/joint_state_slider_widget.h)
+  include/tesseract_gui/widgets/joint_state_slider/joint_state_slider_widget.h)
 QT5_WRAP_UI(JOINT_STATE_SLIDER_WIDGET_headers_UI
-  include/tesseract_gui/joint_state_slider/joint_state_slider_widget.ui)
+  include/tesseract_gui/widgets/joint_state_slider/joint_state_slider_widget.ui)
 
 add_library(${PROJECT_NAME}_joint_state_slider_widget SHARED
   ${JOINT_STATE_SLIDER_WIDGET_headers_MOC}

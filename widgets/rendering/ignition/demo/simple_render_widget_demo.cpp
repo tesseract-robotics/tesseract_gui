@@ -5,8 +5,8 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <QDebug>
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
-#include <tesseract_gui/rendering/ignition/simple_render_widget.h>
-#include <tesseract_gui/rendering/ignition/interactive_view_control.h>
+#include <tesseract_gui/widgets/rendering/ignition/simple_render_widget.h>
+#include <tesseract_gui/widgets/rendering/ignition/interactive_view_control.h>
 
 int main(int argc, char ** argv)
 {

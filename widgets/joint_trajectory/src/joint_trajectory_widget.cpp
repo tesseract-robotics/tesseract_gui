@@ -1,16 +1,16 @@
 #include "ui_joint_trajectory_widget.h"
-#include <tesseract_gui/joint_trajectory/joint_trajectory_plot_dialog.h>
-#include <tesseract_gui/joint_trajectory/joint_trajectory_widget.h>
+#include <tesseract_gui/widgets/joint_trajectory/joint_trajectory_plot_dialog.h>
+#include <tesseract_gui/widgets/joint_trajectory/joint_trajectory_widget.h>
 #include <tesseract_visualization/trajectory_player.h>
 #include <QTimer>
 #include <set>
 
-#include <tesseract_gui/plot/transforms/first_derivative.h>
-#include <tesseract_gui/plot/transforms/integral_transform.h>
-#include <tesseract_gui/plot/transforms/moving_average_filter.h>
-#include <tesseract_gui/plot/transforms/moving_rms.h>
-#include <tesseract_gui/plot/transforms/outlier_removal.h>
-#include <tesseract_gui/plot/transforms/scale_transform.h>
+#include <tesseract_gui/widgets/plot/transforms/first_derivative.h>
+#include <tesseract_gui/widgets/plot/transforms/integral_transform.h>
+#include <tesseract_gui/widgets/plot/transforms/moving_average_filter.h>
+#include <tesseract_gui/widgets/plot/transforms/moving_rms.h>
+#include <tesseract_gui/widgets/plot/transforms/outlier_removal.h>
+#include <tesseract_gui/widgets/plot/transforms/scale_transform.h>
 
 const double SLIDER_RESOLUTION = 0.001;
 

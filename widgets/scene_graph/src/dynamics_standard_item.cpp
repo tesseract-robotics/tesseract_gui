@@ -1,4 +1,4 @@
-#include <tesseract_gui/scene_graph/dynamics_standard_item.h>
+#include <tesseract_gui/widgets/scene_graph/dynamics_standard_item.h>
 #include <tesseract_gui/common/standard_item_type.h>
 
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, DYNAMICS_ICON, (":/tesseract_gui/png/dynamics.png"));

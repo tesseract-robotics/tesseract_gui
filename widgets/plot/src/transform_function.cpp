@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#include <tesseract_gui/plot/transform_function.h>
+#include <tesseract_gui/widgets/plot/transform_function.h>
 
 namespace tesseract_gui
 {

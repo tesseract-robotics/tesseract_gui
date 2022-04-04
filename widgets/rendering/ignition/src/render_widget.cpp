@@ -15,7 +15,7 @@
  *
 */
 
-#include <tesseract_gui/rendering/ignition/render_widget.h>
+#include <tesseract_gui/widgets/rendering/ignition/render_widget.h>
 #include <tesseract_gui/common/gui_utils.h>
 #include <tesseract_gui/common/gui_events.h>
 #include <tesseract_gui/common/conversions.h>

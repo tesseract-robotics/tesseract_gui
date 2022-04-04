@@ -7,12 +7,12 @@ find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
 tesseract_variables()
 
 QT5_WRAP_CPP(ACM_headers_MOC
-  include/tesseract_gui/acm/allowed_collision_matrix_model.h
-  include/tesseract_gui/acm/allowed_collision_matrix_widget.h
-  include/tesseract_gui/acm/add_allowed_collision_entry_dialog.h)
+  include/tesseract_gui/widgets/acm/allowed_collision_matrix_model.h
+  include/tesseract_gui/widgets/acm/allowed_collision_matrix_widget.h
+  include/tesseract_gui/widgets/acm/add_allowed_collision_entry_dialog.h)
 QT5_WRAP_UI(ACM_WIDGET_headers_UI
-  include/tesseract_gui/acm/allowed_collision_matrix_widget.ui
-  include/tesseract_gui/acm/add_allowed_collision_entry_dialog.ui)
+  include/tesseract_gui/widgets/acm/allowed_collision_matrix_widget.ui
+  include/tesseract_gui/widgets/acm/add_allowed_collision_entry_dialog.ui)
 
 add_library(${PROJECT_NAME}_acm SHARED
   ${ACM_headers_MOC}

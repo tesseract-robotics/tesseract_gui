@@ -3,10 +3,10 @@
 #include "ui_tesseract_robotics_studio.h"
 
 
-#include <tesseract_gui/environment/ignition_environment_widget.h>
+#include <tesseract_gui/widgets/environment/ignition_environment_widget.h>
 
 #include <tesseract_urdf/urdf_parser.h>
-#include <tesseract_common/resource_locator.h>
+#include <tesseract_support/tesseract_support_resource_locator.h>
 
 #include <QSettings>
 #include <QWidgetAction>
@@ -15,33 +15,6 @@
 
 namespace tesseract_gui
 {
-
-std::string locateResource(const std::string& url)
-{
-  std::string mod_url = url;
-  if (url.find("package://tesseract_support") == 0)
-  {
-    mod_url.erase(0, strlen("package://tesseract_support"));
-    size_t pos = mod_url.find('/');
-    if (pos == std::string::npos)
-    {
-      return std::string();
-    }
-
-    std::string package = mod_url.substr(0, pos);
-    mod_url.erase(0, pos);
-    std::string package_path = std::string(TESSERACT_SUPPORT_DIR);
-
-    if (package_path.empty())
-    {
-      return std::string();
-    }
-
-    mod_url = package_path + mod_url;
-  }
-
-  return mod_url;
-}
 
 SceneInfo::SceneInfo(std::string scene_name)
   : scene_name(std::move(scene_name))
@@ -154,7 +127,7 @@ TesseractRoboticsStudio::TesseractRoboticsStudio(QWidget *parent)
   connect(d_->perspective_comboBox, SIGNAL(activated(const QString&)), d_->dock_manager, SLOT(openPerspective(const QString&)));
 
   {
-    auto locator = std::make_shared<tesseract_common::SimpleResourceLocator>(locateResource);
+    auto locator = std::make_shared<tesseract_common::TesseractSupportResourceLocator>();
     tesseract_common::fs::path urdf_path = std::string(TESSERACT_SUPPORT_DIR) + "/urdf/lbr_iiwa_14_r820.urdf";
     tesseract_common::fs::path srdf_path = std::string(TESSERACT_SUPPORT_DIR) + "/urdf/lbr_iiwa_14_r820.srdf";
 

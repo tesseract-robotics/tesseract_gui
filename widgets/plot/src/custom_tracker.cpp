@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#include <tesseract_gui/plot/custom_tracker.h>
+#include <tesseract_gui/widgets/plot/custom_tracker.h>
 #include <qwt/qwt_series_data.h>
 #include <qwt/qwt_plot.h>
 #include <qwt/qwt_plot_curve.h>

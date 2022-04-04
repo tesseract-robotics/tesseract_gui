@@ -6,7 +6,7 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <QDebug>
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
-#include <tesseract_gui/plot/plot_subplots.h>
+#include <tesseract_gui/widgets/plot/plot_subplots.h>
 
 int main(int argc, char ** argv)
 {

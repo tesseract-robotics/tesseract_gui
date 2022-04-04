@@ -1,4 +1,4 @@
-#include <tesseract_gui/scene_graph/polygon_mesh_standard_item.h>
+#include <tesseract_gui/widgets/scene_graph/polygon_mesh_standard_item.h>
 #include <tesseract_geometry/impl/convex_mesh.h>
 #include <tesseract_gui/common/standard_item_type.h>
 

@@ -15,7 +15,7 @@
  *
 */
 
-#include <tesseract_gui/rendering/ignition/minimal_scene.h>
+#include <tesseract_gui/widgets/rendering/ignition/minimal_scene.h>
 #include <tesseract_gui/common/gui_utils.h>
 #include <tesseract_gui/common/gui_events.h>
 #include <tesseract_gui/common/conversions.h>

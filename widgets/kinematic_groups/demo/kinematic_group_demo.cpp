@@ -5,7 +5,7 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <QStandardItemModel>
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
-#include <tesseract_gui/kinematic_groups/kinematic_groups_editor_widget.h>
+#include <tesseract_gui/widgets/kinematic_groups/kinematic_groups_editor_widget.h>
 
 int main(int argc, char ** argv)
 {

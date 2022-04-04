@@ -1,6 +1,6 @@
 #include "ui_joint_trajectory_plot_dialog.h"
-#include <tesseract_gui/joint_trajectory/joint_trajectory_plot_dialog.h>
-#include <tesseract_gui/plot/plot_subplots.h>
+#include <tesseract_gui/widgets/joint_trajectory/joint_trajectory_plot_dialog.h>
+#include <tesseract_gui/widgets/plot/plot_subplots.h>
 
 const double SLIDER_RESOLUTION = 0.001;
 

@@ -1,4 +1,4 @@
-#include <tesseract_gui/kinematic_groups/group_tcps_model.h>
+#include <tesseract_gui/widgets/kinematic_groups/group_tcps_model.h>
 
 #include <tesseract_gui/common/standard_item_type.h>
 

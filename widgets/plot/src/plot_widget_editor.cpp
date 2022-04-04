@@ -1,4 +1,4 @@
-#include <tesseract_gui/plot/plot_widget_editor.h>
+#include <tesseract_gui/widgets/plot/plot_widget_editor.h>
 #include "ui_plot_widget_editor.h"
 
 #include <QHBoxLayout>

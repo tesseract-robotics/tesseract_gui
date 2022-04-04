@@ -1,4 +1,4 @@
-#include <tesseract_gui/kinematic_groups/groups_joint_states_editor_widget.h>
+#include <tesseract_gui/widgets/kinematic_groups/groups_joint_states_editor_widget.h>
 #include <tesseract_gui/common/standard_item_type.h>
 #include "ui_groups_joint_states_editor_widget.h"
 

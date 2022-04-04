@@ -1,4 +1,4 @@
-#include <tesseract_gui/acm/add_allowed_collision_entry_dialog.h>
+#include <tesseract_gui/widgets/acm/add_allowed_collision_entry_dialog.h>
 #include "ui_add_allowed_collision_entry_dialog.h"
 #include <QRegExpValidator>
 namespace tesseract_gui

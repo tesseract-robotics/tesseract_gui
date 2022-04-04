@@ -33,7 +33,7 @@
 
 #include <tesseract_gui/common/gui_events.h>
 #include <tesseract_gui/common/gui_utils.h>
-#include <tesseract_gui/rendering/ignition/interactive_view_control.h>
+#include <tesseract_gui/widgets/rendering/ignition/interactive_view_control.h>
 
 /// \brief Private data class for InteractiveViewControl
 class tesseract_gui::InteractiveViewControlPrivate

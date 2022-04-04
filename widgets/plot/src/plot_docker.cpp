@@ -20,8 +20,8 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#include <tesseract_gui/plot/plot_docker.h>
-#include <tesseract_gui/plot/plot_widget_editor.h>
+#include <tesseract_gui/widgets/plot/plot_docker.h>
+#include <tesseract_gui/widgets/plot/plot_widget_editor.h>
 #include <tesseract_gui/common/svg_util.h>
 #include <DockSplitter.h>
 #include <QPushButton>

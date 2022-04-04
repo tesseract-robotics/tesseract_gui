@@ -5,13 +5,34 @@ find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
 # Load variable for clang tidy args, compiler options and cxx version
 tesseract_variables()
 
-QT5_WRAP_CPP(ENVIRONMENT_WIDGET_headers_MOC include/tesseract_gui/environment/environment_widget.h)
-QT5_WRAP_UI(ENVIRONMENT_WIDGET_headers_UI include/tesseract_gui/environment/environment_widget.ui)
+QT5_WRAP_CPP(ENVIRONMENT_WIDGET_headers_MOC include/tesseract_gui/widgets/environment/environment_widget.h)
+QT5_WRAP_UI(ENVIRONMENT_WIDGET_headers_UI include/tesseract_gui/widgets/environment/environment_widget.ui)
 
 add_library(${PROJECT_NAME}_environment SHARED
   ${ENVIRONMENT_WIDGET_headers_MOC}
   ${ENVIRONMENT_WIDGET_headers_UI}
-  src/environment_widget.cpp)
+  src/environment_widget.cpp
+  src/commands/add_allowed_collision_command_standard_item.cpp
+  src/commands/add_contact_managers_plugin_info_command_standard_item.cpp
+  src/commands/add_kinematics_information_command_standard_item.cpp
+  src/commands/add_link_command_standard_item.cpp
+  src/commands/add_scene_graph_command_standard_item.cpp
+  src/commands/change_collision_margins_command_standard_item.cpp
+  src/commands/change_joint_acceleration_limits_command_standard_item.cpp
+  src/commands/change_joint_origin_command_standard_item.cpp
+  src/commands/change_joint_position_limits_command_standard_item.cpp
+  src/commands/change_joint_velocity_limits_command_standard_item.cpp
+  src/commands/change_link_collision_enabled_command_standard_item.cpp
+  src/commands/move_joint_command_standard_item.cpp
+  src/commands/move_link_command_standard_item.cpp
+  src/commands/remove_allowed_collision_command_standard_item.cpp
+  src/commands/remove_allowed_collision_link_command_standard_item.cpp
+  src/commands/remove_joint_command_standard_item.cpp
+  src/commands/remove_link_command_standard_item.cpp
+  src/commands/replace_joint_command_standard_item.cpp
+  src/commands/set_active_continuous_contact_manager_command_standard_item.cpp
+  src/commands/set_active_discrete_contact_manager_command_standard_item.cpp
+)
 target_link_libraries(${PROJECT_NAME}_environment PUBLIC
   tesseract::tesseract_environment
   tesseract::tesseract_common
@@ -30,7 +51,7 @@ find_package(ignition-rendering6 REQUIRED)
 find_package(ignition-math6-eigen3 REQUIRED)
 find_package(ignition-common4 REQUIRED)
 
-QT5_WRAP_CPP(IGNITION_ENVIRONMENT_WIDGET_headers_MOC include/tesseract_gui/environment/ignition_environment_widget.h)
+QT5_WRAP_CPP(IGNITION_ENVIRONMENT_WIDGET_headers_MOC include/tesseract_gui/widgets/environment/ignition_environment_widget.h)
 
 add_library(${PROJECT_NAME}_environment_ignition SHARED
   ${IGNITION_ENVIRONMENT_WIDGET_headers_MOC}

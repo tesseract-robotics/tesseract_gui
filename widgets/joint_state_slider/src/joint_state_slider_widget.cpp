@@ -1,4 +1,4 @@
-#include <tesseract_gui/joint_state_slider/joint_state_slider_widget.h>
+#include <tesseract_gui/widgets/joint_state_slider/joint_state_slider_widget.h>
 #include "ui_joint_state_slider_widget.h"
 
 #include <QLabel>

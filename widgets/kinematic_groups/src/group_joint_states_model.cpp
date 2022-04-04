@@ -1,4 +1,4 @@
-#include <tesseract_gui/kinematic_groups/group_joint_states_model.h>
+#include <tesseract_gui/widgets/kinematic_groups/group_joint_states_model.h>
 #include <tesseract_gui/common/standard_item_type.h>
 
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, ROBOT_ICON, (":/tesseract_gui/png/robotic-arm.png"));

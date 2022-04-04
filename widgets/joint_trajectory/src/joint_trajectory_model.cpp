@@ -1,4 +1,4 @@
-#include <tesseract_gui/joint_trajectory/joint_trajectory_model.h>
+#include <tesseract_gui/widgets/joint_trajectory/joint_trajectory_model.h>
 
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, TRAJECTORY_ICON, (":/tesseract_gui/png/trajectory.png"));
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, TRAJECTORY_STATE_ICON, (":/tesseract_gui/png/robotic-arm.png"));

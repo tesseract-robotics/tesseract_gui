@@ -76,5 +76,7 @@
         <file>png/layout.png</file>
         <file>png/restore.png</file>
         <file>png/save.png</file>
+        <file>png/merge.png</file>
+        <file>png/plugin.png</file>
     </qresource>
 </RCC>

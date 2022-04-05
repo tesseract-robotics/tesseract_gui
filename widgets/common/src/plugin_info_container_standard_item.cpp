@@ -43,11 +43,8 @@ void PluginInfoContainerStandardItem::ctor()
 
   auto* plugins = new QStandardItem(*CUBE_ICON, "plugins");
   for (const auto& plugin : plugin_info_container.plugins)
-  {
-      auto* plugin_name = new QStandardItem(*TEXT_ICON, plugin.first.c_str());
-      auto* plugin_value = new PluginInfoStandardItem(plugin.second);
-      plugins->appendRow({plugin_name, plugin_value});
-  }
+    plugins->appendRow(new PluginInfoStandardItem(plugin.first.c_str(), plugin.second));
+
   appendRow(plugins);
 }
 }

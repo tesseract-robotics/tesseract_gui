@@ -6,9 +6,11 @@ tesseract_variables()
 
 add_library(${PROJECT_NAME}_common_widgets SHARED
   src/calibration_info_standard_item.cpp
+  src/collision_margin_data_standard_item.cpp
   src/contact_managers_plugin_info_standard_item.cpp
   src/kinematics_plugin_info_standard_item.cpp
-  src/origin_standard_item.cpp
+  src/transform_standard_item.cpp
+  src/pairs_collision_margin_data_standard_item.cpp
   src/plugin_info_standard_item.cpp
   src/plugin_info_container_standard_item.cpp
 )

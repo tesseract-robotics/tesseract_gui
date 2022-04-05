@@ -15,10 +15,11 @@ namespace tesseract_gui
 class SetActiveContinuousContactManagerCommandStandardItem : public QStandardItem
 {
 public:
-  SetActiveContinuousContactManagerCommandStandardItem(tesseract_environment::SetActiveContinuousContactManagerCommand::ConstPtr command);
+  explicit SetActiveContinuousContactManagerCommandStandardItem(tesseract_environment::SetActiveContinuousContactManagerCommand::ConstPtr command);
   explicit SetActiveContinuousContactManagerCommandStandardItem(const QString &text, tesseract_environment::SetActiveContinuousContactManagerCommand::ConstPtr command);
-  SetActiveContinuousContactManagerCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::SetActiveContinuousContactManagerCommand::ConstPtr command);
+  explicit SetActiveContinuousContactManagerCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::SetActiveContinuousContactManagerCommand::ConstPtr command);
   int type() const override;
+
 
   tesseract_environment::SetActiveContinuousContactManagerCommand::ConstPtr command;
 

@@ -1,6 +1,6 @@
 
 #include <tesseract_gui/widgets/common/calibration_info_standard_item.h>
-#include <tesseract_gui/widgets/common/origin_standard_item.h>
+#include <tesseract_gui/widgets/common/transform_standard_item.h>
 #include <tesseract_gui/common/standard_item_type.h>
 
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, CUBE_ICON, (":/tesseract_gui/png/cube.png"));
@@ -11,7 +11,7 @@ namespace tesseract_gui
 {
 
 CalibrationInfoStandardItem::CalibrationInfoStandardItem(tesseract_common::CalibrationInfo calibration_info)
-  : QStandardItem(*CUBE_ICON(), "Plugin Info")
+  : QStandardItem(*CUBE_ICON(), "Calibration Info")
   , calibration_info(std::move(calibration_info))
 {
   ctor();
@@ -41,7 +41,7 @@ void CalibrationInfoStandardItem::ctor()
   auto* joints_item = new QStandardItem(*JOINT_VECTOR_ICON(), "Joints");
   for (auto& joint : calibration_info.joints)
   {
-    auto* item = new OriginStandardItem(*ORIGIN_ICON(), QString::fromStdString(joint.first), joint.second);
+    auto* item = new TransformStandardItem(*ORIGIN_ICON(), QString::fromStdString(joint.first), joint.second);
     joints_item->appendRow(item);
   }
   joints_item->sortChildren(0);

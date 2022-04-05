@@ -1,5 +1,4 @@
 #include <tesseract_gui/widgets/kinematic_groups/joint_state_standard_item.h>
-#include <tesseract_gui/widgets/common/origin_standard_item.h>
 #include <tesseract_gui/common/standard_item_type.h>
 
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, CUBE_ICON, (":/tesseract_gui/png/cube.png"));

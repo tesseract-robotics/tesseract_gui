@@ -15,10 +15,11 @@ namespace tesseract_gui
 class ChangeLinkOriginCommandStandardItem : public QStandardItem
 {
 public:
-  ChangeLinkOriginCommandStandardItem(tesseract_environment::ChangeLinkOriginCommand::ConstPtr command);
+  explicit ChangeLinkOriginCommandStandardItem(tesseract_environment::ChangeLinkOriginCommand::ConstPtr command);
   explicit ChangeLinkOriginCommandStandardItem(const QString &text, tesseract_environment::ChangeLinkOriginCommand::ConstPtr command);
-  ChangeLinkOriginCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::ChangeLinkOriginCommand::ConstPtr command);
+  explicit ChangeLinkOriginCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::ChangeLinkOriginCommand::ConstPtr command);
   int type() const override;
+
 
   tesseract_environment::ChangeLinkOriginCommand::ConstPtr command;
 

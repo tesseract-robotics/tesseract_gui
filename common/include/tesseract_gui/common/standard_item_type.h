@@ -13,7 +13,10 @@ enum class StandardItemType : int
   KINEMATICS_PLUGIN_INFO       = QStandardItem::UserType + 3,
   CONTACT_MANAGERS_PLUGIN_INFO = QStandardItem::UserType + 4,
   CALIBRATION_INFO             = QStandardItem::UserType + 5,
-  COMMON_TYPES_END             = QStandardItem::UserType + 6,
+  COLLISION_MARGIN_DATA        = QStandardItem::UserType + 6,
+  PAIRS_COLLISION_MARGIN_DATA  = QStandardItem::UserType + 7,
+  TRANSFORM                    = QStandardItem::UserType + 8,
+  COMMON_TYPES_END             = QStandardItem::UserType + 9,
 
   // Scene Graph Types
   MATERIAL                = COMMON_TYPES_END + 1,
@@ -49,7 +52,8 @@ enum class StandardItemType : int
   LINK_GROUP              = SCENE_GRAPH_TYPES_END + 6,
   GROUP_JOINT_STATES      = SCENE_GRAPH_TYPES_END + 7,
   JOINT_STATE             = SCENE_GRAPH_TYPES_END + 8,
-  SRDF_TYPES_END          = SCENE_GRAPH_TYPES_END + 9,
+  KINEMATICS_INFO         = SCENE_GRAPH_TYPES_END + 9,
+  SRDF_TYPES_END          = SCENE_GRAPH_TYPES_END + 10,
 
 
   // Scene State
@@ -83,7 +87,8 @@ enum class StandardItemType : int
   ENV_COMMAND_ADD_CONTACT_MANAGERS_PLUGIN_INFO      = SCENE_STATE_TYPES_END + 21,
   ENV_COMMAND_SET_ACTIVE_DISCRETE_CONTACT_MANAGER   = SCENE_STATE_TYPES_END + 22,
   ENV_COMMAND_SET_ACTIVE_CONTINUOUS_CONTACT_MANAGER = SCENE_STATE_TYPES_END + 23,
-  ENV_COMMAND_TYPES_END                             = SCENE_STATE_TYPES_END + 24,
+  ENV_COMMAND_COMMANDS                              = SCENE_STATE_TYPES_END + 24,
+  ENV_COMMAND_TYPES_END                             = SCENE_STATE_TYPES_END + 25,
 };
 }
 

@@ -3,20 +3,20 @@
 #include <tesseract_gui/common/standard_item_type.h>
 
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, TEXT_ICON, (":/tesseract_gui/png/text.png"));
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, CUBE_ICON, (":/tesseract_gui/png/cube.png"));
+Q_GLOBAL_STATIC_WITH_ARGS(QIcon, PLUGIN_ICON, (":/tesseract_gui/png/plugin.png"));
 
 namespace tesseract_gui
 {
 
 PluginInfoStandardItem::PluginInfoStandardItem(tesseract_common::PluginInfo plugin_info)
-  : QStandardItem(*CUBE_ICON(), "Plugin Info")
+  : QStandardItem(*PLUGIN_ICON(), "Plugin Info")
   , plugin_info(std::move(plugin_info))
 {
   ctor();
 }
 
 PluginInfoStandardItem::PluginInfoStandardItem(const QString &text, tesseract_common::PluginInfo plugin_info)
-  : QStandardItem(*CUBE_ICON(), text)
+  : QStandardItem(*PLUGIN_ICON(), text)
   , plugin_info(std::move(plugin_info))
 {
   ctor();

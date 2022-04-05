@@ -15,10 +15,11 @@ namespace tesseract_gui
 class AddKinematicsInformationCommandStandardItem : public QStandardItem
 {
 public:
-  AddKinematicsInformationCommandStandardItem(tesseract_environment::AddKinematicsInformationCommand::ConstPtr command);
+  explicit AddKinematicsInformationCommandStandardItem(tesseract_environment::AddKinematicsInformationCommand::ConstPtr command);
   explicit AddKinematicsInformationCommandStandardItem(const QString &text, tesseract_environment::AddKinematicsInformationCommand::ConstPtr command);
-  AddKinematicsInformationCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::AddKinematicsInformationCommand::ConstPtr command);
+  explicit AddKinematicsInformationCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::AddKinematicsInformationCommand::ConstPtr command);
   int type() const override;
+
 
   tesseract_environment::AddKinematicsInformationCommand::ConstPtr command;
 

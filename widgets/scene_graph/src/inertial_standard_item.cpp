@@ -1,5 +1,5 @@
 #include <tesseract_gui/widgets/scene_graph/inertial_standard_item.h>
-#include <tesseract_gui/widgets/common/origin_standard_item.h>
+#include <tesseract_gui/widgets/common/transform_standard_item.h>
 #include <tesseract_gui/common/standard_item_type.h>
 
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, NUMERIC_ICON, (":/tesseract_gui/png/numeric.png"));
@@ -33,7 +33,7 @@ int InertialStandardItem::type() const
 
 void InertialStandardItem::ctor()
 {
-  auto* origin_item = new OriginStandardItem(inertial->origin);
+  auto* origin_item = new TransformStandardItem(inertial->origin);
   appendRow(origin_item);
 
   auto* mass_name = new QStandardItem(*NUMERIC_ICON(), "mass");

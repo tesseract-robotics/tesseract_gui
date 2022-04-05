@@ -15,10 +15,11 @@ namespace tesseract_gui
 class MoveLinkCommandStandardItem : public QStandardItem
 {
 public:
-  MoveLinkCommandStandardItem(tesseract_environment::MoveLinkCommand::ConstPtr command);
+  explicit MoveLinkCommandStandardItem(tesseract_environment::MoveLinkCommand::ConstPtr command);
   explicit MoveLinkCommandStandardItem(const QString &text, tesseract_environment::MoveLinkCommand::ConstPtr command);
-  MoveLinkCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::MoveLinkCommand::ConstPtr command);
+  explicit MoveLinkCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::MoveLinkCommand::ConstPtr command);
   int type() const override;
+
 
   tesseract_environment::MoveLinkCommand::ConstPtr command;
 

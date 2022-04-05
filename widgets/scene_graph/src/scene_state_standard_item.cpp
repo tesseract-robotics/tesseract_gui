@@ -1,5 +1,5 @@
 #include <tesseract_gui/widgets/scene_graph/scene_state_standard_item.h>
-#include <tesseract_gui/widgets/common/origin_standard_item.h>
+#include <tesseract_gui/widgets/common/transform_standard_item.h>
 #include <tesseract_gui/common/standard_item_type.h>
 
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, SCENE_GRAPH_ICON, (":/tesseract_gui/ignition/model.png"));
@@ -51,7 +51,7 @@ void SceneStateStandardItem::ctor()
   auto* links_item = new QStandardItem(*LINK_VECTOR_ICON(), "Links");
   for (auto& link : scene_state.link_transforms)
   {
-    auto* item = new OriginStandardItem(*ORIGIN_ICON(), QString::fromStdString(link.first), link.second);
+    auto* item = new TransformStandardItem(*ORIGIN_ICON(), QString::fromStdString(link.first), link.second);
     links_item->appendRow(item);
   }
   links_item->sortChildren(0);
@@ -60,7 +60,7 @@ void SceneStateStandardItem::ctor()
   auto* joints_item = new QStandardItem(*JOINT_VECTOR_ICON(), "Joints");
   for (auto& joint : scene_state.joint_transforms)
   {
-    auto* item = new OriginStandardItem(*ORIGIN_ICON(), QString::fromStdString(joint.first), joint.second);
+    auto* item = new TransformStandardItem(*ORIGIN_ICON(), QString::fromStdString(joint.first), joint.second);
     joints_item->appendRow(item);
   }
   joints_item->sortChildren(0);

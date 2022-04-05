@@ -3,20 +3,20 @@
 #include <tesseract_gui/common/standard_item_type.h>
 
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, TEXT_ICON, (":/tesseract_gui/png/text.png"));
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, CUBE_ICON, (":/tesseract_gui/png/cube.png"));
+Q_GLOBAL_STATIC_WITH_ARGS(QIcon, COMMAND_ICON, (":/tesseract_gui/png/merge.png"));
 
 namespace tesseract_gui
 {
 
 AddAllowedCollisionCommandStandardItem::AddAllowedCollisionCommandStandardItem(tesseract_environment::AddAllowedCollisionCommand::ConstPtr command)
-  : QStandardItem(*CUBE_ICON(), "Add Allowed Collision")
+  : QStandardItem(*COMMAND_ICON(), "Add Allowed Collision")
   , command(std::move(command))
 {
   ctor();
 }
 
 AddAllowedCollisionCommandStandardItem::AddAllowedCollisionCommandStandardItem(const QString &text, tesseract_environment::AddAllowedCollisionCommand::ConstPtr command)
-  : QStandardItem(*CUBE_ICON(), text)
+  : QStandardItem(*COMMAND_ICON(), text)
   , command(std::move(command))
 {
   ctor();

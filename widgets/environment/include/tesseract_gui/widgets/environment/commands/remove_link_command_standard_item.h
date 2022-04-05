@@ -15,10 +15,11 @@ namespace tesseract_gui
 class RemoveLinkCommandStandardItem : public QStandardItem
 {
 public:
-  RemoveLinkCommandStandardItem(tesseract_environment::RemoveLinkCommand::ConstPtr command);
+  explicit RemoveLinkCommandStandardItem(tesseract_environment::RemoveLinkCommand::ConstPtr command);
   explicit RemoveLinkCommandStandardItem(const QString &text, tesseract_environment::RemoveLinkCommand::ConstPtr command);
-  RemoveLinkCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::RemoveLinkCommand::ConstPtr command);
+  explicit RemoveLinkCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::RemoveLinkCommand::ConstPtr command);
   int type() const override;
+
 
   tesseract_environment::RemoveLinkCommand::ConstPtr command;
 

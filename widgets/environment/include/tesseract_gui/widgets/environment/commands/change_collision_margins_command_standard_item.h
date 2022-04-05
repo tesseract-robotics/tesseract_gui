@@ -15,10 +15,11 @@ namespace tesseract_gui
 class ChangeCollisionMarginsCommandStandardItem : public QStandardItem
 {
 public:
-  ChangeCollisionMarginsCommandStandardItem(tesseract_environment::ChangeCollisionMarginsCommand::ConstPtr command);
+  explicit ChangeCollisionMarginsCommandStandardItem(tesseract_environment::ChangeCollisionMarginsCommand::ConstPtr command);
   explicit ChangeCollisionMarginsCommandStandardItem(const QString &text, tesseract_environment::ChangeCollisionMarginsCommand::ConstPtr command);
-  ChangeCollisionMarginsCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::ChangeCollisionMarginsCommand::ConstPtr command);
+  explicit ChangeCollisionMarginsCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::ChangeCollisionMarginsCommand::ConstPtr command);
   int type() const override;
+
 
   tesseract_environment::ChangeCollisionMarginsCommand::ConstPtr command;
 

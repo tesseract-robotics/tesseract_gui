@@ -15,10 +15,11 @@ namespace tesseract_gui
 class ChangeLinkCollisionEnabledCommandStandardItem : public QStandardItem
 {
 public:
-  ChangeLinkCollisionEnabledCommandStandardItem(tesseract_environment::ChangeLinkCollisionEnabledCommand::ConstPtr command);
+  explicit ChangeLinkCollisionEnabledCommandStandardItem(tesseract_environment::ChangeLinkCollisionEnabledCommand::ConstPtr command);
   explicit ChangeLinkCollisionEnabledCommandStandardItem(const QString &text, tesseract_environment::ChangeLinkCollisionEnabledCommand::ConstPtr command);
-  ChangeLinkCollisionEnabledCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::ChangeLinkCollisionEnabledCommand::ConstPtr command);
+  explicit ChangeLinkCollisionEnabledCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::ChangeLinkCollisionEnabledCommand::ConstPtr command);
   int type() const override;
+
 
   tesseract_environment::ChangeLinkCollisionEnabledCommand::ConstPtr command;
 

@@ -15,10 +15,11 @@ namespace tesseract_gui
 class AddSceneGraphCommandStandardItem : public QStandardItem
 {
 public:
-  AddSceneGraphCommandStandardItem(tesseract_environment::AddSceneGraphCommand::ConstPtr command);
+  explicit AddSceneGraphCommandStandardItem(tesseract_environment::AddSceneGraphCommand::ConstPtr command);
   explicit AddSceneGraphCommandStandardItem(const QString &text, tesseract_environment::AddSceneGraphCommand::ConstPtr command);
-  AddSceneGraphCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::AddSceneGraphCommand::ConstPtr command);
+  explicit AddSceneGraphCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::AddSceneGraphCommand::ConstPtr command);
   int type() const override;
+
 
   tesseract_environment::AddSceneGraphCommand::ConstPtr command;
 

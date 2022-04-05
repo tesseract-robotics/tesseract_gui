@@ -34,9 +34,14 @@ search: https://fonts.google.com/icons
   - restore.png
   - layout.png
 
+<div>Icons made by <a href="https://www.flaticon.com/authors/those-icons" title="Those Icons"> Those Icons </a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com'</a></div>
+- plugin.png
+
 <div>Icons made by <a href="https://www.flaticon.com/authors/flat-icons" title="Flat Icons">Flat Icons</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
 - robotic-arm.png
 
+<div>Icons made by <a href="https://www.flaticon.com/authors/ferdinand" title="Ferdinand"> Ferdinand </a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com'</a></div>
+- merge.png
 
 <div>Icons made by <a href="https://www.flaticon.com/authors/skyclick" title="Skyclick">Skyclick</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
 - safety.png

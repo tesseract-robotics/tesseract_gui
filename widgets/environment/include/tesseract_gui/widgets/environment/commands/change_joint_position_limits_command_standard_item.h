@@ -15,10 +15,11 @@ namespace tesseract_gui
 class ChangeJointPositionLimitsCommandStandardItem : public QStandardItem
 {
 public:
-  ChangeJointPositionLimitsCommandStandardItem(tesseract_environment::ChangeJointPositionLimitsCommand::ConstPtr command);
+  explicit ChangeJointPositionLimitsCommandStandardItem(tesseract_environment::ChangeJointPositionLimitsCommand::ConstPtr command);
   explicit ChangeJointPositionLimitsCommandStandardItem(const QString &text, tesseract_environment::ChangeJointPositionLimitsCommand::ConstPtr command);
-  ChangeJointPositionLimitsCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::ChangeJointPositionLimitsCommand::ConstPtr command);
+  explicit ChangeJointPositionLimitsCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::ChangeJointPositionLimitsCommand::ConstPtr command);
   int type() const override;
+
 
   tesseract_environment::ChangeJointPositionLimitsCommand::ConstPtr command;
 

@@ -12,10 +12,14 @@ QT5_WRAP_CPP(KINEMATIC_GROUP_headers_MOC
 
 add_library(${PROJECT_NAME}_kinematic_groups SHARED
   ${KINEMATIC_GROUP_headers_MOC}
+  src/chain_group_standard_item.cpp
+  src/link_group_standard_item.cpp
   src/opw_params_standard_item.cpp
   src/tcp_standard_item.cpp
+  src/joint_group_standard_item.cpp
   src/joint_state_standard_item.cpp
   src/kinematic_groups_model.cpp
+  src/kinematics_info_standard_item.cpp
   src/group_joint_states_standard_item.cpp
   src/group_joint_states_model.cpp
   src/group_tcps_standard_item.cpp

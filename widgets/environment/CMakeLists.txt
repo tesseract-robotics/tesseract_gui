@@ -5,13 +5,18 @@ find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
 # Load variable for clang tidy args, compiler options and cxx version
 tesseract_variables()
 
-QT5_WRAP_CPP(ENVIRONMENT_WIDGET_headers_MOC include/tesseract_gui/widgets/environment/environment_widget.h)
+QT5_WRAP_CPP(ENVIRONMENT_WIDGET_headers_MOC
+  include/tesseract_gui/widgets/environment/environment_widget.h
+  include/tesseract_gui/widgets/environment/environment_commands_model.h
+)
 QT5_WRAP_UI(ENVIRONMENT_WIDGET_headers_UI include/tesseract_gui/widgets/environment/environment_widget.ui)
 
 add_library(${PROJECT_NAME}_environment SHARED
   ${ENVIRONMENT_WIDGET_headers_MOC}
   ${ENVIRONMENT_WIDGET_headers_UI}
   src/environment_widget.cpp
+  src/environment_commands_standard_item.cpp
+  src/environment_commands_model.cpp
   src/commands/add_allowed_collision_command_standard_item.cpp
   src/commands/add_contact_managers_plugin_info_command_standard_item.cpp
   src/commands/add_kinematics_information_command_standard_item.cpp
@@ -23,6 +28,8 @@ add_library(${PROJECT_NAME}_environment SHARED
   src/commands/change_joint_position_limits_command_standard_item.cpp
   src/commands/change_joint_velocity_limits_command_standard_item.cpp
   src/commands/change_link_collision_enabled_command_standard_item.cpp
+  src/commands/change_link_origin_command_standard_item.cpp
+  src/commands/change_link_visibility_command_standard_item.cpp
   src/commands/move_joint_command_standard_item.cpp
   src/commands/move_link_command_standard_item.cpp
   src/commands/remove_allowed_collision_command_standard_item.cpp
@@ -38,6 +45,7 @@ target_link_libraries(${PROJECT_NAME}_environment PUBLIC
   tesseract::tesseract_common
   Qt5::Core Qt5::Gui Qt5::Widgets
   ${PROJECT_NAME}_common
+  ${PROJECT_NAME}_common_widgets
   ${PROJECT_NAME}_scene_graph
   ${PROJECT_NAME}_kinematic_groups
   ${PROJECT_NAME}_acm)

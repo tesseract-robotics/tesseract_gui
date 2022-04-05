@@ -15,10 +15,11 @@ namespace tesseract_gui
 class RemoveAllowedCollisionCommandStandardItem : public QStandardItem
 {
 public:
-  RemoveAllowedCollisionCommandStandardItem(tesseract_environment::RemoveAllowedCollisionCommand::ConstPtr command);
+  explicit RemoveAllowedCollisionCommandStandardItem(tesseract_environment::RemoveAllowedCollisionCommand::ConstPtr command);
   explicit RemoveAllowedCollisionCommandStandardItem(const QString &text, tesseract_environment::RemoveAllowedCollisionCommand::ConstPtr command);
-  RemoveAllowedCollisionCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::RemoveAllowedCollisionCommand::ConstPtr command);
+  explicit RemoveAllowedCollisionCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::RemoveAllowedCollisionCommand::ConstPtr command);
   int type() const override;
+
 
   tesseract_environment::RemoveAllowedCollisionCommand::ConstPtr command;
 

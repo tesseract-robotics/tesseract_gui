@@ -8,7 +8,7 @@
 #include <tesseract_gui/widgets/scene_graph/sphere_standard_item.h>
 #include <tesseract_gui/widgets/scene_graph/polygon_mesh_standard_item.h>
 #include <tesseract_gui/widgets/scene_graph/octree_standard_item.h>
-#include <tesseract_gui/widgets/common/origin_standard_item.h>
+#include <tesseract_gui/widgets/common/transform_standard_item.h>
 #include <tesseract_gui/common/standard_item_type.h>
 
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, VISUAL_ICON, (":/tesseract_gui/ignition/visual.png"));
@@ -48,7 +48,7 @@ void VisualStandardItem::ctor()
   auto* name_value = new QStandardItem(QString::fromStdString(visual->name));
   appendRow({name_item, name_value});
 
-  auto* origin_item = new OriginStandardItem(visual->origin);
+  auto* origin_item = new TransformStandardItem(visual->origin);
   appendRow(origin_item);
 
   auto* material_item = new MaterialStandardItem(visual->material);

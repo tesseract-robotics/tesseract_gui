@@ -1,21 +1,25 @@
 
 #include <tesseract_gui/widgets/environment/commands/add_scene_graph_command_standard_item.h>
+#include <tesseract_gui/widgets/scene_graph/scene_graph_standard_item.h>
+#include <tesseract_gui/widgets/scene_graph/joint_standard_item.h>
 #include <tesseract_gui/common/standard_item_type.h>
 
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, CUBE_ICON, (":/tesseract_gui/png/cube.png"));
+Q_GLOBAL_STATIC_WITH_ARGS(QIcon, COMMAND_ICON, (":/tesseract_gui/png/merge.png"));
+Q_GLOBAL_STATIC_WITH_ARGS(QIcon, JOINT_ICON, (":/tesseract_gui/ignition/joint.png"));
+Q_GLOBAL_STATIC_WITH_ARGS(QIcon, TEXT_ICON, (":/tesseract_gui/png/text.png"));
 
 namespace tesseract_gui
 {
 
 AddSceneGraphCommandStandardItem::AddSceneGraphCommandStandardItem(tesseract_environment::AddSceneGraphCommand::ConstPtr command)
-  : QStandardItem(*CUBE_ICON(), "Add Scene Graph")
+  : QStandardItem(*COMMAND_ICON(), "Add Scene Graph")
   , command(std::move(command))
 {
   ctor();
 }
 
 AddSceneGraphCommandStandardItem::AddSceneGraphCommandStandardItem(const QString &text, tesseract_environment::AddSceneGraphCommand::ConstPtr command)
-  : QStandardItem(*CUBE_ICON(), text)
+  : QStandardItem(*COMMAND_ICON(), text)
   , command(std::move(command))
 {
   ctor();
@@ -35,16 +39,23 @@ int AddSceneGraphCommandStandardItem::type() const
 
 void AddSceneGraphCommandStandardItem::ctor()
 {
-//  auto* x_name = new QStandardItem(*NUMERIC_ICON(), "x");
-//  auto* x_value = new QStandardItem(QString("%1").arg(box->getX()));
-//  appendRow({x_name, x_value});
+  auto* prefix_name = new QStandardItem(*TEXT_ICON(), "prefix");
+  auto* prefix_value = new QStandardItem(command->getPrefix().c_str());
+  appendRow({prefix_name, prefix_value});
 
-//  auto* y_name = new QStandardItem(*NUMERIC_ICON(), "y");
-//  auto* y_value = new QStandardItem(QString("%1").arg(box->getY()));
-//  appendRow({y_name, y_value});
+  if (command->getJoint() != nullptr)
+  {
+    auto* joint = new JointStandardItem(std::make_shared<tesseract_scene_graph::Joint>(command->getJoint()->clone()));
+    appendRow(joint);
+  }
+  else
+  {
+    auto* x_name = new QStandardItem(*JOINT_ICON(), "Joint");
+    auto* x_value = new QStandardItem("NULL");
+    appendRow({x_name, x_value});
+  }
 
-//  auto* z_name = new QStandardItem(*NUMERIC_ICON(), "z");
-//  auto* z_value = new QStandardItem(QString("%1").arg(box->getZ()));
-//  appendRow({z_name, z_value});
+  auto* scene_graph = new SceneGraphStandardItem(command->getSceneGraph()->clone());
+  appendRow(scene_graph);
 }
 }

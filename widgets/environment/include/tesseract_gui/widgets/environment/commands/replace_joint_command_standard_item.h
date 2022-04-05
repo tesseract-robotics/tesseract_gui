@@ -15,10 +15,11 @@ namespace tesseract_gui
 class ReplaceJointCommandStandardItem : public QStandardItem
 {
 public:
-  ReplaceJointCommandStandardItem(tesseract_environment::ReplaceJointCommand::ConstPtr command);
+  explicit ReplaceJointCommandStandardItem(tesseract_environment::ReplaceJointCommand::ConstPtr command);
   explicit ReplaceJointCommandStandardItem(const QString &text, tesseract_environment::ReplaceJointCommand::ConstPtr command);
-  ReplaceJointCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::ReplaceJointCommand::ConstPtr command);
+  explicit ReplaceJointCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::ReplaceJointCommand::ConstPtr command);
   int type() const override;
+
 
   tesseract_environment::ReplaceJointCommand::ConstPtr command;
 

@@ -15,10 +15,11 @@ namespace tesseract_gui
 class RemoveJointCommandStandardItem : public QStandardItem
 {
 public:
-  RemoveJointCommandStandardItem(tesseract_environment::RemoveJointCommand::ConstPtr command);
+  explicit RemoveJointCommandStandardItem(tesseract_environment::RemoveJointCommand::ConstPtr command);
   explicit RemoveJointCommandStandardItem(const QString &text, tesseract_environment::RemoveJointCommand::ConstPtr command);
-  RemoveJointCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::RemoveJointCommand::ConstPtr command);
+  explicit RemoveJointCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::RemoveJointCommand::ConstPtr command);
   int type() const override;
+
 
   tesseract_environment::RemoveJointCommand::ConstPtr command;
 

@@ -12,47 +12,6 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 namespace tesseract_gui
 {
-class ChainGroupStandardItem : public QStandardItem
-{
-public:
-  ChainGroupStandardItem(tesseract_srdf::ChainGroup group);
-  explicit ChainGroupStandardItem(const QString &text, tesseract_srdf::ChainGroup group);
-  ChainGroupStandardItem(const QIcon &icon, const QString &text, tesseract_srdf::ChainGroup group);
-  int type() const override;
-
-  tesseract_srdf::ChainGroup group;
-
-private:
-  void ctor();
-};
-
-class JointGroupStandardItem : public QStandardItem
-{
-public:
-  JointGroupStandardItem(tesseract_srdf::JointGroup group);
-  explicit JointGroupStandardItem(const QString &text, tesseract_srdf::JointGroup group);
-  JointGroupStandardItem(const QIcon &icon, const QString &text, tesseract_srdf::JointGroup group);
-  int type() const override;
-
-  tesseract_srdf::JointGroup group;
-
-private:
-  void ctor();
-};
-
-class LinkGroupStandardItem : public QStandardItem
-{
-public:
-  LinkGroupStandardItem(tesseract_srdf::LinkGroup group);
-  explicit LinkGroupStandardItem(const QString &text, tesseract_srdf::LinkGroup group);
-  LinkGroupStandardItem(const QIcon &icon, const QString &text, tesseract_srdf::LinkGroup group);
-  int type() const override;
-
-  tesseract_srdf::LinkGroup group;
-
-private:
-  void ctor();
-};
 
 class KinematicGroupsModel : public QStandardItemModel
 {

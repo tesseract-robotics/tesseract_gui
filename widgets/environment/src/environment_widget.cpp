@@ -1,6 +1,7 @@
 #include <tesseract_gui/widgets/environment/environment_widget.h>
 #include "ui_environment_widget.h"
 
+#include <tesseract_gui/widgets/environment/environment_commands_model.h>
 #include <tesseract_gui/widgets/scene_graph/scene_graph_standard_item.h>
 #include <tesseract_gui/widgets/scene_graph/scene_state_standard_item.h>
 #include <tesseract_gui/widgets/kinematic_groups/kinematic_groups_model.h>
@@ -23,6 +24,7 @@ struct EnvironmentWidgetImpl
   GroupTCPsModel group_tcps_model;
   GroupJointStatesModel group_states_model;
   AllowedCollisionMatrixModel acm_model;
+  EnvironmentCommandsModel commands_model;
 };
 
 EnvironmentWidget::EnvironmentWidget(QWidget *parent)
@@ -37,6 +39,7 @@ EnvironmentWidget::EnvironmentWidget(QWidget *parent)
   ui->group_tcps_tree_view->setModel(&data_->group_tcps_model);
   ui->group_states_tree_view->setModel(&data_->group_states_model);
   ui->acm_tree_view->setModel(&data_->acm_model);
+  ui->cmd_history_tree_view->setModel(&data_->commands_model);
 
   connect(ui->scene_tree_view, &QTreeView::collapsed, [this](){ui->scene_tree_view->resizeColumnToContents(0);});
   connect(ui->scene_tree_view, &QTreeView::expanded, [this](){ui->scene_tree_view->resizeColumnToContents(0);});
@@ -50,6 +53,8 @@ EnvironmentWidget::EnvironmentWidget(QWidget *parent)
   connect(ui->group_states_tree_view, &QTreeView::expanded, [this](){ui->group_states_tree_view->resizeColumnToContents(0);});
   connect(ui->acm_tree_view, &QTreeView::collapsed, [this](){ui->acm_tree_view->resizeColumnToContents(0);});
   connect(ui->acm_tree_view, &QTreeView::expanded, [this](){ui->acm_tree_view->resizeColumnToContents(0);});
+  connect(ui->cmd_history_tree_view, &QTreeView::collapsed, [this](){ui->cmd_history_tree_view->resizeColumnToContents(0);});
+  connect(ui->cmd_history_tree_view, &QTreeView::expanded, [this](){ui->cmd_history_tree_view->resizeColumnToContents(0);});
 }
 
 EnvironmentWidget::~EnvironmentWidget() = default;
@@ -58,6 +63,37 @@ void EnvironmentWidget::setEnvironment(tesseract_environment::Environment::UPtr 
 {
   data_->environment = std::move(env);
 
+  updatedModels();
+
+  emit environmentSet(*data_->environment);
+}
+
+const tesseract_environment::Environment* EnvironmentWidget::getEnvironment() const
+{
+  return data_->environment.get();
+}
+
+bool EnvironmentWidget::applyCommands(const tesseract_environment::Commands& commands)
+{
+  if (data_->environment == nullptr)
+    return false;
+
+  if (data_->environment->applyCommands(commands))
+  {
+    emit environmentCommandsApplied(commands);
+    return true;
+  }
+
+  return false;
+}
+
+bool EnvironmentWidget::applyCommand(const tesseract_environment::Command::ConstPtr& command)
+{
+  return applyCommands({command});
+}
+
+void EnvironmentWidget::updatedModels()
+{
   // Scene Graph
   data_->scene_model.clear();
   data_->scene_model.setColumnCount(2);
@@ -89,6 +125,11 @@ void EnvironmentWidget::setEnvironment(tesseract_environment::Environment::UPtr 
   // This hides the root element
   ui->group_tcps_tree_view->setRootIndex(data_->group_tcps_model.index(0,0));
 
+  // Command History
+  data_->commands_model.set(data_->environment->getCommandHistory());
+  // This hides the root element
+  ui->cmd_history_tree_view->setRootIndex(data_->commands_model.index(0,0));
+
   // New data may have been added so resize first column
   ui->scene_tree_view->resizeColumnToContents(0);
   ui->state_tree_view->resizeColumnToContents(0);
@@ -96,32 +137,7 @@ void EnvironmentWidget::setEnvironment(tesseract_environment::Environment::UPtr 
   ui->group_tcps_tree_view->resizeColumnToContents(0);
   ui->group_states_tree_view->resizeColumnToContents(0);
   ui->acm_tree_view->resizeColumnToContents(0);
-
-  emit environmentSet(*data_->environment);
-}
-
-const tesseract_environment::Environment* EnvironmentWidget::getEnvironment() const
-{
-  return data_->environment.get();
-}
-
-bool EnvironmentWidget::applyCommands(const tesseract_environment::Commands& commands)
-{
-  if (data_->environment == nullptr)
-    return false;
-
-  if (data_->environment->applyCommands(commands))
-  {
-    emit environmentCommandsApplied(commands);
-    return true;
-  }
-
-  return false;
-}
-
-bool EnvironmentWidget::applyCommand(const tesseract_environment::Command::ConstPtr& command)
-{
-  return applyCommands({command});
+  ui->cmd_history_tree_view->resizeColumnToContents(0);
 }
 
 }

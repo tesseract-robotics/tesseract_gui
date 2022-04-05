@@ -15,10 +15,11 @@ namespace tesseract_gui
 class ChangeJointAccelerationLimitsCommandStandardItem : public QStandardItem
 {
 public:
-  ChangeJointAccelerationLimitsCommandStandardItem(tesseract_environment::ChangeJointAccelerationLimitsCommand::ConstPtr command);
+  explicit ChangeJointAccelerationLimitsCommandStandardItem(tesseract_environment::ChangeJointAccelerationLimitsCommand::ConstPtr command);
   explicit ChangeJointAccelerationLimitsCommandStandardItem(const QString &text, tesseract_environment::ChangeJointAccelerationLimitsCommand::ConstPtr command);
-  ChangeJointAccelerationLimitsCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::ChangeJointAccelerationLimitsCommand::ConstPtr command);
+  explicit ChangeJointAccelerationLimitsCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::ChangeJointAccelerationLimitsCommand::ConstPtr command);
   int type() const override;
+
 
   tesseract_environment::ChangeJointAccelerationLimitsCommand::ConstPtr command;
 

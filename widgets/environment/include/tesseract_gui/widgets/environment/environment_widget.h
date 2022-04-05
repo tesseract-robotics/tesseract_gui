@@ -58,10 +58,11 @@ Q_SIGNALS:
   void linkCollisionVisibleChanged(const std::string& link_name, bool visible);
   void linkVisualVisibleChanged(const std::string& link_name, bool visible);
 
-
 protected:
   std::unique_ptr<Ui::EnvironmentWidget> ui;
   std::unique_ptr<EnvironmentWidgetImpl> data_;
+
+  void updatedModels();
 };
 }
 

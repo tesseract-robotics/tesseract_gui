@@ -15,10 +15,11 @@ namespace tesseract_gui
 class ChangeLinkVisibilityCommandStandardItem : public QStandardItem
 {
 public:
-  ChangeLinkVisibilityCommandStandardItem(tesseract_environment::ChangeLinkVisibilityCommand::ConstPtr command);
+  explicit ChangeLinkVisibilityCommandStandardItem(tesseract_environment::ChangeLinkVisibilityCommand::ConstPtr command);
   explicit ChangeLinkVisibilityCommandStandardItem(const QString &text, tesseract_environment::ChangeLinkVisibilityCommand::ConstPtr command);
-  ChangeLinkVisibilityCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::ChangeLinkVisibilityCommand::ConstPtr command);
+  explicit ChangeLinkVisibilityCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::ChangeLinkVisibilityCommand::ConstPtr command);
   int type() const override;
+
 
   tesseract_environment::ChangeLinkVisibilityCommand::ConstPtr command;
 

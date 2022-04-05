@@ -8,9 +8,12 @@ namespace tesseract_gui
 enum class StandardItemType : int
 {
   // Common Types
-  PLUGIN_INFO             = QStandardItem::UserType + 1,
-  PLUGIN_INFO_CONTAINER   = QStandardItem::UserType + 2,
-  COMMON_TYPES_END        = QStandardItem::UserType + 3,
+  PLUGIN_INFO                  = QStandardItem::UserType + 1,
+  PLUGIN_INFO_CONTAINER        = QStandardItem::UserType + 2,
+  KINEMATICS_PLUGIN_INFO       = QStandardItem::UserType + 3,
+  CONTACT_MANAGERS_PLUGIN_INFO = QStandardItem::UserType + 4,
+  CALIBRATION_INFO             = QStandardItem::UserType + 5,
+  COMMON_TYPES_END             = QStandardItem::UserType + 6,
 
   // Scene Graph Types
   MATERIAL                = COMMON_TYPES_END + 1,

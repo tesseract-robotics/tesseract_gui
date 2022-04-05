@@ -1,10 +1,10 @@
 #include <tesseract_gui/widgets/scene_graph/joint_standard_item.h>
-#include <tesseract_gui/widgets/scene_graph/origin_standard_item.h>
 #include <tesseract_gui/widgets/scene_graph/dynamics_standard_item.h>
 #include <tesseract_gui/widgets/scene_graph/limits_standard_item.h>
 #include <tesseract_gui/widgets/scene_graph/safety_standard_item.h>
 #include <tesseract_gui/widgets/scene_graph/calibration_standard_item.h>
 #include <tesseract_gui/widgets/scene_graph/mimic_standard_item.h>
+#include <tesseract_gui/widgets/common/origin_standard_item.h>
 #include <tesseract_gui/common/standard_item_type.h>
 
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, JOINT_ICON, (":/tesseract_gui/ignition/joint.png"));

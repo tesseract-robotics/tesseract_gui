@@ -35,9 +35,6 @@ target_include_directories(${PROJECT_NAME}_common PUBLIC
     "$<INSTALL_INTERFACE:include>")
 
 # Mark cpp header files for installation
-install(DIRECTORY include/${PROJECT_NAME}
-  DESTINATION include
-  PATTERN ".svn" EXCLUDE
-)
+install(DIRECTORY include/${PROJECT_NAME} DESTINATION include)
 
 install_targets(TARGETS ${PROJECT_NAME}_common)

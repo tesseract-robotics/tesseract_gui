@@ -5,6 +5,10 @@ find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
 tesseract_variables()
 
 add_library(${PROJECT_NAME}_common_widgets SHARED
+  src/calibration_info_standard_item.cpp
+  src/contact_managers_plugin_info_standard_item.cpp
+  src/kinematics_plugin_info_standard_item.cpp
+  src/origin_standard_item.cpp
   src/plugin_info_standard_item.cpp
   src/plugin_info_container_standard_item.cpp
 )

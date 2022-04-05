@@ -15,7 +15,6 @@ add_library(${PROJECT_NAME}_scene_graph SHARED
   src/link_standard_item.cpp
   src/material_standard_item.cpp
   src/mimic_standard_item.cpp
-  src/origin_standard_item.cpp
   src/safety_standard_item.cpp
   src/scene_graph_standard_item.cpp
   src/scene_state_standard_item.cpp
@@ -34,6 +33,7 @@ target_link_libraries(${PROJECT_NAME}_scene_graph PUBLIC
   tesseract::tesseract_scene_graph
   tesseract::tesseract_common
   Qt5::Core Qt5::Gui Qt5::Widgets
+  ${PROJECT_NAME}_common_widgets
   ${PROJECT_NAME}_common)
 target_include_directories(${PROJECT_NAME}_scene_graph PUBLIC
     "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"

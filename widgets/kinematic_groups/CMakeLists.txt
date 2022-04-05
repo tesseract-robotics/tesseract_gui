@@ -24,12 +24,13 @@ target_link_libraries(${PROJECT_NAME}_kinematic_groups PUBLIC
   tesseract::tesseract_common
   tesseract::tesseract_kinematics_opw
   Qt5::Core Qt5::Gui
+  ${PROJECT_NAME}_common_widgets
   ${PROJECT_NAME}_common
-  ${PROJECT_NAME}_scene_graph)
+)
 target_include_directories(${PROJECT_NAME}_kinematic_groups PUBLIC
     "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
     "$<INSTALL_INTERFACE:include>")
-add_dependencies(${PROJECT_NAME}_kinematic_groups ${PROJECT_NAME}_common ${PROJECT_NAME}_scene_graph)
+add_dependencies(${PROJECT_NAME}_kinematic_groups ${PROJECT_NAME}_common ${PROJECT_NAME}_common_widgets)
 
 QT5_WRAP_CPP(KINEMATIC_GROUP_EDITOR_headers_MOC
   include/tesseract_gui/widgets/kinematic_groups/kinematic_groups_editor_widget.h)
@@ -68,7 +69,7 @@ target_include_directories(${PROJECT_NAME}_groups_joint_states_editor_widget PUB
     "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
     "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/widgets/kinematic_groups>"
     "$<INSTALL_INTERFACE:include>")
-add_dependencies(${PROJECT_NAME}_groups_joint_states_editor_widget ${PROJECT_NAME}_common)
+add_dependencies(${PROJECT_NAME}_groups_joint_states_editor_widget ${PROJECT_NAME}_common ${PROJECT_NAME}_kinematic_groups ${PROJECT_NAME}_joint_state_slider_widget)
 
 add_subdirectory(demo)
 

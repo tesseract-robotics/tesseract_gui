@@ -1,5 +1,6 @@
 
 #include <tesseract_gui/widgets/common/plugin_info_container_standard_item.h>
+#include <tesseract_gui/widgets/common/plugin_info_standard_item.h>
 #include <tesseract_gui/common/standard_item_type.h>
 
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, TEXT_ICON, (":/tesseract_gui/png/text.png"));
@@ -36,13 +37,18 @@ int PluginInfoContainerStandardItem::type() const
 
 void PluginInfoContainerStandardItem::ctor()
 {
-//  auto* class_name = new QStandardItem(*TEXT_ICON, "link_name1");
-//  auto* class_value = new QStandardItem(QString("%1").arg(plugin_info.class_name.c_str()));
-//  appendRow({class_name, class_value});
+  auto* default_name = new QStandardItem(*TEXT_ICON, "default");
+  auto* default_value = new QStandardItem(QString("%1").arg(plugin_info_container.default_plugin.c_str()));
+  appendRow({default_name, default_value});
 
-//  auto* config_name = new QStandardItem(*TEXT_ICON, "config");
-//  auto* config_value = new QStandardItem(QString("%1").arg(plugin_info.getConfigString().c_str()));
-//  appendRow({config_name, config_value});
+  auto* plugins = new QStandardItem(*CUBE_ICON, "plugins");
+  for (const auto& plugin : plugin_info_container.plugins)
+  {
+      auto* plugin_name = new QStandardItem(*TEXT_ICON, plugin.first.c_str());
+      auto* plugin_value = new PluginInfoStandardItem(plugin.second);
+      plugins->appendRow({plugin_name, plugin_value});
+  }
+  appendRow(plugins);
 }
 }
 

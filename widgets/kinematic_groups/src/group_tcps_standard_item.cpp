@@ -2,8 +2,6 @@
 #include <tesseract_gui/widgets/common/transform_standard_item.h>
 #include <tesseract_gui/common/standard_item_type.h>
 
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, ROBOT_ICON, (":/tesseract_gui/png/robotic-arm.png"));
-
 namespace tesseract_gui
 {
 GroupTCPsStandardItem::GroupTCPsStandardItem()
@@ -48,7 +46,7 @@ void GroupTCPsStandardItem::addGroupTCPItem(const QString& group_name, const QSt
   }
   else
   {
-    group_item = new QStandardItem(*ROBOT_ICON(), group_name);
+    group_item = new QStandardItem(QIcon(":/tesseract_gui/png/robotic-arm.png"), group_name);
     group_items_[group_name.toStdString()] = group_item;
     appendRow({group_item, new QStandardItem()}); // Must have two columns so QTreeView::setRootIndex will have two columns
   }

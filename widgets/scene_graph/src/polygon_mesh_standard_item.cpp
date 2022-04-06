@@ -3,21 +3,17 @@
 #include <tesseract_gui/common/standard_item_type.h>
 #include <tesseract_geometry/impl/convex_mesh.h>
 
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, POLYGON_MESH_ICON, (":/tesseract_gui/png/mesh.png"));
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, MESH_ICON, (":/tesseract_gui/png/surface.png"));
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, CONVEX_MESH_ICON, (":/tesseract_gui/png/mesh.png"));
-
 namespace tesseract_gui
 {
 PolygonMeshStandardItem::PolygonMeshStandardItem(tesseract_geometry::PolygonMesh::Ptr mesh)
-  : QStandardItem(*POLYGON_MESH_ICON(), "PolygonMesh")
+  : QStandardItem(QIcon(":/tesseract_gui/png/mesh.png"), "PolygonMesh")
   , mesh(std::move(mesh))
 {
   ctor();
 }
 
 PolygonMeshStandardItem::PolygonMeshStandardItem(const QString &text, tesseract_geometry::PolygonMesh::Ptr mesh)
-  : QStandardItem(*POLYGON_MESH_ICON(), text)
+  : QStandardItem(QIcon(":/tesseract_gui/png/mesh.png"), text)
   , mesh(std::move(mesh))
 {
   ctor();
@@ -39,7 +35,7 @@ void PolygonMeshStandardItem::ctor()
 {
   if (mesh->getType() == tesseract_geometry::GeometryType::CONVEX_MESH)
   {
-    setIcon(*CONVEX_MESH_ICON());
+    setIcon(QIcon(":/tesseract_gui/png/mesh.png"));
     setText("Convex Mesh");
 
     std::string method {"Default"};
@@ -53,12 +49,12 @@ void PolygonMeshStandardItem::ctor()
   }
   else if (mesh->getType() == tesseract_geometry::GeometryType::MESH)
   {
-    setIcon(*MESH_ICON());
+    setIcon(QIcon(":/tesseract_gui/png/surface.png"));
     setText("Mesh");
   }
   else if (mesh->getType() == tesseract_geometry::GeometryType::SDF_MESH)
   {
-    setIcon(*MESH_ICON());
+    setIcon(QIcon(":/tesseract_gui/png/surface.png"));
     setText("SDF Mesh");
   }
 

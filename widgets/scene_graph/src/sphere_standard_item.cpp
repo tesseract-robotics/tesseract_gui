@@ -2,19 +2,17 @@
 #include <tesseract_gui/widgets/common/standard_item_utils.h>
 #include <tesseract_gui/common/standard_item_type.h>
 
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, SPHERE_ICON, (":/tesseract_gui/png/sphere.png"));
-
 namespace tesseract_gui
 {
 SphereStandardItem::SphereStandardItem(tesseract_geometry::Sphere::Ptr sphere)
-  : QStandardItem(*SPHERE_ICON(), "Sphere")
+  : QStandardItem(QIcon(":/tesseract_gui/png/sphere.png"), "Sphere")
   , sphere(std::move(sphere))
 {
   ctor();
 }
 
 SphereStandardItem::SphereStandardItem(const QString &text, tesseract_geometry::Sphere::Ptr sphere)
-  : QStandardItem(*SPHERE_ICON(), text)
+  : QStandardItem(QIcon(":/tesseract_gui/png/sphere.png"), text)
   , sphere(std::move(sphere))
 {
   ctor();

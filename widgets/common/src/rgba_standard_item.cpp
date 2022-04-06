@@ -2,19 +2,17 @@
 #include <tesseract_gui/widgets/common/standard_item_utils.h>
 #include <tesseract_gui/common/standard_item_type.h>
 
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, COLOR_ICON, (":/tesseract_gui/png/rgb.png"));
-
 namespace tesseract_gui
 {
 RGBAStandardItem::RGBAStandardItem(const Eigen::Vector4d& rgba)
-  : QStandardItem(*COLOR_ICON(), "Color")
+  : QStandardItem(QIcon(":/tesseract_gui/png/rgb.png"), "Color")
   , rgba(rgba)
 {
   ctor();
 }
 
 RGBAStandardItem::RGBAStandardItem(const QString &text, const Eigen::Vector4d& rgba)
-  : QStandardItem(*COLOR_ICON(), text)
+  : QStandardItem(QIcon(":/tesseract_gui/png/rgb.png"), text)
   , rgba(rgba)
 {
   ctor();

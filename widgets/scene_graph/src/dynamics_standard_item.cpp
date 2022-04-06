@@ -2,19 +2,17 @@
 #include <tesseract_gui/widgets/common/standard_item_utils.h>
 #include <tesseract_gui/common/standard_item_type.h>
 
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, DYNAMICS_ICON, (":/tesseract_gui/png/dynamics.png"));
-
 namespace tesseract_gui
 {
 DynamicsStandardItem::DynamicsStandardItem(tesseract_scene_graph::JointDynamics::Ptr dynamics)
-  : QStandardItem(*DYNAMICS_ICON(), "Dynamics")
+  : QStandardItem(QIcon(":/tesseract_gui/png/dynamics.png"), "Dynamics")
   , dynamics(std::move(dynamics))
 {
   ctor();
 }
 
 DynamicsStandardItem::DynamicsStandardItem(const QString &text, tesseract_scene_graph::JointDynamics::Ptr dynamics)
-  : QStandardItem(*DYNAMICS_ICON(), text)
+  : QStandardItem(QIcon(":/tesseract_gui/png/dynamics.png"), text)
   , dynamics(std::move(dynamics))
 {
   ctor();

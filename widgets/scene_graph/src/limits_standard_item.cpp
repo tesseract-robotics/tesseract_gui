@@ -2,19 +2,17 @@
 #include <tesseract_gui/widgets/common/standard_item_utils.h>
 #include <tesseract_gui/common/standard_item_type.h>
 
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, LIMITS_ICON, (":/tesseract_gui/png/limits.png"));
-
 namespace tesseract_gui
 {
 LimitsStandardItem::LimitsStandardItem(tesseract_scene_graph::JointLimits::Ptr limits)
-  : QStandardItem(*LIMITS_ICON(), "Limits")
+  : QStandardItem(QIcon(":/tesseract_gui/png/limits.png"), "Limits")
   , limits(std::move(limits))
 {
   ctor();
 }
 
 LimitsStandardItem::LimitsStandardItem(const QString &text, tesseract_scene_graph::JointLimits::Ptr limits)
-  : QStandardItem(*LIMITS_ICON(), text)
+  : QStandardItem(QIcon(":/tesseract_gui/png/limits.png"), text)
   , limits(std::move(limits))
 {
   ctor();

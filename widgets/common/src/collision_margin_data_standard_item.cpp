@@ -4,20 +4,18 @@
 #include <tesseract_gui/widgets/common/standard_item_utils.h>
 #include <tesseract_gui/common/standard_item_type.h>
 
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, CUBE_ICON, (":/tesseract_gui/png/cube.png"));
-
 namespace tesseract_gui
 {
 
 CollisionMarginDataStandardItem::CollisionMarginDataStandardItem(tesseract_common::CollisionMarginData collision_margin_data)
-  : QStandardItem(*CUBE_ICON(), "Collision Margin Data")
+  : QStandardItem(QIcon(":/tesseract_gui/png/cube.png"), "Collision Margin Data")
   , collision_margin_data(std::move(collision_margin_data))
 {
   ctor();
 }
 
 CollisionMarginDataStandardItem::CollisionMarginDataStandardItem(const QString &text, tesseract_common::CollisionMarginData collision_margin_data)
-  : QStandardItem(*CUBE_ICON(), text)
+  : QStandardItem(QIcon(":/tesseract_gui/png/cube.png"), text)
   , collision_margin_data(std::move(collision_margin_data))
 {
   ctor();

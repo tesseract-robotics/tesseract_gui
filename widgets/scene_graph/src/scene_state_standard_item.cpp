@@ -3,21 +3,17 @@
 #include <tesseract_gui/widgets/common/standard_item_utils.h>
 #include <tesseract_gui/common/standard_item_type.h>
 
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, SCENE_GRAPH_ICON, (":/tesseract_gui/ignition/model.png"));
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, LINK_VECTOR_ICON, (":/tesseract_gui/ignition/link_vector.png"));
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, JOINT_VECTOR_ICON, (":/tesseract_gui/ignition/joint_vector.png"));
-
 namespace tesseract_gui
 {
 SceneStateStandardItem::SceneStateStandardItem(tesseract_scene_graph::SceneState scene_state)
-  : QStandardItem(*SCENE_GRAPH_ICON(), "Scene State")
+  : QStandardItem(QIcon(":/tesseract_gui/ignition/model.png"), "Scene State")
   , scene_state(std::move(scene_state))
 {
   ctor();
 }
 
 SceneStateStandardItem::SceneStateStandardItem(const QString &text, tesseract_scene_graph::SceneState scene_state)
-  : QStandardItem(*SCENE_GRAPH_ICON(), text)
+  : QStandardItem(QIcon(":/tesseract_gui/ignition/model.png"), text)
   , scene_state(std::move(scene_state))
 {
   ctor();
@@ -37,14 +33,14 @@ int SceneStateStandardItem::type() const
 
 void SceneStateStandardItem::ctor()
 {
-  auto* values_item = new QStandardItem(*JOINT_VECTOR_ICON(), "Values");
+  auto* values_item = new QStandardItem(QIcon(":/tesseract_gui/ignition/joint_vector.png"), "Values");
   for (auto& joint : scene_state.joints)
     values_item->appendRow(createStandardItemFloat(joint.first, joint.second));
 
   values_item->sortChildren(0);
   appendRow(values_item);
 
-  auto* links_item = new QStandardItem(*LINK_VECTOR_ICON(), "Links");
+  auto* links_item = new QStandardItem(QIcon(":/tesseract_gui/ignition/link_vector.png"), "Links");
   for (auto& link : scene_state.link_transforms)
   {
     auto* item = new TransformStandardItem(QString::fromStdString(link.first), link.second);
@@ -53,7 +49,7 @@ void SceneStateStandardItem::ctor()
   links_item->sortChildren(0);
   appendRow(links_item);
 
-  auto* joints_item = new QStandardItem(*JOINT_VECTOR_ICON(), "Joints");
+  auto* joints_item = new QStandardItem(QIcon(":/tesseract_gui/ignition/joint_vector.png"), "Joints");
   for (auto& joint : scene_state.joint_transforms)
   {
     auto* item = new TransformStandardItem(QString::fromStdString(joint.first), joint.second);

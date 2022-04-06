@@ -2,19 +2,17 @@
 #include <tesseract_gui/widgets/common/standard_item_utils.h>
 #include <tesseract_gui/common/standard_item_type.h>
 
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, CYLINDER_ICON, (":/tesseract_gui/png/cylinder.png"));
-
 namespace tesseract_gui
 {
 CylinderStandardItem::CylinderStandardItem(tesseract_geometry::Cylinder::Ptr cylinder)
-  : QStandardItem(*CYLINDER_ICON(), "Cylinder")
+  : QStandardItem(QIcon(":/tesseract_gui/png/cylinder.png"), "Cylinder")
   , cylinder(std::move(cylinder))
 {
   ctor();
 }
 
 CylinderStandardItem::CylinderStandardItem(const QString &text, tesseract_geometry::Cylinder::Ptr cylinder)
-  : QStandardItem(*CYLINDER_ICON(), text)
+  : QStandardItem(QIcon(":/tesseract_gui/png/cylinder.png"), text)
   , cylinder(std::move(cylinder))
 {
   ctor();

@@ -2,20 +2,17 @@
 #include <tesseract_gui/widgets/common/standard_item_utils.h>
 #include <tesseract_gui/common/standard_item_type.h>
 
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, CUBE_ICON, (":/tesseract_gui/png/cube.png"));
-
-
 namespace tesseract_gui
 {
 BoxStandardItem::BoxStandardItem(tesseract_geometry::Box::Ptr box)
-  : QStandardItem(*CUBE_ICON(), "Box")
+  : QStandardItem(QIcon(":/tesseract_gui/png/cube.png"), "Box")
   , box(std::move(box))
 {
   ctor();
 }
 
 BoxStandardItem::BoxStandardItem(const QString &text, tesseract_geometry::Box::Ptr box)
-  : QStandardItem(*CUBE_ICON(), text)
+  : QStandardItem(QIcon(":/tesseract_gui/png/cube.png"), text)
   , box(std::move(box))
 {
   ctor();

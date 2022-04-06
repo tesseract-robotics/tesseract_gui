@@ -6,23 +6,21 @@
 #include <tesseract_gui/widgets/kinematic_groups/group_joint_states_standard_item.h>
 #include <tesseract_gui/widgets/kinematic_groups/group_tcps_standard_item.h>
 #include <tesseract_gui/widgets/common/kinematics_plugin_info_standard_item.h>
+#include <tesseract_gui/widgets/common/standard_item_utils.h>
 #include <tesseract_gui/common/standard_item_type.h>
-
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, CUBE_ICON, (":/tesseract_gui/png/cube.png"));
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, TEXT_ICON, (":/tesseract_gui/png/text.png"));
 
 namespace tesseract_gui
 {
 
 KinematicsInfoStandardItem::KinematicsInfoStandardItem(tesseract_srdf::KinematicsInformation kinematics_info)
-  : QStandardItem(*CUBE_ICON(), "Kinematics Info")
+  : QStandardItem(QIcon(":/tesseract_gui/png/cube.png"), "Kinematics Info")
   , kinematics_info(std::move(kinematics_info))
 {
   ctor();
 }
 
 KinematicsInfoStandardItem::KinematicsInfoStandardItem(const QString &text, tesseract_srdf::KinematicsInformation kinematics_info)
-  : QStandardItem(*CUBE_ICON(), text)
+  : QStandardItem(QIcon(":/tesseract_gui/png/cube.png"), text)
   , kinematics_info(std::move(kinematics_info))
 {
   ctor();
@@ -45,12 +43,8 @@ void KinematicsInfoStandardItem::ctor()
   auto* group_names = new QStandardItem("Group Names");
   std::size_t cnt {0};
   for (const auto& group_name : kinematics_info.group_names)
-  {
-    auto* name = new QStandardItem(*TEXT_ICON, QString("[%1]").arg(cnt));
-    auto* value = new QStandardItem(group_name.c_str());
-    group_names->appendRow({name, value});
-    ++cnt;
-  }
+    group_names->appendRow(createStandardItemString(QString("[%1]").arg(cnt++).toStdString(), group_name));
+
   appendRow({group_names, new QStandardItem()});
 
   auto* chain_groups = new QStandardItem("Chain Groups");

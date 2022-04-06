@@ -9,22 +9,20 @@
 #include <tesseract_gui/widgets/scene_graph/polygon_mesh_standard_item.h>
 #include <tesseract_gui/widgets/scene_graph/octree_standard_item.h>
 #include <tesseract_gui/widgets/common/transform_standard_item.h>
+#include <tesseract_gui/widgets/common/standard_item_utils.h>
 #include <tesseract_gui/common/standard_item_type.h>
-
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, VISUAL_ICON, (":/tesseract_gui/ignition/visual.png"));
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, TEXT_ICON, (":/tesseract_gui/png/text.png"));
 
 namespace tesseract_gui
 {
 VisualStandardItem::VisualStandardItem(tesseract_scene_graph::Visual::Ptr visual)
-  : QStandardItem(*VISUAL_ICON(), "Visual")
+  : QStandardItem(QIcon(":/tesseract_gui/ignition/visual.png"), "Visual")
   , visual(std::move(visual))
 {
   ctor();
 }
 
 VisualStandardItem::VisualStandardItem(const QString &text, tesseract_scene_graph::Visual::Ptr visual)
-  : QStandardItem(*VISUAL_ICON(), text)
+  : QStandardItem(QIcon(":/tesseract_gui/ignition/visual.png"), text)
   , visual(std::move(visual))
 {
   ctor();
@@ -44,15 +42,9 @@ int VisualStandardItem::type() const
 
 void VisualStandardItem::ctor()
 {
-  auto* name_item = new QStandardItem(*TEXT_ICON(), "name");
-  auto* name_value = new QStandardItem(QString::fromStdString(visual->name));
-  appendRow({name_item, name_value});
-
-  auto* origin_item = new TransformStandardItem(visual->origin);
-  appendRow(origin_item);
-
-  auto* material_item = new MaterialStandardItem(visual->material);
-  appendRow(material_item);
+  appendRow(createStandardItemString("name", visual->name));
+  appendRow(new TransformStandardItem(visual->origin));
+  appendRow(new MaterialStandardItem(visual->material));
 
   QStandardItem* geometry_item;
   switch (visual->geometry->getType())

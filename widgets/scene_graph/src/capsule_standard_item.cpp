@@ -2,19 +2,17 @@
 #include <tesseract_gui/widgets/common/standard_item_utils.h>
 #include <tesseract_gui/common/standard_item_type.h>
 
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, CAPSULE_ICON, (":/tesseract_gui/png/capsule.png"));
-
 namespace tesseract_gui
 {
 CapsuleStandardItem::CapsuleStandardItem(tesseract_geometry::Capsule::Ptr capsule)
-  : QStandardItem(*CAPSULE_ICON(), "Capsule")
+  : QStandardItem(QIcon(":/tesseract_gui/png/capsule.png"), "Capsule")
   , capsule(std::move(capsule))
 {
   ctor();
 }
 
 CapsuleStandardItem::CapsuleStandardItem(const QString &text, tesseract_geometry::Capsule::Ptr capsule)
-  : QStandardItem(*CAPSULE_ICON(), text)
+  : QStandardItem(QIcon(":/tesseract_gui/png/capsule.png"), text)
   , capsule(std::move(capsule))
 {
   ctor();

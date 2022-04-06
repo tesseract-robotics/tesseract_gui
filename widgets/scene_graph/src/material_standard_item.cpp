@@ -3,19 +3,17 @@
 #include <tesseract_gui/widgets/common/rgba_standard_item.h>
 #include <tesseract_gui/common/standard_item_type.h>
 
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, MATERIAL_ICON, (":/tesseract_gui/png/color.png"));
-
 namespace tesseract_gui
 {
 MaterialStandardItem::MaterialStandardItem(tesseract_scene_graph::Material::Ptr material)
-  : QStandardItem(*MATERIAL_ICON(), "Material")
+  : QStandardItem(QIcon(":/tesseract_gui/png/color.png"), "Material")
   , material(std::move(material))
 {
   ctor();
 }
 
 MaterialStandardItem::MaterialStandardItem(const QString &text, tesseract_scene_graph::Material::Ptr material)
-  : QStandardItem(*MATERIAL_ICON(), text)
+  : QStandardItem(QIcon(":/tesseract_gui/png/color.png"), text)
   , material(std::move(material))
 {
   ctor();

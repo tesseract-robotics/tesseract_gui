@@ -2,27 +2,25 @@
 #include <tesseract_gui/widgets/common/standard_item_utils.h>
 #include <tesseract_gui/common/standard_item_type.h>
 
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, CUBE_ICON, (":/tesseract_gui/png/cube.png"));
-
 namespace tesseract_gui
 {
 OPWParamsStandardItem::OPWParamsStandardItem(opw_kinematics::Parameters<double> params)
-  : QStandardItem(*CUBE_ICON(), "OPW")
-  , params(std::move(params))
+  : QStandardItem(QIcon(":/tesseract_gui/png/cube.png"), "OPW")
+  , params(params)
 {
   ctor();
 }
 
 OPWParamsStandardItem::OPWParamsStandardItem(const QString &text, opw_kinematics::Parameters<double> params)
-  : QStandardItem(*CUBE_ICON(), text)
-  , params(std::move(params))
+  : QStandardItem(QIcon(":/tesseract_gui/png/cube.png"), text)
+  , params(params)
 {
   ctor();
 }
 
 OPWParamsStandardItem::OPWParamsStandardItem(const QIcon &icon, const QString &text, opw_kinematics::Parameters<double> params)
   : QStandardItem(icon, text)
-  , params(std::move(params))
+  , params(params)
 {
   ctor();
 }

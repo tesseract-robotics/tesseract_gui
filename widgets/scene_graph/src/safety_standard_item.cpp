@@ -2,19 +2,17 @@
 #include <tesseract_gui/widgets/common/standard_item_utils.h>
 #include <tesseract_gui/common/standard_item_type.h>
 
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, SAFETY_ICON, (":/tesseract_gui/png/safety.png"));
-
 namespace tesseract_gui
 {
 SafetyStandardItem::SafetyStandardItem(tesseract_scene_graph::JointSafety::Ptr safety)
-  : QStandardItem(*SAFETY_ICON(), "Safety")
+  : QStandardItem(QIcon(":/tesseract_gui/png/safety.png"), "Safety")
   , safety(std::move(safety))
 {
   ctor();
 }
 
 SafetyStandardItem::SafetyStandardItem(const QString &text, tesseract_scene_graph::JointSafety::Ptr safety)
-  : QStandardItem(*SAFETY_ICON(), text)
+  : QStandardItem(QIcon(":/tesseract_gui/png/safety.png"), text)
   , safety(std::move(safety))
 {
   ctor();

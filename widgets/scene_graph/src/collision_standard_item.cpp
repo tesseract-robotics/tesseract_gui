@@ -8,22 +8,20 @@
 #include <tesseract_gui/widgets/scene_graph/polygon_mesh_standard_item.h>
 #include <tesseract_gui/widgets/scene_graph/octree_standard_item.h>
 #include <tesseract_gui/widgets/common/transform_standard_item.h>
+#include <tesseract_gui/widgets/common/standard_item_utils.h>
 #include <tesseract_gui/common/standard_item_type.h>
-
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, COLLISION_ICON, (":/tesseract_gui/ignition/collision.png"));
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, TEXT_ICON, (":/tesseract_gui/png/text.png"));
 
 namespace tesseract_gui
 {
 CollisionStandardItem::CollisionStandardItem(tesseract_scene_graph::Collision::Ptr collision)
-  : QStandardItem(*COLLISION_ICON(), "Collision")
+  : QStandardItem(QIcon(":/tesseract_gui/ignition/collision.png"), "Collision")
   , collision(std::move(collision))
 {
   ctor();
 }
 
 CollisionStandardItem::CollisionStandardItem(const QString &text, tesseract_scene_graph::Collision::Ptr collision)
-  : QStandardItem(*COLLISION_ICON(),text)
+  : QStandardItem(QIcon(":/tesseract_gui/ignition/collision.png"),text)
   , collision(std::move(collision))
 {
   ctor();
@@ -42,12 +40,8 @@ int CollisionStandardItem::type() const
 
 void CollisionStandardItem::ctor()
 {
-  auto* name_item = new QStandardItem(*TEXT_ICON(), "name");
-  auto* name_value = new QStandardItem(QString::fromStdString(collision->name));
-  appendRow({name_item, name_value});
-
-  auto* origin_item = new TransformStandardItem(collision->origin);
-  appendRow(origin_item);
+  appendRow(createStandardItemString("name", collision->name));
+  appendRow(new TransformStandardItem(collision->origin));
 
   QStandardItem* geometry_item;
   switch (collision->geometry->getType())

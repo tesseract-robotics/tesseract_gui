@@ -1,8 +1,5 @@
 #include <tesseract_gui/widgets/joint_trajectory/joint_trajectory_model.h>
-
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, TRAJECTORY_ICON, (":/tesseract_gui/png/trajectory.png"));
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, TRAJECTORY_STATE_ICON, (":/tesseract_gui/png/robotic-arm.png"));
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, TRAJECTORY_SET_ICON, (":/tesseract_gui/png/programming.png"));
+#include <tesseract_gui/widgets/common/standard_item_utils.h>
 
 namespace tesseract_gui
 {
@@ -72,7 +69,7 @@ JointStateItem::JointStateItem(tesseract_common::JointTrajectoryInfo& parent_tra
 }
 
 JointStateItem::JointStateItem(const QString &text, tesseract_common::JointTrajectoryInfo& parent_trajectory, tesseract_common::JointState &state)
-  : QStandardItem(*TRAJECTORY_STATE_ICON(), text)
+  : QStandardItem(QIcon(":/tesseract_gui/png/robotic-arm.png"), text)
   , parent_trajectory(parent_trajectory)
   , state(state)
 {
@@ -98,50 +95,36 @@ void JointStateItem::ctor()
   QStandardItem* state_joint_names = new QStandardItem("joint_names");
   state_joint_names->setColumnCount(2);
   for (std::size_t k = 0; k < state.joint_names.size(); ++k)
-  {
-    QStandardItem* p_name = new QStandardItem(QString("[%1]").arg(k));
-    QStandardItem* p_value = new QStandardItem(QString::fromStdString(state.joint_names[k]));
-    state_joint_names->appendRow({p_name, p_value});
-  }
+    state_joint_names->appendRow(createStandardItemString(QString("[%1]").arg(k).toStdString(), state.joint_names[k]));
+
   appendRow(state_joint_names);
 
   // Add State Position
   QStandardItem* state_position = new QStandardItem("position");
   state_position->setColumnCount(2);
   for (Eigen::Index k = 0; k < state.position.rows(); ++k)
-  {
-    QStandardItem* p_name = new QStandardItem(QString("[%1]").arg(k));
-    QStandardItem* p_value = new QStandardItem(QString("%1").arg(state.position[k]));
-    state_position->appendRow({p_name, p_value});
-  }
+    state_position->appendRow(createStandardItemFloat(QString("[%1]").arg(k).toStdString(), state.position[k]));
+
   appendRow(state_position);
 
   // Add State Velocity
   QStandardItem* state_velocity = new QStandardItem("velocity");
   state_velocity->setColumnCount(2);
   for (int k = 0; k < state.velocity.rows(); ++k)
-  {
-    QStandardItem* p_name = new QStandardItem(QString("[%1]").arg(k));
-    QStandardItem* p_value = new QStandardItem(QString("%1").arg(state.velocity[k]));
-    state_velocity->appendRow({p_name, p_value});
-  }
+    state_velocity->appendRow(createStandardItemFloat(QString("[%1]").arg(k).toStdString(), state.velocity[k]));
+
   appendRow(state_velocity);
 
   // Add State Velocity
   QStandardItem* state_acceleration = new QStandardItem("acceleration");
   state_acceleration->setColumnCount(2);
   for (int k = 0; k < state.acceleration.rows(); ++k)
-  {
-    QStandardItem* p_name = new QStandardItem(QString("[%1]").arg(k));
-    QStandardItem* p_value = new QStandardItem(QString("%1").arg(state.acceleration[k]));
-    state_acceleration->appendRow({p_name, p_value});
-  }
+    state_acceleration->appendRow(createStandardItemFloat(QString("[%1]").arg(k).toStdString(), state.acceleration[k]));
+
   appendRow(state_acceleration);
 
   // Add time from start
-  QStandardItem* p_name = new QStandardItem("time");
-  QStandardItem* p_value = new QStandardItem(QString("%1").arg(state.time));
-  appendRow({p_name, p_value});
+  appendRow(createStandardItemFloat("time", state.time));
 }
 
 JointTrajectoryItem::JointTrajectoryItem(tesseract_common::JointTrajectoryInfo& trajectory_info)
@@ -152,7 +135,7 @@ JointTrajectoryItem::JointTrajectoryItem(tesseract_common::JointTrajectoryInfo& 
 }
 
 JointTrajectoryItem::JointTrajectoryItem(const QString &text, tesseract_common::JointTrajectoryInfo& trajectory_info)
-  : QStandardItem(*TRAJECTORY_ICON(), text)
+  : QStandardItem(QIcon(":/tesseract_gui/png/trajectory.png"), text)
   , trajectory_info(trajectory_info)
 {
   ctor();
@@ -187,7 +170,7 @@ JointTrajectorySetItem::JointTrajectorySetItem(tesseract_common::JointTrajectory
 }
 
 JointTrajectorySetItem::JointTrajectorySetItem(const QString &text, tesseract_common::JointTrajectorySet& trajectory_set)
-  : QStandardItem(*TRAJECTORY_SET_ICON(), text)
+  : QStandardItem(QIcon(":/tesseract_gui/png/programming.png"), text)
   , trajectory_set(trajectory_set)
 {
   ctor();

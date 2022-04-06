@@ -3,21 +3,18 @@
 #include <tesseract_gui/widgets/common/transform_standard_item.h>
 #include <tesseract_gui/common/standard_item_type.h>
 
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, COMMAND_ICON, (":/tesseract_gui/png/merge.png"));
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, JOINT_ICON, (":/tesseract_gui/ignition/joint.png"));
-
 namespace tesseract_gui
 {
 
 ChangeJointOriginCommandStandardItem::ChangeJointOriginCommandStandardItem(tesseract_environment::ChangeJointOriginCommand::ConstPtr command)
-  : QStandardItem(*COMMAND_ICON(), "Change Joint Origin")
+  : QStandardItem(QIcon(":/tesseract_gui/png/merge.png"), "Change Joint Origin")
   , command(std::move(command))
 {
   ctor();
 }
 
 ChangeJointOriginCommandStandardItem::ChangeJointOriginCommandStandardItem(const QString &text, tesseract_environment::ChangeJointOriginCommand::ConstPtr command)
-  : QStandardItem(*COMMAND_ICON(), text)
+  : QStandardItem(QIcon(":/tesseract_gui/png/merge.png"), text)
   , command(std::move(command))
 {
   ctor();
@@ -37,7 +34,7 @@ int ChangeJointOriginCommandStandardItem::type() const
 
 void ChangeJointOriginCommandStandardItem::ctor()
 {
-  auto* item = new TransformStandardItem(*JOINT_ICON(), command->getJointName().c_str(), command->getOrigin());
+  auto* item = new TransformStandardItem(QIcon(":/tesseract_gui/ignition/joint.png"), command->getJointName().c_str(), command->getOrigin());
   appendRow({item, new QStandardItem()});
 }
 }

@@ -2,24 +2,20 @@
 #include <tesseract_gui/widgets/scene_graph/inertial_standard_item.h>
 #include <tesseract_gui/widgets/scene_graph/visual_standard_item.h>
 #include <tesseract_gui/widgets/scene_graph/collision_standard_item.h>
+#include <tesseract_gui/widgets/common/standard_item_utils.h>
 #include <tesseract_gui/common/standard_item_type.h>
-
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, LINK_ICON, (":/tesseract_gui/ignition/link.png"));
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, TEXT_ICON, (":/tesseract_gui/png/text.png"));
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, VISUAL_VECTOR_ICON, (":/tesseract_gui/ignition/visual_vector.png"));
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, COLLISION_VECTOR_ICON, (":/tesseract_gui/ignition/collision_vector.png"));
 
 namespace tesseract_gui
 {
 LinkStandardItem::LinkStandardItem(tesseract_scene_graph::Link::Ptr link)
-  : QStandardItem(*LINK_ICON(), "Link")
+  : QStandardItem(QIcon(":/tesseract_gui/ignition/link.png"), "Link")
   , link(std::move(link))
 {
   ctor();
 }
 
 LinkStandardItem::LinkStandardItem(const QString &text, tesseract_scene_graph::Link::Ptr link)
-  : QStandardItem(*LINK_ICON(), text)
+  : QStandardItem(QIcon(":/tesseract_gui/ignition/link.png"), text)
   , link(std::move(link))
 {
   ctor();
@@ -39,35 +35,26 @@ int LinkStandardItem::type() const
 
 void LinkStandardItem::ctor()
 {
-  auto* name_item = new QStandardItem(*TEXT_ICON(), "name");
-  auto* name_value = new QStandardItem(QString::fromStdString(link->getName()));
-  appendRow({name_item, name_value});
+  appendRow(createStandardItemString("name", link->getName()));
 
   if (link->inertial != nullptr)
-  {
-    auto* inertial_item = new InertialStandardItem(link->inertial);
-    appendRow(inertial_item);
-  }
+    appendRow(new InertialStandardItem(link->inertial));
 
   if (!link->visual.empty())
   {
-    auto* visuals_item = new QStandardItem(*VISUAL_VECTOR_ICON(), "Visual");
+    auto* visuals_item = new QStandardItem(QIcon(":/tesseract_gui/ignition/visual_vector.png"), "Visual");
     for (std::size_t i = 0; i < link->visual.size(); ++i)
-    {
-      auto* visual_item = new VisualStandardItem(QString("[%1]").arg(i), link->visual.at(i));
-      visuals_item->appendRow(visual_item);
-    }
+      visuals_item->appendRow(new VisualStandardItem(QString("[%1]").arg(i), link->visual.at(i)));
+
     appendRow(visuals_item);
   }
 
   if (!link->collision.empty())
   {
-    auto* collisions_item = new QStandardItem(*COLLISION_VECTOR_ICON(), "Collision");
+    auto* collisions_item = new QStandardItem(QIcon(":/tesseract_gui/ignition/collision_vector.png"), "Collision");
     for (std::size_t i = 0; i < link->collision.size(); ++i)
-    {
-      auto* collision_item = new CollisionStandardItem(QString("[%1]").arg(i), link->collision.at(i));
-      collisions_item->appendRow(collision_item);
-    }
+      collisions_item->appendRow(new CollisionStandardItem(QString("[%1]").arg(i), link->collision.at(i)));
+
     appendRow(collisions_item);
   }
 }

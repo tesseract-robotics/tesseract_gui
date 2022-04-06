@@ -14,7 +14,8 @@ add_library(${PROJECT_NAME}_joint_trajectory_model SHARED
 target_link_libraries(${PROJECT_NAME}_joint_trajectory_model PUBLIC
   tesseract::tesseract_common
   Qt5::Core Qt5::Gui
-  ${PROJECT_NAME}_common)
+  ${PROJECT_NAME}_common
+  ${PROJECT_NAME}_common_widgets)
 target_include_directories(${PROJECT_NAME}_joint_trajectory_model PUBLIC
     "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
     "$<INSTALL_INTERFACE:include>")
@@ -40,7 +41,8 @@ target_link_libraries(${PROJECT_NAME}_joint_trajectory_widget PUBLIC
   Qt5::Gui
   Qt5::Widgets
   ${PROJECT_NAME}_plot
-  ${PROJECT_NAME}_common)
+  ${PROJECT_NAME}_common
+  ${PROJECT_NAME}_common_widgets)
 target_include_directories(${PROJECT_NAME}_joint_trajectory_widget PUBLIC
     "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
     "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/widgets/joint_trajectory>"

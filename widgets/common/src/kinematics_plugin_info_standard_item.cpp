@@ -1,24 +1,21 @@
 
 #include <tesseract_gui/widgets/common/kinematics_plugin_info_standard_item.h>
 #include <tesseract_gui/widgets/common/plugin_info_container_standard_item.h>
+#include <tesseract_gui/widgets/common/standard_item_utils.h>
 #include <tesseract_gui/common/standard_item_type.h>
-
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, TEXT_ICON, (":/tesseract_gui/png/text.png"));
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, CUBE_ICON, (":/tesseract_gui/png/cube.png"));
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, ROBOT_ICON, (":/tesseract_gui/png/robotic-arm.png"));
 
 namespace tesseract_gui
 {
 
 KinematicsPluginInfoStandardItem::KinematicsPluginInfoStandardItem(tesseract_common::KinematicsPluginInfo plugin_info)
-  : QStandardItem(*CUBE_ICON(), "Kinematics Plugin Info")
+  : QStandardItem(QIcon(":/tesseract_gui/png/cube.png"), "Kinematics Plugin Info")
   , plugin_info(std::move(plugin_info))
 {
   ctor();
 }
 
 KinematicsPluginInfoStandardItem::KinematicsPluginInfoStandardItem(const QString &text, tesseract_common::KinematicsPluginInfo plugin_info)
-  : QStandardItem(*CUBE_ICON(), text)
+  : QStandardItem(QIcon(":/tesseract_gui/png/cube.png"), text)
   , plugin_info(std::move(plugin_info))
 {
   ctor();
@@ -41,34 +38,27 @@ void KinematicsPluginInfoStandardItem::ctor()
   auto* search_paths = new QStandardItem("search paths");
   std::size_t cnt {0};
   for (const auto& search_path : plugin_info.search_paths)
-  {
-    auto* name = new QStandardItem(*TEXT_ICON, QString("[%1]").arg(cnt));
-    auto* value = new QStandardItem(search_path.c_str());
-    search_paths->appendRow({name, value});
-    ++cnt;
-  }
+    search_paths->appendRow(createStandardItemString(QString("[%1]").arg(cnt++).toStdString(), search_path));
+
   appendRow({search_paths, new QStandardItem()});
 
   auto* search_libraries = new QStandardItem("search libraries");
   cnt = 0;
   for (const auto& search_library : plugin_info.search_libraries)
-  {
-    auto* name = new QStandardItem(*TEXT_ICON, QString("[%1]").arg(cnt));
-    auto* value = new QStandardItem(search_library.c_str());
-    search_libraries->appendRow({name, value});
-    ++cnt;
-  }
+    search_libraries->appendRow(createStandardItemString(QString("[%1]").arg(cnt++).toStdString(), search_library));
+
   appendRow({search_libraries, new QStandardItem()});
 
+  QIcon robot_icon(":/tesseract_gui/png/robotic-arm.png");
   auto* fwd_plugins = new QStandardItem("Fwd Kinematics Plugins");
   for (const auto& group : plugin_info.fwd_plugin_infos)
-    fwd_plugins->appendRow(new PluginInfoContainerStandardItem(*ROBOT_ICON, group.first.c_str(), group.second));
+    fwd_plugins->appendRow(new PluginInfoContainerStandardItem(robot_icon, group.first.c_str(), group.second)); // NOLIN
 
   appendRow({fwd_plugins, new QStandardItem()});
 
   auto* inv_plugins = new QStandardItem("Inv Kinematics Plugins");
   for (const auto& group : plugin_info.inv_plugin_infos)
-    inv_plugins->appendRow(new PluginInfoContainerStandardItem(*ROBOT_ICON, group.first.c_str(), group.second));
+    inv_plugins->appendRow(new PluginInfoContainerStandardItem(robot_icon, group.first.c_str(), group.second)); // NOLINT
 
   appendRow({inv_plugins, new QStandardItem()});
 }

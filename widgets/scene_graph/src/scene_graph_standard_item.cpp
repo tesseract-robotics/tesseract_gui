@@ -1,24 +1,20 @@
 #include <tesseract_gui/widgets/scene_graph/scene_graph_standard_item.h>
 #include <tesseract_gui/widgets/scene_graph/link_standard_item.h>
 #include <tesseract_gui/widgets/scene_graph/joint_standard_item.h>
+#include <tesseract_gui/widgets/common/standard_item_utils.h>
 #include <tesseract_gui/common/standard_item_type.h>
-
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, SCENE_GRAPH_ICON, (":/tesseract_gui/ignition/model.png"));
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, LINK_VECTOR_ICON, (":/tesseract_gui/ignition/link_vector.png"));
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, JOINT_VECTOR_ICON, (":/tesseract_gui/ignition/joint_vector.png"));
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, TEXT_ICON, (":/tesseract_gui/png/text.png"));
 
 namespace tesseract_gui
 {
 SceneGraphStandardItem::SceneGraphStandardItem(tesseract_scene_graph::SceneGraph::UPtr scene_graph)
-  : QStandardItem(*SCENE_GRAPH_ICON(), "SceneGraph")
+  : QStandardItem(QIcon(":/tesseract_gui/ignition/model.png"), "SceneGraph")
   , scene_graph(std::move(scene_graph))
 {
   ctor();
 }
 
 SceneGraphStandardItem::SceneGraphStandardItem(const QString &text, tesseract_scene_graph::SceneGraph::UPtr scene_graph)
-  : QStandardItem(*SCENE_GRAPH_ICON(), text)
+  : QStandardItem(QIcon(":/tesseract_gui/ignition/model.png"), text)
   , scene_graph(std::move(scene_graph))
 {
   ctor();
@@ -38,19 +34,10 @@ int SceneGraphStandardItem::type() const
 
 void SceneGraphStandardItem::ctor()
 {
-  {
-    auto* item = new QStandardItem(*TEXT_ICON(), "name");
-    auto* value = new QStandardItem(QString::fromStdString(scene_graph->getName()));
-    appendRow({item, value});
-  }
+  appendRow(createStandardItemString("name", scene_graph->getName()));
+  appendRow(createStandardItemString("root_link", scene_graph->getRoot()));
 
-  {
-    auto* item = new QStandardItem(*TEXT_ICON(), "root_link");
-    auto* value = new QStandardItem(QString::fromStdString(scene_graph->getRoot()));
-    appendRow({item, value});
-  }
-
-  auto* links_item = new QStandardItem(*LINK_VECTOR_ICON(), "Links");
+  auto* links_item = new QStandardItem(QIcon(":/tesseract_gui/ignition/link_vector.png"), "Links");
   for (const auto& link : scene_graph->getLinks())
   {
     auto* item = new LinkStandardItem(QString::fromStdString(link->getName()), std::make_shared<tesseract_scene_graph::Link>(link->clone()));
@@ -58,7 +45,7 @@ void SceneGraphStandardItem::ctor()
   }
   appendRow(links_item);
 
-  auto* joints_item = new QStandardItem(*JOINT_VECTOR_ICON(), "Joints");
+  auto* joints_item = new QStandardItem(QIcon(":/tesseract_gui/ignition/joint_vector.png"), "Joints");
   for (const auto& joint : scene_graph->getJoints())
   {
     auto* item = new JointStandardItem(QString::fromStdString(joint->getName()), std::make_shared<tesseract_scene_graph::Joint>(joint->clone()));

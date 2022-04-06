@@ -1,22 +1,20 @@
 
 #include <tesseract_gui/widgets/common/plugin_info_standard_item.h>
+#include <tesseract_gui/widgets/common/standard_item_utils.h>
 #include <tesseract_gui/common/standard_item_type.h>
-
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, TEXT_ICON, (":/tesseract_gui/png/text.png"));
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, PLUGIN_ICON, (":/tesseract_gui/png/plugin.png"));
 
 namespace tesseract_gui
 {
 
 PluginInfoStandardItem::PluginInfoStandardItem(tesseract_common::PluginInfo plugin_info)
-  : QStandardItem(*PLUGIN_ICON(), "Plugin Info")
+  : QStandardItem(QIcon(":/tesseract_gui/png/plugin.png"), "Plugin Info")
   , plugin_info(std::move(plugin_info))
 {
   ctor();
 }
 
 PluginInfoStandardItem::PluginInfoStandardItem(const QString &text, tesseract_common::PluginInfo plugin_info)
-  : QStandardItem(*PLUGIN_ICON(), text)
+  : QStandardItem(QIcon(":/tesseract_gui/png/plugin.png"), text)
   , plugin_info(std::move(plugin_info))
 {
   ctor();
@@ -36,13 +34,8 @@ int PluginInfoStandardItem::type() const
 
 void PluginInfoStandardItem::ctor()
 {
-  auto* class_name = new QStandardItem(*TEXT_ICON, "link_name1");
-  auto* class_value = new QStandardItem(QString("%1").arg(plugin_info.class_name.c_str()));
-  appendRow({class_name, class_value});
-
-  auto* config_name = new QStandardItem(*TEXT_ICON, "config");
-  auto* config_value = new QStandardItem(QString("%1").arg(plugin_info.getConfigString().c_str()));
-  appendRow({config_name, config_value});
+  appendRow(createStandardItemString("link_name1", plugin_info.class_name));
+  appendRow(createStandardItemString("config", plugin_info.getConfigString()));
 }
 }
 

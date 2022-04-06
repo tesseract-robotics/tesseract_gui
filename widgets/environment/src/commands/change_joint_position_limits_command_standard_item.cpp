@@ -3,21 +3,18 @@
 #include <tesseract_gui/widgets/common/standard_item_utils.h>
 #include <tesseract_gui/common/standard_item_type.h>
 
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, COMMAND_ICON, (":/tesseract_gui/png/merge.png"));
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, JOINT_ICON, (":/tesseract_gui/ignition/joint.png"));
-
 namespace tesseract_gui
 {
 
 ChangeJointPositionLimitsCommandStandardItem::ChangeJointPositionLimitsCommandStandardItem(tesseract_environment::ChangeJointPositionLimitsCommand::ConstPtr command)
-  : QStandardItem(*COMMAND_ICON(), "Change Joint Position Limits")
+  : QStandardItem(QIcon(":/tesseract_gui/png/merge.png"), "Change Joint Position Limits")
   , command(std::move(command))
 {
   ctor();
 }
 
 ChangeJointPositionLimitsCommandStandardItem::ChangeJointPositionLimitsCommandStandardItem(const QString &text, tesseract_environment::ChangeJointPositionLimitsCommand::ConstPtr command)
-  : QStandardItem(*COMMAND_ICON(), text)
+  : QStandardItem(QIcon(":/tesseract_gui/png/merge.png"), text)
   , command(std::move(command))
 {
   ctor();
@@ -39,7 +36,7 @@ void ChangeJointPositionLimitsCommandStandardItem::ctor()
 {
   for (const auto& joint : command->getLimits())
   {
-    auto* item = new QStandardItem(*JOINT_ICON(), joint.first.c_str());
+    auto* item = new QStandardItem(QIcon(":/tesseract_gui/ignition/joint.png"), joint.first.c_str());
 
     item->appendRow(createStandardItemFloat("lower", joint.second.first));
     item->appendRow(createStandardItemFloat("upper", joint.second.second));

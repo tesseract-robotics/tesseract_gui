@@ -5,6 +5,7 @@
 #include <tesseract_gui/widgets/kinematic_groups/link_group_standard_item.h>
 #include <tesseract_gui/widgets/kinematic_groups/group_joint_states_standard_item.h>
 #include <tesseract_gui/widgets/kinematic_groups/group_tcps_standard_item.h>
+#include <tesseract_gui/widgets/common/kinematics_plugin_info_standard_item.h>
 #include <tesseract_gui/common/standard_item_type.h>
 
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, CUBE_ICON, (":/tesseract_gui/png/cube.png"));
@@ -75,6 +76,9 @@ void KinematicsInfoStandardItem::ctor()
 
   auto* group_tcps = new GroupTCPsStandardItem(kinematics_info.group_tcps);
   appendRow({group_tcps, new QStandardItem()});
+
+  auto* kin_plugins = new KinematicsPluginInfoStandardItem(kinematics_info.kinematics_plugin_info);
+  appendRow({kin_plugins, new QStandardItem()});
 }
 }
 

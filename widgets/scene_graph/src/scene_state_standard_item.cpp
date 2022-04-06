@@ -1,12 +1,11 @@
 #include <tesseract_gui/widgets/scene_graph/scene_state_standard_item.h>
 #include <tesseract_gui/widgets/common/transform_standard_item.h>
+#include <tesseract_gui/widgets/common/standard_item_utils.h>
 #include <tesseract_gui/common/standard_item_type.h>
 
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, SCENE_GRAPH_ICON, (":/tesseract_gui/ignition/model.png"));
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, ORIGIN_ICON, (":/tesseract_gui/png/origin.png"));
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, LINK_VECTOR_ICON, (":/tesseract_gui/ignition/link_vector.png"));
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, JOINT_VECTOR_ICON, (":/tesseract_gui/ignition/joint_vector.png"));
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, NUMERIC_ICON, (":/tesseract_gui/png/numeric.png"));
 
 namespace tesseract_gui
 {
@@ -40,18 +39,15 @@ void SceneStateStandardItem::ctor()
 {
   auto* values_item = new QStandardItem(*JOINT_VECTOR_ICON(), "Values");
   for (auto& joint : scene_state.joints)
-  {
-    auto* x_name = new QStandardItem(*NUMERIC_ICON(), QString::fromStdString(joint.first));
-    auto* x_value = new QStandardItem(QString("%1").arg(joint.second));
-    values_item->appendRow({x_name, x_value});
-  }
+    values_item->appendRow(createStandardItemFloat(joint.first, joint.second));
+
   values_item->sortChildren(0);
   appendRow(values_item);
 
   auto* links_item = new QStandardItem(*LINK_VECTOR_ICON(), "Links");
   for (auto& link : scene_state.link_transforms)
   {
-    auto* item = new TransformStandardItem(*ORIGIN_ICON(), QString::fromStdString(link.first), link.second);
+    auto* item = new TransformStandardItem(QString::fromStdString(link.first), link.second);
     links_item->appendRow(item);
   }
   links_item->sortChildren(0);
@@ -60,7 +56,7 @@ void SceneStateStandardItem::ctor()
   auto* joints_item = new QStandardItem(*JOINT_VECTOR_ICON(), "Joints");
   for (auto& joint : scene_state.joint_transforms)
   {
-    auto* item = new TransformStandardItem(*ORIGIN_ICON(), QString::fromStdString(joint.first), joint.second);
+    auto* item = new TransformStandardItem(QString::fromStdString(joint.first), joint.second);
     joints_item->appendRow(item);
   }
   joints_item->sortChildren(0);

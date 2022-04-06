@@ -12,6 +12,8 @@ add_library(${PROJECT_NAME}_common_widgets SHARED
   src/transform_standard_item.cpp
   src/pairs_collision_margin_data_standard_item.cpp
   src/plugin_info_standard_item.cpp
+  src/rgba_standard_item.cpp
+  src/standard_item_utils.cpp
   src/plugin_info_container_standard_item.cpp
 )
 target_link_libraries(${PROJECT_NAME}_common_widgets PUBLIC

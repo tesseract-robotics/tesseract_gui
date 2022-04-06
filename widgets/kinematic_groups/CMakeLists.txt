@@ -15,7 +15,6 @@ add_library(${PROJECT_NAME}_kinematic_groups SHARED
   src/chain_group_standard_item.cpp
   src/link_group_standard_item.cpp
   src/opw_params_standard_item.cpp
-  src/tcp_standard_item.cpp
   src/joint_group_standard_item.cpp
   src/joint_state_standard_item.cpp
   src/kinematic_groups_model.cpp

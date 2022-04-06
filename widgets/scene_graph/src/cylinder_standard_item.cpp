@@ -1,8 +1,8 @@
 #include <tesseract_gui/widgets/scene_graph/cylinder_standard_item.h>
+#include <tesseract_gui/widgets/common/standard_item_utils.h>
 #include <tesseract_gui/common/standard_item_type.h>
 
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, CYLINDER_ICON, (":/tesseract_gui/png/cylinder.png"));
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, NUMERIC_ICON, (":/tesseract_gui/png/numeric.png"));
 
 namespace tesseract_gui
 {
@@ -34,17 +34,8 @@ int CylinderStandardItem::type() const
 
 void CylinderStandardItem::ctor()
 {
-  {
-    auto* name = new QStandardItem(*NUMERIC_ICON(), "radius");
-    auto* value = new QStandardItem(QString("%1").arg(cylinder->getRadius()));
-    appendRow({name, value});
-  }
-
-  {
-    auto* name = new QStandardItem(*NUMERIC_ICON(), "length");
-    auto* value = new QStandardItem(QString("%1").arg(cylinder->getLength()));
-    appendRow({name, value});
-  }
+  appendRow(createStandardItemFloat("radius", cylinder->getRadius()));
+  appendRow(createStandardItemFloat("length", cylinder->getLength()));
 }
 }
 

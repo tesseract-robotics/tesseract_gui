@@ -1,9 +1,9 @@
 
 #include <tesseract_gui/widgets/common/pairs_collision_margin_data_standard_item.h>
+#include <tesseract_gui/widgets/common/standard_item_utils.h>
 #include <tesseract_gui/common/standard_item_type.h>
 
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, CUBE_ICON, (":/tesseract_gui/png/cube.png"));
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, NUMERIC_ICON, (":/tesseract_gui/png/numeric.png"));
+Q_GLOBAL_STATIC_WITH_ARGS(QIcon, CUBE_ICON, (":/tesseract_gui/png/cube.png"))
 
 namespace tesseract_gui
 {
@@ -57,9 +57,7 @@ void PairsCollisionMarginDataStandardItem::addPairCollisionMargin(const tesserac
     item = it->second;
   }
 
-  auto* name = new QStandardItem(*NUMERIC_ICON(), pair.second.c_str());
-  auto* value = new QStandardItem(QString("%1").arg(collision_margin));
-  item->appendRow({name, name});
+  item->appendRow(createStandardItemFloat(pair.second, collision_margin));
 }
 }
 

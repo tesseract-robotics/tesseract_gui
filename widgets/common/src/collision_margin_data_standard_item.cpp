@@ -1,10 +1,10 @@
 
 #include <tesseract_gui/widgets/common/collision_margin_data_standard_item.h>
 #include <tesseract_gui/widgets/common/pairs_collision_margin_data_standard_item.h>
+#include <tesseract_gui/widgets/common/standard_item_utils.h>
 #include <tesseract_gui/common/standard_item_type.h>
 
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, CUBE_ICON, (":/tesseract_gui/png/cube.png"));
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, NUMERIC_ICON, (":/tesseract_gui/png/numeric.png"));
 
 namespace tesseract_gui
 {
@@ -37,16 +37,9 @@ int CollisionMarginDataStandardItem::type() const
 
 void CollisionMarginDataStandardItem::ctor()
 {
-  auto* default_name = new QStandardItem(*NUMERIC_ICON(), "Default Margin");
-  auto* default_value = new QStandardItem(QString("%1").arg(collision_margin_data.getDefaultCollisionMargin()));
-  appendRow({default_name, default_value});
-
-  auto* max_name = new QStandardItem(*NUMERIC_ICON(), "Max Margin");
-  auto* max_value = new QStandardItem(QString("%1").arg(collision_margin_data.getMaxCollisionMargin()));
-  appendRow({max_name, max_value});
-
-  auto* pairs_item = new PairsCollisionMarginDataStandardItem(collision_margin_data.getPairCollisionMargins());
-  appendRow({pairs_item, new QStandardItem()});
+  appendRow(createStandardItemFloat("Default Margin", collision_margin_data.getDefaultCollisionMargin()));
+  appendRow(createStandardItemFloat("Max Margin", collision_margin_data.getMaxCollisionMargin()));
+  appendRow(new PairsCollisionMarginDataStandardItem(collision_margin_data.getPairCollisionMargins()));
 }
 }
 

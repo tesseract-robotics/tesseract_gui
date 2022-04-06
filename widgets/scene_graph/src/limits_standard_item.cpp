@@ -1,8 +1,8 @@
 #include <tesseract_gui/widgets/scene_graph/limits_standard_item.h>
+#include <tesseract_gui/widgets/common/standard_item_utils.h>
 #include <tesseract_gui/common/standard_item_type.h>
 
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, LIMITS_ICON, (":/tesseract_gui/png/limits.png"));
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, NUMERIC_ICON, (":/tesseract_gui/png/numeric.png"));
 
 namespace tesseract_gui
 {
@@ -34,34 +34,10 @@ int LimitsStandardItem::type() const
 
 void LimitsStandardItem::ctor()
 {
-  {
-    auto* item = new QStandardItem(*NUMERIC_ICON(), "lower");
-    auto* value = new QStandardItem(QString("%1").arg(limits->lower));
-    appendRow({item, value});
-  }
-
-  {
-    auto* item = new QStandardItem(*NUMERIC_ICON(), "upper");
-    auto* value = new QStandardItem(QString("%1").arg(limits->upper));
-    appendRow({item, value});
-  }
-
-  {
-    auto* item = new QStandardItem(*NUMERIC_ICON(), "effort");
-    auto* value = new QStandardItem(QString("%1").arg(limits->effort));
-    appendRow({item, value});
-  }
-
-  {
-    auto* item = new QStandardItem(*NUMERIC_ICON(), "velocity");
-    auto* value = new QStandardItem(QString("%1").arg(limits->velocity));
-    appendRow({item, value});
-  }
-
-  {
-    auto* item = new QStandardItem(*NUMERIC_ICON(), "acceleration");
-    auto* value = new QStandardItem(QString("%1").arg(limits->acceleration));
-    appendRow({item, value});
-  }
+  appendRow(createStandardItemFloat("lower", limits->lower));
+  appendRow(createStandardItemFloat("upper", limits->upper));
+  appendRow(createStandardItemFloat("effort", limits->effort));
+  appendRow(createStandardItemFloat("velocity", limits->velocity));
+  appendRow(createStandardItemFloat("acceleration", limits->acceleration));
 }
 }

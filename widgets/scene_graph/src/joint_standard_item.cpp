@@ -5,6 +5,7 @@
 #include <tesseract_gui/widgets/scene_graph/calibration_standard_item.h>
 #include <tesseract_gui/widgets/scene_graph/mimic_standard_item.h>
 #include <tesseract_gui/widgets/common/transform_standard_item.h>
+#include <tesseract_gui/widgets/common/standard_item_utils.h>
 #include <tesseract_gui/common/standard_item_type.h>
 
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, JOINT_ICON, (":/tesseract_gui/ignition/joint.png"));
@@ -14,9 +15,6 @@ Q_GLOBAL_STATIC_WITH_ARGS(QIcon, REVOLUTE_ICON, (":/tesseract_gui/png/revolute.p
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, CONTINUOUS_ICON, (":/tesseract_gui/png/continuous.png"));
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, PRISMATIC_ICON, (":/tesseract_gui/png/prismatic.png"));
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, UNKNOWN_ICON, (":/tesseract_gui/png/unknown.png"));
-
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, TEXT_ICON, (":/tesseract_gui/png/text.png"));
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, NUMERIC_ICON, (":/tesseract_gui/png/numeric.png"));
 
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, FIXED_JOINT_ICON, (":/tesseract_gui/ignition/joint_fixed.png"));
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, REVOLUTE_JOINT_ICON, (":/tesseract_gui/ignition/joint_revolute.png"));
@@ -54,11 +52,7 @@ int JointStandardItem::type() const
 
 void JointStandardItem::ctor()
 {
-  {
-    auto* item = new QStandardItem(*TEXT_ICON(), "name");
-    auto* value = new QStandardItem(QString::fromStdString(joint->getName()));
-    appendRow({item, value});
-  }
+  appendRow(createStandardItemString("name", joint->getName()));
 
   {
     QStandardItem* item;
@@ -94,7 +88,6 @@ void JointStandardItem::ctor()
     appendRow({item, value});
   }
 
-
   if (joint->type == tesseract_scene_graph::JointType::REVOLUTE ||
       joint->type == tesseract_scene_graph::JointType::PRISMATIC ||
       joint->type == tesseract_scene_graph::JointType::PLANAR)
@@ -102,66 +95,31 @@ void JointStandardItem::ctor()
     auto* item = new QStandardItem(*AXIS_ICON(), "axis");
     item->setColumnCount(2);
 
-    auto* x_name = new QStandardItem(*NUMERIC_ICON(), "x");
-    auto* x_value = new QStandardItem(QString("%1").arg(joint->axis.x()));
-    item->appendRow({x_name, x_value});
-
-    auto* y_name = new QStandardItem(*NUMERIC_ICON(), "y");
-    auto* y_value = new QStandardItem(QString("%1").arg(joint->axis.y()));
-    item->appendRow({y_name, y_value});
-
-    auto* z_name = new QStandardItem(*NUMERIC_ICON(), "z");
-    auto* z_value = new QStandardItem(QString("%1").arg(joint->axis.z()));
-    item->appendRow({z_name, z_value});
+    item->appendRow(createStandardItemFloat("x", joint->axis.x()));
+    item->appendRow(createStandardItemFloat("y", joint->axis.y()));
+    item->appendRow(createStandardItemFloat("z", joint->axis.z()));
 
     appendRow(item);
   }
 
-  {
-    auto* item = new QStandardItem(*TEXT_ICON(), "child_link_name");
-    auto* value = new QStandardItem(QString::fromStdString(joint->child_link_name));
-    appendRow({item, value});
-  }
-
-  {
-    auto* item = new QStandardItem(*TEXT_ICON(), "parent_link_name");
-    auto* value = new QStandardItem(QString::fromStdString(joint->parent_link_name));
-    appendRow({item, value});
-  }
-
-  {
-    auto* item = new TransformStandardItem(joint->parent_to_joint_origin_transform);
-    appendRow(item);
-  }
+  appendRow(createStandardItemString("child_link_name", joint->child_link_name));
+  appendRow(createStandardItemString("parent_link_name", joint->parent_link_name));
+  appendRow(new TransformStandardItem(joint->parent_to_joint_origin_transform));
 
   if (joint->dynamics != nullptr)
-  {
-    auto* item = new DynamicsStandardItem(joint->dynamics);
-    appendRow(item);
-  }
+    appendRow(new DynamicsStandardItem(joint->dynamics));
 
   if (joint->limits != nullptr)
-  {
-    auto* item = new LimitsStandardItem(joint->limits);
-    appendRow(item);
-  }
+    appendRow(new LimitsStandardItem(joint->limits));
 
   if (joint->safety != nullptr)
-  {
-    auto* item = new SafetyStandardItem(joint->safety);
-    appendRow(item);
-  }
+    appendRow(new SafetyStandardItem(joint->safety));
 
   if (joint->calibration != nullptr)
-  {
-    auto* item = new CalibrationStandardItem(joint->calibration);
-    appendRow(item);
-  }
+    appendRow(new CalibrationStandardItem(joint->calibration));
 
   if (joint->mimic != nullptr)
-  {
-    auto* item = new MimicStandardItem(joint->mimic);
-    appendRow(item);
-  }
+    appendRow(new MimicStandardItem(joint->mimic));
+
 }
 }

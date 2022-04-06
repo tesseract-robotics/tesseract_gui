@@ -1,8 +1,8 @@
 #include <tesseract_gui/widgets/scene_graph/calibration_standard_item.h>
+#include <tesseract_gui/widgets/common/standard_item_utils.h>
 #include <tesseract_gui/common/standard_item_type.h>
 
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, CALIBRATION_ICON, (":/tesseract_gui/png/calibration.png"));
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, NUMERIC_ICON, (":/tesseract_gui/png/numeric.png"));
 
 namespace tesseract_gui
 {
@@ -34,22 +34,8 @@ int CalibrationStandardItem::type() const
 
 void CalibrationStandardItem::ctor()
 {
-  {
-    auto* item = new QStandardItem(*NUMERIC_ICON(), "reference_position");
-    auto* value = new QStandardItem(QString("%1").arg(calibration->reference_position));
-    appendRow({item, value});
-  }
-
-  {
-    auto* item = new QStandardItem(*NUMERIC_ICON(), "rising");
-    auto* value = new QStandardItem(QString("%1").arg(calibration->rising));
-    appendRow({item, value});
-  }
-
-  {
-    auto* item = new QStandardItem(*NUMERIC_ICON(), "falling");
-    auto* value = new QStandardItem(QString("%1").arg(calibration->falling));
-    appendRow({item, value});
-  }
+  appendRow(createStandardItemFloat("reference_position", calibration->reference_position));
+  appendRow(createStandardItemFloat("rising", calibration->rising));
+  appendRow(createStandardItemFloat("falling", calibration->falling));
 }
 }

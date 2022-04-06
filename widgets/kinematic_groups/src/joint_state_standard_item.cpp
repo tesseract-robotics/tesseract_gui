@@ -1,9 +1,8 @@
 #include <tesseract_gui/widgets/kinematic_groups/joint_state_standard_item.h>
+#include <tesseract_gui/widgets/common/standard_item_utils.h>
 #include <tesseract_gui/common/standard_item_type.h>
 
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, CUBE_ICON, (":/tesseract_gui/png/cube.png"));
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, TEXT_ICON, (":/tesseract_gui/png/text.png"));
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, NUMERIC_ICON, (":/tesseract_gui/png/numeric.png"));
 
 namespace tesseract_gui
 {
@@ -33,11 +32,8 @@ int JointStateStandardItem::type() const
 void JointStateStandardItem::ctor(const std::unordered_map<std::string, double>& state)
 {
   for (const auto& s : state)
-  {
-    auto* p_name = new QStandardItem(*NUMERIC_ICON(), QString::fromStdString(s.first));
-    auto* p_value = new QStandardItem(QString("%1").arg(s.second));
-    appendRow({p_name, p_value});
-  }
+    appendRow(createStandardItemFloat(s.first, s.second));
+
   sortChildren(0);
 }
 }

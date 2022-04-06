@@ -1,10 +1,8 @@
 #include <tesseract_gui/widgets/kinematic_groups/group_tcps_standard_item.h>
-#include <tesseract_gui/widgets/kinematic_groups/tcp_standard_item.h>
+#include <tesseract_gui/widgets/common/transform_standard_item.h>
 #include <tesseract_gui/common/standard_item_type.h>
 
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, ROBOT_ICON, (":/tesseract_gui/png/robotic-arm.png"));
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, TEXT_ICON, (":/tesseract_gui/png/text.png"));
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, NUMERIC_ICON, (":/tesseract_gui/png/numeric.png"));
 
 namespace tesseract_gui
 {
@@ -55,7 +53,7 @@ void GroupTCPsStandardItem::addGroupTCPItem(const QString& group_name, const QSt
     appendRow({group_item, new QStandardItem()}); // Must have two columns so QTreeView::setRootIndex will have two columns
   }
 
-  group_item->appendRow(new TCPStandardItem(tcp_name, tcp));
+  group_item->appendRow(new TransformStandardItem(tcp_name, tcp));
 }
 
 void GroupTCPsStandardItem::addGroupTCP(const QString& group_name, const QString& tcp_name, const Eigen::Isometry3d& tcp)

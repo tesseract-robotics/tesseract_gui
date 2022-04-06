@@ -1,13 +1,11 @@
 #include <tesseract_gui/widgets/scene_graph/polygon_mesh_standard_item.h>
-#include <tesseract_geometry/impl/convex_mesh.h>
+#include <tesseract_gui/widgets/common/standard_item_utils.h>
 #include <tesseract_gui/common/standard_item_type.h>
+#include <tesseract_geometry/impl/convex_mesh.h>
 
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, POLYGON_MESH_ICON, (":/tesseract_gui/png/mesh.png"));
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, MESH_ICON, (":/tesseract_gui/png/surface.png"));
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, CONVEX_MESH_ICON, (":/tesseract_gui/png/mesh.png"));
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, NUMERIC_ICON, (":/tesseract_gui/png/numeric.png"));
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, URL_ICON, (":/tesseract_gui/png/url.png"));
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, TEXT_ICON, (":/tesseract_gui/png/text.png"));
 
 namespace tesseract_gui
 {
@@ -43,7 +41,6 @@ void PolygonMeshStandardItem::ctor()
   {
     setIcon(*CONVEX_MESH_ICON());
     setText("Convex Mesh");
-    auto* name = new QStandardItem(*TEXT_ICON(), "creation method");
 
     std::string method {"Default"};
     auto convex_mesh = std::static_pointer_cast<tesseract_geometry::ConvexMesh>(mesh);
@@ -52,8 +49,7 @@ void PolygonMeshStandardItem::ctor()
     else if (convex_mesh->getCreationMethod() == tesseract_geometry::ConvexMesh::CONVERTED)
       method = "Converted";
 
-    auto* value = new QStandardItem(QString::fromStdString(method));
-    appendRow({name, value});
+    appendRow(createStandardItemString("creation method", method));
   }
   else if (mesh->getType() == tesseract_geometry::GeometryType::MESH)
   {
@@ -66,27 +62,13 @@ void PolygonMeshStandardItem::ctor()
     setText("SDF Mesh");
   }
 
+  std::string url;
+  if (mesh->getResource() != nullptr)
+    url = mesh->getResource()->getUrl();
 
-  {
-    auto* name = new QStandardItem(*URL_ICON(), "resource");
-    std::string url;
-    if (mesh->getResource() != nullptr)
-      url = mesh->getResource()->getUrl();
-
-    auto* value = new QStandardItem(QString::fromStdString(url));
-    appendRow({name, value});
-  }
-
-  {
-    auto* name = new QStandardItem(*NUMERIC_ICON(), "vertex count");
-    auto* value = new QStandardItem(QString("%1").arg(mesh->getVertexCount()));
-    appendRow({name, value});
-  }
-  {
-    auto* name = new QStandardItem(*NUMERIC_ICON(), "face count");
-    auto* value = new QStandardItem(QString("%1").arg(mesh->getFaceCount()));
-    appendRow({name, value});
-  }
+  appendRow(createStandardItemURL("resource", url));
+  appendRow(createStandardItemInt("vertex count", mesh->getVertexCount()));
+  appendRow(createStandardItemInt("face count", mesh->getFaceCount()));
 }
 }
 

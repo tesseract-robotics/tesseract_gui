@@ -1,8 +1,8 @@
 #include <tesseract_gui/widgets/scene_graph/plane_standard_item.h>
+#include <tesseract_gui/widgets/common/standard_item_utils.h>
 #include <tesseract_gui/common/standard_item_type.h>
 
 Q_GLOBAL_STATIC_WITH_ARGS(QIcon, PLANE_ICON, (":/tesseract_gui/png/plane.png"));
-Q_GLOBAL_STATIC_WITH_ARGS(QIcon, NUMERIC_ICON, (":/tesseract_gui/png/numeric.png"));
 
 namespace tesseract_gui
 {
@@ -34,29 +34,10 @@ int PlaneStandardItem::type() const
 
 void PlaneStandardItem::ctor()
 {
-  {
-    auto* name = new QStandardItem(*NUMERIC_ICON(), "a");
-    auto* value = new QStandardItem(QString("%1").arg(plane->getA()));
-    appendRow({name, value});
-  }
-
-  {
-    auto* name = new QStandardItem(*NUMERIC_ICON(), "b");
-    auto* value = new QStandardItem(QString("%1").arg(plane->getB()));
-    appendRow({name, value});
-  }
-
-  {
-    auto* name = new QStandardItem(*NUMERIC_ICON(), "c");
-    auto* value = new QStandardItem(QString("%1").arg(plane->getC()));
-    appendRow({name, value});
-  }
-
-  {
-    auto* name = new QStandardItem(*NUMERIC_ICON(), "d");
-    auto* value = new QStandardItem(QString("%1").arg(plane->getD()));
-    appendRow({name, value});
-  }
+  appendRow(createStandardItemFloat("a", plane->getA()));
+  appendRow(createStandardItemFloat("b", plane->getB()));
+  appendRow(createStandardItemFloat("c", plane->getC()));
+  appendRow(createStandardItemFloat("d", plane->getD()));
 }
 }
 

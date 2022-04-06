@@ -57,6 +57,8 @@ Q_SIGNALS:
   void linkVisibleChanged(const std::string& link_name, bool visible);
   void linkCollisionVisibleChanged(const std::string& link_name, bool visible);
   void linkVisualVisibleChanged(const std::string& link_name, bool visible);
+  void selectedLinksChanged(const std::vector<std::string>& selected_links);
+  void triggerRender();
 
 protected:
   std::unique_ptr<Ui::EnvironmentWidget> ui;

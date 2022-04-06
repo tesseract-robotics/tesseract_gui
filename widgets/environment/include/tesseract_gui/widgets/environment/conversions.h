@@ -30,6 +30,11 @@ ignition::rendering::VisualPtr loadLinkCollisions(ignition::rendering::Scene& sc
                                                   EntityContainer& entity_container,
                                                   const tesseract_scene_graph::Link& link);
 
+ignition::rendering::VisualPtr loadLinkWireBox(ignition::rendering::Scene& scene,
+                                               EntityContainer& entity_container,
+                                               const tesseract_scene_graph::Link& link,
+                                               const ignition::math::AxisAlignedBox& aabb);
+
 ignition::rendering::VisualPtr loadLinkGeometry(ignition::rendering::Scene& scene,
                                                 EntityContainer& entity_container,
                                                 const tesseract_geometry::Geometry& geometry,

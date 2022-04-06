@@ -55,6 +55,9 @@ EnvironmentWidget::EnvironmentWidget(QWidget *parent)
   connect(ui->acm_tree_view, &QTreeView::expanded, [this](){ui->acm_tree_view->resizeColumnToContents(0);});
   connect(ui->cmd_history_tree_view, &QTreeView::collapsed, [this](){ui->cmd_history_tree_view->resizeColumnToContents(0);});
   connect(ui->cmd_history_tree_view, &QTreeView::expanded, [this](){ui->cmd_history_tree_view->resizeColumnToContents(0);});
+
+//  connect(ui->acm_tree_view, SIGNAL(entrySelected()), this, SIGNAL(entrySelected()));
+  connect(ui->acm_tree_view, SIGNAL(selectedLinksChanged(std::vector<std::string>)), this, SIGNAL(selectedLinksChanged(std::vector<std::string>)));
 }
 
 EnvironmentWidget::~EnvironmentWidget() = default;

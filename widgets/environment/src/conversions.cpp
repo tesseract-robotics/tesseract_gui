@@ -2,6 +2,7 @@
 #include <tesseract_geometry/geometries.h>
 #include <ignition/math/eigen3/Conversions.hh>
 #include <ignition/common/MeshManager.hh>
+#include <ignition/rendering/WireBox.hh>
 
 namespace tesseract_gui
 {
@@ -37,6 +38,9 @@ ignition::rendering::VisualPtr loadLink(ignition::rendering::Scene& scene,
   ignition::rendering::VisualPtr ign_link = scene.CreateVisual(lc, link.getName());
   ign_link->AddChild(loadLinkVisuals(scene, entity_container, link));
   ign_link->AddChild(loadLinkCollisions(scene, entity_container, link));
+  if (!link.visual.empty() || !link.collision.empty())
+    ign_link->AddChild(loadLinkWireBox(scene, entity_container, link, ign_link->LocalBoundingBox()));
+
   return ign_link;
 }
 
@@ -66,6 +70,37 @@ ignition::rendering::VisualPtr loadLinkCollisions(ignition::rendering::Scene& sc
     ign_link_collisions->AddChild(loadLinkGeometry(scene, entity_container, *visual->geometry, Eigen::Vector3d::Ones(), visual->origin, visual->material));
 
   return ign_link_collisions;
+}
+
+ignition::rendering::VisualPtr loadLinkWireBox(ignition::rendering::Scene& scene,
+                                               EntityContainer& entity_container,
+                                               const tesseract_scene_graph::Link &link,
+                                               const ignition::math::v6::AxisAlignedBox &aabb)
+{
+  std::string name = link.getName() + "::WireBox";
+  auto lc = entity_container.addVisual(name);
+
+  auto white = scene.Material("highlight_material");
+  if (!white)
+  {
+    white = scene.CreateMaterial("highlight_material");
+    white->SetAmbient(1.0, 1.0, 1.0);
+    white->SetDiffuse(1.0, 1.0, 1.0);
+    white->SetSpecular(1.0, 1.0, 1.0);
+    white->SetEmissive(1.0, 1.0, 1.0);
+  }
+
+  ignition::rendering::WireBoxPtr wire_box = scene.CreateWireBox();
+  wire_box->SetBox(aabb);
+
+  // Create visual and add wire box
+  ignition::rendering::VisualPtr wire_box_vis = scene.CreateVisual(lc, name);
+  wire_box_vis->SetInheritScale(false);
+  wire_box_vis->AddGeometry(wire_box);
+  wire_box_vis->SetMaterial(white, false);
+  wire_box_vis->SetVisible(false);
+
+  return wire_box_vis;
 }
 
 ignition::rendering::VisualPtr loadLinkGeometry(ignition::rendering::Scene& scene,
@@ -232,4 +267,5 @@ ignition::rendering::MaterialPtr loadMaterial(ignition::rendering::Scene& scene,
 
   return nullptr;
 }
+
 }

@@ -7,6 +7,8 @@ AllowedCollisionMatrixModel::AllowedCollisionMatrixModel(QObject *parent)
   : QStandardItemModel(parent)
 {
   setColumnCount(3);
+
+
 }
 
 AllowedCollisionMatrixModel::AllowedCollisionMatrixModel(const AllowedCollisionMatrixModel &other)

@@ -71,7 +71,7 @@ public:
   std::string sceneName = "scene";
 
   /// \brief Initial Camera pose
-  ignition::math::Pose3d cameraPose = ignition::math::Pose3d(0, 0, 2, 0, 0.4, 0);
+  ignition::math::Pose3d cameraPose = ignition::math::Pose3d(-6, 0, 6, 0, 0.5, 0);
 
   /// \brief Default camera near clipping plane distance
   double cameraNearClip = 0.01;

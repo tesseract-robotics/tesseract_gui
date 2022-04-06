@@ -141,8 +141,9 @@ TesseractRoboticsStudio::TesseractRoboticsStudio(QWidget *parent)
       auto* widget = new tesseract_gui::IgnitionEnvironmentWidget(scene_info->scene_name, *scene_info->entity_manager);
       widget->setEnvironment(std::move(env));
       qobject_cast<QApplication *>(qGuiApp)->installEventFilter(widget);
+      connect(widget, SIGNAL(triggerRender()), scene_info->render_widget, SLOT(update()));
 
-      ads::CDockWidget* dock_widget = new ads::CDockWidget("Environment");
+      auto* dock_widget = new ads::CDockWidget("Environment");
       dock_widget->setWidget(widget);
       dock_widget->setFeature(ads::CDockWidget::DockWidgetDeleteOnClose, true);
       dock_widget->setFeature(ads::CDockWidget::DockWidgetFocusable, true);

@@ -9,6 +9,7 @@ tesseract_variables()
 QT5_WRAP_CPP(ACM_headers_MOC
   include/tesseract_gui/widgets/acm/allowed_collision_matrix_model.h
   include/tesseract_gui/widgets/acm/allowed_collision_matrix_widget.h
+  include/tesseract_gui/widgets/acm/allowed_collision_matrix_tree_view.h
   include/tesseract_gui/widgets/acm/add_allowed_collision_entry_dialog.h)
 QT5_WRAP_UI(ACM_WIDGET_headers_UI
   include/tesseract_gui/widgets/acm/allowed_collision_matrix_widget.ui
@@ -19,6 +20,7 @@ add_library(${PROJECT_NAME}_acm SHARED
   ${ACM_WIDGET_headers_UI}
   src/allowed_collision_matrix_model.cpp
   src/allowed_collision_matrix_widget.cpp
+  src/allowed_collision_matrix_tree_view.cpp
   src/add_allowed_collision_entry_dialog.cpp)
 
 target_link_libraries(${PROJECT_NAME}_acm PUBLIC

@@ -33,11 +33,11 @@ public Q_SLOTS:
   void onRemoveButtonClicked();
   void onAddButtonClicked();
   void onGenerateButtonClicked();
-  void onSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
 
 Q_SIGNALS:
   void generateClicked(int resolution);
   void entrySelected(tesseract_common::AllowedCollisionEntries selection);
+  void selectedLinksChanged(const std::vector<std::string>& selected_links);
 
 private:
   std::unique_ptr<Ui::AllowedCollisionMatrixWidget> ui_;

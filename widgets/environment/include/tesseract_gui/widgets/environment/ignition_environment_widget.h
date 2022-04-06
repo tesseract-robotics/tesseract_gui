@@ -21,6 +21,7 @@ private Q_SLOTS:
   void onLinkVisibleChanged(const std::string& link_name, bool visible);
   void onLinkCollisionVisibleChanged(const std::string& link_name, bool visible);
   void onKinkVisualVisibleChanged(const std::string& link_name, bool visible);
+  void onSelectedLinksChanged(const std::vector<std::string>& selected_links);
 
 protected:
   std::string container_name_;
@@ -33,6 +34,8 @@ protected:
   std::unordered_map<std::string, bool> link_visible_changes_;
   std::unordered_map<std::string, bool> link_collision_visible_changes_;
   std::unordered_map<std::string, bool> link_visual_visible_changes_;
+  std::vector<std::string> link_selection_changes_;
+  std::vector<EntityID> highlighted_entities_;
 
   // Documentation inherited
   bool eventFilter(QObject *_obj, QEvent *_event) override;

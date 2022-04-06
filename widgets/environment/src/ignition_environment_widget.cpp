@@ -19,6 +19,7 @@ IgnitionEnvironmentWidget::IgnitionEnvironmentWidget(std::string scene_name,
 , scene_name_(std::move(scene_name))
 , entity_container_(entity_manager.getEntityContainer(container_name_))
 {
+  connect(this, SIGNAL(selectedLinksChanged(std::vector<std::string>)), this, SLOT(onSelectedLinksChanged(std::vector<std::string>)));
 }
 
 IgnitionEnvironmentWidget::~IgnitionEnvironmentWidget() = default;
@@ -29,38 +30,50 @@ void IgnitionEnvironmentWidget::onEnvironmentSet(const tesseract_environment::En
   render_dirty_ = true;
   render_reset_ = true;
   render_state_dirty_ = true;
+  emit triggerRender();
 }
 
 void IgnitionEnvironmentWidget::onEnvironmentCommandsApplied(const tesseract_environment::Commands& commands)
 {
   render_dirty_ = true;
   render_state_dirty_ = true;
+  emit triggerRender();
 }
 
 void IgnitionEnvironmentWidget::onLinkVisibleChanged(const std::string& link_name, bool visible)
 {
   link_visible_changes_[link_name] = visible;
   render_dirty_ = true;
+  emit triggerRender();
 }
 
 void IgnitionEnvironmentWidget::onLinkCollisionVisibleChanged(const std::string& link_name, bool visible)
 {
   link_collision_visible_changes_[link_name] = visible;
   render_dirty_ = true;
+  emit triggerRender();
 }
 
 void IgnitionEnvironmentWidget::onKinkVisualVisibleChanged(const std::string& link_name, bool visible)
 {
   link_visual_visible_changes_[link_name] = visible;
   render_dirty_ = true;
+  emit triggerRender();
+}
+
+void IgnitionEnvironmentWidget::onSelectedLinksChanged(const std::vector<std::string>& selected_links)
+{
+  link_selection_changes_ = selected_links;
+  render_dirty_ = true;
+  emit triggerRender();
 }
 
 bool IgnitionEnvironmentWidget::eventFilter(QObject *_obj, QEvent *_event)
 {
-  if (_event->type() == events::Render::kType)
+  if (_event->type() == events::PreRender::kType)
   {
-    assert(dynamic_cast<events::Render*>(_event) != nullptr);
-    if (static_cast<events::Render*>(_event)->getSceneName() == scene_name_ && render_dirty_)
+    assert(dynamic_cast<events::PreRender*>(_event) != nullptr);
+    if (static_cast<events::PreRender*>(_event)->getSceneName() == scene_name_ && render_dirty_)
     {
       ignition::rendering::ScenePtr scene = sceneFromFirstRenderEngine(scene_name_);
       if (scene != nullptr)
@@ -155,6 +168,7 @@ bool IgnitionEnvironmentWidget::eventFilter(QObject *_obj, QEvent *_event)
                   // LCOV_EXCL_STOP
               }
             }
+            render_revision_ = revision;
           }
 
           for (const auto& l : link_visible_changes_)
@@ -181,6 +195,26 @@ bool IgnitionEnvironmentWidget::eventFilter(QObject *_obj, QEvent *_event)
             auto visual_node = scene->VisualById(lc);
             if (visual_node != nullptr)
               visual_node->SetVisible(l.second);
+          }
+
+          for (const auto& id : highlighted_entities_)
+          {
+            auto visual_node = scene->VisualById(id);
+            if (visual_node != nullptr)
+              visual_node->SetVisible(false);
+          }
+          highlighted_entities_.clear();
+
+          for (const auto& l : link_selection_changes_)
+          {
+            std::string visual_key = l + "::WireBox";
+            auto lc = entity_container_->getVisual(visual_key);
+            auto visual_node = scene->VisualById(lc);
+            if (visual_node != nullptr)
+            {
+              visual_node->SetVisible(true);
+              highlighted_entities_.push_back(lc);
+            }
           }
         }
         render_dirty_ = false;

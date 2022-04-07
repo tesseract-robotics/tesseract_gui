@@ -3,6 +3,7 @@
 #include <ignition/math/eigen3/Conversions.hh>
 #include <ignition/common/MeshManager.hh>
 #include <ignition/rendering/WireBox.hh>
+#include <ignition/rendering/AxisVisual.hh>
 
 namespace tesseract_gui
 {
@@ -21,13 +22,31 @@ bool isMeshWithColor(const std::string& file_path)
   return false;
 }
 
-void loadSceneGraph(ignition::rendering::Scene& scene,
-                    tesseract_gui::EntityContainer &entity_container,
-                    const tesseract_scene_graph::SceneGraph& scene_graph)
+std::vector<std::string> loadSceneGraph(ignition::rendering::Scene& scene,
+                                        tesseract_gui::EntityContainer &entity_container,
+                                        const tesseract_scene_graph::SceneGraph& scene_graph,
+                                        const std::string& prefix)
 {
+  std::vector<std::string> link_names;
   ignition::rendering::VisualPtr root = scene.RootVisual();
-  for (const auto& link : scene_graph.getLinks())
-    root->AddChild(loadLink(scene, entity_container, *link));
+  if (prefix.empty())
+  {
+    for (const auto& link : scene_graph.getLinks())
+    {
+      root->AddChild(loadLink(scene, entity_container, *link));
+      link_names.push_back(link->getName());
+    }
+  }
+  else
+  {
+    for (const auto& link : scene_graph.getLinks())
+    {
+      auto clone_link = link->clone(prefix + link->getName());
+      root->AddChild(loadLink(scene, entity_container, clone_link));
+      link_names.push_back(clone_link.getName());
+    }
+  }
+  return link_names;
 }
 
 ignition::rendering::VisualPtr loadLink(ignition::rendering::Scene& scene,
@@ -38,6 +57,7 @@ ignition::rendering::VisualPtr loadLink(ignition::rendering::Scene& scene,
   ignition::rendering::VisualPtr ign_link = scene.CreateVisual(lc, link.getName());
   ign_link->AddChild(loadLinkVisuals(scene, entity_container, link));
   ign_link->AddChild(loadLinkCollisions(scene, entity_container, link));
+  ign_link->AddChild(loadLinkAxis(scene, entity_container, link));
   if (!link.visual.empty() || !link.collision.empty())
     ign_link->AddChild(loadLinkWireBox(scene, entity_container, link, ign_link->LocalBoundingBox()));
 
@@ -69,6 +89,7 @@ ignition::rendering::VisualPtr loadLinkCollisions(ignition::rendering::Scene& sc
   for (const auto& visual : link.visual)
     ign_link_collisions->AddChild(loadLinkGeometry(scene, entity_container, *visual->geometry, Eigen::Vector3d::Ones(), visual->origin, visual->material));
 
+  ign_link_collisions->SetVisible(false);
   return ign_link_collisions;
 }
 
@@ -101,6 +122,87 @@ ignition::rendering::VisualPtr loadLinkWireBox(ignition::rendering::Scene& scene
   wire_box_vis->SetVisible(false);
 
   return wire_box_vis;
+}
+
+ignition::rendering::VisualPtr loadLinkAxis(ignition::rendering::Scene& scene,
+                                            EntityContainer& entity_container,
+                                            const tesseract_scene_graph::Link& link)
+{
+  std::string name = link.getName() + "::Axis";
+  auto lc = entity_container.addVisual(name);
+
+  // Set an alpha not equal to 1 breaks rendering so cannot use CreateAxisVisual
+  // ignition::rendering::AxisVisualPtr axis =scene.CreateAxisVisual(lc, name);
+  ignition::rendering::VisualPtr axis = scene.CreateVisual(lc, name);
+  auto axis_red = scene.Material("tesseract_gui_axis_red_material");
+  if (!axis_red)
+  {
+    axis_red = scene.CreateMaterial("tesseract_gui_axis_red_material");
+    axis_red->SetAmbient(1.0, 0.0, 0.0);
+    axis_red->SetDiffuse(1.0, 0.0, 0.0);
+    axis_red->SetSpecular(1.0, 0.0, 0.0);
+  }
+
+  auto axis_green = scene.Material("tesseract_gui_axis_green_material");
+  if (!axis_green)
+  {
+    axis_green = scene.CreateMaterial("tesseract_gui_axis_green_material");
+    axis_green->SetAmbient(0.0, 1.0, 0.0);
+    axis_green->SetDiffuse(0.0, 1.0, 0.0);
+    axis_green->SetSpecular(0.0, 1.0, 0.0);
+  }
+
+  auto axis_blue = scene.Material("tesseract_gui_axis_blue_material");
+  if (!axis_blue)
+  {
+    axis_blue = scene.CreateMaterial("tesseract_gui_axis_blue_material");
+    axis_blue->SetAmbient(0.0, 0.0, 1.0);
+    axis_blue->SetDiffuse(0.0, 0.0, 1.0);
+    axis_blue->SetSpecular(0.0, 0.0, 1.0);
+  }
+
+  {
+    auto gv_id = static_cast<unsigned>(entity_container.createEntityID());
+    ignition::rendering::VisualPtr cylinder = scene.CreateVisual(gv_id);
+    Eigen::Isometry3d pose = Eigen::Isometry3d::Identity();
+    pose.translation() = Eigen::Vector3d(0,0,0.5);
+    cylinder->SetLocalPose(ignition::math::eigen3::convert(pose));
+    cylinder->AddGeometry(scene.CreateCylinder());
+    cylinder->Scale(0.1, 0.1, 1.0);
+    cylinder->SetMaterial(axis_blue);
+    axis->AddChild(cylinder);
+  }
+
+  {
+    auto gv_id = static_cast<unsigned>(entity_container.createEntityID());
+    ignition::rendering::VisualPtr cylinder = scene.CreateVisual(gv_id);
+    Eigen::Isometry3d pose = Eigen::Isometry3d::Identity();
+    pose.rotate(Eigen::AngleAxisd(M_PI_2, Eigen::Vector3d::UnitY()));
+    pose.translation() = Eigen::Vector3d(0.5,0,0);
+    cylinder->SetLocalPose(ignition::math::eigen3::convert(pose));
+    cylinder->AddGeometry(scene.CreateCylinder());
+    cylinder->Scale(0.1, 0.1, 1.0);
+    cylinder->SetMaterial(axis_red);
+    axis->AddChild(cylinder);
+  }
+
+  {
+    auto gv_id = static_cast<unsigned>(entity_container.createEntityID());
+    ignition::rendering::VisualPtr cylinder = scene.CreateVisual(gv_id);
+    Eigen::Isometry3d pose = Eigen::Isometry3d::Identity();
+    pose.rotate(Eigen::AngleAxisd(-M_PI_2, Eigen::Vector3d::UnitX()));
+    pose.translation() = Eigen::Vector3d(0,0.5,0);
+    cylinder->SetLocalPose(ignition::math::eigen3::convert(pose));
+    cylinder->AddGeometry(scene.CreateCylinder());
+    cylinder->Scale(0.1, 0.1, 1.0);
+    cylinder->SetMaterial(axis_green);
+    axis->AddChild(cylinder);
+  }
+
+  axis->SetInheritScale(false);
+  axis->Scale(0.1, 0.1, 0.1);
+  axis->SetVisible(true);
+  return axis;
 }
 
 ignition::rendering::VisualPtr loadLinkGeometry(ignition::rendering::Scene& scene,

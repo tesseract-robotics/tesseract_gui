@@ -17,7 +17,8 @@ public:
 
 private Q_SLOTS:
   void onEnvironmentSet(const tesseract_environment::Environment& env);
-  void onEnvironmentCommandsApplied(const tesseract_environment::Commands& commands);
+  void onEnvironmentChanged(const tesseract_environment::Environment& env);
+  void onEnvironmentCurrentStateChanged(const tesseract_environment::Environment& env);
   void onLinkVisibleChanged(const std::string& link_name, bool visible);
   void onLinkCollisionVisibleChanged(const std::string& link_name, bool visible);
   void onKinkVisualVisibleChanged(const std::string& link_name, bool visible);
@@ -27,7 +28,9 @@ protected:
   std::string container_name_;
   std::string scene_name_;
   EntityContainer::Ptr entity_container_;
-  int render_revision_{0};
+  long render_revision_{0};
+  std::chrono::system_clock::time_point render_state_timestamp_{std::chrono::system_clock::now()};
+  std::vector<std::string> render_link_names_;
   bool render_dirty_{true};
   bool render_reset_{true};
   bool render_state_dirty_{true};

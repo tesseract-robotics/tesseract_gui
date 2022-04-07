@@ -30,7 +30,7 @@ namespace tesseract_gui
     }
   }
 
-  void AllowedCollisionMatrixTreeView::onSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
+  void AllowedCollisionMatrixTreeView::onSelectionChanged(const QItemSelection &/*selected*/, const QItemSelection &/*deselected*/)
   {
     auto* model = qobject_cast<tesseract_gui::AllowedCollisionMatrixModel*>(this->model());
     QModelIndexList indices = selectionModel()->selectedRows();

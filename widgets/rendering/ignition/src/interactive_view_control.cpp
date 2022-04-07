@@ -173,19 +173,16 @@ void InteractiveViewControlPrivate::OnRender()
 
   if (this->mouseEvent.Type() == ignition::common::MouseEvent::SCROLL)
   {
-    this->target = ignition::rendering::screenToScene(
-      this->mouseEvent.Pos(), this->camera, this->rayQuery);
+    this->target = ignition::rendering::screenToScene(this->mouseEvent.Pos(), this->camera, this->rayQuery);
 
     this->viewControl->SetTarget(this->target);
-    double distance = this->camera->WorldPosition().Distance(
-        this->target);
-    double amount = -this->drag.Y() * distance / 5.0;
+    double distance = this->camera->WorldPosition().Distance(this->target);
+    double amount = -this->drag.Y() * distance / 20.0;
     this->viewControl->Zoom(amount);
   }
   else if (this->mouseEvent.Type() == ignition::common::MouseEvent::PRESS)
   {
-    this->target = ignition::rendering::screenToScene(
-      this->mouseEvent.PressPos(), this->camera, this->rayQuery);
+    this->target = ignition::rendering::screenToScene(this->mouseEvent.PressPos(), this->camera, this->rayQuery);
     this->viewControl->SetTarget(this->target);
   }
   else
@@ -209,9 +206,7 @@ void InteractiveViewControlPrivate::OnRender()
       double hfov = this->camera->HFOV().Radian();
       double vfov = 2.0f * atan(tan(hfov / 2.0F) / this->camera->AspectRatio());
       double distance = this->camera->WorldPosition().Distance(this->target);
-      double amount = ((-this->drag.Y() /
-          static_cast<double>(this->camera->ImageHeight()))
-          * distance * tan(vfov/2.0) * 6.0);
+      double amount = ((-this->drag.Y() / static_cast<double>(this->camera->ImageHeight())) * distance * tan(vfov/2.0) * 6.0);
       this->viewControl->Zoom(amount);
     }
   }

@@ -20,11 +20,14 @@ IgnitionEnvironmentWidget::IgnitionEnvironmentWidget(std::string scene_name,
 , entity_container_(entity_manager.getEntityContainer(container_name_))
 {
   connect(this, SIGNAL(selectedLinksChanged(std::vector<std::string>)), this, SLOT(onSelectedLinksChanged(std::vector<std::string>)));
+  connect(this, SIGNAL(environmentSet(tesseract_environment::Environment)), this, SLOT(onEnvironmentSet(tesseract_environment::Environment)));
+  connect(this, SIGNAL(environmentChanged(tesseract_environment::Environment)), this, SLOT(onEnvironmentChanged(tesseract_environment::Environment)));
+  connect(this, SIGNAL(environmentCurrentStateChanged(tesseract_environment::Environment)), this, SLOT(onEnvironmentCurrentStateChanged(tesseract_environment::Environment)));
 }
 
 IgnitionEnvironmentWidget::~IgnitionEnvironmentWidget() = default;
 
-void IgnitionEnvironmentWidget::onEnvironmentSet(const tesseract_environment::Environment& env)
+void IgnitionEnvironmentWidget::onEnvironmentSet(const tesseract_environment::Environment& /*env*/)
 {
   render_revision_ = 0;
   render_dirty_ = true;
@@ -33,9 +36,15 @@ void IgnitionEnvironmentWidget::onEnvironmentSet(const tesseract_environment::En
   emit triggerRender();
 }
 
-void IgnitionEnvironmentWidget::onEnvironmentCommandsApplied(const tesseract_environment::Commands& commands)
+void IgnitionEnvironmentWidget::onEnvironmentChanged(const tesseract_environment::Environment& /*env*/)
 {
   render_dirty_ = true;
+  render_state_dirty_ = true;
+  emit triggerRender();
+}
+
+void IgnitionEnvironmentWidget::onEnvironmentCurrentStateChanged(const tesseract_environment::Environment& /*env*/)
+{
   render_state_dirty_ = true;
   emit triggerRender();
 }
@@ -89,88 +98,131 @@ bool IgnitionEnvironmentWidget::eventFilter(QObject *_obj, QEvent *_event)
               scene->DestroyNodeById(id.second);
 
             entity_container_->clear();
+            render_link_names_.clear();
+            render_revision_ = 0;
+            render_state_timestamp_ = environment().getCurrentStateTimestamp();
           }
           render_reset_ = false;
         }
 
-        if (render_dirty_)
-        {
-          auto revision = getEnvironment()->getRevision();
-          if (revision > render_revision_)
+        { // Check environment
+          auto lock = environment().lockRead();
+          auto revision = environment().getRevision();
+          auto state_timestamp = environment().getCurrentStateTimestamp();
+          if (render_dirty_ || revision > render_revision_)
           {
-            auto commands = getEnvironment()->getCommandHistory();
-            for (std::size_t i = render_revision_; i < commands.size(); ++i)
+            if (revision > render_revision_)
             {
-              const tesseract_environment::Command::ConstPtr& command = commands.at(i);
-              switch (command->getType())
+              tesseract_environment::Commands commands = environment().getCommandHistory();
+
+              bool links_removed {false};
+              for (std::size_t i = render_revision_; i < commands.size(); ++i)
               {
-                case tesseract_environment::CommandType::ADD_LINK:
+                const tesseract_environment::Command::ConstPtr& command = commands.at(i);
+                switch (command->getType())
                 {
-                  auto cmd = std::static_pointer_cast<const tesseract_environment::AddLinkCommand>(command);
-  //                success &= applyAddCommand(cmd);
-                  break;
+                  case tesseract_environment::CommandType::ADD_SCENE_GRAPH:
+                  {
+                    auto cmd = std::static_pointer_cast<const tesseract_environment::AddSceneGraphCommand>(command);
+                    auto link_names = loadSceneGraph(*scene, *entity_container_, *cmd->getSceneGraph(), cmd->getPrefix());
+                    render_link_names_.insert(render_link_names_.end(), link_names.begin(), link_names.end());
+                    break;
+                  }
+                  case tesseract_environment::CommandType::ADD_LINK:
+                  {
+                    auto cmd = std::static_pointer_cast<const tesseract_environment::AddLinkCommand>(command);
+                    ignition::rendering::VisualPtr root = scene->RootVisual();
+                    root->AddChild(loadLink(*scene, *entity_container_, *cmd->getLink()));
+                    render_link_names_.push_back(cmd->getLink()->getName());
+                    break;
+                  }
+                  case tesseract_environment::CommandType::CHANGE_LINK_VISIBILITY:
+                  {
+                    auto cmd = std::static_pointer_cast<const tesseract_environment::ChangeLinkVisibilityCommand>(command);
+                    auto lc = entity_container_->getVisual(cmd->getLinkName());
+                    auto visual_node = scene->VisualById(lc);
+                    if (visual_node != nullptr)
+                      visual_node->SetVisible(cmd->getEnabled());
+                    break;
+                  }
+                  case tesseract_environment::CommandType::REMOVE_LINK:
+                  case tesseract_environment::CommandType::REMOVE_JOINT:
+                  {
+                    links_removed = true;
+                    break;
+                  }
+                  case tesseract_environment::CommandType::MOVE_LINK:
+                  case tesseract_environment::CommandType::MOVE_JOINT:
+                  case tesseract_environment::CommandType::REPLACE_JOINT:
+                  case tesseract_environment::CommandType::CHANGE_JOINT_ORIGIN:
+                  case tesseract_environment::CommandType::CHANGE_LINK_ORIGIN:
+                  {
+                    render_state_dirty_ = true;
+                    break;
+                  }
+                  case tesseract_environment::CommandType::CHANGE_LINK_COLLISION_ENABLED:
+                  case tesseract_environment::CommandType::ADD_ALLOWED_COLLISION:
+                  case tesseract_environment::CommandType::REMOVE_ALLOWED_COLLISION:
+                  case tesseract_environment::CommandType::REMOVE_ALLOWED_COLLISION_LINK:
+                  case tesseract_environment::CommandType::CHANGE_JOINT_POSITION_LIMITS:
+                  case tesseract_environment::CommandType::CHANGE_JOINT_VELOCITY_LIMITS:
+                  case tesseract_environment::CommandType::CHANGE_JOINT_ACCELERATION_LIMITS:
+                  case tesseract_environment::CommandType::ADD_KINEMATICS_INFORMATION:
+                  case tesseract_environment::CommandType::CHANGE_COLLISION_MARGINS:
+                  case tesseract_environment::CommandType::ADD_CONTACT_MANAGERS_PLUGIN_INFO:
+                  case tesseract_environment::CommandType::SET_ACTIVE_CONTINUOUS_CONTACT_MANAGER:
+                  case tesseract_environment::CommandType::SET_ACTIVE_DISCRETE_CONTACT_MANAGER:
+                  {
+                    break;
+                  }
+                  // LCOV_EXCL_START
+                  default:
+                  {
+                    CONSOLE_BRIDGE_logError("IgnitionEnvironmentWidget, Unhandled environment command");
+    //                success &= false;
+                  }
+                    // LCOV_EXCL_STOP
                 }
-                case tesseract_environment::CommandType::REMOVE_LINK:
-                {
-                  auto cmd = std::static_pointer_cast<const tesseract_environment::RemoveLinkCommand>(command);
-  //                success &= applyRemoveLinkCommand(cmd);
-                  break;
-                }
-                case tesseract_environment::CommandType::REMOVE_JOINT:
-                {
-                  auto cmd = std::static_pointer_cast<const tesseract_environment::RemoveJointCommand>(command);
-  //                success &= applyRemoveJointCommand(cmd);
-                  break;
-                }
-                case tesseract_environment::CommandType::CHANGE_LINK_ORIGIN:
-                {
-                  auto cmd = std::static_pointer_cast<const tesseract_environment::ChangeLinkOriginCommand>(command);
-  //                success &= applyChangeLinkOriginCommand(cmd);
-                  break;
-                }
-                case tesseract_environment::CommandType::CHANGE_LINK_VISIBILITY:
-                {
-                  auto cmd = std::static_pointer_cast<const tesseract_environment::ChangeLinkVisibilityCommand>(command);
-  //                success &= applyChangeLinkVisibilityCommand(cmd);
-                  break;
-                }
-                case tesseract_environment::CommandType::ADD_SCENE_GRAPH:
-                {
-                  auto cmd = std::static_pointer_cast<const tesseract_environment::AddSceneGraphCommand>(command);
-                  loadSceneGraph(*scene, *entity_container_, *cmd->getSceneGraph());
-                  break;
-                }
-                case tesseract_environment::CommandType::MOVE_LINK:
-                case tesseract_environment::CommandType::MOVE_JOINT:
-                case tesseract_environment::CommandType::REPLACE_JOINT:
-                case tesseract_environment::CommandType::CHANGE_JOINT_ORIGIN:
-                case tesseract_environment::CommandType::CHANGE_LINK_COLLISION_ENABLED:
-                case tesseract_environment::CommandType::ADD_ALLOWED_COLLISION:
-                case tesseract_environment::CommandType::REMOVE_ALLOWED_COLLISION:
-                case tesseract_environment::CommandType::REMOVE_ALLOWED_COLLISION_LINK:
-                case tesseract_environment::CommandType::CHANGE_JOINT_POSITION_LIMITS:
-                case tesseract_environment::CommandType::CHANGE_JOINT_VELOCITY_LIMITS:
-                case tesseract_environment::CommandType::CHANGE_JOINT_ACCELERATION_LIMITS:
-                case tesseract_environment::CommandType::ADD_KINEMATICS_INFORMATION:
-                case tesseract_environment::CommandType::CHANGE_COLLISION_MARGINS:
-                case tesseract_environment::CommandType::ADD_CONTACT_MANAGERS_PLUGIN_INFO:
-                case tesseract_environment::CommandType::SET_ACTIVE_CONTINUOUS_CONTACT_MANAGER:
-                case tesseract_environment::CommandType::SET_ACTIVE_DISCRETE_CONTACT_MANAGER:
-                {
-                  break;
-                }
-                // LCOV_EXCL_START
-                default:
-                {
-                  CONSOLE_BRIDGE_logError("IgnitionEnvironmentWidget, Unhandled environment command");
-  //                success &= false;
-                }
-                  // LCOV_EXCL_STOP
               }
+
+              if (links_removed)
+              {
+                std::vector<std::string> link_names = environment().getLinkNames();
+                std::vector<std::string> diff;
+
+                std::sort(link_names.begin(), link_names.end());
+                std::sort(render_link_names_.begin(), render_link_names_.end());
+
+                std::set_difference(render_link_names_.begin(),
+                                    render_link_names_.end(),
+                                    link_names.begin(),
+                                    link_names.end(),
+                                    std::inserter(diff, diff.begin()));
+
+                for (const auto& removed_link : diff)
+                {
+                  auto id = entity_container_->getVisual(removed_link);
+                  scene->DestroyNodeById(id);
+                }
+              }
+              render_revision_ = revision;
             }
-            render_revision_ = revision;
           }
 
+          if (render_state_dirty_ || state_timestamp > render_state_timestamp_)
+          {
+            tesseract_scene_graph::SceneState state = environment().getState();
+            for (const auto& pair : state.link_transforms)
+            {
+              EntityID id = entity_container_->getVisual(pair.first);
+              scene->VisualById(id)->SetWorldPose(ignition::math::eigen3::convert(pair.second));
+            }
+            render_state_timestamp_ = state_timestamp;
+          }
+        }
+
+        if (render_dirty_)
+        {
           for (const auto& l : link_visible_changes_)
           {
             auto lc = entity_container_->getVisual(l.first);
@@ -218,17 +270,6 @@ bool IgnitionEnvironmentWidget::eventFilter(QObject *_obj, QEvent *_event)
           }
         }
         render_dirty_ = false;
-
-        if (render_state_dirty_)
-        {
-          tesseract_scene_graph::SceneState state = getEnvironment()->getState();
-          for (const auto& pair : state.link_transforms)
-          {
-            EntityID id = entity_container_->getVisual(pair.first);
-            scene->VisualById(id)->SetWorldPose(ignition::math::eigen3::convert(pair.second));
-          }
-        }
-        render_state_dirty_ = false;
       }
     }
   }
@@ -236,4 +277,5 @@ bool IgnitionEnvironmentWidget::eventFilter(QObject *_obj, QEvent *_event)
   // Standard event processing
   return QObject::eventFilter(_obj, _event);
 }
+
 }

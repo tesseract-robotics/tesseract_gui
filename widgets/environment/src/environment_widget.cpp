@@ -12,12 +12,13 @@
 
 #include <QStandardItemModel>
 
-
 namespace tesseract_gui
 {
 struct EnvironmentWidgetImpl
 {
-  tesseract_environment::Environment::UPtr environment;
+  tesseract_environment::Environment::Ptr environment;
+  long widget_revision{0};
+  std::chrono::system_clock::time_point widget_state_timestamp{std::chrono::system_clock::now()};
   QStandardItemModel scene_model;
   QStandardItemModel state_model;
   KinematicGroupsModel group_model;
@@ -62,58 +63,92 @@ EnvironmentWidget::EnvironmentWidget(QWidget *parent)
 
 EnvironmentWidget::~EnvironmentWidget() = default;
 
-void EnvironmentWidget::setEnvironment(tesseract_environment::Environment::UPtr env)
+void EnvironmentWidget::setEnvironment(tesseract_environment::Environment::Ptr env)
 {
   data_->environment = std::move(env);
+  data_->environment->addEventCallback([this](const tesseract_environment::Event& event){this->tesseractEventFilter(event);});
 
-  updatedModels();
+  updateModels();
 
   emit environmentSet(*data_->environment);
 }
 
-const tesseract_environment::Environment* EnvironmentWidget::getEnvironment() const
+const tesseract_environment::Environment& EnvironmentWidget::environment() const
 {
-  return data_->environment.get();
+  return *(data_->environment);
 }
 
-bool EnvironmentWidget::applyCommands(const tesseract_environment::Commands& commands)
+tesseract_environment::Environment& EnvironmentWidget::environment()
 {
-  if (data_->environment == nullptr)
-    return false;
-
-  if (data_->environment->applyCommands(commands))
-  {
-    emit environmentCommandsApplied(commands);
-    return true;
-  }
-
-  return false;
+  return *(data_->environment);
 }
 
-bool EnvironmentWidget::applyCommand(const tesseract_environment::Command::ConstPtr& command)
+tesseract_environment::Environment::ConstPtr EnvironmentWidget::getEnvironment() const
 {
-  return applyCommands({command});
+  return data_->environment;
 }
 
-void EnvironmentWidget::updatedModels()
+tesseract_environment::Environment::Ptr EnvironmentWidget::getEnvironment()
 {
+  return data_->environment;
+}
+
+void EnvironmentWidget::updateModels()
+{
+  auto lock = data_->environment->lockRead();
+
+  // Store the revision
+  data_->widget_revision = data_->environment->getRevision();
+  data_->widget_state_timestamp = data_->environment->getCurrentStateTimestamp();
+
   // Scene Graph
+  updateSceneGraphModel();
+
+  // Scene State
+  updateCurrentStateModel();
+
+  // Allowed Collision Matrix
+  updateAllowedCollisionMatrixModel();
+
+  // Kinematic Information
+  updateKinematicsInformationModels();
+
+  // Command History
+  updateCommandHistoryModel();
+}
+
+void EnvironmentWidget::updateSceneGraphModel()
+{
   data_->scene_model.clear();
   data_->scene_model.setColumnCount(2);
   data_->scene_model.setHorizontalHeaderLabels({"Name", "Values"});
   auto* scene_item = new tesseract_gui::SceneGraphStandardItem(data_->environment->getSceneGraph()->clone());
   data_->scene_model.appendRow(scene_item);
 
-  // Scene State
+  // New data may have been added so resize first column
+  ui->scene_tree_view->resizeColumnToContents(0);
+}
+void EnvironmentWidget::updateCurrentStateModel()
+{
   data_->state_model.clear();
   data_->state_model.setColumnCount(2);
   data_->state_model.setHorizontalHeaderLabels({"Name", "Values"});
   auto* state_item = new tesseract_gui::SceneStateStandardItem(data_->environment->getState());
   data_->state_model.appendRow(state_item);
 
-  // Allowed Collision Matrix
+  // New data may have been added so resize first column
+  ui->state_tree_view->resizeColumnToContents(0);
+}
+void EnvironmentWidget::updateAllowedCollisionMatrixModel()
+{
   data_->acm_model.setAllowedCollisionMatrix(*data_->environment->getAllowedCollisionMatrix());
 
+  // New data may have been added so resize first column
+  ui->acm_tree_view->resizeColumnToContents(0);
+}
+
+void EnvironmentWidget::updateKinematicsInformationModels()
+{
   // Kinematic Groups
   auto kin_info = data_->environment->getKinematicsInformation();
   data_->group_model.set(kin_info.chain_groups, kin_info.joint_groups, kin_info.link_groups);
@@ -128,19 +163,38 @@ void EnvironmentWidget::updatedModels()
   // This hides the root element
   ui->group_tcps_tree_view->setRootIndex(data_->group_tcps_model.index(0,0));
 
-  // Command History
+  // New data may have been added so resize first column
+  ui->groups_tree_view->resizeColumnToContents(0);
+  ui->group_tcps_tree_view->resizeColumnToContents(0);
+  ui->group_states_tree_view->resizeColumnToContents(0);
+}
+
+void EnvironmentWidget::updateCommandHistoryModel()
+{
   data_->commands_model.set(data_->environment->getCommandHistory());
   // This hides the root element
   ui->cmd_history_tree_view->setRootIndex(data_->commands_model.index(0,0));
 
   // New data may have been added so resize first column
-  ui->scene_tree_view->resizeColumnToContents(0);
-  ui->state_tree_view->resizeColumnToContents(0);
-  ui->groups_tree_view->resizeColumnToContents(0);
-  ui->group_tcps_tree_view->resizeColumnToContents(0);
-  ui->group_states_tree_view->resizeColumnToContents(0);
-  ui->acm_tree_view->resizeColumnToContents(0);
   ui->cmd_history_tree_view->resizeColumnToContents(0);
 }
 
+void EnvironmentWidget::tesseractEventFilter(const tesseract_environment::Event& event)
+{
+  switch (event.type)
+  {
+    case tesseract_environment::Events::COMMAND_APPLIED:
+    {
+      updateModels();
+      emit environmentChanged(*data_->environment);
+      break;
+    }
+    case tesseract_environment::Events::SCENE_STATE_CHANGED:
+    {
+      updateCurrentStateModel();
+      emit environmentCurrentStateChanged(*data_->environment);
+      break;
+    }
+  }
+}
 }

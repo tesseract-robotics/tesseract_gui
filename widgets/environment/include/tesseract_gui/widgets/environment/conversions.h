@@ -14,9 +14,10 @@ namespace tesseract_gui
 
 bool isMeshWithColor(const std::string& file_path);
 
-void loadSceneGraph(ignition::rendering::Scene& scene,
-                                              EntityContainer& entity_container,
-                                              const tesseract_scene_graph::SceneGraph& scene_graph);
+std::vector<std::string> loadSceneGraph(ignition::rendering::Scene& scene,
+                                        EntityContainer& entity_container,
+                                        const tesseract_scene_graph::SceneGraph& scene_graph,
+                                        const std::string& prefix = "");
 
 ignition::rendering::VisualPtr loadLink(ignition::rendering::Scene& scene,
                                         EntityContainer& entity_container,
@@ -34,6 +35,10 @@ ignition::rendering::VisualPtr loadLinkWireBox(ignition::rendering::Scene& scene
                                                EntityContainer& entity_container,
                                                const tesseract_scene_graph::Link& link,
                                                const ignition::math::AxisAlignedBox& aabb);
+
+ignition::rendering::VisualPtr loadLinkAxis(ignition::rendering::Scene& scene,
+                                            EntityContainer& entity_container,
+                                            const tesseract_scene_graph::Link& link);
 
 ignition::rendering::VisualPtr loadLinkGeometry(ignition::rendering::Scene& scene,
                                                 EntityContainer& entity_container,

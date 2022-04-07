@@ -97,6 +97,12 @@ void buildScene(ScenePtr _scene)
   camera->SetHFOV(IGN_PI / 2);
   root->AddChild(camera);
 //! [create camera]
+
+  ignition::rendering::AxisVisualPtr axis = _scene->CreateAxisVisual("world_axis");
+  axis->SetInheritScale(false);
+  axis->Scale(0.5, 0.5, 0.5);
+  axis->SetVisible(true);
+  root->AddChild(axis);
 }
 
 //////////////////////////////////////////////////
@@ -126,7 +132,7 @@ int main(int _argc, char** _argv)
 
   // Expose engine name to command line because we can't instantiate both
   // ogre and ogre2 at the same time
-  std::string ogreEngineName("ogre2");
+  std::string ogreEngineName("ogre");
   if (_argc > 1)
   {
     ogreEngineName = _argv[1];

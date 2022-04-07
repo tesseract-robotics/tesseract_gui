@@ -26,34 +26,26 @@ public:
    * @param env The environment
    * @param scene_name
    */
-  void setEnvironment(tesseract_environment::Environment::UPtr env);
+  void setEnvironment(tesseract_environment::Environment::Ptr env);
 
   /**
    * @brief The the environment
    * @return The environment
    */
-  const tesseract_environment::Environment* getEnvironment() const;
+  const tesseract_environment::Environment& environment() const;
+  tesseract_environment::Environment& environment();
 
   /**
-   * @brief Applies the commands to the environment
-   * @param commands Commands to be applied to the environment
-   * @return true if successful. If returned false, then only a partial set of commands have been applied. Call
-   * getCommandHistory to check. Some commands are not checked for success
+   * @brief The the environment
+   * @return The environment
    */
-  bool applyCommands(const tesseract_environment::Commands& commands);
-
-  /**
-   * @brief Apply command to the environment
-   * @param command Command to be applied to the environment
-   * @return true if successful. If returned false, then the command have not been applied.
-   * Some type of Command are not checked for success
-   */
-  bool applyCommand(const tesseract_environment::Command::ConstPtr& command);
-
+  tesseract_environment::Environment::ConstPtr getEnvironment() const;
+  tesseract_environment::Environment::Ptr getEnvironment();
 
 Q_SIGNALS:
   void environmentSet(const tesseract_environment::Environment& env);
-  void environmentCommandsApplied(const tesseract_environment::Commands& commands);
+  void environmentChanged(const tesseract_environment::Environment& env);
+  void environmentCurrentStateChanged(const tesseract_environment::Environment& env);
   void linkVisibleChanged(const std::string& link_name, bool visible);
   void linkCollisionVisibleChanged(const std::string& link_name, bool visible);
   void linkVisualVisibleChanged(const std::string& link_name, bool visible);
@@ -64,7 +56,15 @@ protected:
   std::unique_ptr<Ui::EnvironmentWidget> ui;
   std::unique_ptr<EnvironmentWidgetImpl> data_;
 
-  void updatedModels();
+  void updateModels();
+  void updateSceneGraphModel();
+  void updateCurrentStateModel();
+  void updateAllowedCollisionMatrixModel();
+  void updateKinematicsInformationModels();
+  void updateCommandHistoryModel();
+
+  void tesseractEventFilter(const tesseract_environment::Event& event);
+
 };
 }
 

@@ -576,10 +576,6 @@ void SimpleRenderWidget::paintGL()
   makeCurrent();
   // The next four commands fix the issue with flipping raster position when using glDrawPixels
   // though there is still an issue with using the texture which works when using glut
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
   auto imgw = image.Width();
   auto imgh = image.Height();
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -587,6 +583,13 @@ void SimpleRenderWidget::paintGL()
   bool use_texture{false};
   if (use_texture)
   {
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glMatrixMode(GL_TEXTURE);
+    glLoadIdentity();
+
     glEnable(GL_TEXTURE_RECTANGLE);
     glViewport (0, 0, (GLsizei) imgw, (GLsizei) imgh);
     glDeleteTextures(1, &(this->dataPtr->texture));
@@ -596,7 +599,7 @@ void SimpleRenderWidget::paintGL()
     glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
     glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
     glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
-    glTexImage2D (GL_TEXTURE_RECTANGLE, 0, GL_RGB, (GLint)imgw, (GLint)imgh, 0, GL_RGB, GL_UNSIGNED_BYTE, image.Data());
+    glTexImage2D (GL_TEXTURE_RECTANGLE, 0, GL_RGB, (GLint)imgw, (GLint)imgh, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
     glBegin (GL_QUADS);
     // Bottom left
     glTexCoord2d (imgw, imgh);
@@ -618,6 +621,13 @@ void SimpleRenderWidget::paintGL()
   }
   else
   {
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glMatrixMode(GL_TEXTURE);
+    glLoadIdentity();
+
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
     glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);

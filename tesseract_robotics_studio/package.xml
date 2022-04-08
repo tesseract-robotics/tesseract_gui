@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>tesseract_robotics_studio</name>
+  <version>0.1.0</version>
+  <description>The tesseract_robotics_studio package</description>
+  <maintainer email="Levi.Armstrong@swri.org">Levi Armstrong</maintainer>
+  <license>LGPL-3.0</license>
+  <author>Levi Armstrong</author>
+
+  <!-- Following recommendations of REP 136 -->
+  <buildtool_depend>cmake</buildtool_depend>
+  <build_depend>ros_industrial_cmake_boilerplate</build_depend>
+
+  <depend>qt_advanced_docking</depend>
+  <depend>tesseract_ignition</depend>
+  <depend>tesseract_widgets</depend>
+  <depend>tesseract_scene_graph</depend>
+  <depend>tesseract_common</depend>
+  <depend>tesseract_support</depend>
+  <depend>tesseract_urdf</depend>
+
+  <export>
+    <build_type>cmake</build_type>
+  </export>
+</package>

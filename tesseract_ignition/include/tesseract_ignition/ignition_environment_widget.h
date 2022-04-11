@@ -38,7 +38,7 @@ protected:
   std::unordered_map<std::string, bool> link_collision_visible_changes_;
   std::unordered_map<std::string, bool> link_visual_visible_changes_;
   std::vector<std::string> link_selection_changes_;
-  std::vector<EntityID> highlighted_entities_;
+  std::vector<Entity> highlighted_entities_;
 
   // Documentation inherited
   bool eventFilter(QObject *_obj, QEvent *_event) override;

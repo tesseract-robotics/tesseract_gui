@@ -4,16 +4,20 @@
 #include <tesseract_common/macros.h>
 TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <string>
+#include <vector>
 #include <unordered_map>
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 namespace tesseract_gui
 {
-  using EntityID = int;
-  using EntityMap = std::unordered_map<std::string, EntityID>;
+  struct Entity
+  {
+    int id{-1};
+    std::string unique_name;
+  };
 
-  static const int NULL_ENTITY_ID = -1;
-  static const EntityMap NULL_ENTITY_MAP;
+  using EntityMap = std::unordered_map<std::string, Entity>;
+  using EntityVector = std::vector<Entity>;
 }
 
 #endif // TESSERACT_GUI_COMMON_ENTITY_H

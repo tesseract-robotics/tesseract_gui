@@ -3,6 +3,7 @@
 
 namespace tesseract_gui
 {
+int EntityManager::entity_counter_ = 1000; // NOLINT
 
 std::shared_ptr<EntityContainer> EntityManager::getEntityContainer(const std::string& name)
 {
@@ -28,10 +29,13 @@ std::shared_ptr<const EntityContainer> EntityManager::getEntityContainer(const s
   return c_it->second;
 }
 
-EntityID EntityManager::createEntityID()
+Entity EntityManager::createEntity()
 {
   std::unique_lock<std::shared_mutex> lock(mutex_);
-  return ++entity_counter_;
+  Entity entity;
+  entity.id = ++entity_counter_;
+  entity.unique_name = "TesseractEntity::" + std::to_string(entity.id);
+  return entity;
 }
 
 bool EntityManager::empty() const
@@ -53,6 +57,5 @@ void EntityManager::clear()
     c.second->clear();
 
   containers_.clear();
-  entity_counter_ = 1000;
 }
 }  // namespace tesseract_visualization

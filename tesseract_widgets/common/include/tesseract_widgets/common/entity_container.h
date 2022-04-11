@@ -20,49 +20,71 @@ public:
 
   /**
    * @brief Get the name of the container
+   * @brief This should be unique
    * @return The container name
    */
   std::string getName() const;
 
   /**
-   * @brief Create unique entity ID
-   * @return New Entity ID
+   * @brief Add untracked entity
+   * @return The Entity
    */
-  EntityID createEntityID();
+  Entity addUntracked();
+
+  /**
+   * @brief Get a vector of untracked entities
+   * @return A vector of entities.
+   */
+  EntityVector getUntracked() const;
 
   /**
    * @brief Add visual name to manager and return id for visual
    * @param name Name given to the visual
-   * @return The Entity ID
+   * @return The Entity
    */
-  EntityID addVisual(const std::string& name);
+  Entity addVisual(const std::string& name);
 
   /**
-   * @brief Given the visual name return the ID
+   * @brief Given the visual name return the Entity
    * @param name Name of the visual
-   * @return The ID of the visual (if < 1000 it was not found)
+   * @throws If entity does not exits for the provided name
+   * @return The Entity of the visual
    */
-  EntityID getVisual(const std::string& name) const;
+  Entity getVisual(const std::string& name) const;
+
+  /**
+   * @brief Given the visual name return if an entity exist for the provided name
+   * @param name Name of the visual
+   * @return True if an entity exits
+   */
+  bool hasVisual(const std::string& name) const;
 
   /**
    * @brief Get all visuals being managed
-   * @return A map of names to entity id's
+   * @return A map of names to entity's
    */
   EntityMap getVisuals() const;
 
   /**
    * @brief Add sensor name to manager and return id for sensor
    * @param name Name given to the sensor
-   * @return The Entity ID
+   * @return The Entity
    */
-  EntityID addSensor(const std::string& name);
+  Entity addSensor(const std::string& name);
 
   /**
-   * @brief Given the sensor name return the ID
+   * @brief Given the sensor name return if an entity exist for the provided name
    * @param name Name of the sensor
-   * @return The ID of the visual (if < 1000 it was not found)
+   * @return True if an entity exits
    */
-  EntityID getSensor(const std::string& name) const;
+  bool hasSensor(const std::string& name) const;
+
+  /**
+   * @brief Given the sensor name return the entity
+   * @param name Name of the sensor
+   * @return The entity of the visual
+   */
+  Entity getSensor(const std::string& name) const;
 
   /**
    * @brief Get all sensors being managed
@@ -79,11 +101,12 @@ public:
 private:
   std::shared_ptr<EntityManager> manager_;
   std::string name_;
-  EntityMap visual_id_map_;          /**< Stores entity id for each visual */
-  EntityMap sensor_id_map_;          /**< Stores entity id for each sensor */
-  mutable std::shared_mutex mutex_;
+  EntityMap visual_entity_map_;          /**< Stores a map of entity id to name for each visual */
+  EntityMap sensor_entity_map_;          /**< Stores a map of entity id to name for each sensor */
+  EntityVector untracked_entities_;      /**< Stored a vector of untracked entities */
 
-  std::string getKey(const std::string& name) const;
+
+  mutable std::shared_mutex mutex_;
 };
 }
 #endif // TESSERACT_GUI_COMMON_ENTITY_CONTAINER_H

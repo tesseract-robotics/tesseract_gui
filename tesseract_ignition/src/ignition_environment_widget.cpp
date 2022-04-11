@@ -25,7 +25,23 @@ IgnitionEnvironmentWidget::IgnitionEnvironmentWidget(std::string scene_name,
   connect(this, SIGNAL(environmentCurrentStateChanged(tesseract_environment::Environment)), this, SLOT(onEnvironmentCurrentStateChanged(tesseract_environment::Environment)));
 }
 
-IgnitionEnvironmentWidget::~IgnitionEnvironmentWidget() = default;
+IgnitionEnvironmentWidget::~IgnitionEnvironmentWidget()
+{
+  ignition::rendering::ScenePtr scene = sceneFromFirstRenderEngine(scene_name_);
+  if (scene != nullptr)
+  {
+    for (const auto& entity : entity_container_->getVisuals())
+      scene->DestroyNodeById(entity.second.id);
+
+    for (const auto& entity : entity_container_->getSensors())
+      scene->DestroyNodeById(entity.second.id);
+
+    for (const auto& entity : entity_container_->getUntracked())
+      scene->DestroyNodeById(entity.id);
+
+    entity_container_->clear();
+  }
+}
 
 void IgnitionEnvironmentWidget::onEnvironmentSet(const tesseract_environment::Environment& /*env*/)
 {
@@ -91,11 +107,14 @@ bool IgnitionEnvironmentWidget::eventFilter(QObject *_obj, QEvent *_event)
         {
           if (!entity_container_->empty())
           {
-            for (const auto& id : entity_container_->getVisuals())
-              scene->DestroyNodeById(id.second);
+            for (const auto& entity : entity_container_->getVisuals())
+              scene->DestroyNodeById(entity.second.id);
 
-            for (const auto& id : entity_container_->getSensors())
-              scene->DestroyNodeById(id.second);
+            for (const auto& entity : entity_container_->getSensors())
+              scene->DestroyNodeById(entity.second.id);
+
+            for (const auto& entity : entity_container_->getUntracked())
+              scene->DestroyNodeById(entity.id);
 
             entity_container_->clear();
             render_link_names_.clear();
@@ -139,8 +158,8 @@ bool IgnitionEnvironmentWidget::eventFilter(QObject *_obj, QEvent *_event)
                   case tesseract_environment::CommandType::CHANGE_LINK_VISIBILITY:
                   {
                     auto cmd = std::static_pointer_cast<const tesseract_environment::ChangeLinkVisibilityCommand>(command);
-                    auto lc = entity_container_->getVisual(cmd->getLinkName());
-                    auto visual_node = scene->VisualById(lc);
+                    auto entity = entity_container_->getVisual(cmd->getLinkName());
+                    auto visual_node = scene->VisualById(entity.id);
                     if (visual_node != nullptr)
                       visual_node->SetVisible(cmd->getEnabled());
                     break;
@@ -201,8 +220,8 @@ bool IgnitionEnvironmentWidget::eventFilter(QObject *_obj, QEvent *_event)
 
                 for (const auto& removed_link : diff)
                 {
-                  auto id = entity_container_->getVisual(removed_link);
-                  scene->DestroyNodeById(id);
+                  auto entity = entity_container_->getVisual(removed_link);
+                  scene->DestroyNodeById(entity.id);
                 }
               }
               render_revision_ = revision;
@@ -214,8 +233,8 @@ bool IgnitionEnvironmentWidget::eventFilter(QObject *_obj, QEvent *_event)
             tesseract_scene_graph::SceneState state = environment().getState();
             for (const auto& pair : state.link_transforms)
             {
-              EntityID id = entity_container_->getVisual(pair.first);
-              scene->VisualById(id)->SetWorldPose(ignition::math::eigen3::convert(pair.second));
+              Entity entity = entity_container_->getVisual(pair.first);
+              scene->VisualById(entity.id)->SetWorldPose(ignition::math::eigen3::convert(pair.second));
             }
             render_state_timestamp_ = state_timestamp;
           }
@@ -225,8 +244,8 @@ bool IgnitionEnvironmentWidget::eventFilter(QObject *_obj, QEvent *_event)
         {
           for (const auto& l : link_visible_changes_)
           {
-            auto lc = entity_container_->getVisual(l.first);
-            auto visual_node = scene->VisualById(lc);
+            auto entity = entity_container_->getVisual(l.first);
+            auto visual_node = scene->VisualById(entity.id);
             if (visual_node != nullptr)
               visual_node->SetVisible(l.second);
           }
@@ -234,8 +253,8 @@ bool IgnitionEnvironmentWidget::eventFilter(QObject *_obj, QEvent *_event)
           for (const auto& l : link_visual_visible_changes_)
           {
             std::string visual_key = l.first + "::Visuals";
-            auto lc = entity_container_->getVisual(visual_key);
-            auto visual_node = scene->VisualById(lc);
+            auto entity = entity_container_->getVisual(visual_key);
+            auto visual_node = scene->VisualById(entity.id);
             if (visual_node != nullptr)
               visual_node->SetVisible(l.second);
           }
@@ -243,15 +262,15 @@ bool IgnitionEnvironmentWidget::eventFilter(QObject *_obj, QEvent *_event)
           for (const auto& l : link_collision_visible_changes_)
           {
             std::string visual_key = l.first + "::Collisions";
-            auto lc = entity_container_->getVisual(visual_key);
-            auto visual_node = scene->VisualById(lc);
+            auto entity = entity_container_->getVisual(visual_key);
+            auto visual_node = scene->VisualById(entity.id);
             if (visual_node != nullptr)
               visual_node->SetVisible(l.second);
           }
 
-          for (const auto& id : highlighted_entities_)
+          for (const auto& entity : highlighted_entities_)
           {
-            auto visual_node = scene->VisualById(id);
+            auto visual_node = scene->VisualById(entity.id);
             if (visual_node != nullptr)
               visual_node->SetVisible(false);
           }
@@ -260,12 +279,12 @@ bool IgnitionEnvironmentWidget::eventFilter(QObject *_obj, QEvent *_event)
           for (const auto& l : link_selection_changes_)
           {
             std::string visual_key = l + "::WireBox";
-            auto lc = entity_container_->getVisual(visual_key);
-            auto visual_node = scene->VisualById(lc);
+            auto entity = entity_container_->getVisual(visual_key);
+            auto visual_node = scene->VisualById(entity.id);
             if (visual_node != nullptr)
             {
               visual_node->SetVisible(true);
-              highlighted_entities_.push_back(lc);
+              highlighted_entities_.push_back(entity);
             }
           }
         }

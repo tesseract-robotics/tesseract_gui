@@ -33,6 +33,9 @@ EnvironmentWidget::EnvironmentWidget(QWidget *parent)
   , data_(std::make_unique<EnvironmentWidgetImpl>())
 {
   ui->setupUi(this);
+
+  ui->tab_widget->setCurrentIndex(0);
+
   ui->scene_tree_view->setModel(&data_->scene_model);
   ui->state_tree_view->setModel(&data_->state_model);
   ui->groups_tree_view->setModel(&data_->group_model);

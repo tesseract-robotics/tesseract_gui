@@ -40,7 +40,8 @@ target_link_libraries(${PROJECT_NAME}_joint_trajectory_widget PUBLIC
   Qt5::Gui
   Qt5::Widgets
   ${PROJECT_NAME}_plot
-  ${PROJECT_NAME}_common)
+  ${PROJECT_NAME}_common
+  ${PROJECT_NAME}_joint_trajectory_model)
 target_include_directories(${PROJECT_NAME}_joint_trajectory_widget PUBLIC
     "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
     "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/joint_trajectory>"

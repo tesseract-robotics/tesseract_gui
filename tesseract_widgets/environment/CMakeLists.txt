@@ -47,7 +47,8 @@ target_link_libraries(${PROJECT_NAME}_environment PUBLIC
   ${PROJECT_NAME}_common
   ${PROJECT_NAME}_scene_graph
   ${PROJECT_NAME}_kinematic_groups
-  ${PROJECT_NAME}_acm)
+  ${PROJECT_NAME}_acm
+  ${PROJECT_NAME}_joint_trajectory_widget)
 target_include_directories(${PROJECT_NAME}_environment PUBLIC
     "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
     "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/environment>"

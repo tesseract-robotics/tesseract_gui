@@ -25,6 +25,16 @@ public:
    */
   std::shared_ptr<EntityContainer> getEntityContainer(const std::string& name);
   std::shared_ptr<const EntityContainer> getEntityContainer(const std::string& name) const;
+  bool hasEntityContainer(const std::string& name) const;
+  void removeEntityContainer(const std::string& name);
+
+  /**
+   * @brief Get entity containers. If it does not exist one is created.
+   * @param name The name of the container
+   * @return The entity container
+   */
+  std::unordered_map<std::string, std::shared_ptr<EntityContainer>> getEntityContainers();
+  std::unordered_map<std::string, std::shared_ptr<const EntityContainer>> getEntityContainers() const;
 
   /**
    * @brief Create new entity ID
@@ -41,6 +51,7 @@ public:
 private:
   mutable std::shared_mutex mutex_;
   std::unordered_map<std::string, std::shared_ptr<EntityContainer>> containers_;
+  std::unordered_map<std::string, std::shared_ptr<const EntityContainer>> containers_const_;
   static int entity_counter_; /**< Start entity counter to avoid clashing with gazebo */
 };
 }

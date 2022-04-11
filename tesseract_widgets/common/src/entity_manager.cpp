@@ -13,6 +13,7 @@ std::shared_ptr<EntityContainer> EntityManager::getEntityContainer(const std::st
   {
     auto container = std::make_shared<EntityContainer>(shared_from_this(), name);
     containers_[name] = container;
+    containers_const_[name] = container;
     return container;
   }
 
@@ -27,6 +28,31 @@ std::shared_ptr<const EntityContainer> EntityManager::getEntityContainer(const s
     return nullptr;
 
   return c_it->second;
+}
+
+bool EntityManager::hasEntityContainer(const std::string& name) const
+{
+  std::shared_lock<std::shared_mutex> lock(mutex_);
+  return (containers_.find(name) != containers_.end());
+}
+
+void EntityManager::removeEntityContainer(const std::string& name)
+{
+  std::unique_lock<std::shared_mutex> lock(mutex_);
+  containers_.erase(name);
+  containers_const_.erase(name);
+}
+
+std::unordered_map<std::string, std::shared_ptr<EntityContainer>> EntityManager::getEntityContainers()
+{
+  std::shared_lock<std::shared_mutex> lock(mutex_);
+  return containers_;
+}
+
+std::unordered_map<std::string, std::shared_ptr<const EntityContainer>> EntityManager::getEntityContainers() const
+{
+  std::shared_lock<std::shared_mutex> lock(mutex_);
+  return containers_const_;
 }
 
 Entity EntityManager::createEntity()

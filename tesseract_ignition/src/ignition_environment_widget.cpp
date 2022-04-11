@@ -30,14 +30,17 @@ IgnitionEnvironmentWidget::~IgnitionEnvironmentWidget()
   ignition::rendering::ScenePtr scene = sceneFromFirstRenderEngine(scene_name_);
   if (scene != nullptr)
   {
-    for (const auto& entity : entity_container_->getVisuals())
-      scene->DestroyNodeById(entity.second.id);
+    for (const auto& ns : entity_container_->getTrackedEntities())
+    {
+      for (const auto& entity : ns.second)
+        scene->DestroyNodeById(entity.second.id);
+    }
 
-    for (const auto& entity : entity_container_->getSensors())
-      scene->DestroyNodeById(entity.second.id);
-
-    for (const auto& entity : entity_container_->getUntracked())
-      scene->DestroyNodeById(entity.id);
+    for (const auto& ns : entity_container_->getUntrackedEntities())
+    {
+      for (const auto& entity : ns.second)
+        scene->DestroyNodeById(entity.id);
+    }
 
     entity_container_->clear();
   }
@@ -107,14 +110,17 @@ bool IgnitionEnvironmentWidget::eventFilter(QObject *_obj, QEvent *_event)
         {
           if (!entity_container_->empty())
           {
-            for (const auto& entity : entity_container_->getVisuals())
-              scene->DestroyNodeById(entity.second.id);
+            for (const auto& ns : entity_container_->getTrackedEntities())
+            {
+              for (const auto& entity : ns.second)
+                scene->DestroyNodeById(entity.second.id);
+            }
 
-            for (const auto& entity : entity_container_->getSensors())
-              scene->DestroyNodeById(entity.second.id);
-
-            for (const auto& entity : entity_container_->getUntracked())
-              scene->DestroyNodeById(entity.id);
+            for (const auto& ns : entity_container_->getUntrackedEntities())
+            {
+              for (const auto& entity : ns.second)
+                scene->DestroyNodeById(entity.id);
+            }
 
             entity_container_->clear();
             render_link_names_.clear();
@@ -158,7 +164,7 @@ bool IgnitionEnvironmentWidget::eventFilter(QObject *_obj, QEvent *_event)
                   case tesseract_environment::CommandType::CHANGE_LINK_VISIBILITY:
                   {
                     auto cmd = std::static_pointer_cast<const tesseract_environment::ChangeLinkVisibilityCommand>(command);
-                    auto entity = entity_container_->getVisual(cmd->getLinkName());
+                    auto entity = entity_container_->getTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, cmd->getLinkName());
                     auto visual_node = scene->VisualById(entity.id);
                     if (visual_node != nullptr)
                       visual_node->SetVisible(cmd->getEnabled());
@@ -220,7 +226,7 @@ bool IgnitionEnvironmentWidget::eventFilter(QObject *_obj, QEvent *_event)
 
                 for (const auto& removed_link : diff)
                 {
-                  auto entity = entity_container_->getVisual(removed_link);
+                  auto entity = entity_container_->getTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, removed_link);
                   scene->DestroyNodeById(entity.id);
                 }
               }
@@ -233,7 +239,7 @@ bool IgnitionEnvironmentWidget::eventFilter(QObject *_obj, QEvent *_event)
             tesseract_scene_graph::SceneState state = environment().getState();
             for (const auto& pair : state.link_transforms)
             {
-              Entity entity = entity_container_->getVisual(pair.first);
+              Entity entity = entity_container_->getTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, pair.first);
               scene->VisualById(entity.id)->SetWorldPose(ignition::math::eigen3::convert(pair.second));
             }
             render_state_timestamp_ = state_timestamp;
@@ -244,7 +250,7 @@ bool IgnitionEnvironmentWidget::eventFilter(QObject *_obj, QEvent *_event)
         {
           for (const auto& l : link_visible_changes_)
           {
-            auto entity = entity_container_->getVisual(l.first);
+            auto entity = entity_container_->getTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, l.first);
             auto visual_node = scene->VisualById(entity.id);
             if (visual_node != nullptr)
               visual_node->SetVisible(l.second);
@@ -253,7 +259,7 @@ bool IgnitionEnvironmentWidget::eventFilter(QObject *_obj, QEvent *_event)
           for (const auto& l : link_visual_visible_changes_)
           {
             std::string visual_key = l.first + "::Visuals";
-            auto entity = entity_container_->getVisual(visual_key);
+            auto entity = entity_container_->getTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, visual_key);
             auto visual_node = scene->VisualById(entity.id);
             if (visual_node != nullptr)
               visual_node->SetVisible(l.second);
@@ -262,7 +268,7 @@ bool IgnitionEnvironmentWidget::eventFilter(QObject *_obj, QEvent *_event)
           for (const auto& l : link_collision_visible_changes_)
           {
             std::string visual_key = l.first + "::Collisions";
-            auto entity = entity_container_->getVisual(visual_key);
+            auto entity = entity_container_->getTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, visual_key);
             auto visual_node = scene->VisualById(entity.id);
             if (visual_node != nullptr)
               visual_node->SetVisible(l.second);
@@ -279,7 +285,7 @@ bool IgnitionEnvironmentWidget::eventFilter(QObject *_obj, QEvent *_event)
           for (const auto& l : link_selection_changes_)
           {
             std::string visual_key = l + "::WireBox";
-            auto entity = entity_container_->getVisual(visual_key);
+            auto entity = entity_container_->getTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, visual_key);
             auto visual_node = scene->VisualById(entity.id);
             if (visual_node != nullptr)
             {

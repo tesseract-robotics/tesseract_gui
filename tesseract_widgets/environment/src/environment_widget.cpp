@@ -67,6 +67,8 @@ void EnvironmentWidget::setEnvironment(tesseract_environment::Environment::Ptr e
   data_->environment = std::move(env);
   data_->environment->addEventCallback([this](const tesseract_environment::Event& event){this->tesseractEventFilter(event);});
 
+  clear();
+
   updateModels();
 
   emit environmentSet(*data_->environment);
@@ -92,8 +94,25 @@ tesseract_environment::Environment::Ptr EnvironmentWidget::getEnvironment()
   return data_->environment;
 }
 
+void EnvironmentWidget::clear()
+{
+  data_->widget_revision = 0;
+  data_->widget_state_timestamp = std::chrono::system_clock::now();
+
+  data_->scene_model.clear();
+  data_->state_model.clear();
+  data_->acm_model.clear();
+  data_->group_model.clear();
+  data_->group_states_model.clear();
+  data_->group_tcps_model.clear();
+  data_->commands_model.clear();
+}
+
 void EnvironmentWidget::updateModels()
 {
+  if (!data_->environment->isInitialized())
+    return;
+
   auto lock = data_->environment->lockRead();
 
   // Store the revision
@@ -118,6 +137,9 @@ void EnvironmentWidget::updateModels()
 
 void EnvironmentWidget::updateSceneGraphModel()
 {
+  if (!data_->environment->isInitialized())
+    return;
+
   data_->scene_model.clear();
   data_->scene_model.setColumnCount(2);
   data_->scene_model.setHorizontalHeaderLabels({"Name", "Values"});
@@ -129,6 +151,9 @@ void EnvironmentWidget::updateSceneGraphModel()
 }
 void EnvironmentWidget::updateCurrentStateModel()
 {
+  if (!data_->environment->isInitialized())
+    return;
+
   data_->state_model.clear();
   data_->state_model.setColumnCount(2);
   data_->state_model.setHorizontalHeaderLabels({"Name", "Values"});
@@ -140,6 +165,9 @@ void EnvironmentWidget::updateCurrentStateModel()
 }
 void EnvironmentWidget::updateAllowedCollisionMatrixModel()
 {
+  if (!data_->environment->isInitialized())
+    return;
+
   data_->acm_model.setAllowedCollisionMatrix(*data_->environment->getAllowedCollisionMatrix());
 
   // New data may have been added so resize first column
@@ -148,6 +176,9 @@ void EnvironmentWidget::updateAllowedCollisionMatrixModel()
 
 void EnvironmentWidget::updateKinematicsInformationModels()
 {
+  if (!data_->environment->isInitialized())
+    return;
+
   // Kinematic Groups
   auto kin_info = data_->environment->getKinematicsInformation();
   data_->group_model.set(kin_info.chain_groups, kin_info.joint_groups, kin_info.link_groups);
@@ -170,6 +201,9 @@ void EnvironmentWidget::updateKinematicsInformationModels()
 
 void EnvironmentWidget::updateCommandHistoryModel()
 {
+  if (!data_->environment->isInitialized())
+    return;
+
   data_->commands_model.set(data_->environment->getCommandHistory());
   // This hides the root element
   ui->cmd_history_tree_view->setRootIndex(data_->commands_model.index(0,0));

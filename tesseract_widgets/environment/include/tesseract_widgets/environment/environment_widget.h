@@ -56,6 +56,8 @@ protected:
   std::unique_ptr<Ui::EnvironmentWidget> ui;
   std::unique_ptr<EnvironmentWidgetImpl> data_;
 
+  void clear();
+
   void updateModels();
   void updateSceneGraphModel();
   void updateCurrentStateModel();

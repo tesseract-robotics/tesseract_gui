@@ -16,6 +16,10 @@ public:
   using Ptr = std::shared_ptr<EntityContainer>;
   using ConstPtr = std::shared_ptr<const EntityContainer>;
 
+  static const std::string VISUAL_NS;
+  static const std::string SENSOR_NS;
+  static const std::string RESOURCE_NS;
+
   EntityContainer(std::shared_ptr<EntityManager> manager, std::string name);
 
   /**
@@ -26,71 +30,63 @@ public:
   std::string getName() const;
 
   /**
-   * @brief Add untracked entity
-   * @return The Entity
+   * @brief Add a tracked entity
+   * @param ns The namespace to store it under
+   * @param name The tracked name
+   * @return The entity
    */
-  Entity addUntracked();
+  Entity addTrackedEntity(const std::string& ns, const std::string& name);
 
   /**
-   * @brief Get a vector of untracked entities
-   * @return A vector of entities.
+   * @brief Get a tracked entity
+   * @throws If either the namespace or name do not exist
+   * @param ns The namespace to search under
+   * @param name The name to locate
+   * @return The entity
    */
-  EntityVector getUntracked() const;
+  Entity getTrackedEntity(const std::string& ns, const std::string& name);
 
   /**
-   * @brief Add visual name to manager and return id for visual
-   * @param name Name given to the visual
-   * @return The Entity
+   * @brief Check if a tracked entity exists
+   * @param ns The namespace to search under
+   * @param name The name to locate
+   * @return True if it exists, otherwise false
    */
-  Entity addVisual(const std::string& name);
+  bool hasTrackedEntity(const std::string& ns, const std::string& name);
 
   /**
-   * @brief Given the visual name return the Entity
-   * @param name Name of the visual
-   * @throws If entity does not exits for the provided name
-   * @return The Entity of the visual
+   * @brief Get the tracked entities under the provided namespace
+   * @param ns The namespace to return
+   * @return Tracked entities for the provided namespace
    */
-  Entity getVisual(const std::string& name) const;
+  EntityMap getTrackedEntities(const std::string& ns) const;
 
   /**
-   * @brief Given the visual name return if an entity exist for the provided name
-   * @param name Name of the visual
-   * @return True if an entity exits
+   * @brief Get all tracked entities
+   * @return All tracked entities
    */
-  bool hasVisual(const std::string& name) const;
+  std::unordered_map<std::string, EntityMap> getTrackedEntities() const;
+
 
   /**
-   * @brief Get all visuals being managed
-   * @return A map of names to entity's
+   * @brief Add untracked entity under the provided namespace
+   * @param ns The namespace to store it under
+   * @return The entity
    */
-  EntityMap getVisuals() const;
+  Entity addUntrackedEntity(const std::string& ns);
 
   /**
-   * @brief Add sensor name to manager and return id for sensor
-   * @param name Name given to the sensor
-   * @return The Entity
+   * @brief Get the untracked entities under the provided namespace
+   * @param ns The namespace to return
+   * @return Untracked entities for the provided namespace
    */
-  Entity addSensor(const std::string& name);
+  EntityVector getUntrackedEntities(const std::string& ns) const;
 
   /**
-   * @brief Given the sensor name return if an entity exist for the provided name
-   * @param name Name of the sensor
-   * @return True if an entity exits
+   * @brief Get all untracked entities
+   * @return All untracked entities
    */
-  bool hasSensor(const std::string& name) const;
-
-  /**
-   * @brief Given the sensor name return the entity
-   * @param name Name of the sensor
-   * @return The entity of the visual
-   */
-  Entity getSensor(const std::string& name) const;
-
-  /**
-   * @brief Get all sensors being managed
-   * @return A map of names to entity id's
-   */
-  EntityMap getSensors() const;
+  std::unordered_map<std::string, EntityVector> getUntrackedEntities() const;
 
   /** @brief Check if empty */
   bool empty() const;
@@ -101,10 +97,8 @@ public:
 private:
   std::shared_ptr<EntityManager> manager_;
   std::string name_;
-  EntityMap visual_entity_map_;          /**< Stores a map of entity id to name for each visual */
-  EntityMap sensor_entity_map_;          /**< Stores a map of entity id to name for each sensor */
-  EntityVector untracked_entities_;      /**< Stored a vector of untracked entities */
-
+  std::unordered_map<std::string, EntityMap> tracked_entity_map_;
+  std::unordered_map<std::string, EntityVector> untracked_entity_map_;
 
   mutable std::shared_mutex mutex_;
 };

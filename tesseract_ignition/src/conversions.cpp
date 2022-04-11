@@ -228,7 +228,7 @@ ignition::rendering::VisualPtr loadLink(ignition::rendering::Scene& scene,
                                         tesseract_gui::EntityContainer &entity_container,
                                         const tesseract_scene_graph::Link& link)
 {
-  auto entity = entity_container.addVisual(link.getName());
+  auto entity = entity_container.addTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, link.getName());
   ignition::rendering::VisualPtr ign_link = scene.CreateVisual(entity.id, entity.unique_name);
   ign_link->AddChild(loadLinkVisuals(scene, entity_container, link));
   ign_link->AddChild(loadLinkCollisions(scene, entity_container, link));
@@ -244,7 +244,7 @@ ignition::rendering::VisualPtr loadLinkVisuals(ignition::rendering::Scene& scene
                                                const tesseract_scene_graph::Link& link)
 {
   std::string name = link.getName() + "::Visuals";
-  auto entity = entity_container.addVisual(name);
+  auto entity = entity_container.addTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, name);
   ignition::rendering::VisualPtr ign_link_visuals = scene.CreateVisual(entity.id, entity.unique_name);
 
   for (const auto& visual : link.visual)
@@ -258,7 +258,7 @@ ignition::rendering::VisualPtr loadLinkCollisions(ignition::rendering::Scene& sc
                                                   const tesseract_scene_graph::Link& link)
 {
   std::string name = link.getName() + "::Collisions";
-  auto entity = entity_container.addVisual(name);
+  auto entity = entity_container.addTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, name);
   ignition::rendering::VisualPtr ign_link_collisions = scene.CreateVisual(entity.id, entity.unique_name);
 
   for (const auto& visual : link.visual)
@@ -274,7 +274,7 @@ ignition::rendering::VisualPtr loadLinkWireBox(ignition::rendering::Scene& scene
                                                const ignition::math::v6::AxisAlignedBox &aabb)
 {
   std::string name = link.getName() + "::WireBox";
-  auto entity = entity_container.addVisual(name);
+  auto entity = entity_container.addTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, name);
 
   auto white = scene.Material("highlight_material");
   if (!white)
@@ -304,7 +304,7 @@ ignition::rendering::VisualPtr loadLinkAxis(ignition::rendering::Scene& scene,
                                             const tesseract_scene_graph::Link& link)
 {
   std::string name = link.getName() + "::Axis";
-  auto entity = entity_container.addVisual(name);
+  auto entity = entity_container.addTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, name);
 
   // Set an alpha not equal to 1 breaks rendering so cannot use CreateAxisVisual
   // ignition::rendering::AxisVisualPtr axis =scene.CreateAxisVisual(lc, name);
@@ -337,7 +337,7 @@ ignition::rendering::VisualPtr loadLinkAxis(ignition::rendering::Scene& scene,
   }
 
   {
-    auto gv_entity = entity_container.addUntracked();
+    auto gv_entity = entity_container.addUntrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS);
     ignition::rendering::VisualPtr cylinder = scene.CreateVisual(gv_entity.id, gv_entity.unique_name);
     Eigen::Isometry3d pose = Eigen::Isometry3d::Identity();
     pose.translation() = Eigen::Vector3d(0,0,0.5);
@@ -349,7 +349,7 @@ ignition::rendering::VisualPtr loadLinkAxis(ignition::rendering::Scene& scene,
   }
 
   {
-    auto gv_entity = entity_container.addUntracked();
+    auto gv_entity = entity_container.addUntrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS);
     ignition::rendering::VisualPtr cylinder = scene.CreateVisual(gv_entity.id, gv_entity.unique_name);
     Eigen::Isometry3d pose = Eigen::Isometry3d::Identity();
     pose.rotate(Eigen::AngleAxisd(M_PI_2, Eigen::Vector3d::UnitY()));
@@ -362,7 +362,7 @@ ignition::rendering::VisualPtr loadLinkAxis(ignition::rendering::Scene& scene,
   }
 
   {
-    auto gv_entity = entity_container.addUntracked();
+    auto gv_entity = entity_container.addUntrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS);
     ignition::rendering::VisualPtr cylinder = scene.CreateVisual(gv_entity.id, gv_entity.unique_name);
     Eigen::Isometry3d pose = Eigen::Isometry3d::Identity();
     pose.rotate(Eigen::AngleAxisd(-M_PI_2, Eigen::Vector3d::UnitX()));
@@ -392,7 +392,7 @@ ignition::rendering::VisualPtr loadLinkGeometry(ignition::rendering::Scene& scen
   {
     case tesseract_geometry::GeometryType::BOX:
     {
-      auto gv_entity = entity_container.addUntracked();
+      auto gv_entity = entity_container.addUntrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS);
       ignition::rendering::VisualPtr box = scene.CreateVisual(gv_entity.id, gv_entity.unique_name);
       box->SetLocalPose(ignition::math::eigen3::convert(local_pose));
       box->AddGeometry(scene.CreateBox());
@@ -404,7 +404,7 @@ ignition::rendering::VisualPtr loadLinkGeometry(ignition::rendering::Scene& scen
     }
     case tesseract_geometry::GeometryType::SPHERE:
     {
-      auto gv_entity = entity_container.addUntracked();
+      auto gv_entity = entity_container.addUntrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS);
       ignition::rendering::VisualPtr sphere = scene.CreateVisual(gv_entity.id, gv_entity.unique_name);
       sphere->SetLocalPose(ignition::math::eigen3::convert(local_pose));
       sphere->AddGeometry(scene.CreateSphere());
@@ -416,7 +416,7 @@ ignition::rendering::VisualPtr loadLinkGeometry(ignition::rendering::Scene& scen
     }
     case tesseract_geometry::GeometryType::CYLINDER:
     {
-      auto gv_entity = entity_container.addUntracked();
+      auto gv_entity = entity_container.addUntrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS);
       ignition::rendering::VisualPtr cylinder = scene.CreateVisual(gv_entity.id, gv_entity.unique_name);
       cylinder->SetLocalPose(ignition::math::eigen3::convert(local_pose));
       cylinder->AddGeometry(scene.CreateCylinder());
@@ -428,7 +428,7 @@ ignition::rendering::VisualPtr loadLinkGeometry(ignition::rendering::Scene& scen
     }
     case tesseract_geometry::GeometryType::CONE:
     {
-      auto gv_entity = entity_container.addUntracked();
+      auto gv_entity = entity_container.addUntrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS);
       ignition::rendering::VisualPtr cone = scene.CreateVisual(gv_entity.id, gv_entity.unique_name);
       cone->SetLocalPose(ignition::math::eigen3::convert(local_pose));
       cone->AddGeometry(scene.CreateCone());
@@ -448,7 +448,7 @@ ignition::rendering::VisualPtr loadLinkGeometry(ignition::rendering::Scene& scen
       auto resource = shape.getResource();
       if (resource)
       {
-        auto gv_entity = entity_container.addUntracked();
+        auto gv_entity = entity_container.addUntrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS);
         ignition::rendering::VisualPtr mesh = scene.CreateVisual(gv_entity.id, gv_entity.unique_name);
         mesh->SetLocalPose(ignition::math::eigen3::convert(local_pose));
 
@@ -474,7 +474,7 @@ ignition::rendering::VisualPtr loadLinkGeometry(ignition::rendering::Scene& scen
       auto resource = shape.getResource();
       if (resource)
       {
-        auto gv_entity = entity_container.addUntracked();
+        auto gv_entity = entity_container.addUntrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS);
         ignition::rendering::VisualPtr mesh = scene.CreateVisual(gv_entity.id, gv_entity.unique_name);
         mesh->SetLocalPose(ignition::math::eigen3::convert(local_pose));
 

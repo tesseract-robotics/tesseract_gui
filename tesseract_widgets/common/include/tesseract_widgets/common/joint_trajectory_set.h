@@ -34,6 +34,8 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <boost/serialization/base_object.hpp>
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
+#include <tesseract_environment/environment.h>
+#include <tesseract_command_language/composite_instruction.h>
 #include <tesseract_common/joint_state.h>
 
 namespace tesseract_common
@@ -42,8 +44,13 @@ struct JointTrajectoryInfo
 {
   JointTrajectoryInfo() = default;
 
+  /** @brief The initial state of the environment */
   JointState initial_state;
+
+  /** @brief The joint trajectory */
   JointTrajectory trajectory;
+
+  /** @brief A description of the trajectory */
   std::string description;
 
 private:
@@ -57,7 +64,22 @@ class JointTrajectorySet
 public:
   /** @brief This is only provided for serialization, DO NOT USE */
   JointTrajectorySet() = default;
-  JointTrajectorySet(const std::unordered_map<std::string, double>& initial_state);
+
+  /**
+   * @brief Create a trajectory set with initial state
+   * @param initial_state The initial state of the environment
+   * @param environment (Optional) The environment to use for planning
+   */
+  JointTrajectorySet(const std::unordered_map<std::string, double>& initial_state,
+                     tesseract_environment::Environment::Ptr environment = nullptr);
+
+  /**
+   * @brief Create a trajectory set with initial state and environment commands
+   * @param initial_state The initial state of the environment
+   * @param commands Additional Commands to be applied to environment prior to planning
+   */
+  JointTrajectorySet(const std::unordered_map<std::string, double>& initial_state,
+                     tesseract_environment::Commands commands);
 
   /**
    * @brief Append a Joint Trajectory
@@ -67,6 +89,19 @@ public:
    * @param description A description of the trajectory
    */
   void appendJointTrajectory(const JointTrajectory& joint_trajectory, const std::string& description);
+
+  /**
+   * @brief Get the environment for the joint trajectory set
+   * @details This can be a nullptr. If nullptr then check for commands which should be applied to the existing environment.
+   * @return The environment
+   */
+  tesseract_environment::Environment::Ptr getEnvironment() const;
+
+  /**
+   * @brief Get the environment commands that were applied to existing environment for the joint trajectory set
+   * @return The environment commands
+   */
+  const tesseract_environment::Commands& getEnvironmentCommands() const;
 
   /**
    * @brief Get the initial state
@@ -87,8 +122,17 @@ public:
   std::vector<JointTrajectoryInfo>::const_reference operator[](std::size_t pos) const;
 
 private:
+  /** @brief The initial state of the environment */
   JointState initial_state_;
+
+  /** @brief A vector of joint trajectory in the set */
   std::vector<JointTrajectoryInfo> joint_trajectory_;
+
+  /** @brief (Optional) Override the existing Tesseract Environment */
+  tesseract_environment::Environment::Ptr environment_{nullptr};
+
+  /** @brief (Optional) Additional Commands to be applied to environment prior to trajectory visualization */
+  tesseract_environment::Commands commands_;
 
   /**
    * @brief Append a joint state to the end

@@ -1,9 +1,6 @@
 #include "ui_joint_trajectory_widget.h"
 #include <tesseract_widgets/joint_trajectory/joint_trajectory_plot_dialog.h>
 #include <tesseract_widgets/joint_trajectory/joint_trajectory_widget.h>
-#include <tesseract_visualization/trajectory_player.h>
-#include <QTimer>
-#include <set>
 
 #include <tesseract_widgets/plot/transforms/first_derivative.h>
 #include <tesseract_widgets/plot/transforms/integral_transform.h>
@@ -11,6 +8,12 @@
 #include <tesseract_widgets/plot/transforms/moving_rms.h>
 #include <tesseract_widgets/plot/transforms/outlier_removal.h>
 #include <tesseract_widgets/plot/transforms/scale_transform.h>
+
+#include <tesseract_widgets/common/standard_item_type.h>
+
+#include <tesseract_visualization/trajectory_player.h>
+#include <QTimer>
+#include <set>
 
 const double SLIDER_RESOLUTION = 0.001;
 
@@ -22,6 +25,7 @@ JointTrajectoryWidget::JointTrajectoryWidget(QWidget *parent)
 {
 
   ui_->setupUi(this);
+  ui_->trajectoryPlotButton->setIcon(QIcon(":/tesseract_widgets/png/chart.png"));
 
   player_ = std::make_unique<tesseract_visualization::TrajectoryPlayer>();
   player_timer_ = std::make_unique<QTimer>(this);
@@ -52,35 +56,34 @@ void JointTrajectoryWidget::setModel(JointTrajectoryModel* model)
   connect(ui_->trajectoryTreeView->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)), this, SLOT(onCurrentRowChanged(QModelIndex,QModelIndex)));
 }
 
-void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex &current, const QModelIndex &previous)
+void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex &current, const QModelIndex &/*previous*/)
 {
   QStandardItem* item = model_->itemFromIndex(current);
   switch (item->type())
   {
-    case JointTrajectoryModel::STATE:
-    {
-      disablePlayer();
-      const tesseract_common::JointState& state = model_->getJointState(current);
-      emit showState(state);
-      break;
-    }
-    case JointTrajectoryModel::TRAJECTORY:
+    case static_cast<int>(tesseract_gui::StandardItemType::JOINT_TRAJECTORY_SET_TRAJECTORY):
     {
       current_trajectory_ = model_->getJointTrajectory(current);
-      /** @todo need to use the initial state */
+
+      const tesseract_common::JointTrajectorySet& traj_set = model_->getJointTrajectorySet(current);
+      emit configureEnvironment(traj_set.getEnvironment(), traj_set.getEnvironmentCommands(), traj_set.getInitialState());
+
       player_->setTrajectory(current_trajectory_.trajectory);
 
       enablePlayer();
 
       break;
     }
-    case JointTrajectoryModel::TRAJECTORY_SET:
+    case static_cast<int>(tesseract_gui::StandardItemType::JOINT_TRAJECTORY_SET):
     {
       const tesseract_common::JointTrajectorySet& trajectory_set = model_->getJointTrajectorySet(current);
       current_trajectory_ = tesseract_common::JointTrajectoryInfo();
       current_trajectory_.initial_state = trajectory_set.getInitialState();
       for (const auto& t : trajectory_set.getJointTrajectories())
         current_trajectory_.trajectory.insert(current_trajectory_.trajectory.end(), t.trajectory.begin(), t.trajectory.end());
+
+      const tesseract_common::JointTrajectorySet& traj_set = model_->getJointTrajectorySet(current);
+      emit configureEnvironment(traj_set.getEnvironment(), traj_set.getEnvironmentCommands(), traj_set.getInitialState());
 
       player_->setTrajectory(current_trajectory_.trajectory);
       enablePlayer();
@@ -89,6 +92,10 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex &current, cons
     default:
     {
       disablePlayer();
+      const tesseract_common::JointState& state = model_->getJointState(current);
+      const tesseract_common::JointTrajectorySet& traj_set = model_->getJointTrajectorySet(current);
+      emit configureEnvironment(traj_set.getEnvironment(), traj_set.getEnvironmentCommands(), traj_set.getInitialState());
+      emit showState(state);
       break;
     }
   }

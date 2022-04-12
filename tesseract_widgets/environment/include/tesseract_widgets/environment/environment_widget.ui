@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>570</width>
+    <width>475</width>
     <height>542</height>
    </rect>
   </property>
@@ -29,7 +29,7 @@
    <item>
     <widget class="QTabWidget" name="tab_widget">
      <property name="currentIndex">
-      <number>7</number>
+      <number>6</number>
      </property>
      <widget class="QWidget" name="scene_tab">
       <attribute name="title">
@@ -213,28 +213,6 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="joint_trajectory_tab">
-      <attribute name="title">
-       <string>Trajectory</string>
-      </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_9">
-       <property name="leftMargin">
-        <number>3</number>
-       </property>
-       <property name="topMargin">
-        <number>3</number>
-       </property>
-       <property name="rightMargin">
-        <number>3</number>
-       </property>
-       <property name="bottomMargin">
-        <number>3</number>
-       </property>
-       <item>
-        <widget class="tesseract_gui::JointTrajectoryWidget" name="widget" native="true"/>
-       </item>
-      </layout>
-     </widget>
     </widget>
    </item>
   </layout>
@@ -244,12 +222,6 @@
    <class>tesseract_gui::AllowedCollisionMatrixTreeView</class>
    <extends>QTreeView</extends>
    <header>tesseract_widgets/acm/allowed_collision_matrix_tree_view.h</header>
-  </customwidget>
-  <customwidget>
-   <class>tesseract_gui::JointTrajectoryWidget</class>
-   <extends>QWidget</extends>
-   <header>tesseract_widgets/joint_trajectory/joint_trajectory_widget.h</header>
-   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

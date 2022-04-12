@@ -37,6 +37,9 @@ public:
 
 Q_SIGNALS:
   void showState(const tesseract_common::JointState& state);
+  void configureEnvironment(tesseract_environment::Environment::Ptr environment,
+                            const tesseract_environment::Commands& commands,
+                            const tesseract_common::JointState& initial_state);
 
 private Q_SLOTS:
   void onCurrentRowChanged(const QModelIndex &current, const QModelIndex &previous);
@@ -48,7 +51,7 @@ private Q_SLOTS:
 
 private:
   std::unique_ptr<Ui::JointTrajectoryWidget> ui_;
-  JointTrajectoryModel* model_;
+  JointTrajectoryModel* model_{nullptr};
   std::unique_ptr<tesseract_visualization::TrajectoryPlayer> player_;
   std::unique_ptr<QTimer> player_timer_;
   std::unique_ptr<JointTrajectoryPlotDialog> plot_dialog_;

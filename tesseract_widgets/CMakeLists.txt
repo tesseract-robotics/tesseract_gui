@@ -19,6 +19,7 @@ add_subdirectory(joint_trajectory)
 add_subdirectory(kinematic_groups)
 add_subdirectory(plot)
 add_subdirectory(scene_graph)
+add_subdirectory(workbench)
 
 install(FILES "${CMAKE_CURRENT_LIST_DIR}/cmake/FindQwt.cmake" DESTINATION lib/cmake/${PROJECT_NAME})
 install(FILES "${CMAKE_CURRENT_LIST_DIR}/cmake/tesseract_widgets-extras.cmake" DESTINATION lib/cmake/${PROJECT_NAME})

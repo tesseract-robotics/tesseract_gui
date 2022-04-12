@@ -21,13 +21,6 @@ class JointTrajectoryModel : public QStandardItemModel
   Q_OBJECT
 
 public:
-  enum ItemType
-  {
-    STATE = QStandardItem::UserType + 1,
-    TRAJECTORY = QStandardItem::UserType + 2,
-    TRAJECTORY_SET = QStandardItem::UserType + 3
-  };
-
   explicit JointTrajectoryModel(QObject *parent = nullptr);
   JointTrajectoryModel(const JointTrajectoryModel &other);
   JointTrajectoryModel &operator=(const JointTrajectoryModel &other);
@@ -53,12 +46,11 @@ private:
 class JointStateItem : public QStandardItem
 {
 public:
-  JointStateItem(tesseract_common::JointTrajectoryInfo& parent_trajectory, tesseract_common::JointState& state);
-  explicit JointStateItem(const QString &text, tesseract_common::JointTrajectoryInfo& parent_trajectory, tesseract_common::JointState& state);
-  JointStateItem(const QIcon &icon, const QString &text, tesseract_common::JointTrajectoryInfo& parent_trajectory, tesseract_common::JointState& state);
+  JointStateItem(tesseract_common::JointState& state);
+  explicit JointStateItem(const QString &text, tesseract_common::JointState& state);
+  JointStateItem(const QIcon &icon, const QString &text, tesseract_common::JointState& state);
   int type() const override;
 
-  tesseract_common::JointTrajectoryInfo& parent_trajectory;
   tesseract_common::JointState& state;
 private:
   void ctor();
@@ -71,6 +63,7 @@ public:
   explicit JointTrajectoryItem(const QString &text, tesseract_common::JointTrajectoryInfo& trajectory_info);
   JointTrajectoryItem(const QIcon &icon, const QString &text, tesseract_common::JointTrajectoryInfo& trajectory_info);
   int type() const override;
+
   tesseract_common::JointTrajectoryInfo& trajectory_info;
 private:
   void ctor();
@@ -83,6 +76,7 @@ public:
   explicit JointTrajectorySetItem(const QString &text, tesseract_common::JointTrajectorySet &trajectory_set);
   JointTrajectorySetItem(const QIcon &icon, const QString &text, tesseract_common::JointTrajectorySet& trajectory_set);
   int type() const override;
+
   tesseract_common::JointTrajectorySet& trajectory_set;
 private:
   void ctor();

@@ -47,7 +47,16 @@ void JointTrajectoryInfo::serialize(Archive& ar, const unsigned int /*version*/)
   ar& BOOST_SERIALIZATION_NVP(description);
 }
 
-JointTrajectorySet::JointTrajectorySet(const std::unordered_map<std::string, double>& initial_state)
+JointTrajectorySet::JointTrajectorySet(const std::unordered_map<std::string, double>& initial_state,
+                                       tesseract_environment::Commands commands)
+  : JointTrajectorySet(initial_state)
+{
+  commands_ = std::move(commands);
+}
+
+JointTrajectorySet::JointTrajectorySet(const std::unordered_map<std::string, double>& initial_state,
+                                       tesseract_environment::Environment::Ptr environment)
+  : environment_(std::move(environment))
 {
   initial_state_.joint_names.reserve(initial_state.size());
   initial_state_.position.resize(static_cast<Eigen::Index>(initial_state.size()));
@@ -64,6 +73,16 @@ JointTrajectorySet::JointTrajectorySet(const std::unordered_map<std::string, dou
     initial_state_.acceleration(r) = 0;
     initial_state_.effort(r) = 0;
   }
+}
+
+tesseract_environment::Environment::Ptr JointTrajectorySet::getEnvironment() const
+{
+  return environment_;
+}
+
+const tesseract_environment::Commands& JointTrajectorySet::getEnvironmentCommands() const
+{
+  return commands_;
 }
 
 JointState JointTrajectorySet::getNewTrajectoryInitialState() const

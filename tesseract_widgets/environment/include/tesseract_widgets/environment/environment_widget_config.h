@@ -20,34 +20,45 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_WIDGETS_ENVIRONMENT_ENVIRONMENT_WIDGET_H
-#define TESSERACT_WIDGETS_ENVIRONMENT_ENVIRONMENT_WIDGET_H
+#ifndef TESSERACT_WIDGETS_ENVIRONMENT_ENVIRONMENT_WIDGET_CONFIG_H
+#define TESSERACT_WIDGETS_ENVIRONMENT_ENVIRONMENT_WIDGET_CONFIG_H
 
-#include <QWidget>
 #include <memory>
+#include <QObject>
 #include <tesseract_environment/environment.h>
 
-namespace Ui {
-class EnvironmentWidget;
-}
+class QStandardItemModel;
+
+
 
 namespace tesseract_gui
 {
-class EnvironmentWidgetConfig;
+class KinematicGroupsModel;
+class GroupTCPsModel;
+class GroupJointStatesModel;
+class AllowedCollisionMatrixModel;
+class EnvironmentCommandsModel;
 
-class EnvironmentWidget : public QWidget
+
+struct EnvironmentWidgetConfigImpl;
+
+class EnvironmentWidgetConfig : public QObject
 {
   Q_OBJECT
-
 public:
-  explicit EnvironmentWidget(QWidget *parent = nullptr);
-  ~EnvironmentWidget() override;
+
+  using Ptr = std::shared_ptr<EnvironmentWidgetConfig>;
+  using ConstPtr = std::shared_ptr<const EnvironmentWidgetConfig>;
+
+  EnvironmentWidgetConfig();
+  ~EnvironmentWidgetConfig() override;
 
   /**
-   * @brief Configure the environment widget
-   * @param config The environment widgets configuration
+   * @brief Set environment
+   * @param env The environment
+   * @param scene_name
    */
-  void setConfiguration(std::shared_ptr<EnvironmentWidgetConfig> config);
+  void setEnvironment(tesseract_environment::Environment::Ptr env);
 
   /**
    * @brief The the environment
@@ -63,27 +74,33 @@ public:
   tesseract_environment::Environment::ConstPtr getEnvironment() const;
   tesseract_environment::Environment::Ptr getEnvironment();
 
+  QStandardItemModel& getSceneGraphModel();
+  QStandardItemModel& getSceneStateModel();
+  KinematicGroupsModel& getKinematicGroupsModel();
+  GroupTCPsModel& getGroupTCPsModel();
+  GroupJointStatesModel& getGroupJointStatesModel();
+  AllowedCollisionMatrixModel& getAllowedCollisionMatrixModel();
+  EnvironmentCommandsModel& getEnvironmentCommandsModel();
+
+  void clear();
+
 Q_SIGNALS:
-  void configurationSet(EnvironmentWidgetConfig& config);
   void environmentSet(const tesseract_environment::Environment& env);
   void environmentChanged(const tesseract_environment::Environment& env);
   void environmentCurrentStateChanged(const tesseract_environment::Environment& env);
-  void linkVisibleChanged(const std::string& link_name, bool visible);
-  void linkCollisionVisibleChanged(const std::string& link_name, bool visible);
-  void linkVisualVisibleChanged(const std::string& link_name, bool visible);
-  void selectedLinksChanged(const std::vector<std::string>& selected_links);
-  void triggerRender();
+  void modelsUpdated();
 
-private Q_SLOTS:
-  void onModelsUpdated();
-
+public Q_SLOTS:
+  void onUpdateModels();
+  void onUpdateSceneGraphModel();
+  void onUpdateCurrentStateModel();
+  void onUpdateAllowedCollisionMatrixModel();
+  void onUpdateKinematicsInformationModels();
+  void onUpdateCommandHistoryModel();
 protected:
-  std::unique_ptr<Ui::EnvironmentWidget> ui;
-  std::shared_ptr<EnvironmentWidgetConfig> config_;
+  std::unique_ptr<EnvironmentWidgetConfigImpl> data_;
 
-  void updateModels();
-
+  void tesseractEventFilter(const tesseract_environment::Event& event);
 };
 }
-
-#endif // TESSERACT_WIDGETS_ENVIRONMENT_ENVIRONMENT_WIDGET_H
+#endif // TESSERACT_WIDGETS_ENVIRONMENT_ENVIRONMENT_WIDGET_CONFIG_H

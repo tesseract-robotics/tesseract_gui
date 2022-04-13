@@ -7,6 +7,7 @@ tesseract_variables()
 
 QT5_WRAP_CPP(ENVIRONMENT_WIDGET_headers_MOC
   include/tesseract_widgets/environment/environment_widget.h
+  include/tesseract_widgets/environment/environment_widget_config.h
   include/tesseract_widgets/environment/environment_commands_model.h
 )
 QT5_WRAP_UI(ENVIRONMENT_WIDGET_headers_UI include/tesseract_widgets/environment/environment_widget.ui)
@@ -15,6 +16,7 @@ add_library(${PROJECT_NAME}_environment SHARED
   ${ENVIRONMENT_WIDGET_headers_MOC}
   ${ENVIRONMENT_WIDGET_headers_UI}
   src/environment_widget.cpp
+  src/environment_widget_config.cpp
   src/environment_commands_standard_item.cpp
   src/environment_commands_model.cpp
   src/commands/add_allowed_collision_command_standard_item.cpp

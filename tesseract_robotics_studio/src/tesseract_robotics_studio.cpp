@@ -1,3 +1,25 @@
+/**
+ * @author Levi Armstrong <levi.armstrong@gmail.com>
+ *
+ * @copyright Copyright (C) 2022 Levi Armstrong <levi.armstrong@gmail.com>
+ *
+ * @par License
+ * GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
+ * @par
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ * @par
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * @par
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
 #include <tesseract_robotics_studio/tesseract_robotics_studio.h>
 #include <DockManager.h>
 #include "ui_tesseract_robotics_studio.h"
@@ -6,6 +28,8 @@
 
 #include <tesseract_urdf/urdf_parser.h>
 #include <tesseract_support/tesseract_support_resource_locator.h>
+
+#include <tesseract_widgets/environment/environment_widget_config.h>
 
 #include <QSettings>
 #include <QWidgetAction>
@@ -137,8 +161,11 @@ TesseractRoboticsStudio::TesseractRoboticsStudio(QWidget *parent)
     SceneInfo::Ptr scene_info = createScene(scene_name);
     if (scene_info != nullptr)
     {
+      auto config = std::make_shared<tesseract_gui::EnvironmentWidgetConfig>();
+      config->setEnvironment(std::move(env));
+
       auto* widget = new tesseract_gui::IgnitionEnvironmentWidget(scene_info->scene_name, *scene_info->entity_manager);
-      widget->setEnvironment(std::move(env));
+      widget->setConfiguration(std::move(config));
       qobject_cast<QApplication *>(qGuiApp)->installEventFilter(widget);
       connect(widget, SIGNAL(triggerRender()), scene_info->render_widget, SLOT(update()));
 

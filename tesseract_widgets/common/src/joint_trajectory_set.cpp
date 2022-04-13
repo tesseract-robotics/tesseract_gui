@@ -30,12 +30,14 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <boost/serialization/string.hpp>
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/set.hpp>
+#include <boost/serialization/shared_ptr.hpp>
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <tesseract_common/utils.h>
 #include <tesseract_common/serialization.h>
 //#include <tesseract_common/joint_trajectory_set.h>
 #include <tesseract_widgets/common/joint_trajectory_set.h>
+#include <tesseract_environment/commands.h>
 
 namespace tesseract_common
 {
@@ -43,6 +45,7 @@ template <class Archive>
 void JointTrajectoryInfo::serialize(Archive& ar, const unsigned int /*version*/)
 {
   ar& BOOST_SERIALIZATION_NVP(initial_state);
+  ar& BOOST_SERIALIZATION_NVP(commands);
   ar& BOOST_SERIALIZATION_NVP(trajectory);
   ar& BOOST_SERIALIZATION_NVP(description);
 }
@@ -229,6 +232,7 @@ void JointTrajectorySet::serialize(Archive& ar, const unsigned int /*version*/)
 {
   ar& BOOST_SERIALIZATION_NVP(initial_state_);
   ar& BOOST_SERIALIZATION_NVP(joint_trajectory_);
+  ar& BOOST_SERIALIZATION_NVP(commands_);
 }
 
 }  // namespace tesseract_common

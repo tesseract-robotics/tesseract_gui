@@ -47,6 +47,9 @@ struct JointTrajectoryInfo
   /** @brief The initial state of the environment */
   JointState initial_state;
 
+  /** @brief (Optional) Additional Commands to be applied to trajectory set environment prior to trajectory visualization */
+  tesseract_environment::Commands commands;
+
   /** @brief The joint trajectory */
   JointTrajectory trajectory;
 

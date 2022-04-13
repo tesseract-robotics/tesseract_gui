@@ -1,4 +1,5 @@
 find_package(tesseract_common REQUIRED)
+find_package(tesseract_environment REQUIRED)
 find_package(Qt5 COMPONENTS Core Gui Widgets Svg REQUIRED)
 
 # Load variable for clang tidy args, compiler options and cxx version
@@ -29,6 +30,7 @@ add_library(${PROJECT_NAME}_common SHARED
 )
 target_link_libraries(${PROJECT_NAME}_common PUBLIC
   tesseract::tesseract_common
+  tesseract::tesseract_environment
   Qt5::Core Qt5::Gui Qt5::Widgets Qt5::Svg)
 target_include_directories(${PROJECT_NAME}_common PUBLIC
     "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"

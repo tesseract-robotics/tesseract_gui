@@ -49,6 +49,8 @@ public:
 
   using Ptr = std::shared_ptr<EnvironmentWidgetConfig>;
   using ConstPtr = std::shared_ptr<const EnvironmentWidgetConfig>;
+  using UPtr = std::unique_ptr<EnvironmentWidgetConfig>;
+  using ConstUPtr = std::unique_ptr<const EnvironmentWidgetConfig>;
 
   EnvironmentWidgetConfig();
   ~EnvironmentWidgetConfig() override;
@@ -83,6 +85,8 @@ public:
   EnvironmentCommandsModel& getEnvironmentCommandsModel();
 
   void clear();
+
+  EnvironmentWidgetConfig::UPtr clone() const;
 
 Q_SIGNALS:
   void environmentSet(const tesseract_environment::Environment& env);

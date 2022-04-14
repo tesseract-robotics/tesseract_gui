@@ -51,7 +51,10 @@ public:
   const EnvironmentWidget& getEnvironmentWidget() const;
 
   JointTrajectoryWidget& getJointTrajectoryWidget();
-  const JointTrajectoryWidget& getJointTrajectorWidget() const;
+  const JointTrajectoryWidget& getJointTrajectoryWidget() const;
+
+public Q_SLOTS:
+  virtual void onRender();
 
 private Q_SLOTS:
   void onConfigureJointTrajectoryEnvironment(tesseract_environment::Environment::Ptr environment,

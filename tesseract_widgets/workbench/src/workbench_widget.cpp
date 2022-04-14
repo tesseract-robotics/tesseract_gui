@@ -67,7 +67,12 @@ EnvironmentWidget& WorkbenchWidget::getEnvironmentWidget() { return *data_->envi
 const EnvironmentWidget& WorkbenchWidget::getEnvironmentWidget() const { return *data_->environment_widget; }
 
 JointTrajectoryWidget& WorkbenchWidget::getJointTrajectoryWidget() { return *data_->joint_trajectory_widget; }
-const JointTrajectoryWidget& WorkbenchWidget::getJointTrajectorWidget() const { return *data_->joint_trajectory_widget; }
+const JointTrajectoryWidget& WorkbenchWidget::getJointTrajectoryWidget() const { return *data_->joint_trajectory_widget; }
+
+void WorkbenchWidget::onRender()
+{
+  data_->environment_widget->onRender();
+}
 
 void WorkbenchWidget::onConfigureJointTrajectoryEnvironment(tesseract_environment::Environment::Ptr environment,
                                                             const tesseract_environment::Commands& commands,

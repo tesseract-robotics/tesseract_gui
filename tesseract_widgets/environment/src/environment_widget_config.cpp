@@ -32,11 +32,14 @@
 
 #include <tesseract_environment/environment.h>
 
+#include <qobjectdefs.h>
+
 namespace tesseract_gui
 {
 
 struct EnvironmentWidgetConfigImpl
 {
+  std::size_t hash;
   tesseract_environment::Environment::Ptr environment;
   QStandardItemModel scene_model;
   QStandardItemModel scene_state_model;
@@ -50,14 +53,24 @@ struct EnvironmentWidgetConfigImpl
 EnvironmentWidgetConfig::EnvironmentWidgetConfig()
   : data_(std::make_unique<EnvironmentWidgetConfigImpl>())
 {
+  data_->hash = std::hash<EnvironmentWidgetConfig*>{}(this);
 }
 
-EnvironmentWidgetConfig::~EnvironmentWidgetConfig() = default;
+EnvironmentWidgetConfig::~EnvironmentWidgetConfig()
+{
+  // disconnect the callback
+  if (data_->environment != nullptr)
+    data_->environment->removeEventCallback(data_->hash);
+};
 
 void EnvironmentWidgetConfig::setEnvironment(tesseract_environment::Environment::Ptr env)
 {
+  // disconnect the callback
+  if (data_->environment != nullptr)
+    data_->environment->removeEventCallback(data_->hash);
+
   data_->environment = std::move(env);
-  data_->environment->addEventCallback([this](const tesseract_environment::Event& event){this->tesseractEventFilter(event);});
+  data_->environment->addEventCallback(data_->hash, [this](const tesseract_environment::Event& event){this->tesseractEventFilter(event);});
 
   clear();
 
@@ -188,4 +201,12 @@ void EnvironmentWidgetConfig::tesseractEventFilter(const tesseract_environment::
     }
   }
 }
+
+EnvironmentWidgetConfig::UPtr EnvironmentWidgetConfig::clone() const
+{
+  auto c = std::make_unique<EnvironmentWidgetConfig>();
+  c->setEnvironment(data_->environment->clone());
+  return c;
+}
+
 }

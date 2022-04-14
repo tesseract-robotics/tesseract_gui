@@ -75,8 +75,7 @@ void EnvironmentWidget::setConfiguration(std::shared_ptr<EnvironmentWidgetConfig
 {
   if (config != nullptr)
   {
-    disconnect(config_.get(), SIGNAL(modelsUpdated()), this , SLOT(onModelsUpdate()));
-    disconnect(config_.get(), SIGNAL(modelsUpdated()), this , SLOT(onModelsUpdate()));
+    disconnect(config_.get(), SIGNAL(modelsUpdated()), this , SLOT(onModelsUpdated()));
     disconnect(config_.get(), SIGNAL(environmentSet(tesseract_environment::Environment)), this , SIGNAL(environmentSet(tesseract_environment::Environment)));
     disconnect(config_.get(), SIGNAL(environmentChanged(tesseract_environment::Environment)), this , SIGNAL(environmentChanged(tesseract_environment::Environment)));
     disconnect(config_.get(), SIGNAL(environmentCurrentStateChanged(tesseract_environment::Environment)), this , SIGNAL(environmentCurrentStateChanged(tesseract_environment::Environment)));
@@ -91,7 +90,9 @@ void EnvironmentWidget::setConfiguration(std::shared_ptr<EnvironmentWidgetConfig
   ui->acm_tree_view->setModel(&config_->getAllowedCollisionMatrixModel());
   ui->cmd_history_tree_view->setModel(&config_->getEnvironmentCommandsModel());
 
-  connect(config_.get(), SIGNAL(modelsUpdated()), this , SLOT(onModelsUpdate()));
+  onModelsUpdated();
+
+  connect(config_.get(), SIGNAL(modelsUpdated()), this , SLOT(onModelsUpdated()));
   connect(config_.get(), SIGNAL(environmentSet(tesseract_environment::Environment)), this , SIGNAL(environmentSet(tesseract_environment::Environment)));
   connect(config_.get(), SIGNAL(environmentChanged(tesseract_environment::Environment)), this , SIGNAL(environmentChanged(tesseract_environment::Environment)));
   connect(config_.get(), SIGNAL(environmentCurrentStateChanged(tesseract_environment::Environment)), this , SIGNAL(environmentCurrentStateChanged(tesseract_environment::Environment)));
@@ -143,5 +144,8 @@ void EnvironmentWidget::onModelsUpdated()
   ui->cmd_history_tree_view->resizeColumnToContents(0);
 }
 
+void EnvironmentWidget::onRender()
+{
 
+}
 }

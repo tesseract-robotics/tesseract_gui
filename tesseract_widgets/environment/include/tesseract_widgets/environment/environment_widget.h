@@ -74,8 +74,9 @@ Q_SIGNALS:
   void selectedLinksChanged(const std::vector<std::string>& selected_links);
   void triggerRender();
 
-private Q_SLOTS:
-  void onModelsUpdated();
+public Q_SLOTS:
+  virtual void onModelsUpdated();
+  virtual void onRender();
 
 protected:
   std::unique_ptr<Ui::EnvironmentWidget> ui;

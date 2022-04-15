@@ -26,14 +26,13 @@
 #include <tesseract_common/macros.h>
 TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #ifndef Q_MOC_RUN
-#include <tesseract_common/joint_state.h>
 #include <memory>
 #endif
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <QWidget>
 #include <QItemSelectionModel>
-#include <tesseract_widgets/joint_trajectory/joint_trajectory_model.h>
+
 
 namespace Ui {
 class JointTrajectoryWidget;
@@ -44,9 +43,24 @@ namespace tesseract_visualization
 class TrajectoryPlayer;
 }
 
+namespace tesseract_common
+{
+class JointState;
+class JointTrajectorySet;
+}
+
+namespace tesseract_environment
+{
+class Environment;
+class Command;
+}
+
 namespace tesseract_gui
 {
+class JointTrajectoryModel;
 class JointTrajectoryPlotDialog;
+
+struct JointTrajectoryWidgetPrivate;
 class JointTrajectoryWidget : public QWidget
 {
   Q_OBJECT
@@ -57,11 +71,30 @@ public:
 
   void setModel(JointTrajectoryModel* model);
 
+  /**
+   * @brief Add joint trajectory set
+   * @param trajectory_set The trajectory set associated with the key
+   * @return The key associated with added trajectory for removal
+   */
+  QString addJointTrajectorySet(const tesseract_common::JointTrajectorySet& trajectory_set);
+
+  /**
+   * @brief Remove the joint trajectory set
+   * @param key The key associated with the joint trajectory set to be removed
+   */
+  void removeJointTrajectorySet(const QString& key);
+
+  /**
+   * @brief Check a trajectory set with the provided key exists
+   * @param key The key associated with the joint trajectory set to find
+   * @return True if a trajectory exists under the provided key, otherwise false
+   */
+  bool hasJointTrajectorySet(const QString& key);
+
 Q_SIGNALS:
   void showState(const tesseract_common::JointState& state);
-  void configureEnvironment(tesseract_environment::Environment::Ptr environment,
-                            const tesseract_environment::Commands& commands,
-                            const tesseract_common::JointState& initial_state);
+  void configureJointTrajectorySet(const QString& uuid, const tesseract_common::JointTrajectorySet& joint_trajectory_set);
+  void jointTrajectorySetRemoved(const QString& uuid);
 
 private Q_SLOTS:
   void onCurrentRowChanged(const QModelIndex &current, const QModelIndex &previous);
@@ -70,18 +103,12 @@ private Q_SLOTS:
   void onPlayerTimerTimeout();
   void onSliderValueChanged(int value);
   void onPlotTrajectoryClicked();
+  void onEnablePlayer();
+  void onDisablePlayer();
 
 private:
   std::unique_ptr<Ui::JointTrajectoryWidget> ui_;
-  JointTrajectoryModel* model_{nullptr};
-  std::unique_ptr<tesseract_visualization::TrajectoryPlayer> player_;
-  std::unique_ptr<QTimer> player_timer_;
-  std::unique_ptr<JointTrajectoryPlotDialog> plot_dialog_;
-  double current_duration_{0};
-  tesseract_common::JointTrajectoryInfo current_trajectory_;
-
-  void enablePlayer();
-  void disablePlayer();
+  std::unique_ptr<JointTrajectoryWidgetPrivate> data_;
 };
 
 }

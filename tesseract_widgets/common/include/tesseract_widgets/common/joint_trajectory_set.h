@@ -74,7 +74,7 @@ public:
    * @param environment (Optional) The environment to use for planning
    */
   JointTrajectorySet(const std::unordered_map<std::string, double>& initial_state,
-                     tesseract_environment::Environment::Ptr environment = nullptr);
+                     tesseract_environment::Environment::UPtr environment = nullptr);
 
   /**
    * @brief Create a trajectory set with initial state and environment commands
@@ -91,7 +91,7 @@ public:
    * @param joint_trajectory The joint trajectory to append
    * @param description A description of the trajectory
    */
-  void appendJointTrajectory(const JointTrajectory& joint_trajectory, const std::string& description);
+  void appendJointTrajectory(const JointTrajectory& joint_trajectory, const std::string& description = "");
 
   /**
    * @brief Get the environment for the joint trajectory set
@@ -118,6 +118,22 @@ public:
    */
   const std::vector<JointTrajectoryInfo>& getJointTrajectories() const;
 
+  /**
+   * @brief Set a description for the trajectory set
+   * @param description A description of the trajectory set
+   */
+  void setDescription(std::string description);
+
+  /**
+   * @brief Get the description for the trajectory set
+   * @return The description
+   */
+  const std::string& getDescription() const;
+
+  /**
+   * @brief Get the size of the trajectory set
+   * @return The size
+   */
   std::size_t size() const;
 
   /** @brief access specified element */
@@ -136,6 +152,9 @@ private:
 
   /** @brief (Optional) Additional Commands to be applied to environment prior to trajectory visualization */
   tesseract_environment::Commands commands_;
+
+  /** @brief A description of the trajectory set */
+  std::string description_;
 
   /**
    * @brief Append a joint state to the end

@@ -23,6 +23,7 @@
 #include "ui_joint_trajectory_widget.h"
 #include <tesseract_widgets/joint_trajectory/joint_trajectory_plot_dialog.h>
 #include <tesseract_widgets/joint_trajectory/joint_trajectory_widget.h>
+#include <tesseract_widgets/joint_trajectory/joint_trajectory_model.h>
 
 #include <tesseract_widgets/plot/transforms/first_derivative.h>
 #include <tesseract_widgets/plot/transforms/integral_transform.h>
@@ -33,6 +34,7 @@
 
 #include <tesseract_widgets/common/standard_item_type.h>
 
+#include <tesseract_common/joint_state.h>
 #include <tesseract_visualization/trajectory_player.h>
 #include <QTimer>
 #include <set>
@@ -41,22 +43,33 @@ const double SLIDER_RESOLUTION = 0.001;
 
 namespace tesseract_gui
 {
+
+struct JointTrajectoryWidgetPrivate
+{
+  JointTrajectoryModel* model{nullptr};
+  std::unique_ptr<tesseract_visualization::TrajectoryPlayer> player;
+  std::unique_ptr<QTimer> player_timer;
+  std::unique_ptr<JointTrajectoryPlotDialog> plot_dialog;
+  double current_duration{0};
+  tesseract_common::JointTrajectoryInfo current_trajectory;
+};
+
 JointTrajectoryWidget::JointTrajectoryWidget(QWidget *parent)
   : QWidget(parent)
   , ui_(std::make_unique<Ui::JointTrajectoryWidget>())
+  , data_(std::make_unique<JointTrajectoryWidgetPrivate>())
 {
-
   ui_->setupUi(this);
   ui_->trajectoryPlotButton->setIcon(QIcon(":/tesseract_widgets/png/chart.png"));
 
-  player_ = std::make_unique<tesseract_visualization::TrajectoryPlayer>();
-  player_timer_ = std::make_unique<QTimer>(this);
-  player_timer_->start(10);
+  data_->player = std::make_unique<tesseract_visualization::TrajectoryPlayer>();
+  data_->player_timer = std::make_unique<QTimer>(this);
+  data_->player_timer->start(10);
 
   connect(ui_->trajectoryPlayButton, SIGNAL(clicked()), this, SLOT(onPlayButtonClicked()));
   connect(ui_->trajectoryPauseButton, SIGNAL(clicked()), this, SLOT(onPauseButtonClicked()));
   connect(ui_->trajectorySlider, SIGNAL(valueChanged(int)), this, SLOT(onSliderValueChanged(int)));
-  connect(player_timer_.get(), SIGNAL(timeout()), this, SLOT(onPlayerTimerTimeout()));
+  connect(data_->player_timer.get(), SIGNAL(timeout()), this, SLOT(onPlayerTimerTimeout()));
   connect(ui_->trajectoryPlotButton, SIGNAL(clicked()), this, SLOT(onPlotTrajectoryClicked()));
 
   TransformFactory::registerTransform<FirstDerivative>();
@@ -73,50 +86,68 @@ void JointTrajectoryWidget::setModel(JointTrajectoryModel* model)
 {
   ui_->trajectoryTreeView->setModel(model);
   ui_->trajectoryTreeView->setColumnWidth(0, 175);
-  model_ = model;
+  data_->model = model;
 
   connect(ui_->trajectoryTreeView->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)), this, SLOT(onCurrentRowChanged(QModelIndex,QModelIndex)));
 }
 
+QString JointTrajectoryWidget::addJointTrajectorySet(const tesseract_common::JointTrajectorySet& trajectory_set)
+{
+  return data_->model->addJointTrajectorySet(trajectory_set);
+}
+
+void JointTrajectoryWidget::removeJointTrajectorySet(const QString& key)
+{
+  data_->model->removeJointTrajectorySet(key);
+  emit jointTrajectorySetRemoved(key);
+}
+
+bool JointTrajectoryWidget::hasJointTrajectorySet(const QString& key)
+{
+  return data_->model->hasJointTrajectorySet(key);
+}
+
 void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex &current, const QModelIndex &/*previous*/)
 {
-  QStandardItem* item = model_->itemFromIndex(current);
+  QStandardItem* item = data_->model->itemFromIndex(current);
   switch (item->type())
   {
     case static_cast<int>(tesseract_gui::StandardItemType::JOINT_TRAJECTORY_SET_TRAJECTORY):
     {
-      current_trajectory_ = model_->getJointTrajectory(current);
+      data_->current_trajectory = data_->model->getJointTrajectory(current);
 
-      const tesseract_common::JointTrajectorySet& traj_set = model_->getJointTrajectorySet(current);
-      emit configureEnvironment(traj_set.getEnvironment(), traj_set.getEnvironmentCommands(), traj_set.getInitialState());
+      auto details = data_->model->getJointTrajectorySetDetails(current);
+      emit configureJointTrajectorySet(details.first, details.second);
 
-      player_->setTrajectory(current_trajectory_.trajectory);
+      data_->player->setTrajectory(data_->current_trajectory.trajectory);
 
-      enablePlayer();
+      onEnablePlayer();
 
       break;
     }
     case static_cast<int>(tesseract_gui::StandardItemType::JOINT_TRAJECTORY_SET):
     {
-      const tesseract_common::JointTrajectorySet& trajectory_set = model_->getJointTrajectorySet(current);
-      current_trajectory_ = tesseract_common::JointTrajectoryInfo();
-      current_trajectory_.initial_state = trajectory_set.getInitialState();
-      for (const auto& t : trajectory_set.getJointTrajectories())
-        current_trajectory_.trajectory.insert(current_trajectory_.trajectory.end(), t.trajectory.begin(), t.trajectory.end());
+      auto details = data_->model->getJointTrajectorySetDetails(current);
+      const tesseract_common::JointTrajectorySet& traj_set = details.second;
 
-      const tesseract_common::JointTrajectorySet& traj_set = model_->getJointTrajectorySet(current);
-      emit configureEnvironment(traj_set.getEnvironment(), traj_set.getEnvironmentCommands(), traj_set.getInitialState());
+      emit configureJointTrajectorySet(details.first, details.second);
 
-      player_->setTrajectory(current_trajectory_.trajectory);
-      enablePlayer();
+      data_->current_trajectory = tesseract_common::JointTrajectoryInfo();
+      data_->current_trajectory.initial_state = traj_set.getInitialState();
+      for (const auto& t : traj_set.getJointTrajectories())
+        data_->current_trajectory.trajectory.insert(data_->current_trajectory.trajectory.end(), t.trajectory.begin(), t.trajectory.end());
+
+
+      data_->player->setTrajectory(data_->current_trajectory.trajectory);
+      onEnablePlayer();
       break;
     }
     default:
     {
-      disablePlayer();
-      const tesseract_common::JointState& state = model_->getJointState(current);
-      const tesseract_common::JointTrajectorySet& traj_set = model_->getJointTrajectorySet(current);
-      emit configureEnvironment(traj_set.getEnvironment(), traj_set.getEnvironmentCommands(), traj_set.getInitialState());
+      onDisablePlayer();
+      const tesseract_common::JointState& state = data_->model->getJointState(current);
+      auto details = data_->model->getJointTrajectorySetDetails(current);
+      emit configureJointTrajectorySet(details.first, details.second);
       emit showState(state);
       break;
     }
@@ -134,53 +165,53 @@ void JointTrajectoryWidget::onPlayButtonClicked()
   ui_->trajectoryPlayButton->setEnabled(false);
   ui_->trajectorySlider->setEnabled(false);
   ui_->trajectoryPauseButton->setEnabled(true);
-  player_->setCurrentDuration(current_duration_);
+  data_->player->setCurrentDuration(data_->current_duration);
 }
 
 void JointTrajectoryWidget::onPlayerTimerTimeout()
 {
   if (ui_->trajectoryPlayerFrame->isEnabled() && ui_->trajectoryPauseButton->isEnabled())
   {
-    player_->getNext();
-    ui_->trajectorySlider->setSliderPosition(player_->currentDuration() / SLIDER_RESOLUTION);
-    if (player_->isFinished())
+    data_->player->getNext();
+    ui_->trajectorySlider->setSliderPosition(data_->player->currentDuration() / SLIDER_RESOLUTION);
+    if (data_->player->isFinished())
       onPauseButtonClicked();
   }
 }
 
 void JointTrajectoryWidget::onSliderValueChanged(int value)
 {
-  current_duration_ = value * SLIDER_RESOLUTION;
-  tesseract_common::JointState state = player_->setCurrentDuration(current_duration_);
-  ui_->trajectoryCurrentDurationLabel->setText(QString().sprintf("%0.3f", current_duration_));
+  data_->current_duration = value * SLIDER_RESOLUTION;
+  tesseract_common::JointState state = data_->player->setCurrentDuration(data_->current_duration);
+  ui_->trajectoryCurrentDurationLabel->setText(QString().sprintf("%0.3f", data_->current_duration));
   emit showState(state);
 }
 
 void JointTrajectoryWidget::onPlotTrajectoryClicked()
 {
-  if (current_trajectory_.trajectory.empty())
+  if (data_->current_trajectory.trajectory.empty())
     return;
 
-  plot_dialog_ = nullptr;
-  plot_dialog_ = std::make_unique<JointTrajectoryPlotDialog>(current_trajectory_);
-  plot_dialog_->setWindowFlags(Qt::WindowMinMaxButtonsHint | Qt::WindowCloseButtonHint);
-  plot_dialog_->show();
+  data_->plot_dialog = nullptr;
+  data_->plot_dialog = std::make_unique<JointTrajectoryPlotDialog>(data_->current_trajectory);
+  data_->plot_dialog->setWindowFlags(Qt::WindowMinMaxButtonsHint | Qt::WindowCloseButtonHint);
+  data_->plot_dialog->show();
 }
 
-void JointTrajectoryWidget::enablePlayer()
+void JointTrajectoryWidget::onEnablePlayer()
 {
   ui_->trajectoryPlayerFrame->setEnabled(true);
   ui_->trajectoryPlayButton->setEnabled(true);
   ui_->trajectoryPauseButton->setEnabled(false);
   ui_->trajectorySlider->setMinimum(0);
-  ui_->trajectorySlider->setMaximum(player_->trajectoryDuration() / SLIDER_RESOLUTION);
+  ui_->trajectorySlider->setMaximum(data_->player->trajectoryDuration() / SLIDER_RESOLUTION);
   ui_->trajectorySlider->setSliderPosition(0);
-  ui_->trajectoryCurrentDurationLabel->setText(QString().sprintf("%0.3f", player_->currentDuration()));
-  ui_->trajectoryDurationLabel->setText(QString().sprintf("%0.3f", player_->trajectoryDuration()));
-  current_duration_ = 0;
+  ui_->trajectoryCurrentDurationLabel->setText(QString().sprintf("%0.3f", data_->player->currentDuration()));
+  ui_->trajectoryDurationLabel->setText(QString().sprintf("%0.3f", data_->player->trajectoryDuration()));
+  data_->current_duration = 0;
 }
 
-void JointTrajectoryWidget::disablePlayer()
+void JointTrajectoryWidget::onDisablePlayer()
 {
   ui_->trajectoryPlayerFrame->setEnabled(false);
 }

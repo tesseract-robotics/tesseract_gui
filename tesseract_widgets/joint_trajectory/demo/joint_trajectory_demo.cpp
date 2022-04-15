@@ -65,11 +65,11 @@ int main(int argc, char ** argv)
     }
 
     auto* model = new tesseract_gui::JointTrajectoryModel();
-    model->addJointTrajectorySet("set1", trajectory_set);
-    model->addJointTrajectorySet("set2", trajectory_set);
-    model->addJointTrajectorySet("set3", trajectory_set);
+    QString set1_key = model->addJointTrajectorySet(trajectory_set);
+    QString set2_key = model->addJointTrajectorySet(trajectory_set);
+    QString set3_key = model->addJointTrajectorySet(trajectory_set);
 
-    model->removeJointTrajectorySet("set2");
+    model->removeJointTrajectorySet(set2_key);
 
     tesseract_gui::JointTrajectoryWidget widget;
     widget.setModel(model);

@@ -58,7 +58,7 @@ JointTrajectorySet::JointTrajectorySet(const std::unordered_map<std::string, dou
 }
 
 JointTrajectorySet::JointTrajectorySet(const std::unordered_map<std::string, double>& initial_state,
-                                       tesseract_environment::Environment::Ptr environment)
+                                       tesseract_environment::Environment::UPtr environment)
   : environment_(std::move(environment))
 {
   initial_state_.joint_names.reserve(initial_state.size());
@@ -215,7 +215,13 @@ void JointTrajectorySet::appendJointState(JointTrajectoryInfo& traj_info, const 
 }
 
 const std::vector<JointTrajectoryInfo>& JointTrajectorySet::getJointTrajectories() const { return joint_trajectory_; }
+
+void JointTrajectorySet::setDescription(std::string description) { description_ = description; }
+
+const std::string& JointTrajectorySet::getDescription() const { return description_; }
+
 std::size_t JointTrajectorySet::size() const { return joint_trajectory_.size(); }
+
 std::vector<JointTrajectoryInfo>::reference JointTrajectorySet::operator[](std::size_t pos)
 {
   return joint_trajectory_[pos];
@@ -232,7 +238,9 @@ void JointTrajectorySet::serialize(Archive& ar, const unsigned int /*version*/)
 {
   ar& BOOST_SERIALIZATION_NVP(initial_state_);
   ar& BOOST_SERIALIZATION_NVP(joint_trajectory_);
+  ar& BOOST_SERIALIZATION_NVP(environment_);
   ar& BOOST_SERIALIZATION_NVP(commands_);
+  ar& BOOST_SERIALIZATION_NVP(description_);
 }
 
 }  // namespace tesseract_common

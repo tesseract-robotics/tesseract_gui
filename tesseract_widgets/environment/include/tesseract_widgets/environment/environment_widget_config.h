@@ -33,6 +33,7 @@ class QStandardItemModel;
 
 namespace tesseract_gui
 {
+class SceneStateModel;
 class KinematicGroupsModel;
 class GroupTCPsModel;
 class GroupJointStatesModel;
@@ -77,7 +78,7 @@ public:
   tesseract_environment::Environment::Ptr getEnvironment();
 
   QStandardItemModel& getSceneGraphModel();
-  QStandardItemModel& getSceneStateModel();
+  SceneStateModel &getSceneStateModel();
   KinematicGroupsModel& getKinematicGroupsModel();
   GroupTCPsModel& getGroupTCPsModel();
   GroupJointStatesModel& getGroupJointStatesModel();

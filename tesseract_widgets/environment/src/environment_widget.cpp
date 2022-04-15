@@ -26,7 +26,7 @@
 #include <tesseract_widgets/environment/environment_widget_config.h>
 #include <tesseract_widgets/environment/environment_commands_model.h>
 #include <tesseract_widgets/scene_graph/scene_graph_standard_item.h>
-#include <tesseract_widgets/scene_graph/scene_state_standard_item.h>
+#include <tesseract_widgets/scene_graph/scene_state_model.h>
 #include <tesseract_widgets/kinematic_groups/kinematic_groups_model.h>
 #include <tesseract_widgets/kinematic_groups/group_tcps_model.h>
 #include <tesseract_widgets/kinematic_groups/group_joint_states_model.h>

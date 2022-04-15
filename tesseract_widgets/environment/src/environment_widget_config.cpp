@@ -24,7 +24,7 @@
 #include <tesseract_widgets/environment/environment_widget_config.h>
 #include <tesseract_widgets/environment/environment_commands_model.h>
 #include <tesseract_widgets/scene_graph/scene_graph_standard_item.h>
-#include <tesseract_widgets/scene_graph/scene_state_standard_item.h>
+#include <tesseract_widgets/scene_graph/scene_state_model.h>
 #include <tesseract_widgets/kinematic_groups/kinematic_groups_model.h>
 #include <tesseract_widgets/kinematic_groups/group_tcps_model.h>
 #include <tesseract_widgets/kinematic_groups/group_joint_states_model.h>
@@ -42,7 +42,7 @@ struct EnvironmentWidgetConfigImpl
   std::size_t hash;
   tesseract_environment::Environment::Ptr environment;
   QStandardItemModel scene_model;
-  QStandardItemModel scene_state_model;
+  SceneStateModel scene_state_model;
   KinematicGroupsModel group_model;
   GroupTCPsModel group_tcps_model;
   GroupJointStatesModel group_states_model;
@@ -100,7 +100,7 @@ tesseract_environment::Environment::Ptr EnvironmentWidgetConfig::getEnvironment(
 }
 
 QStandardItemModel& EnvironmentWidgetConfig::getSceneGraphModel() {return data_->scene_model;}
-QStandardItemModel& EnvironmentWidgetConfig::getSceneStateModel() {return data_->scene_state_model;}
+SceneStateModel& EnvironmentWidgetConfig::getSceneStateModel() {return data_->scene_state_model;}
 KinematicGroupsModel& EnvironmentWidgetConfig::getKinematicGroupsModel() {return data_->group_model;}
 GroupTCPsModel& EnvironmentWidgetConfig::getGroupTCPsModel() {return data_->group_tcps_model;}
 GroupJointStatesModel& EnvironmentWidgetConfig::getGroupJointStatesModel() {return data_->group_states_model;}
@@ -145,11 +145,7 @@ void EnvironmentWidgetConfig::onUpdateCurrentStateModel()
   if (!data_->environment->isInitialized())
     return;
 
-  data_->scene_state_model.clear();
-  data_->scene_state_model.setColumnCount(2);
-  data_->scene_state_model.setHorizontalHeaderLabels({"Name", "Values"});
-  auto* state_item = new tesseract_gui::SceneStateStandardItem(data_->environment->getState());
-  data_->scene_state_model.appendRow(state_item);
+  data_->scene_state_model.setState(data_->environment->getState());
 }
 void EnvironmentWidgetConfig::onUpdateAllowedCollisionMatrixModel()
 {
@@ -195,7 +191,7 @@ void EnvironmentWidgetConfig::tesseractEventFilter(const tesseract_environment::
     }
     case tesseract_environment::Events::SCENE_STATE_CHANGED:
     {
-//      onUpdateCurrentStateModel();
+      onUpdateCurrentStateModel();
       emit environmentCurrentStateChanged(*data_->environment);
       break;
     }

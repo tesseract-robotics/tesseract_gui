@@ -28,23 +28,20 @@ namespace tesseract_gui
 {
 TransformStandardItem::TransformStandardItem(const Eigen::Isometry3d& transform)
   : QStandardItem(QIcon(":/tesseract_widgets/png/origin.png"), "Transform")
-  , transform(transform)
 {
-  ctor();
+  ctor(transform);
 }
 
 TransformStandardItem::TransformStandardItem(const QString &text, const Eigen::Isometry3d& transform)
   : QStandardItem(QIcon(":/tesseract_widgets/png/origin.png"), text)
-  , transform(transform)
 {
-  ctor();
+  ctor(transform);
 }
 
 TransformStandardItem::TransformStandardItem(const QIcon &icon, const QString &text, const Eigen::Isometry3d& transform)
   : QStandardItem(icon, text)
-  , transform(transform)
 {
-  ctor();
+  ctor(transform);
 }
 
 int TransformStandardItem::type() const
@@ -52,29 +49,41 @@ int TransformStandardItem::type() const
   return static_cast<int>(StandardItemType::TRANSFORM);
 }
 
-void TransformStandardItem::ctor()
+void TransformStandardItem::setTransform(const Eigen::Isometry3d& transform)
 {
+  position_->child(0, 1)->setData(transform.translation().x(), Qt::DisplayRole);
+  position_->child(1, 1)->setData(transform.translation().y(), Qt::DisplayRole);
+  position_->child(2, 1)->setData(transform.translation().z(), Qt::DisplayRole);
 
-  auto* position_item = new QStandardItem(QIcon(":/tesseract_widgets/png/position.png"), "position");
-  position_item->setColumnCount(2);
+  Eigen::Quaterniond q(transform.rotation());
+  orientation_->child(0, 1)->setData(q.x(), Qt::DisplayRole);
+  orientation_->child(1, 1)->setData(q.y(), Qt::DisplayRole);
+  orientation_->child(2, 1)->setData(q.z(), Qt::DisplayRole);
+  orientation_->child(3, 1)->setData(q.w(), Qt::DisplayRole);
+}
 
-  position_item->appendRow(createStandardItemFloat("x", transform.translation().x()));
-  position_item->appendRow(createStandardItemFloat("y", transform.translation().y()));
-  position_item->appendRow(createStandardItemFloat("z", transform.translation().z()));
+void TransformStandardItem::ctor(const Eigen::Isometry3d& transform)
+{
+  position_ = new QStandardItem(QIcon(":/tesseract_widgets/png/position.png"), "position");
+  position_->setColumnCount(2);
 
-  appendRow(position_item);
+  position_->appendRow(createStandardItemFloat("x", transform.translation().x()));
+  position_->appendRow(createStandardItemFloat("y", transform.translation().y()));
+  position_->appendRow(createStandardItemFloat("z", transform.translation().z()));
 
-  auto* orientation_item = new QStandardItem(QIcon(":/tesseract_widgets/png/orientation.png"), "orientation");
-  orientation_item->setColumnCount(2);
+  appendRow(position_);
+
+  orientation_ = new QStandardItem(QIcon(":/tesseract_widgets/png/orientation.png"), "orientation");
+  orientation_->setColumnCount(2);
 
   Eigen::Quaterniond q(transform.rotation());
 
-  orientation_item->appendRow(createStandardItemFloat( "x", q.x()));
-  orientation_item->appendRow(createStandardItemFloat( "y", q.y()));
-  orientation_item->appendRow(createStandardItemFloat( "z", q.z()));
-  orientation_item->appendRow(createStandardItemFloat( "w", q.w()));
+  orientation_->appendRow(createStandardItemFloat( "x", q.x()));
+  orientation_->appendRow(createStandardItemFloat( "y", q.y()));
+  orientation_->appendRow(createStandardItemFloat( "z", q.z()));
+  orientation_->appendRow(createStandardItemFloat( "w", q.w()));
 
-  appendRow(orientation_item);
+  appendRow(orientation_);
 
 }
 }

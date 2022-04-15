@@ -42,10 +42,12 @@ public:
   explicit TransformStandardItem(const QIcon &icon, const QString &text, const Eigen::Isometry3d& transform);
   int type() const override;
 
-  Eigen::Isometry3d transform;
+  void setTransform(const Eigen::Isometry3d& transform);
 
 private:
-  void ctor();
+  void ctor(const Eigen::Isometry3d& transform);
+  QStandardItem* position_;
+  QStandardItem* orientation_;
 };
 }
 

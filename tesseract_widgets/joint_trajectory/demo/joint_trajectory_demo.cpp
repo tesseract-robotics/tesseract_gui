@@ -42,7 +42,8 @@ int main(int argc, char ** argv)
     tesseract_common::JointTrajectorySet trajectory_set(initial_state);
     for (int i = 0; i < 5; ++i)
     {
-      tesseract_common::JointTrajectory trajectory;
+      tesseract_common::JointTrajectory trajectory("description");
+
       for (int j = 0; j < 5; ++j)
       {
         tesseract_common::JointState state;
@@ -61,7 +62,7 @@ int main(int argc, char ** argv)
         }
         trajectory.push_back(state);
       }
-      trajectory_set.appendJointTrajectory(trajectory, "description");
+      trajectory_set.appendJointTrajectory(trajectory);
     }
 
     auto* model = new tesseract_gui::JointTrajectoryModel();

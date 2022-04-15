@@ -47,14 +47,8 @@ struct JointTrajectoryInfo
   /** @brief The initial state of the environment */
   JointState initial_state;
 
-  /** @brief (Optional) Additional Commands to be applied to trajectory set environment prior to trajectory visualization */
-  tesseract_environment::Commands commands;
-
   /** @brief The joint trajectory */
   JointTrajectory trajectory;
-
-  /** @brief A description of the trajectory */
-  std::string description;
 
 private:
   friend class boost::serialization::access;
@@ -71,10 +65,19 @@ public:
   /**
    * @brief Create a trajectory set with initial state
    * @param initial_state The initial state of the environment
-   * @param environment (Optional) The environment to use for planning
+   * @param description (Optional) A description of the trajectory set
    */
   JointTrajectorySet(const std::unordered_map<std::string, double>& initial_state,
-                     tesseract_environment::Environment::UPtr environment = nullptr);
+                     std::string description = "");
+
+  /**
+   * @brief Create a trajectory set with initial state
+   * @param initial_state The initial state of the environment
+   * @param environment The environment to use for planning
+   */
+  JointTrajectorySet(const std::unordered_map<std::string, double>& initial_state,
+                     tesseract_environment::Environment::UPtr environment,
+                     std::string description = "");
 
   /**
    * @brief Create a trajectory set with initial state and environment commands
@@ -82,16 +85,16 @@ public:
    * @param commands Additional Commands to be applied to environment prior to planning
    */
   JointTrajectorySet(const std::unordered_map<std::string, double>& initial_state,
-                     tesseract_environment::Commands commands);
+                     tesseract_environment::Commands commands,
+                     std::string description = "");
 
   /**
    * @brief Append a Joint Trajectory
    * @brief This will adjust the time because each trajectory most likely starts from zero
    * @param key The key to store the trajectory under
    * @param joint_trajectory The joint trajectory to append
-   * @param description A description of the trajectory
    */
-  void appendJointTrajectory(const JointTrajectory& joint_trajectory, const std::string& description = "");
+  void appendJointTrajectory(const JointTrajectory& joint_trajectory);
 
   /**
    * @brief Get the environment for the joint trajectory set

@@ -337,7 +337,7 @@ PlotWidgetBase::PlotWidgetBase(QWidget* parent)
   };
 
   QSettings settings;
-  bool use_opengl = settings.value("Preferences::use_opengl", true).toBool();
+  bool use_opengl = settings.value("Preferences::use_opengl", false).toBool();
 
   QWidget* abs_canvas;
   if (use_opengl)

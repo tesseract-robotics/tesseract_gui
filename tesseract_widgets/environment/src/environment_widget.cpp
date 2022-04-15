@@ -98,6 +98,7 @@ void EnvironmentWidget::setConfiguration(std::shared_ptr<EnvironmentWidgetConfig
   connect(config_.get(), SIGNAL(environmentCurrentStateChanged(tesseract_environment::Environment)), this , SIGNAL(environmentCurrentStateChanged(tesseract_environment::Environment)));
 
   emit configurationSet(*config_);
+  emit environmentSet(config_->environment());
 }
 
 const tesseract_environment::Environment& EnvironmentWidget::environment() const

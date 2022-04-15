@@ -23,6 +23,7 @@
 #include <tesseract_widgets/workbench/workbench_widget.h>
 #include <tesseract_widgets/environment/environment_widget.h>
 #include <tesseract_widgets/joint_trajectory/joint_trajectory_widget.h>
+#include <tesseract_widgets/joint_trajectory/joint_trajectory_model.h>
 
 #include "ui_workbench_widget.h"
 
@@ -35,6 +36,7 @@ struct WorkbenchWidgetImpl
 {
   EnvironmentWidget* environment_widget;
   JointTrajectoryWidget* joint_trajectory_widget;
+  JointTrajectoryModel* joint_trajectory_model;
 };
 
 WorkbenchWidget::WorkbenchWidget(EnvironmentWidget* environment_widget, QWidget *parent)
@@ -45,6 +47,8 @@ WorkbenchWidget::WorkbenchWidget(EnvironmentWidget* environment_widget, QWidget 
   ui->setupUi(this);
   data_->environment_widget = environment_widget;
   data_->joint_trajectory_widget = new JointTrajectoryWidget(); // NOLINT
+  data_->joint_trajectory_model = new JointTrajectoryModel(); // NOLINT
+  data_->joint_trajectory_widget->setModel(data_->joint_trajectory_model);
 
   { // Add environment widget
     auto* layout = new QVBoxLayout(); // NOLINT

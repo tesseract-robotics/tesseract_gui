@@ -37,6 +37,7 @@
 #include <tesseract_common/joint_state.h>
 #include <tesseract_visualization/trajectory_player.h>
 #include <QTimer>
+#include <QToolBar>
 #include <set>
 
 const double SLIDER_RESOLUTION = 0.001;
@@ -61,6 +62,9 @@ JointTrajectoryWidget::JointTrajectoryWidget(QWidget *parent)
 {
   ui_->setupUi(this);
   ui_->trajectoryPlotButton->setIcon(QIcon(":/tesseract_widgets/png/chart.png"));
+
+  auto* toolbar = new QToolBar;
+  ui_->verticalLayout->insertWidget(0, toolbar);
 
   data_->player = std::make_unique<tesseract_visualization::TrajectoryPlayer>();
   data_->player_timer = std::make_unique<QTimer>(this);

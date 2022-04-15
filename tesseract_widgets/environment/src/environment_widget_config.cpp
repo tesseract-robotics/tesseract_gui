@@ -195,7 +195,7 @@ void EnvironmentWidgetConfig::tesseractEventFilter(const tesseract_environment::
     }
     case tesseract_environment::Events::SCENE_STATE_CHANGED:
     {
-      onUpdateCurrentStateModel();
+//      onUpdateCurrentStateModel();
       emit environmentCurrentStateChanged(*data_->environment);
       break;
     }

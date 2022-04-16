@@ -130,20 +130,6 @@
         </property>
        </widget>
       </item>
-      <item>
-       <widget class="QPushButton" name="trajectoryPlotButton">
-        <property name="toolTip">
-         <string>Plot Trajectory</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="icon">
-         <iconset theme=":/tesseract_widgets/png/chart.png">
-          <normaloff>.</normaloff>.</iconset>
-        </property>
-       </widget>
-      </item>
      </layout>
     </widget>
    </item>

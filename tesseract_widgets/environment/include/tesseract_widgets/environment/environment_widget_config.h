@@ -29,8 +29,6 @@
 
 class QStandardItemModel;
 
-
-
 namespace tesseract_gui
 {
 class SceneStateModel;
@@ -40,9 +38,7 @@ class GroupJointStatesModel;
 class AllowedCollisionMatrixModel;
 class EnvironmentCommandsModel;
 
-
 struct EnvironmentWidgetConfigImpl;
-
 class EnvironmentWidgetConfig : public QObject
 {
   Q_OBJECT
@@ -86,6 +82,12 @@ public:
   EnvironmentCommandsModel& getEnvironmentCommandsModel();
 
   void clear();
+
+  /**
+   * @brief Check if config is valid
+   * @return Returns true if environment is not a nullptr and is initialized
+   */
+  bool isValid() const;
 
   EnvironmentWidgetConfig::UPtr clone() const;
 

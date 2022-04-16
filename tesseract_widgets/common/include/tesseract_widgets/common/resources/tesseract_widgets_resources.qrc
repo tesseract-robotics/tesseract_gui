@@ -78,5 +78,6 @@
         <file>png/save.png</file>
         <file>png/merge.png</file>
         <file>png/plugin.png</file>
+        <file>svg/import.svg</file>
     </qresource>
 </RCC>

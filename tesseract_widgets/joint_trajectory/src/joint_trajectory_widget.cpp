@@ -53,6 +53,16 @@ struct JointTrajectoryWidgetPrivate
   std::unique_ptr<JointTrajectoryPlotDialog> plot_dialog;
   double current_duration{0};
   tesseract_common::JointTrajectoryInfo current_trajectory;
+
+  // Store the selected item
+  QStandardItem* selected_item;
+
+  // Toolbar
+  QToolBar* toolbar;
+  QAction* open_action;
+  QAction* save_action;
+  QAction* remove_action;
+  QAction* plot_action;
 };
 
 JointTrajectoryWidget::JointTrajectoryWidget(QWidget *parent)
@@ -61,10 +71,8 @@ JointTrajectoryWidget::JointTrajectoryWidget(QWidget *parent)
   , data_(std::make_unique<JointTrajectoryWidgetPrivate>())
 {
   ui_->setupUi(this);
-  ui_->trajectoryPlotButton->setIcon(QIcon(":/tesseract_widgets/png/chart.png"));
 
-  auto* toolbar = new QToolBar;
-  ui_->verticalLayout->insertWidget(0, toolbar);
+  createToolBar();
 
   data_->player = std::make_unique<tesseract_visualization::TrajectoryPlayer>();
   data_->player_timer = std::make_unique<QTimer>(this);
@@ -74,7 +82,6 @@ JointTrajectoryWidget::JointTrajectoryWidget(QWidget *parent)
   connect(ui_->trajectoryPauseButton, SIGNAL(clicked()), this, SLOT(onPauseButtonClicked()));
   connect(ui_->trajectorySlider, SIGNAL(valueChanged(int)), this, SLOT(onSliderValueChanged(int)));
   connect(data_->player_timer.get(), SIGNAL(timeout()), this, SLOT(onPlayerTimerTimeout()));
-  connect(ui_->trajectoryPlotButton, SIGNAL(clicked()), this, SLOT(onPlotTrajectoryClicked()));
 
   TransformFactory::registerTransform<FirstDerivative>();
   TransformFactory::registerTransform<IntegralTransform>();
@@ -85,6 +92,54 @@ JointTrajectoryWidget::JointTrajectoryWidget(QWidget *parent)
 }
 
 JointTrajectoryWidget::~JointTrajectoryWidget() = default;
+
+void JointTrajectoryWidget::createToolBar()
+{
+  data_->toolbar = new QToolBar; // NOLINT
+  data_->open_action = data_->toolbar->addAction(QIcon(":/tesseract_widgets/svg/import.svg"),"Open", this, SLOT(onOpen()));
+  data_->save_action = data_->toolbar->addAction(QIcon(":/tesseract_widgets/svg/save.svg"),"Save", this, SLOT(onSave()));
+  data_->remove_action = data_->toolbar->addAction(QIcon(":/tesseract_widgets/svg/trash.svg"),"Remove", this, SLOT(onRemove()));
+  data_->toolbar->addSeparator();
+  data_->plot_action = data_->toolbar->addAction(QIcon(":/tesseract_widgets/svg/plot_image.svg"),"Plot Joint Trajectory", this, SLOT(onPlot()));
+
+  data_->save_action->setDisabled(true);
+  data_->remove_action->setDisabled(true);
+  data_->plot_action->setDisabled(true);
+
+  ui_->verticalLayout->insertWidget(0, data_->toolbar);
+}
+
+void JointTrajectoryWidget::onOpen()
+{
+
+}
+
+void JointTrajectoryWidget::onSave()
+{
+
+}
+
+void JointTrajectoryWidget::onRemove()
+{
+  if (data_->selected_item != nullptr && data_->selected_item->type() == static_cast<int>(StandardItemType::JOINT_TRAJECTORY_SET))
+  {
+    QString uuid = dynamic_cast<JointTrajectorySetItem*>(data_->selected_item)->uuid;
+    data_->model->removeJointTrajectorySet(uuid);
+    data_->selected_item = nullptr;
+    onDisablePlayer();
+  }
+}
+
+void JointTrajectoryWidget::onPlot()
+{
+  if (data_->current_trajectory.trajectory.empty())
+    return;
+
+  data_->plot_dialog = nullptr;
+  data_->plot_dialog = std::make_unique<JointTrajectoryPlotDialog>(data_->current_trajectory);
+  data_->plot_dialog->setWindowFlags(Qt::WindowMinMaxButtonsHint | Qt::WindowCloseButtonHint);
+  data_->plot_dialog->show();
+}
 
 void JointTrajectoryWidget::setModel(JointTrajectoryModel* model)
 {
@@ -113,16 +168,23 @@ bool JointTrajectoryWidget::hasJointTrajectorySet(const QString& key)
 
 void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex &current, const QModelIndex &/*previous*/)
 {
-  QStandardItem* item = data_->model->itemFromIndex(current);
-  switch (item->type())
+  data_->selected_item = data_->model->itemFromIndex(current);
+  switch (data_->selected_item->type())
   {
-    case static_cast<int>(tesseract_gui::StandardItemType::NAMESPACE):
+    case static_cast<int>(StandardItemType::NAMESPACE):
     {
       onDisablePlayer();
+      data_->save_action->setDisabled(true);
+      data_->remove_action->setDisabled(true);
+      data_->plot_action->setDisabled(true);
       break;
     }
-    case static_cast<int>(tesseract_gui::StandardItemType::JOINT_TRAJECTORY_SET_TRAJECTORY):
+    case static_cast<int>(StandardItemType::JOINT_TRAJECTORY_SET_TRAJECTORY):
     {
+      data_->save_action->setDisabled(true);
+      data_->remove_action->setDisabled(true);
+      data_->plot_action->setDisabled(false);
+
       data_->current_trajectory = data_->model->getJointTrajectory(current);
 
       auto details = data_->model->getJointTrajectorySetDetails(current);
@@ -134,8 +196,12 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex &current, cons
 
       break;
     }
-    case static_cast<int>(tesseract_gui::StandardItemType::JOINT_TRAJECTORY_SET):
+    case static_cast<int>(StandardItemType::JOINT_TRAJECTORY_SET):
     {
+      data_->save_action->setDisabled(false);
+      data_->remove_action->setDisabled(false);
+      data_->plot_action->setDisabled(false);
+
       auto details = data_->model->getJointTrajectorySetDetails(current);
       const tesseract_common::JointTrajectorySet& traj_set = details.second;
 
@@ -153,6 +219,10 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex &current, cons
     }
     default:
     {
+      data_->save_action->setDisabled(true);
+      data_->remove_action->setDisabled(true);
+      data_->plot_action->setDisabled(true);
+
       onDisablePlayer();
       const tesseract_common::JointState& state = data_->model->getJointState(current);
       auto details = data_->model->getJointTrajectorySetDetails(current);
@@ -194,17 +264,6 @@ void JointTrajectoryWidget::onSliderValueChanged(int value)
   tesseract_common::JointState state = data_->player->setCurrentDuration(data_->current_duration);
   ui_->trajectoryCurrentDurationLabel->setText(QString().sprintf("%0.3f", data_->current_duration));
   emit showState(state);
-}
-
-void JointTrajectoryWidget::onPlotTrajectoryClicked()
-{
-  if (data_->current_trajectory.trajectory.empty())
-    return;
-
-  data_->plot_dialog = nullptr;
-  data_->plot_dialog = std::make_unique<JointTrajectoryPlotDialog>(data_->current_trajectory);
-  data_->plot_dialog->setWindowFlags(Qt::WindowMinMaxButtonsHint | Qt::WindowCloseButtonHint);
-  data_->plot_dialog->show();
 }
 
 void JointTrajectoryWidget::onEnablePlayer()

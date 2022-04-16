@@ -97,19 +97,25 @@ Q_SIGNALS:
   void configureJointTrajectorySet(const QString& uuid, const tesseract_common::JointTrajectorySet& joint_trajectory_set);
   void jointTrajectorySetRemoved(const QString& uuid);
 
+public Q_SLOTS:
+  virtual void onOpen();
+  virtual void onSave();
+  virtual void onRemove();
+  virtual void onPlot();
+
 private Q_SLOTS:
   void onCurrentRowChanged(const QModelIndex &current, const QModelIndex &previous);
   void onPauseButtonClicked();
   void onPlayButtonClicked();
   void onPlayerTimerTimeout();
   void onSliderValueChanged(int value);
-  void onPlotTrajectoryClicked();
   void onEnablePlayer();
   void onDisablePlayer();
 
 private:
   std::unique_ptr<Ui::JointTrajectoryWidget> ui_;
   std::unique_ptr<JointTrajectoryWidgetPrivate> data_;
+  void createToolBar();
 };
 
 }

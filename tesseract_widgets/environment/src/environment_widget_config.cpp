@@ -118,6 +118,11 @@ void EnvironmentWidgetConfig::clear()
   data_->commands_model.clear();
 }
 
+bool EnvironmentWidgetConfig::isValid() const
+{
+  return (data_->environment != nullptr && data_->environment->isInitialized());
+}
+
 void EnvironmentWidgetConfig::onUpdateModels()
 {
   onUpdateSceneGraphModel();

@@ -131,7 +131,7 @@ void JointTrajectoryWidget::onSave()
   {
     QString filename = QFileDialog::getSaveFileName(this, tr("Save File"),
                                 QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation)[0],
-                                tr("Joint Trajectory Set | XML (*.jtsx)"));
+                                tr("Trajectory (*.jtsx)"));
 
     if( !filename.isNull() )
     {

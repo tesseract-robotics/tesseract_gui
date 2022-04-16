@@ -20,8 +20,8 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_GUI_PLOT_SVG_UTIL_H
-#define TESSERACT_GUI_PLOT_SVG_UTIL_H
+#ifndef TESSERACT_WIDGETS_COMMON_SVG_UTIL_H
+#define TESSERACT_WIDGETS_COMMON_SVG_UTIL_H
 
 #include <QPixmap>
 
@@ -33,4 +33,4 @@ namespace tesseract_gui
 QPixmap LoadSvg(QString filename, QString style_name = "light");
 }
 
-#endif  // TESSERACT_GUI_PLOT_SVG_UTIL_H
+#endif  // TESSERACT_WIDGETS_COMMON_SVG_UTIL_H

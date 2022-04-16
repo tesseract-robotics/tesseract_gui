@@ -24,19 +24,20 @@
 #include <tesseract_widgets/common/plugin_info_container_standard_item.h>
 #include <tesseract_widgets/common/standard_item_utils.h>
 #include <tesseract_widgets/common/standard_item_type.h>
+#include <tesseract_widgets/common/icon_utils.h>
 
 namespace tesseract_gui
 {
 
 ContactManagersPluginInfoStandardItem::ContactManagersPluginInfoStandardItem(tesseract_common::ContactManagersPluginInfo plugin_info)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/cube.png"), "Contact Managers Plugin Info")
+  : QStandardItem(icons::getCubeIcon(), "Contact Managers Plugin Info")
   , plugin_info(std::move(plugin_info))
 {
   ctor();
 }
 
 ContactManagersPluginInfoStandardItem::ContactManagersPluginInfoStandardItem(const QString &text, tesseract_common::ContactManagersPluginInfo plugin_info)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/cube.png"), text)
+  : QStandardItem(icons::getCubeIcon(), text)
   , plugin_info(std::move(plugin_info))
 {
   ctor();
@@ -70,9 +71,8 @@ void ContactManagersPluginInfoStandardItem::ctor()
 
   appendRow({search_libraries, new QStandardItem()});
 
-  QIcon collision_icon(":/tesseract_widgets/ignition/collision.png");
-  appendRow(new PluginInfoContainerStandardItem(collision_icon, "Discrete Plugins", plugin_info.discrete_plugin_infos));
-  appendRow(new PluginInfoContainerStandardItem(collision_icon, "Continuous Plugins", plugin_info.continuous_plugin_infos));
+  appendRow(new PluginInfoContainerStandardItem(icons::getCollisionIcon(), "Discrete Plugins", plugin_info.discrete_plugin_infos));
+  appendRow(new PluginInfoContainerStandardItem(icons::getCollisionIcon(), "Continuous Plugins", plugin_info.continuous_plugin_infos));
 }
 }
 

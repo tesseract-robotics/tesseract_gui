@@ -23,18 +23,19 @@
 #include <tesseract_widgets/common/rgba_standard_item.h>
 #include <tesseract_widgets/common/standard_item_utils.h>
 #include <tesseract_widgets/common/standard_item_type.h>
+#include <tesseract_widgets/common/icon_utils.h>
 
 namespace tesseract_gui
 {
 RGBAStandardItem::RGBAStandardItem(const Eigen::Vector4d& rgba)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/rgb.png"), "Color")
+  : QStandardItem(icons::getRGBIcon(), "Color")
   , rgba(rgba)
 {
   ctor();
 }
 
 RGBAStandardItem::RGBAStandardItem(const QString &text, const Eigen::Vector4d& rgba)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/rgb.png"), text)
+  : QStandardItem(icons::getRGBIcon(), text)
   , rgba(rgba)
 {
   ctor();

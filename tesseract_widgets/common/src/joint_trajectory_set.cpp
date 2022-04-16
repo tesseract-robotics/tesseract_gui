@@ -221,9 +221,13 @@ void JointTrajectorySet::appendJointState(JointTrajectoryInfo& traj_info, const 
 
 const std::vector<JointTrajectoryInfo>& JointTrajectorySet::getJointTrajectories() const { return joint_trajectory_; }
 
-void JointTrajectorySet::setDescription(std::string description) { description_ = description; }
+void JointTrajectorySet::setDescription(std::string description) { description_ = std::move(description); }
 
 const std::string& JointTrajectorySet::getDescription() const { return description_; }
+
+void JointTrajectorySet::setNamespace(std::string ns) { ns_ = std::move(ns_); }
+
+const std::string& JointTrajectorySet::getNamespace() const { return ns_; }
 
 std::size_t JointTrajectorySet::size() const { return joint_trajectory_.size(); }
 
@@ -246,6 +250,7 @@ void JointTrajectorySet::serialize(Archive& ar, const unsigned int /*version*/)
   ar& BOOST_SERIALIZATION_NVP(environment_);
   ar& BOOST_SERIALIZATION_NVP(commands_);
   ar& BOOST_SERIALIZATION_NVP(description_);
+  ar& BOOST_SERIALIZATION_NVP(ns_);
 }
 
 }  // namespace tesseract_common

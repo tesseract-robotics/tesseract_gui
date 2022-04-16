@@ -33,18 +33,19 @@
 #include <tesseract_widgets/common/transform_standard_item.h>
 #include <tesseract_widgets/common/standard_item_utils.h>
 #include <tesseract_widgets/common/standard_item_type.h>
+#include <tesseract_widgets/common/icon_utils.h>
 
 namespace tesseract_gui
 {
 VisualStandardItem::VisualStandardItem(tesseract_scene_graph::Visual::Ptr visual)
-  : QStandardItem(QIcon(":/tesseract_widgets/ignition/visual.png"), "Visual")
+  : QStandardItem(icons::getVisualIcon(), "Visual")
   , visual(std::move(visual))
 {
   ctor();
 }
 
 VisualStandardItem::VisualStandardItem(const QString &text, tesseract_scene_graph::Visual::Ptr visual)
-  : QStandardItem(QIcon(":/tesseract_widgets/ignition/visual.png"), text)
+  : QStandardItem(icons::getVisualIcon(), text)
   , visual(std::move(visual))
 {
   ctor();

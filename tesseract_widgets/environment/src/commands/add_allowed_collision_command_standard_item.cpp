@@ -23,19 +23,20 @@
 #include <tesseract_widgets/environment/commands/add_allowed_collision_command_standard_item.h>
 #include <tesseract_widgets/common/standard_item_utils.h>
 #include <tesseract_widgets/common/standard_item_type.h>
+#include <tesseract_widgets/common/icon_utils.h>
 
 namespace tesseract_gui
 {
 
 AddAllowedCollisionCommandStandardItem::AddAllowedCollisionCommandStandardItem(tesseract_environment::AddAllowedCollisionCommand::ConstPtr command)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/merge.png"), "Add Allowed Collision")
+  : QStandardItem(icons::getCommandEntryIcon(), "Add Allowed Collision")
   , command(std::move(command))
 {
   ctor();
 }
 
 AddAllowedCollisionCommandStandardItem::AddAllowedCollisionCommandStandardItem(const QString &text, tesseract_environment::AddAllowedCollisionCommand::ConstPtr command)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/merge.png"), text)
+  : QStandardItem(icons::getCommandEntryIcon(), text)
   , command(std::move(command))
 {
   ctor();

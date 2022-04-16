@@ -23,19 +23,20 @@
 #include <tesseract_widgets/environment/commands/add_contact_managers_plugin_info_command_standard_item.h>
 #include <tesseract_widgets/common/contact_managers_plugin_info_standard_item.h>
 #include <tesseract_widgets/common/standard_item_type.h>
+#include <tesseract_widgets/common/icon_utils.h>
 
 namespace tesseract_gui
 {
 
 AddContactManagersPluginInfoCommandStandardItem::AddContactManagersPluginInfoCommandStandardItem(tesseract_environment::AddContactManagersPluginInfoCommand::ConstPtr command)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/merge.png"), "Add Contact Managers Plugin Info")
+  : QStandardItem(icons::getCommandEntryIcon(), "Add Contact Managers Plugin Info")
   , command(std::move(command))
 {
   ctor();
 }
 
 AddContactManagersPluginInfoCommandStandardItem::AddContactManagersPluginInfoCommandStandardItem(const QString &text, tesseract_environment::AddContactManagersPluginInfoCommand::ConstPtr command)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/merge.png"), text)
+  : QStandardItem(icons::getCommandEntryIcon(), text)
   , command(std::move(command))
 {
   ctor();

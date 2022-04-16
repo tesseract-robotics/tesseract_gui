@@ -23,18 +23,19 @@
 #include <tesseract_widgets/scene_graph/cone_standard_item.h>
 #include <tesseract_widgets/common/standard_item_utils.h>
 #include <tesseract_widgets/common/standard_item_type.h>
+#include <tesseract_widgets/common/icon_utils.h>
 
 namespace tesseract_gui
 {
 ConeStandardItem::ConeStandardItem(tesseract_geometry::Cone::Ptr cone)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/cone.png"), "Capsule")
+  : QStandardItem(icons::getConeIcon(), "Cone")
   , cone(std::move(cone))
 {
   ctor();
 }
 
 ConeStandardItem::ConeStandardItem(const QString &text, tesseract_geometry::Cone::Ptr cone)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/cone.png"), text)
+  : QStandardItem(icons::getConeIcon(), text)
   , cone(std::move(cone))
 {
   ctor();

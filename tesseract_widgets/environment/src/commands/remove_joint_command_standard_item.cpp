@@ -23,19 +23,20 @@
 #include <tesseract_widgets/environment/commands/remove_joint_command_standard_item.h>
 #include <tesseract_widgets/common/standard_item_utils.h>
 #include <tesseract_widgets/common/standard_item_type.h>
+#include <tesseract_widgets/common/icon_utils.h>
 
 namespace tesseract_gui
 {
 
 RemoveJointCommandStandardItem::RemoveJointCommandStandardItem(tesseract_environment::RemoveJointCommand::ConstPtr command)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/merge.png"), "Remove Joint")
+  : QStandardItem(icons::getCommandEntryIcon(), "Remove Joint")
   , command(std::move(command))
 {
   ctor();
 }
 
 RemoveJointCommandStandardItem::RemoveJointCommandStandardItem(const QString &text, tesseract_environment::RemoveJointCommand::ConstPtr command)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/merge.png"), text)
+  : QStandardItem(icons::getCommandEntryIcon(), text)
   , command(std::move(command))
 {
   ctor();

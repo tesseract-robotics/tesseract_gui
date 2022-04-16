@@ -24,19 +24,20 @@
 #include <tesseract_widgets/common/transform_standard_item.h>
 #include <tesseract_widgets/common/standard_item_utils.h>
 #include <tesseract_widgets/common/standard_item_type.h>
+#include <tesseract_widgets/common/icon_utils.h>
 
 namespace tesseract_gui
 {
 
 ChangeLinkOriginCommandStandardItem::ChangeLinkOriginCommandStandardItem(tesseract_environment::ChangeLinkOriginCommand::ConstPtr command)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/merge.png"), "Change Link Origin")
+  : QStandardItem(icons::getCommandEntryIcon(), "Change Link Origin")
   , command(std::move(command))
 {
   ctor();
 }
 
 ChangeLinkOriginCommandStandardItem::ChangeLinkOriginCommandStandardItem(const QString &text, tesseract_environment::ChangeLinkOriginCommand::ConstPtr command)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/merge.png"), text)
+  : QStandardItem(icons::getCommandEntryIcon(), text)
   , command(std::move(command))
 {
   ctor();
@@ -56,7 +57,7 @@ int ChangeLinkOriginCommandStandardItem::type() const
 
 void ChangeLinkOriginCommandStandardItem::ctor()
 {
-  auto* item = new TransformStandardItem(QIcon(":/tesseract_widgets/ignition/link.png"), command->getLinkName().c_str(), command->getOrigin());
+  auto* item = new TransformStandardItem(icons::getLinkIcon(), command->getLinkName().c_str(), command->getOrigin());
   appendRow({item, new QStandardItem()});
 }
 }

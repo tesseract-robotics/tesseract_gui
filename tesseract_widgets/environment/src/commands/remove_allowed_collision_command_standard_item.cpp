@@ -23,19 +23,20 @@
 #include <tesseract_widgets/environment/commands/remove_allowed_collision_command_standard_item.h>
 #include <tesseract_widgets/common/standard_item_utils.h>
 #include <tesseract_widgets/common/standard_item_type.h>
+#include <tesseract_widgets/common/icon_utils.h>
 
 namespace tesseract_gui
 {
 
 RemoveAllowedCollisionCommandStandardItem::RemoveAllowedCollisionCommandStandardItem(tesseract_environment::RemoveAllowedCollisionCommand::ConstPtr command)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/merge.png"), "Remove Allowed Collision")
+  : QStandardItem(icons::getCommandEntryIcon(), "Remove Allowed Collision")
   , command(std::move(command))
 {
   ctor();
 }
 
 RemoveAllowedCollisionCommandStandardItem::RemoveAllowedCollisionCommandStandardItem(const QString &text, tesseract_environment::RemoveAllowedCollisionCommand::ConstPtr command)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/merge.png"), text)
+  : QStandardItem(icons::getCommandEntryIcon(), text)
   , command(std::move(command))
 {
   ctor();

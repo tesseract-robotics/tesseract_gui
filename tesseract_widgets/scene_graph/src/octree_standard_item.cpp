@@ -23,18 +23,19 @@
 #include <tesseract_widgets/scene_graph/octree_standard_item.h>
 #include <tesseract_widgets/common/standard_item_utils.h>
 #include <tesseract_widgets/common/standard_item_type.h>
+#include <tesseract_widgets/common/icon_utils.h>
 
 namespace tesseract_gui
 {
 OctreeStandardItem::OctreeStandardItem(tesseract_geometry::Octree::Ptr octree)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/octree.png"), "Octree")
+  : QStandardItem(icons::getOctreeIcon(), "Octree")
   , octree(std::move(octree))
 {
   ctor();
 }
 
 OctreeStandardItem::OctreeStandardItem(const QString &text, tesseract_geometry::Octree::Ptr octree)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/octree.png"), text)
+  : QStandardItem(icons::getOctreeIcon(), text)
   , octree(std::move(octree))
 {
   ctor();
@@ -60,17 +61,17 @@ void OctreeStandardItem::ctor()
   {
     case tesseract_geometry::Octree::BOX:
     {
-      appendRow(createStandardItemString(QIcon(":/tesseract_widgets/png/cube.png"), "subshape", "BOX"));
+      appendRow(createStandardItemString(icons::getCubeIcon(), "subshape", "BOX"));
       break;
     }
     case tesseract_geometry::Octree::SPHERE_INSIDE:
     {
-      appendRow(createStandardItemString(QIcon(":/tesseract_widgets/png/sphere.png"), "subshape", "SPHERE INSIDE"));
+      appendRow(createStandardItemString(icons::getSphereIcon(), "subshape", "SPHERE INSIDE"));
       break;
     }
     case tesseract_geometry::Octree::SPHERE_OUTSIDE:
     {
-      appendRow(createStandardItemString(QIcon(":/tesseract_widgets/png/sphere.png"), "subshape", "SPHERE OUTSIDE"));
+      appendRow(createStandardItemString(icons::getSphereIcon(), "subshape", "SPHERE OUTSIDE"));
       break;
     }
   }

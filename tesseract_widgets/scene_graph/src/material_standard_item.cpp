@@ -24,18 +24,19 @@
 #include <tesseract_widgets/common/standard_item_utils.h>
 #include <tesseract_widgets/common/rgba_standard_item.h>
 #include <tesseract_widgets/common/standard_item_type.h>
+#include <tesseract_widgets/common/icon_utils.h>
 
 namespace tesseract_gui
 {
 MaterialStandardItem::MaterialStandardItem(tesseract_scene_graph::Material::Ptr material)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/color.png"), "Material")
+  : QStandardItem(icons::getColorIcon(), "Material")
   , material(std::move(material))
 {
   ctor();
 }
 
 MaterialStandardItem::MaterialStandardItem(const QString &text, tesseract_scene_graph::Material::Ptr material)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/color.png"), text)
+  : QStandardItem(icons::getColorIcon(), text)
   , material(std::move(material))
 {
   ctor();

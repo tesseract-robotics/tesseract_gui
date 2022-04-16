@@ -23,18 +23,19 @@
 #include <tesseract_widgets/scene_graph/dynamics_standard_item.h>
 #include <tesseract_widgets/common/standard_item_utils.h>
 #include <tesseract_widgets/common/standard_item_type.h>
+#include <tesseract_widgets/common/icon_utils.h>
 
 namespace tesseract_gui
 {
 DynamicsStandardItem::DynamicsStandardItem(tesseract_scene_graph::JointDynamics::Ptr dynamics)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/dynamics.png"), "Dynamics")
+  : QStandardItem(icons::getDynamicsIcon(), "Dynamics")
   , dynamics(std::move(dynamics))
 {
   ctor();
 }
 
 DynamicsStandardItem::DynamicsStandardItem(const QString &text, tesseract_scene_graph::JointDynamics::Ptr dynamics)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/dynamics.png"), text)
+  : QStandardItem(icons::getDynamicsIcon(), text)
   , dynamics(std::move(dynamics))
 {
   ctor();

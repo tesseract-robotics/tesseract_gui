@@ -23,18 +23,19 @@
 #include <tesseract_widgets/scene_graph/limits_standard_item.h>
 #include <tesseract_widgets/common/standard_item_utils.h>
 #include <tesseract_widgets/common/standard_item_type.h>
+#include <tesseract_widgets/common/icon_utils.h>
 
 namespace tesseract_gui
 {
 LimitsStandardItem::LimitsStandardItem(tesseract_scene_graph::JointLimits::Ptr limits)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/limits.png"), "Limits")
+  : QStandardItem(icons::getLimitsIcon(), "Limits")
   , limits(std::move(limits))
 {
   ctor();
 }
 
 LimitsStandardItem::LimitsStandardItem(const QString &text, tesseract_scene_graph::JointLimits::Ptr limits)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/limits.png"), text)
+  : QStandardItem(icons::getLimitsIcon(), text)
   , limits(std::move(limits))
 {
   ctor();

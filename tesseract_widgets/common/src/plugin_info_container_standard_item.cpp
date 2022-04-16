@@ -24,19 +24,20 @@
 #include <tesseract_widgets/common/plugin_info_standard_item.h>
 #include <tesseract_widgets/common/standard_item_utils.h>
 #include <tesseract_widgets/common/standard_item_type.h>
+#include <tesseract_widgets/common/icon_utils.h>
 
 namespace tesseract_gui
 {
 
 PluginInfoContainerStandardItem::PluginInfoContainerStandardItem(tesseract_common::PluginInfoContainer plugin_info_container)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/cube.png"), "Plugin Info Container")
+  : QStandardItem(icons::getCubeIcon(), "Plugin Info Container")
   , plugin_info_container(std::move(plugin_info_container))
 {
   ctor();
 }
 
 PluginInfoContainerStandardItem::PluginInfoContainerStandardItem(const QString &text, tesseract_common::PluginInfoContainer plugin_info_container)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/cube.png"), text)
+  : QStandardItem(icons::getCubeIcon(), text)
   , plugin_info_container(std::move(plugin_info_container))
 {
   ctor();
@@ -58,7 +59,7 @@ void PluginInfoContainerStandardItem::ctor()
 {
   appendRow(createStandardItemString("default", plugin_info_container.default_plugin));
 
-  auto* plugins = new QStandardItem(QIcon(":/tesseract_widgets/png/cube.png"), "plugins");
+  auto* plugins = new QStandardItem(icons::getCubeIcon(), "plugins");
   for (const auto& plugin : plugin_info_container.plugins)
     plugins->appendRow(new PluginInfoStandardItem(plugin.first.c_str(), plugin.second));
 

@@ -23,18 +23,19 @@
 #include <tesseract_widgets/scene_graph/cylinder_standard_item.h>
 #include <tesseract_widgets/common/standard_item_utils.h>
 #include <tesseract_widgets/common/standard_item_type.h>
+#include <tesseract_widgets/common/icon_utils.h>
 
 namespace tesseract_gui
 {
 CylinderStandardItem::CylinderStandardItem(tesseract_geometry::Cylinder::Ptr cylinder)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/cylinder.png"), "Cylinder")
+  : QStandardItem(icons::getCylinderIcon(), "Cylinder")
   , cylinder(std::move(cylinder))
 {
   ctor();
 }
 
 CylinderStandardItem::CylinderStandardItem(const QString &text, tesseract_geometry::Cylinder::Ptr cylinder)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/cylinder.png"), text)
+  : QStandardItem(icons::getCylinderIcon(), text)
   , cylinder(std::move(cylinder))
 {
   ctor();

@@ -23,18 +23,19 @@
 #include <tesseract_widgets/scene_graph/box_standard_item.h>
 #include <tesseract_widgets/common/standard_item_utils.h>
 #include <tesseract_widgets/common/standard_item_type.h>
+#include <tesseract_widgets/common/icon_utils.h>
 
 namespace tesseract_gui
 {
 BoxStandardItem::BoxStandardItem(tesseract_geometry::Box::Ptr box)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/cube.png"), "Box")
+  : QStandardItem(icons::getCubeIcon(), "Box")
   , box(std::move(box))
 {
   ctor();
 }
 
 BoxStandardItem::BoxStandardItem(const QString &text, tesseract_geometry::Box::Ptr box)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/cube.png"), text)
+  : QStandardItem(icons::getCubeIcon(), text)
   , box(std::move(box))
 {
   ctor();

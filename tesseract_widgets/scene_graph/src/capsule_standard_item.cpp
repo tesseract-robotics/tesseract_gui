@@ -23,18 +23,19 @@
 #include <tesseract_widgets/scene_graph/capsule_standard_item.h>
 #include <tesseract_widgets/common/standard_item_utils.h>
 #include <tesseract_widgets/common/standard_item_type.h>
+#include <tesseract_widgets/common/icon_utils.h>
 
 namespace tesseract_gui
 {
 CapsuleStandardItem::CapsuleStandardItem(tesseract_geometry::Capsule::Ptr capsule)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/capsule.png"), "Capsule")
+  : QStandardItem(icons::getCapsuleIcon(), "Capsule")
   , capsule(std::move(capsule))
 {
   ctor();
 }
 
 CapsuleStandardItem::CapsuleStandardItem(const QString &text, tesseract_geometry::Capsule::Ptr capsule)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/capsule.png"), text)
+  : QStandardItem(icons::getCapsuleIcon(), text)
   , capsule(std::move(capsule))
 {
   ctor();

@@ -23,19 +23,20 @@
 #include <tesseract_widgets/common/plugin_info_standard_item.h>
 #include <tesseract_widgets/common/standard_item_utils.h>
 #include <tesseract_widgets/common/standard_item_type.h>
+#include <tesseract_widgets/common/icon_utils.h>
 
 namespace tesseract_gui
 {
 
 PluginInfoStandardItem::PluginInfoStandardItem(tesseract_common::PluginInfo plugin_info)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/plugin.png"), "Plugin Info")
+  : QStandardItem(icons::getPluginIcon(), "Plugin Info")
   , plugin_info(std::move(plugin_info))
 {
   ctor();
 }
 
 PluginInfoStandardItem::PluginInfoStandardItem(const QString &text, tesseract_common::PluginInfo plugin_info)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/plugin.png"), text)
+  : QStandardItem(icons::getPluginIcon(), text)
   , plugin_info(std::move(plugin_info))
 {
   ctor();

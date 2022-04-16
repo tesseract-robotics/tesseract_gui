@@ -23,18 +23,19 @@
 #include <tesseract_widgets/scene_graph/safety_standard_item.h>
 #include <tesseract_widgets/common/standard_item_utils.h>
 #include <tesseract_widgets/common/standard_item_type.h>
+#include <tesseract_widgets/common/icon_utils.h>
 
 namespace tesseract_gui
 {
 SafetyStandardItem::SafetyStandardItem(tesseract_scene_graph::JointSafety::Ptr safety)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/safety.png"), "Safety")
+  : QStandardItem(icons::getSafetyIcon(), "Safety")
   , safety(std::move(safety))
 {
   ctor();
 }
 
 SafetyStandardItem::SafetyStandardItem(const QString &text, tesseract_scene_graph::JointSafety::Ptr safety)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/safety.png"), text)
+  : QStandardItem(icons::getSafetyIcon(), text)
   , safety(std::move(safety))
 {
   ctor();

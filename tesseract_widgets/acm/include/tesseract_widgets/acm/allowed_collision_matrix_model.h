@@ -54,7 +54,6 @@ public:
   QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
 Q_SIGNALS:
-
   void entryRemoved(QString link1_name, QString link2_name);
   void entryAdded(QString link1_name, QString link2_name, QString reason);
 

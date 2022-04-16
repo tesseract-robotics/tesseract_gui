@@ -29,18 +29,19 @@
 #include <tesseract_widgets/common/transform_standard_item.h>
 #include <tesseract_widgets/common/standard_item_utils.h>
 #include <tesseract_widgets/common/standard_item_type.h>
+#include <tesseract_widgets/common/icon_utils.h>
 
 namespace tesseract_gui
 {
 JointStandardItem::JointStandardItem(tesseract_scene_graph::Joint::Ptr joint)
-  : QStandardItem(QIcon(":/tesseract_widgets/ignition/joint.png"), "Joint")
+  : QStandardItem(icons::getJointIcon(), "Joint")
   , joint(std::move(joint))
 {
   ctor();
 }
 
 JointStandardItem::JointStandardItem(const QString &text, tesseract_scene_graph::Joint::Ptr joint)
-  : QStandardItem(QIcon(":/tesseract_widgets/ignition/joint.png"), text)
+  : QStandardItem(icons::getJointIcon(), text)
   , joint(std::move(joint))
 {
   ctor();
@@ -66,28 +67,28 @@ void JointStandardItem::ctor()
     QStandardItem* item;
     if (joint->type == tesseract_scene_graph::JointType::FIXED)
     {
-      item = new QStandardItem(QIcon(":/tesseract_widgets/png/anchor.png"), "type");
-      setIcon(QIcon(":/tesseract_widgets/ignition/joint_fixed.png"));
+      item = new QStandardItem(icons::getAnchorIcon(), "type");
+      setIcon(icons::getJointFixedIcon());
     }
     else if (joint->type == tesseract_scene_graph::JointType::REVOLUTE)
     {
-      item = new QStandardItem(QIcon(":/tesseract_widgets/png/revolute.png"), "type");
-      setIcon(QIcon(":/tesseract_widgets/ignition/joint_revolute.png"));
+      item = new QStandardItem(icons::getRevoluteIcon(), "type");
+      setIcon(icons::getJointRevoluteIcon());
     }
     else if (joint->type == tesseract_scene_graph::JointType::CONTINUOUS)
     {
-      item = new QStandardItem(QIcon(":/tesseract_widgets/png/continuous.png"), "type");
-      setIcon(QIcon(":/tesseract_widgets/ignition/joint_continuous.png"));
+      item = new QStandardItem(icons::getContinuousIcon(), "type");
+      setIcon(icons::getJointContinuousIcon());
     }
     else if (joint->type == tesseract_scene_graph::JointType::PRISMATIC)
     {
-      item = new QStandardItem(QIcon(":/tesseract_widgets/png/prismatic.png"), "type");
-      setIcon(QIcon(":/tesseract_widgets/ignition/joint_prismatic.png"));
+      item = new QStandardItem(icons::getPrismaticIcon(), "type");
+      setIcon(icons::getJointPrismaticIcon());
     }
     else
     {
-      item = new QStandardItem(QIcon(":/tesseract_widgets/png/unknown.png"), "type");
-      setIcon(QIcon(":/tesseract_widgets/ignition/joint_unknown.png"));
+      item = new QStandardItem(icons::getUnknownIcon(), "type");
+      setIcon(icons::getJointUnknownIcon());
     }
 
     std::stringstream ss;
@@ -100,7 +101,7 @@ void JointStandardItem::ctor()
       joint->type == tesseract_scene_graph::JointType::PRISMATIC ||
       joint->type == tesseract_scene_graph::JointType::PLANAR)
   {
-    auto* item = new QStandardItem(QIcon(":/tesseract_widgets/png/axis.png"), "axis");
+    auto* item = new QStandardItem(icons::getAxisIcon(), "axis");
     item->setColumnCount(2);
 
     item->appendRow(createStandardItemFloat("x", joint->axis.x()));

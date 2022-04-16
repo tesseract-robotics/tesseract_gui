@@ -44,25 +44,26 @@
 #include <tesseract_widgets/environment/commands/set_active_continuous_contact_manager_command_standard_item.h>
 #include <tesseract_widgets/environment/commands/set_active_discrete_contact_manager_command_standard_item.h>
 #include <tesseract_widgets/common/standard_item_type.h>
+#include <tesseract_widgets/common/icon_utils.h>
 
 namespace tesseract_gui
 {
 
 EnvironmentCommandsStandardItem::EnvironmentCommandsStandardItem()
-: QStandardItem(QIcon(":/tesseract_widgets/png/cube.png"), "Commands")
+  : QStandardItem(icons::getCubeIcon(), "Commands")
 {
   ctor();
 }
 
 EnvironmentCommandsStandardItem::EnvironmentCommandsStandardItem(tesseract_environment::Commands commands)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/cube.png"), "Commands")
+  : QStandardItem(icons::getCubeIcon(), "Commands")
   , commands_(std::move(commands))
 {
   ctor();
 }
 
 EnvironmentCommandsStandardItem::EnvironmentCommandsStandardItem(const QString &text, tesseract_environment::Commands commands)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/cube.png"), text)
+  : QStandardItem(icons::getCubeIcon(), text)
   , commands_(std::move(commands))
 {
   ctor();

@@ -29,19 +29,20 @@
 #include <tesseract_widgets/common/kinematics_plugin_info_standard_item.h>
 #include <tesseract_widgets/common/standard_item_utils.h>
 #include <tesseract_widgets/common/standard_item_type.h>
+#include <tesseract_widgets/common/icon_utils.h>
 
 namespace tesseract_gui
 {
 
 KinematicsInfoStandardItem::KinematicsInfoStandardItem(tesseract_srdf::KinematicsInformation kinematics_info)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/cube.png"), "Kinematics Info")
+  : QStandardItem(icons::getCubeIcon(), "Kinematics Info")
   , kinematics_info(std::move(kinematics_info))
 {
   ctor();
 }
 
 KinematicsInfoStandardItem::KinematicsInfoStandardItem(const QString &text, tesseract_srdf::KinematicsInformation kinematics_info)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/cube.png"), text)
+  : QStandardItem(icons::getCubeIcon(), text)
   , kinematics_info(std::move(kinematics_info))
 {
   ctor();

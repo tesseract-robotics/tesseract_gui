@@ -33,11 +33,14 @@
 #include <tesseract_widgets/plot/transforms/scale_transform.h>
 
 #include <tesseract_widgets/common/standard_item_type.h>
+#include <tesseract_widgets/common/icon_utils.h>
 
 #include <tesseract_common/joint_state.h>
+#include <tesseract_common/serialization.h>
 #include <tesseract_visualization/trajectory_player.h>
 #include <QTimer>
 #include <QToolBar>
+#include <QFileDialog>
 #include <set>
 
 const double SLIDER_RESOLUTION = 0.001;
@@ -96,11 +99,11 @@ JointTrajectoryWidget::~JointTrajectoryWidget() = default;
 void JointTrajectoryWidget::createToolBar()
 {
   data_->toolbar = new QToolBar; // NOLINT
-  data_->open_action = data_->toolbar->addAction(QIcon(":/tesseract_widgets/svg/import.svg"),"Open", this, SLOT(onOpen()));
-  data_->save_action = data_->toolbar->addAction(QIcon(":/tesseract_widgets/svg/save.svg"),"Save", this, SLOT(onSave()));
-  data_->remove_action = data_->toolbar->addAction(QIcon(":/tesseract_widgets/svg/trash.svg"),"Remove", this, SLOT(onRemove()));
+  data_->open_action = data_->toolbar->addAction(icons::getImportIcon(),"Open", this, SLOT(onOpen()));
+  data_->save_action = data_->toolbar->addAction(icons::getSaveIcon(),"Save", this, SLOT(onSave()));
+  data_->remove_action = data_->toolbar->addAction(icons::getTrashIcon(),"Remove", this, SLOT(onRemove()));
   data_->toolbar->addSeparator();
-  data_->plot_action = data_->toolbar->addAction(QIcon(":/tesseract_widgets/svg/plot_image.svg"),"Plot Joint Trajectory", this, SLOT(onPlot()));
+  data_->plot_action = data_->toolbar->addAction(icons::getPlotIcon(),"Plot Joint Trajectory", this, SLOT(onPlot()));
 
   data_->save_action->setDisabled(true);
   data_->remove_action->setDisabled(true);
@@ -111,12 +114,31 @@ void JointTrajectoryWidget::createToolBar()
 
 void JointTrajectoryWidget::onOpen()
 {
-
+  QString filename = QFileDialog::getOpenFileName(this,
+                                                  tr("Open Document"),
+                                                  QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation)[0],
+                                                  tr("Joint Trajectory Set | XML (*.jtsx);;All files (*.*)"));
+  if( !filename.isNull() )
+  {
+    tesseract_common::JointTrajectorySet joint_trajectory_set = tesseract_common::Serialization::fromArchiveFileXML<tesseract_common::JointTrajectorySet>(filename.toStdString());
+    addJointTrajectorySet(joint_trajectory_set);
+  }
 }
 
 void JointTrajectoryWidget::onSave()
 {
+  if (data_->selected_item != nullptr && data_->selected_item->type() == static_cast<int>(StandardItemType::JOINT_TRAJECTORY_SET))
+  {
+    QString filename = QFileDialog::getSaveFileName(this, tr("Save File"),
+                                QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation)[0],
+                                tr("Joint Trajectory Set | XML (*.jtsx)"));
 
+    if( !filename.isNull() )
+    {
+      auto* item = dynamic_cast<JointTrajectorySetItem*>(data_->selected_item);
+      tesseract_common::Serialization::toArchiveFileXML<tesseract_common::JointTrajectorySet>(item->trajectory_set,filename.toStdString());
+    }
+  }
 }
 
 void JointTrajectoryWidget::onRemove()
@@ -150,9 +172,9 @@ void JointTrajectoryWidget::setModel(JointTrajectoryModel* model)
   connect(ui_->trajectoryTreeView->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)), this, SLOT(onCurrentRowChanged(QModelIndex,QModelIndex)));
 }
 
-QString JointTrajectoryWidget::addJointTrajectorySet(const tesseract_common::JointTrajectorySet& trajectory_set, const std::string &ns)
+QString JointTrajectoryWidget::addJointTrajectorySet(const tesseract_common::JointTrajectorySet& trajectory_set)
 {
-  return data_->model->addJointTrajectorySet(trajectory_set, ns);
+  return data_->model->addJointTrajectorySet(trajectory_set);
 }
 
 void JointTrajectoryWidget::removeJointTrajectorySet(const QString& key)

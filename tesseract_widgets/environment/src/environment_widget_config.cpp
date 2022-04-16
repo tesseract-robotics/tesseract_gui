@@ -31,7 +31,9 @@
 #include <tesseract_widgets/acm/allowed_collision_matrix_model.h>
 
 #include <tesseract_environment/environment.h>
+#include <tesseract_common/timer.h>
 
+#include <QDebug>
 #include <qobjectdefs.h>
 
 namespace tesseract_gui
@@ -125,12 +127,31 @@ bool EnvironmentWidgetConfig::isValid() const
 
 void EnvironmentWidgetConfig::onUpdateModels()
 {
+  tesseract_common::Timer timer;
+  timer.start();
+  double prev_elapsed {0};
   onUpdateSceneGraphModel();
+  double elapsed = timer.elapsedMilliseconds();
+  qDebug() << "onUpdateSceneGraphModel: " << elapsed << " ms";
+  prev_elapsed = elapsed;
   onUpdateCurrentStateModel();
+  elapsed = timer.elapsedMilliseconds();
+  qDebug() << "onUpdateCurrentStateModel: " << elapsed - prev_elapsed << " ms";
+  prev_elapsed = elapsed;
   onUpdateAllowedCollisionMatrixModel();
+  elapsed = timer.elapsedMilliseconds();
+  qDebug() << "onUpdateAllowedCollisionMatrixModel: " << elapsed - prev_elapsed << " ms";
+  prev_elapsed = elapsed;
   onUpdateKinematicsInformationModels();
+  elapsed = timer.elapsedMilliseconds();
+  qDebug() << "onUpdateKinematicsInformationModels: " << elapsed - prev_elapsed << " ms";
+  prev_elapsed = elapsed;
   onUpdateCommandHistoryModel();
+  elapsed = timer.elapsedMilliseconds();
+  qDebug() << "onUpdateCommandHistoryModel: " << elapsed - prev_elapsed << " ms";
+  prev_elapsed = elapsed;
 
+  qDebug() << "onUpdateModels: " << timer.elapsedMilliseconds() << " ms\n";
   emit modelsUpdated();
 }
 

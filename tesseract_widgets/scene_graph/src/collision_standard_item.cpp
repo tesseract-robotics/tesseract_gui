@@ -32,18 +32,19 @@
 #include <tesseract_widgets/common/transform_standard_item.h>
 #include <tesseract_widgets/common/standard_item_utils.h>
 #include <tesseract_widgets/common/standard_item_type.h>
+#include <tesseract_widgets/common/icon_utils.h>
 
 namespace tesseract_gui
 {
 CollisionStandardItem::CollisionStandardItem(tesseract_scene_graph::Collision::Ptr collision)
-  : QStandardItem(QIcon(":/tesseract_widgets/ignition/collision.png"), "Collision")
+  : QStandardItem(icons::getCollisionIcon(), "Collision")
   , collision(std::move(collision))
 {
   ctor();
 }
 
 CollisionStandardItem::CollisionStandardItem(const QString &text, tesseract_scene_graph::Collision::Ptr collision)
-  : QStandardItem(QIcon(":/tesseract_widgets/ignition/collision.png"),text)
+  : QStandardItem(icons::getCollisionIcon(),text)
   , collision(std::move(collision))
 {
   ctor();

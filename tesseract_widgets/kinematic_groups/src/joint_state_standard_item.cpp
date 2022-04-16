@@ -23,17 +23,18 @@
 #include <tesseract_widgets/kinematic_groups/joint_state_standard_item.h>
 #include <tesseract_widgets/common/standard_item_utils.h>
 #include <tesseract_widgets/common/standard_item_type.h>
+#include <tesseract_widgets/common/icon_utils.h>
 
 namespace tesseract_gui
 {
 JointStateStandardItem::JointStateStandardItem(QString name, const std::unordered_map<std::string, double>& state)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/cube.png"), "Joint State")
+  : QStandardItem(icons::getCubeIcon(), "Joint State")
 {
   ctor(state);
 }
 
 JointStateStandardItem::JointStateStandardItem(const QString &text, QString name, const std::unordered_map<std::string, double>& state)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/cube.png"), text)
+  : QStandardItem(icons::getCubeIcon(), text)
 {
   ctor(state);
 }

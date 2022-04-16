@@ -1,8 +1,8 @@
 #include <tesseract_widgets/scene_graph/scene_state_model.h>
-#include <tesseract_widgets/scene_graph/scene_state_standard_item.h>
 #include <tesseract_widgets/common/transform_standard_item.h>
 #include <tesseract_widgets/common/standard_item_utils.h>
 #include <tesseract_widgets/common/standard_item_type.h>
+#include <tesseract_widgets/common/icon_utils.h>
 
 #include <tesseract_scene_graph/scene_state.h>
 
@@ -159,9 +159,9 @@ void SceneStateModel::clear()
   setColumnCount(2);
   setHorizontalHeaderLabels({"Name", "Values"});
 
-  data_->values_item = new QStandardItem(QIcon(":/tesseract_widgets/ignition/joint_vector.png"), "Values");
-  data_->links_item = new QStandardItem(QIcon(":/tesseract_widgets/ignition/link_vector.png"), "Links");
-  data_->joints_item = new QStandardItem(QIcon(":/tesseract_widgets/ignition/joint_vector.png"), "Joints");
+  data_->values_item = new QStandardItem(icons::getJointVectorIcon(), "Values");
+  data_->links_item = new QStandardItem(icons::getLinkVectorIcon(), "Links");
+  data_->joints_item = new QStandardItem(icons::getJointVectorIcon(), "Joints");
 
   appendRow(data_->values_item);
   appendRow(data_->links_item);

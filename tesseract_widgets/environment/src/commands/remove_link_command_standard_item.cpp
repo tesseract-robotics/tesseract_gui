@@ -23,19 +23,20 @@
 #include <tesseract_widgets/environment/commands/remove_link_command_standard_item.h>
 #include <tesseract_widgets/common/standard_item_utils.h>
 #include <tesseract_widgets/common/standard_item_type.h>
+#include <tesseract_widgets/common/icon_utils.h>
 
 namespace tesseract_gui
 {
 
 RemoveLinkCommandStandardItem::RemoveLinkCommandStandardItem(tesseract_environment::RemoveLinkCommand::ConstPtr command)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/merge.png"), "Remove Link")
+  : QStandardItem(icons::getCommandEntryIcon(), "Remove Link")
   , command(std::move(command))
 {
   ctor();
 }
 
 RemoveLinkCommandStandardItem::RemoveLinkCommandStandardItem(const QString &text, tesseract_environment::RemoveLinkCommand::ConstPtr command)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/merge.png"), text)
+  : QStandardItem(icons::getCommandEntryIcon(), text)
   , command(std::move(command))
 {
   ctor();

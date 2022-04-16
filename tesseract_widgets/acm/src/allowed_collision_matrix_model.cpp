@@ -22,6 +22,7 @@
  */
 
 #include <tesseract_widgets/acm/allowed_collision_matrix_model.h>
+#include <tesseract_widgets/common/icon_utils.h>
 
 namespace tesseract_gui
 {
@@ -30,8 +31,6 @@ AllowedCollisionMatrixModel::AllowedCollisionMatrixModel(QObject *parent)
   : QStandardItemModel(parent)
 {
   setColumnCount(3);
-
-
 }
 
 AllowedCollisionMatrixModel::AllowedCollisionMatrixModel(const AllowedCollisionMatrixModel &other)
@@ -48,33 +47,34 @@ AllowedCollisionMatrixModel &AllowedCollisionMatrixModel::operator=(const Allowe
 
 void AllowedCollisionMatrixModel::setAllowedCollisionMatrix(const tesseract_common::AllowedCollisionMatrix& acm)
 {
-  QStandardItemModel::clear();
+  clear();
+
   acm_ = acm;
-  QStandardItem *parent_item = this->invisibleRootItem();
+
+  double elapse {0};
   for (const auto& ac : acm.getAllAllowedCollisions())
   {
-    QList<QStandardItem*> item;
-    item.push_back(new QStandardItem(QString::fromStdString(ac.first.first)));
-    item.push_back(new QStandardItem(QString::fromStdString(ac.first.second)));
-    item.push_back(new QStandardItem(QString::fromStdString(ac.second)));
-    parent_item->appendRow(item);
+    auto col0 = new QStandardItem(QString::fromStdString(ac.first.first)); // NOLINT
+    auto col1 = new QStandardItem(QString::fromStdString(ac.first.second)); // NOLINT
+    auto col2 = new QStandardItem(QString::fromStdString(ac.second)); // NOLINT
+    appendRow({col0, col1, col2});
   }
+
   sort(0);
 }
 
 void AllowedCollisionMatrixModel::add(const QString& link1_name, const QString& link2_name, const QString& reason)
 {
   acm_.addAllowedCollision(link1_name.toStdString(), link2_name.toStdString(), reason.toStdString());
-  QStandardItem *parent_item = this->invisibleRootItem();
   QList<QStandardItem*> item;
   item.push_back(new QStandardItem(link1_name));
   item.push_back(new QStandardItem(link2_name));
   item.push_back(new QStandardItem(reason));
-  parent_item->appendRow(item);
+  appendRow(item);
   sort(0);
 
   // If the count does not match then it was a replace so rebuild model.
-  if (parent_item->rowCount() != static_cast<int>(acm_.getAllAllowedCollisions().size()))
+  if (rowCount() != static_cast<int>(acm_.getAllAllowedCollisions().size()))
     setAllowedCollisionMatrix(acm_);
 
   emit entryAdded(link1_name, link2_name, reason);
@@ -103,6 +103,7 @@ bool AllowedCollisionMatrixModel::removeRows(int row, int count, const QModelInd
 void AllowedCollisionMatrixModel::clear()
 {
   QStandardItemModel::clear();
+  setColumnCount(3);
   acm_.clearAllowedCollisions();
 }
 

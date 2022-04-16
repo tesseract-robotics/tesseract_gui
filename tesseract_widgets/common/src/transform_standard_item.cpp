@@ -23,17 +23,18 @@
 #include <tesseract_widgets/common/transform_standard_item.h>
 #include <tesseract_widgets/common/standard_item_utils.h>
 #include <tesseract_widgets/common/standard_item_type.h>
+#include <tesseract_widgets/common/icon_utils.h>
 
 namespace tesseract_gui
 {
 TransformStandardItem::TransformStandardItem(const Eigen::Isometry3d& transform)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/origin.png"), "Transform")
+  : QStandardItem(icons::getOriginIcon(), "Transform")
 {
   ctor(transform);
 }
 
 TransformStandardItem::TransformStandardItem(const QString &text, const Eigen::Isometry3d& transform)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/origin.png"), text)
+  : QStandardItem(icons::getOriginIcon(), text)
 {
   ctor(transform);
 }
@@ -64,7 +65,7 @@ void TransformStandardItem::setTransform(const Eigen::Isometry3d& transform)
 
 void TransformStandardItem::ctor(const Eigen::Isometry3d& transform)
 {
-  position_ = new QStandardItem(QIcon(":/tesseract_widgets/png/position.png"), "position");
+  position_ = new QStandardItem(icons::getPositionIcon(), "position");
   position_->setColumnCount(2);
 
   position_->appendRow(createStandardItemFloat("x", transform.translation().x()));
@@ -73,7 +74,7 @@ void TransformStandardItem::ctor(const Eigen::Isometry3d& transform)
 
   appendRow(position_);
 
-  orientation_ = new QStandardItem(QIcon(":/tesseract_widgets/png/orientation.png"), "orientation");
+  orientation_ = new QStandardItem(icons::getOrientationIcon(), "orientation");
   orientation_->setColumnCount(2);
 
   Eigen::Quaterniond q(transform.rotation());

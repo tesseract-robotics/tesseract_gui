@@ -24,6 +24,7 @@
 #include <tesseract_widgets/common/namespace_standard_item.h>
 #include <tesseract_widgets/common/standard_item_type.h>
 #include <tesseract_widgets/common/standard_item_utils.h>
+#include <tesseract_widgets/common/icon_utils.h>
 
 #include <QUuid>
 
@@ -42,10 +43,10 @@ void JointTrajectoryModel::clear()
   setHorizontalHeaderLabels({"Name", "Values"});
 }
 
-QString JointTrajectoryModel::addJointTrajectorySet(const tesseract_common::JointTrajectorySet& trajectory_set, const std::string &ns)
+QString JointTrajectoryModel::addJointTrajectorySet(const tesseract_common::JointTrajectorySet& trajectory_set)
 {
   QString key = QUuid::createUuid().toString();
-  QString name_space = (ns.empty()) ? "general" : QString::fromStdString(ns);
+  QString name_space = (trajectory_set.getNamespace().empty()) ? "general" : QString::fromStdString(trajectory_set.getNamespace());
 
   QList<QStandardItem*> ns_item = findItems(name_space);
   assert(ns_item.size() <= 1);
@@ -57,7 +58,7 @@ QString JointTrajectoryModel::addJointTrajectorySet(const tesseract_common::Join
   }
   else
   {
-    item = new NamespaceStandardItem(name_space);
+    item = new NamespaceStandardItem(name_space); // NOLINT
     appendRow(item);
   }
 
@@ -151,7 +152,7 @@ JointStateItem::JointStateItem(tesseract_common::JointState &state)
 }
 
 JointStateItem::JointStateItem(const QString &text, tesseract_common::JointState &state)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/robotic-arm.png"), text)
+  : QStandardItem(icons::getRobotArmIcon(), text)
   , state(state)
 {
   ctor();
@@ -214,7 +215,7 @@ JointTrajectoryItem::JointTrajectoryItem(tesseract_common::JointTrajectoryInfo& 
 }
 
 JointTrajectoryItem::JointTrajectoryItem(const QString &text, tesseract_common::JointTrajectoryInfo& trajectory_info)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/trajectory.png"), text)
+  : QStandardItem(icons::getTrajectoryIcon(), text)
   , trajectory_info(trajectory_info)
 {
   ctor();
@@ -242,7 +243,7 @@ void JointTrajectoryItem::ctor()
 }
 
 JointTrajectorySetItem::JointTrajectorySetItem(QString uuid, const tesseract_common::JointTrajectorySet &trajectory_set)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/programming.png"), "Trajectory Set")
+  : QStandardItem(icons::getJointTrajectorySetIcon(), "Trajectory Set")
   , uuid(std::move(uuid))
   , trajectory_set(trajectory_set)
 {
@@ -250,7 +251,7 @@ JointTrajectorySetItem::JointTrajectorySetItem(QString uuid, const tesseract_com
 }
 
 JointTrajectorySetItem::JointTrajectorySetItem(const QString &text, QString uuid, const tesseract_common::JointTrajectorySet& trajectory_set)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/programming.png"), text)
+  : QStandardItem(icons::getJointTrajectorySetIcon(), text)
   , uuid(std::move(uuid))
   , trajectory_set(trajectory_set)
 {

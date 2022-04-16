@@ -24,19 +24,20 @@
 #include <tesseract_widgets/common/pairs_collision_margin_data_standard_item.h>
 #include <tesseract_widgets/common/standard_item_utils.h>
 #include <tesseract_widgets/common/standard_item_type.h>
+#include <tesseract_widgets/common/icon_utils.h>
 
 namespace tesseract_gui
 {
 
 CollisionMarginDataStandardItem::CollisionMarginDataStandardItem(tesseract_common::CollisionMarginData collision_margin_data)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/cube.png"), "Collision Margin Data")
+  : QStandardItem(icons::getCubeIcon(), "Collision Margin Data")
   , collision_margin_data(std::move(collision_margin_data))
 {
   ctor();
 }
 
 CollisionMarginDataStandardItem::CollisionMarginDataStandardItem(const QString &text, tesseract_common::CollisionMarginData collision_margin_data)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/cube.png"), text)
+  : QStandardItem(icons::getCubeIcon(), text)
   , collision_margin_data(std::move(collision_margin_data))
 {
   ctor();

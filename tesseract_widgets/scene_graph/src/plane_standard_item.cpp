@@ -23,18 +23,19 @@
 #include <tesseract_widgets/scene_graph/plane_standard_item.h>
 #include <tesseract_widgets/common/standard_item_utils.h>
 #include <tesseract_widgets/common/standard_item_type.h>
+#include <tesseract_widgets/common/icon_utils.h>
 
 namespace tesseract_gui
 {
 PlaneStandardItem::PlaneStandardItem(tesseract_geometry::Plane::Ptr plane)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/plane.png"), "Plane")
+  : QStandardItem(icons::getPlaneIcon(), "Plane")
   , plane(std::move(plane))
 {
   ctor();
 }
 
 PlaneStandardItem::PlaneStandardItem(const QString &text, tesseract_geometry::Plane::Ptr plane)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/plane.png"), text)
+  : QStandardItem(icons::getPlaneIcon(), text)
   , plane(std::move(plane))
 {
   ctor();

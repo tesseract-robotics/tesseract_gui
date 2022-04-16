@@ -134,6 +134,18 @@ public:
   const std::string& getDescription() const;
 
   /**
+   * @brief Set a namespace for the trajectory set
+   * @param ns A namespace the trajectory is associated with
+   */
+  void setNamespace(std::string ns);
+
+  /**
+   * @brief Get the namespace for the trajectory set
+   * @return The namespace
+   */
+  const std::string& getNamespace() const;
+
+  /**
    * @brief Get the size of the trajectory set
    * @return The size
    */
@@ -158,6 +170,9 @@ private:
 
   /** @brief A description of the trajectory set */
   std::string description_;
+
+  /** @brief The namespace associated with the trajectory set */
+  std::string ns_{"general"};
 
   /**
    * @brief Append a joint state to the end

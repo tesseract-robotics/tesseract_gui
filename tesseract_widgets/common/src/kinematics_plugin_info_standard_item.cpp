@@ -24,19 +24,20 @@
 #include <tesseract_widgets/common/plugin_info_container_standard_item.h>
 #include <tesseract_widgets/common/standard_item_utils.h>
 #include <tesseract_widgets/common/standard_item_type.h>
+#include <tesseract_widgets/common/icon_utils.h>
 
 namespace tesseract_gui
 {
 
 KinematicsPluginInfoStandardItem::KinematicsPluginInfoStandardItem(tesseract_common::KinematicsPluginInfo plugin_info)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/cube.png"), "Kinematics Plugin Info")
+  : QStandardItem(icons::getCubeIcon(), "Kinematics Plugin Info")
   , plugin_info(std::move(plugin_info))
 {
   ctor();
 }
 
 KinematicsPluginInfoStandardItem::KinematicsPluginInfoStandardItem(const QString &text, tesseract_common::KinematicsPluginInfo plugin_info)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/cube.png"), text)
+  : QStandardItem(icons::getCubeIcon(), text)
   , plugin_info(std::move(plugin_info))
 {
   ctor();
@@ -70,16 +71,15 @@ void KinematicsPluginInfoStandardItem::ctor()
 
   appendRow({search_libraries, new QStandardItem()});
 
-  QIcon robot_icon(":/tesseract_widgets/png/robotic-arm.png");
   auto* fwd_plugins = new QStandardItem("Fwd Kinematics Plugins");
   for (const auto& group : plugin_info.fwd_plugin_infos)
-    fwd_plugins->appendRow(new PluginInfoContainerStandardItem(robot_icon, group.first.c_str(), group.second)); // NOLIN
+    fwd_plugins->appendRow(new PluginInfoContainerStandardItem(icons::getRobotArmIcon(), group.first.c_str(), group.second)); // NOLIN
 
   appendRow({fwd_plugins, new QStandardItem()});
 
   auto* inv_plugins = new QStandardItem("Inv Kinematics Plugins");
   for (const auto& group : plugin_info.inv_plugin_infos)
-    inv_plugins->appendRow(new PluginInfoContainerStandardItem(robot_icon, group.first.c_str(), group.second)); // NOLINT
+    inv_plugins->appendRow(new PluginInfoContainerStandardItem(icons::getRobotArmIcon(), group.first.c_str(), group.second)); // NOLINT
 
   appendRow({inv_plugins, new QStandardItem()});
 }

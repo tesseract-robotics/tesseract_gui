@@ -26,7 +26,8 @@ add_library(${PROJECT_NAME}_acm SHARED
 target_link_libraries(${PROJECT_NAME}_acm PUBLIC
   tesseract::tesseract_scene_graph
   tesseract::tesseract_common
-  Qt5::Core Qt5::Widgets Qt5::Gui)
+  Qt5::Core Qt5::Widgets Qt5::Gui
+  ${PROJECT_NAME}_common)
 target_include_directories(${PROJECT_NAME}_acm PUBLIC
     "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
     "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/acm>"

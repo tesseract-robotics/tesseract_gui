@@ -23,19 +23,20 @@
 #include <tesseract_widgets/environment/commands/change_joint_velocity_limits_command_standard_item.h>
 #include <tesseract_widgets/common/standard_item_utils.h>
 #include <tesseract_widgets/common/standard_item_type.h>
+#include <tesseract_widgets/common/icon_utils.h>
 
 namespace tesseract_gui
 {
 
 ChangeJointVelocityLimitsCommandStandardItem::ChangeJointVelocityLimitsCommandStandardItem(tesseract_environment::ChangeJointVelocityLimitsCommand::ConstPtr command)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/merge.png"), "Change Joint Velocity Limits")
+  : QStandardItem(icons::getCommandEntryIcon(), "Change Joint Velocity Limits")
   , command(std::move(command))
 {
   ctor();
 }
 
 ChangeJointVelocityLimitsCommandStandardItem::ChangeJointVelocityLimitsCommandStandardItem(const QString &text, tesseract_environment::ChangeJointVelocityLimitsCommand::ConstPtr command)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/merge.png"), text)
+  : QStandardItem(icons::getCommandEntryIcon(), text)
   , command(std::move(command))
 {
   ctor();
@@ -56,7 +57,7 @@ int ChangeJointVelocityLimitsCommandStandardItem::type() const
 void ChangeJointVelocityLimitsCommandStandardItem::ctor()
 {
   for (const auto& joint : command->getLimits())
-    appendRow(createStandardItemFloat(QIcon(":/tesseract_widgets/ignition/joint.png"), joint.first, joint.second));
+    appendRow(createStandardItemFloat(icons::getJointIcon(), joint.first, joint.second));
 
   sortChildren(0);
 }

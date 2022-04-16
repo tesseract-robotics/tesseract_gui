@@ -23,18 +23,19 @@
 #include <tesseract_widgets/kinematic_groups/opw_params_standard_item.h>
 #include <tesseract_widgets/common/standard_item_utils.h>
 #include <tesseract_widgets/common/standard_item_type.h>
+#include <tesseract_widgets/common/icon_utils.h>
 
 namespace tesseract_gui
 {
 OPWParamsStandardItem::OPWParamsStandardItem(opw_kinematics::Parameters<double> params)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/cube.png"), "OPW")
+  : QStandardItem(icons::getCubeIcon(), "OPW")
   , params(params)
 {
   ctor();
 }
 
 OPWParamsStandardItem::OPWParamsStandardItem(const QString &text, opw_kinematics::Parameters<double> params)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/cube.png"), text)
+  : QStandardItem(icons::getCubeIcon(), text)
   , params(params)
 {
   ctor();

@@ -23,6 +23,7 @@
 #include <tesseract_widgets/kinematic_groups/group_joint_states_standard_item.h>
 #include <tesseract_widgets/kinematic_groups/joint_state_standard_item.h>
 #include <tesseract_widgets/common/standard_item_type.h>
+#include <tesseract_widgets/common/icon_utils.h>
 
 namespace tesseract_gui
 {
@@ -70,7 +71,7 @@ void GroupJointStatesStandardItem::addGroupJointStateItem(const QString& group_n
   }
   else
   {
-    group_item = new QStandardItem(QIcon(":/tesseract_widgets/png/robotic-arm.png"), group_name);
+    group_item = new QStandardItem(icons::getRobotArmIcon(), group_name);
     group_items_[group_name.toStdString()] = group_item;
     appendRow({group_item, new QStandardItem()});// Must have two columns so QTreeView::setRootIndex will have two columns
   }

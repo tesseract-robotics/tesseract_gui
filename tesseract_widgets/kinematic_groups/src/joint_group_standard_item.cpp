@@ -23,19 +23,20 @@
 #include <tesseract_widgets/kinematic_groups/joint_group_standard_item.h>
 #include <tesseract_widgets/common/standard_item_utils.h>
 #include <tesseract_widgets/common/standard_item_type.h>
+#include <tesseract_widgets/common/icon_utils.h>
 
 namespace tesseract_gui
 {
 
 JointGroupStandardItem::JointGroupStandardItem(tesseract_srdf::JointGroup group)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/robotic-arm.png"), "Joint Group")
+  : QStandardItem(icons::getRobotArmIcon(), "Joint Group")
   , group(std::move(group))
 {
   ctor();
 }
 
 JointGroupStandardItem::JointGroupStandardItem(const QString &text, tesseract_srdf::JointGroup group)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/robotic-arm.png"), text)
+  : QStandardItem(icons::getRobotArmIcon(), text)
   , group(std::move(group))
 {
   ctor();

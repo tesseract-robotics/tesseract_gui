@@ -23,18 +23,19 @@
 #include <tesseract_widgets/scene_graph/calibration_standard_item.h>
 #include <tesseract_widgets/common/standard_item_utils.h>
 #include <tesseract_widgets/common/standard_item_type.h>
+#include <tesseract_widgets/common/icon_utils.h>
 
 namespace tesseract_gui
 {
 CalibrationStandardItem::CalibrationStandardItem(tesseract_scene_graph::JointCalibration::Ptr calibration)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/calibration.png"), "Calibration")
+  : QStandardItem(icons::getCalibrationIcon(), "Calibration")
   , calibration(std::move(calibration))
 {
   ctor();
 }
 
 CalibrationStandardItem::CalibrationStandardItem(const QString &text, tesseract_scene_graph::JointCalibration::Ptr calibration)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/calibration.png"), text)
+  : QStandardItem(icons::getCalibrationIcon(), text)
   , calibration(std::move(calibration))
 {
   ctor();

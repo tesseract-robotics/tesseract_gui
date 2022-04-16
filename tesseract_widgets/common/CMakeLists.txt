@@ -10,7 +10,6 @@ QT5_ADD_RESOURCES(RESOURCES_common_RCC
   include/tesseract_widgets/common/resources/themes/dark/qdarkstyle_dark.qrc
   include/tesseract_widgets/common/resources/themes/light/qdarkstyle_light.qrc)
 
-
 add_library(${PROJECT_NAME}_common SHARED
   ${RESOURCES_common_RCC}
   src/calibration_info_standard_item.cpp
@@ -28,6 +27,7 @@ add_library(${PROJECT_NAME}_common SHARED
   src/entity_container.cpp
   src/joint_trajectory_set.cpp
   src/svg_util.cpp
+  src/icon_utils.cpp
 )
 target_link_libraries(${PROJECT_NAME}_common PUBLIC
   tesseract::tesseract_common

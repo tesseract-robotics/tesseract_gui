@@ -23,19 +23,20 @@
 #include <tesseract_widgets/common/calibration_info_standard_item.h>
 #include <tesseract_widgets/common/transform_standard_item.h>
 #include <tesseract_widgets/common/standard_item_type.h>
+#include <tesseract_widgets/common/icon_utils.h>
 
 namespace tesseract_gui
 {
 
 CalibrationInfoStandardItem::CalibrationInfoStandardItem(tesseract_common::CalibrationInfo calibration_info)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/cube.png"), "Calibration Info")
+  : QStandardItem(icons::getCubeIcon(), "Calibration Info")
   , calibration_info(std::move(calibration_info))
 {
   ctor();
 }
 
 CalibrationInfoStandardItem::CalibrationInfoStandardItem(const QString &text, tesseract_common::CalibrationInfo calibration_info)
-  : QStandardItem(QIcon(":/tesseract_widgets/png/cube.png"), text)
+  : QStandardItem(icons::getCubeIcon(), text)
   , calibration_info(std::move(calibration_info))
 {
   ctor();
@@ -55,7 +56,7 @@ int CalibrationInfoStandardItem::type() const
 
 void CalibrationInfoStandardItem::ctor()
 {
-  auto* joints_item = new QStandardItem(QIcon(":/tesseract_widgets/ignition/joint_vector.png"), "Joints");
+  auto* joints_item = new QStandardItem(icons::getJointIcon(), "Joints");
   for (auto& joint : calibration_info.joints)
   {
     auto* item = new TransformStandardItem(QString::fromStdString(joint.first), joint.second);

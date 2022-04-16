@@ -95,9 +95,9 @@ void JointTrajectoryWidget::setModel(JointTrajectoryModel* model)
   connect(ui_->trajectoryTreeView->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)), this, SLOT(onCurrentRowChanged(QModelIndex,QModelIndex)));
 }
 
-QString JointTrajectoryWidget::addJointTrajectorySet(const tesseract_common::JointTrajectorySet& trajectory_set)
+QString JointTrajectoryWidget::addJointTrajectorySet(const tesseract_common::JointTrajectorySet& trajectory_set, const std::string &ns)
 {
-  return data_->model->addJointTrajectorySet(trajectory_set);
+  return data_->model->addJointTrajectorySet(trajectory_set, ns);
 }
 
 void JointTrajectoryWidget::removeJointTrajectorySet(const QString& key)
@@ -116,6 +116,11 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex &current, cons
   QStandardItem* item = data_->model->itemFromIndex(current);
   switch (item->type())
   {
+    case static_cast<int>(tesseract_gui::StandardItemType::NAMESPACE):
+    {
+      onDisablePlayer();
+      break;
+    }
     case static_cast<int>(tesseract_gui::StandardItemType::JOINT_TRAJECTORY_SET_TRAJECTORY):
     {
       data_->current_trajectory = data_->model->getJointTrajectory(current);

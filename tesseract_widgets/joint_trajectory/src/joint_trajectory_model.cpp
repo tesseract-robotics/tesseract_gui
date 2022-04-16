@@ -21,6 +21,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 #include <tesseract_widgets/joint_trajectory/joint_trajectory_model.h>
+#include <tesseract_widgets/common/namespace_standard_item.h>
 #include <tesseract_widgets/common/standard_item_type.h>
 #include <tesseract_widgets/common/standard_item_utils.h>
 
@@ -33,16 +34,6 @@ JointTrajectoryModel::JointTrajectoryModel(QObject *parent)
 {
   clear();
 }
-JointTrajectoryModel::JointTrajectoryModel(const JointTrajectoryModel &other)
-: QStandardItemModel(other.d_ptr->parent)
-{
-  this->trajectory_sets_ = other.trajectory_sets_;
-}
-JointTrajectoryModel &JointTrajectoryModel::operator=(const JointTrajectoryModel &other)
-{
-  this->trajectory_sets_ = other.trajectory_sets_;
-  return *this;
-}
 
 void JointTrajectoryModel::clear()
 {
@@ -51,13 +42,29 @@ void JointTrajectoryModel::clear()
   setHorizontalHeaderLabels({"Name", "Values"});
 }
 
-QString JointTrajectoryModel::addJointTrajectorySet(const tesseract_common::JointTrajectorySet& trajectory_set)
+QString JointTrajectoryModel::addJointTrajectorySet(const tesseract_common::JointTrajectorySet& trajectory_set, const std::string &ns)
 {
   QString key = QUuid::createUuid().toString();
-  trajectory_sets_[key] = trajectory_set;
-  auto* trajectory_container_item = new JointTrajectorySetItem(key, trajectory_sets_.at(key));
+  QString name_space = (ns.empty()) ? "general" : QString::fromStdString(ns);
+
+  QList<QStandardItem*> ns_item = findItems(name_space);
+  assert(ns_item.size() <= 1);
+
+  NamespaceStandardItem* item;
+  if (ns_item.size() > 0)
+  {
+    item = dynamic_cast<NamespaceStandardItem*>(ns_item[0]);
+  }
+  else
+  {
+    item = new NamespaceStandardItem(name_space);
+    appendRow(item);
+  }
+
+  auto* trajectory_container_item = new JointTrajectorySetItem(key, trajectory_set);
   auto* trajectory_description_item = new QStandardItem(QString::fromStdString(trajectory_set.getDescription()));
-  appendRow({trajectory_container_item, trajectory_description_item});
+  item->appendRow({trajectory_container_item, trajectory_description_item});
+  trajectory_sets_[key] = trajectory_container_item;
   return key;
 }
 
@@ -67,9 +74,9 @@ void JointTrajectoryModel::removeJointTrajectorySet(const QString& key)
   if (it == trajectory_sets_.end())
     throw std::runtime_error("Tried to remove trajectory set '" + key.toStdString() + "' which does not exist!");
 
-  auto row = static_cast<int>(std::distance(trajectory_sets_.begin(), it));
+  QModelIndex idx = indexFromItem(it->second);
   trajectory_sets_.erase(it);
-  removeRow(row);
+  removeRow(idx.row());
 }
 
 bool JointTrajectoryModel::hasJointTrajectorySet(const QString& key)
@@ -234,7 +241,7 @@ void JointTrajectoryItem::ctor()
   }
 }
 
-JointTrajectorySetItem::JointTrajectorySetItem(QString uuid, tesseract_common::JointTrajectorySet& trajectory_set)
+JointTrajectorySetItem::JointTrajectorySetItem(QString uuid, const tesseract_common::JointTrajectorySet &trajectory_set)
   : QStandardItem(QIcon(":/tesseract_widgets/png/programming.png"), "Trajectory Set")
   , uuid(std::move(uuid))
   , trajectory_set(trajectory_set)
@@ -242,14 +249,14 @@ JointTrajectorySetItem::JointTrajectorySetItem(QString uuid, tesseract_common::J
   ctor();
 }
 
-JointTrajectorySetItem::JointTrajectorySetItem(const QString &text, QString uuid, tesseract_common::JointTrajectorySet& trajectory_set)
+JointTrajectorySetItem::JointTrajectorySetItem(const QString &text, QString uuid, const tesseract_common::JointTrajectorySet& trajectory_set)
   : QStandardItem(QIcon(":/tesseract_widgets/png/programming.png"), text)
   , uuid(std::move(uuid))
   , trajectory_set(trajectory_set)
 {
   ctor();
 }
-JointTrajectorySetItem::JointTrajectorySetItem(const QIcon &icon, const QString &text, QString uuid, tesseract_common::JointTrajectorySet &trajectory_set)
+JointTrajectorySetItem::JointTrajectorySetItem(const QIcon &icon, const QString &text, QString uuid, const tesseract_common::JointTrajectorySet &trajectory_set)
   : QStandardItem(icon, text)
   , uuid(std::move(uuid))
   , trajectory_set(trajectory_set)

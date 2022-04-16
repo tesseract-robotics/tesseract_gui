@@ -36,22 +36,20 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 namespace tesseract_gui
 {
 
-
 class JointTrajectoryModel : public QStandardItemModel
 {
   Q_OBJECT
 
 public:
   explicit JointTrajectoryModel(QObject *parent = nullptr);
-  JointTrajectoryModel(const JointTrajectoryModel &other);
-  JointTrajectoryModel &operator=(const JointTrajectoryModel &other);
 
   /**
    * @brief Add joint trajectory set
    * @param trajectory_set The trajectory set associated with the key
+   * @param namespace The namespace to store the trajectory under. If empty it will go under 'general'
    * @return The key associated with added trajectory for removal
    */
-  QString addJointTrajectorySet(const tesseract_common::JointTrajectorySet& trajectory_set);
+  QString addJointTrajectorySet(const tesseract_common::JointTrajectorySet& trajectory_set, const std::string &ns = "");
 
   /**
    * @brief Remove the joint trajectory set
@@ -74,7 +72,7 @@ public:
   void clear();
 
 private:
-  std::map<QString, tesseract_common::JointTrajectorySet> trajectory_sets_;
+  std::map<QString, QStandardItem*> trajectory_sets_;
 };
 
 class JointStateItem : public QStandardItem
@@ -106,13 +104,13 @@ private:
 class JointTrajectorySetItem : public QStandardItem
 {
 public:
-  JointTrajectorySetItem(QString uuid, tesseract_common::JointTrajectorySet& trajectory_set);
-  explicit JointTrajectorySetItem(const QString &text, QString uuid, tesseract_common::JointTrajectorySet &trajectory_set);
-  JointTrajectorySetItem(const QIcon &icon, const QString &text, QString uuid, tesseract_common::JointTrajectorySet& trajectory_set);
+  JointTrajectorySetItem(QString uuid, const tesseract_common::JointTrajectorySet& trajectory_set);
+  explicit JointTrajectorySetItem(const QString &text, QString uuid, const tesseract_common::JointTrajectorySet &trajectory_set);
+  JointTrajectorySetItem(const QIcon &icon, const QString &text, QString uuid, const tesseract_common::JointTrajectorySet& trajectory_set);
   int type() const override;
 
   QString uuid;
-  tesseract_common::JointTrajectorySet& trajectory_set;
+  tesseract_common::JointTrajectorySet trajectory_set;
 private:
   void ctor();
 };

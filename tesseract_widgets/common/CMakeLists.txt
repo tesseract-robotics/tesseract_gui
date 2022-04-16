@@ -17,6 +17,7 @@ add_library(${PROJECT_NAME}_common SHARED
   src/collision_margin_data_standard_item.cpp
   src/contact_managers_plugin_info_standard_item.cpp
   src/kinematics_plugin_info_standard_item.cpp
+  src/namespace_standard_item.cpp
   src/transform_standard_item.cpp
   src/pairs_collision_margin_data_standard_item.cpp
   src/plugin_info_standard_item.cpp

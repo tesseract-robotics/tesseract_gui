@@ -74,9 +74,10 @@ public:
   /**
    * @brief Add joint trajectory set
    * @param trajectory_set The trajectory set associated with the key
+   * @param namespace The namespace to store the trajectory under. If empty it will go under 'general'
    * @return The key associated with added trajectory for removal
    */
-  QString addJointTrajectorySet(const tesseract_common::JointTrajectorySet& trajectory_set);
+  QString addJointTrajectorySet(const tesseract_common::JointTrajectorySet& trajectory_set, const std::string &ns = "");
 
   /**
    * @brief Remove the joint trajectory set

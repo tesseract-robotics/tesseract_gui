@@ -38,7 +38,8 @@ enum class StandardItemType : int
   COLLISION_MARGIN_DATA        = QStandardItem::UserType + 6,
   PAIRS_COLLISION_MARGIN_DATA  = QStandardItem::UserType + 7,
   TRANSFORM                    = QStandardItem::UserType + 8,
-  COMMON_TYPES_END             = QStandardItem::UserType + 9,
+  NAMESPACE                    = QStandardItem::UserType + 9,
+  COMMON_TYPES_END             = QStandardItem::UserType + 10,
 
   // Joint Trajectory Set Types
   JOINT_TRAJECTORY_SET            = COMMON_TYPES_END + 1,

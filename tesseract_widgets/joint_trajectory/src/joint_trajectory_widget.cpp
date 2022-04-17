@@ -68,14 +68,18 @@ struct JointTrajectoryWidgetPrivate
   QAction* plot_action;
 };
 
-JointTrajectoryWidget::JointTrajectoryWidget(QWidget *parent)
+JointTrajectoryWidget::JointTrajectoryWidget(QWidget *parent, bool add_toolbar)
   : QWidget(parent)
   , ui_(std::make_unique<Ui::JointTrajectoryWidget>())
   , data_(std::make_unique<JointTrajectoryWidgetPrivate>())
 {
   ui_->setupUi(this);
 
-  createToolBar();
+  if (add_toolbar)
+  {
+    createToolBar();
+    ui_->verticalLayout->insertWidget(0, data_->toolbar);
+  }
 
   data_->player = std::make_unique<tesseract_visualization::TrajectoryPlayer>();
   data_->player_timer = std::make_unique<QTimer>(this);
@@ -108,8 +112,6 @@ void JointTrajectoryWidget::createToolBar()
   data_->save_action->setDisabled(true);
   data_->remove_action->setDisabled(true);
   data_->plot_action->setDisabled(true);
-
-  ui_->verticalLayout->insertWidget(0, data_->toolbar);
 }
 
 void JointTrajectoryWidget::onOpen()

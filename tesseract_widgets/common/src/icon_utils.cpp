@@ -318,4 +318,51 @@ QIcon getJointUnknownIcon()
   return icon;
 }
 
+QIcon getShowAllLinksIcon()
+{
+  static QIcon icon = QIcon(":/tesseract_widgets/ignition/show-link.png");
+  return icon;
+}
+
+QIcon getHideAllLinksIcon()
+{
+  static QIcon icon = QIcon(":/tesseract_widgets/ignition/hide-link.png");
+  return icon;
+}
+
+QIcon getShowVisualAllLinksIcon()
+{
+  static QIcon icon = QIcon(":/tesseract_widgets/ignition/show-visual.png");
+  return icon;
+}
+
+QIcon getHideVisualAllLinksIcon()
+{
+  static QIcon icon = QIcon(":/tesseract_widgets/ignition/hide-visual.png");
+  return icon;
+}
+
+QIcon getShowCollisionAllLinksIcon()
+{
+  static QIcon icon = QIcon(":/tesseract_widgets/ignition/show-collision.png");
+  return icon;
+}
+
+QIcon getHideCollisionAllLinksIcon()
+{
+  static QIcon icon = QIcon(":/tesseract_widgets/ignition/hide-collision.png");
+  return icon;
+}
+
+QIcon getSelectAllLinksIcon()
+{
+  static QIcon icon = QIcon(":/tesseract_widgets/ignition/select-link.png");
+  return icon;
+}
+
+QIcon getDeselectAllLinksIcon()
+{
+  static QIcon icon = QIcon(":/tesseract_widgets/ignition/deselect-link.png");
+  return icon;
+}
 }

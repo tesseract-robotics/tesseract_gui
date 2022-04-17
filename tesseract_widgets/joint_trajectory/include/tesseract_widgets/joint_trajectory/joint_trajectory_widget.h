@@ -66,7 +66,7 @@ class JointTrajectoryWidget : public QWidget
   Q_OBJECT
 
 public:
-  explicit JointTrajectoryWidget(QWidget *parent = nullptr);
+  explicit JointTrajectoryWidget(QWidget *parent = nullptr, bool add_toolbar = true);
   ~JointTrajectoryWidget();
 
   void setModel(JointTrajectoryModel* model);

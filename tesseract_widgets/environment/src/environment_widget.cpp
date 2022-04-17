@@ -31,24 +31,49 @@
 #include <tesseract_widgets/kinematic_groups/group_tcps_model.h>
 #include <tesseract_widgets/kinematic_groups/group_joint_states_model.h>
 #include <tesseract_widgets/acm/allowed_collision_matrix_model.h>
+#include <tesseract_widgets/common/icon_utils.h>
 
 #include <QStandardItemModel>
+#include <QToolBar>
 
 namespace tesseract_gui
 {
 struct EnvironmentWidgetImpl
 {
-  EnvironmentWidgetConfig config;
+  EnvironmentWidgetImpl()
+    : config(std::make_shared<EnvironmentWidgetConfig>()) {}
+
+  EnvironmentWidgetConfig::Ptr config;
+
+  // Toolbar
+  QToolBar* toolbar;
+  QAction* show_all_links_action;
+  QAction* hide_all_links_action;
+
+  QAction* show_visual_all_links_action;
+  QAction* hide_visual_all_links_action;
+
+  QAction* show_collision_all_links_action;
+  QAction* hide_collision_all_links_action;
+
+  QAction* select_all_links_action;
+  QAction* deselect_all_links_action;
 };
 
-EnvironmentWidget::EnvironmentWidget(QWidget *parent)
+EnvironmentWidget::EnvironmentWidget(QWidget *parent, bool add_toolbar)
   : QWidget(parent)
   , ui(std::make_unique<Ui::EnvironmentWidget>())
-  , config_(std::make_shared<EnvironmentWidgetConfig>())
+  , data_(std::make_unique<EnvironmentWidgetImpl>())
 {
   ui->setupUi(this);
 
   ui->tab_widget->setCurrentIndex(0);
+
+  if (add_toolbar)
+  {
+    createToolBar();
+    ui->verticalLayout->insertWidget(0, data_->toolbar);
+  }
 
   connect(ui->scene_tree_view, &QTreeView::collapsed, [this](){ui->scene_tree_view->resizeColumnToContents(0);});
   connect(ui->scene_tree_view, &QTreeView::expanded, [this](){ui->scene_tree_view->resizeColumnToContents(0);});
@@ -75,65 +100,70 @@ void EnvironmentWidget::setConfiguration(std::shared_ptr<EnvironmentWidgetConfig
 {
   if (config != nullptr)
   {
-    disconnect(config_.get(), SIGNAL(modelsUpdated()), this , SLOT(onModelsUpdated()));
-    disconnect(config_.get(), SIGNAL(environmentSet(tesseract_environment::Environment)), this , SIGNAL(environmentSet(tesseract_environment::Environment)));
-    disconnect(config_.get(), SIGNAL(environmentChanged(tesseract_environment::Environment)), this , SIGNAL(environmentChanged(tesseract_environment::Environment)));
-    disconnect(config_.get(), SIGNAL(environmentCurrentStateChanged(tesseract_environment::Environment)), this , SIGNAL(environmentCurrentStateChanged(tesseract_environment::Environment)));
+    disconnect(data_->config.get(), SIGNAL(modelsUpdated()), this , SLOT(onModelsUpdated()));
+    disconnect(data_->config.get(), SIGNAL(environmentSet(tesseract_environment::Environment)), this , SIGNAL(environmentSet(tesseract_environment::Environment)));
+    disconnect(data_->config.get(), SIGNAL(environmentChanged(tesseract_environment::Environment)), this , SIGNAL(environmentChanged(tesseract_environment::Environment)));
+    disconnect(data_->config.get(), SIGNAL(environmentCurrentStateChanged(tesseract_environment::Environment)), this , SIGNAL(environmentCurrentStateChanged(tesseract_environment::Environment)));
   }
 
-  config_ = std::move(config);
-  ui->scene_tree_view->setModel(&config_->getSceneGraphModel());
-  ui->state_tree_view->setModel(&config_->getSceneStateModel());
-  ui->groups_tree_view->setModel(&config_->getKinematicGroupsModel());
-  ui->group_tcps_tree_view->setModel(&config_->getGroupTCPsModel());
-  ui->group_states_tree_view->setModel(&config_->getGroupJointStatesModel());
-  ui->acm_tree_view->setModel(&config_->getAllowedCollisionMatrixModel());
-  ui->cmd_history_tree_view->setModel(&config_->getEnvironmentCommandsModel());
+  data_->config = std::move(config);
+  ui->scene_tree_view->setModel(&data_->config->getSceneGraphModel());
+  ui->state_tree_view->setModel(&data_->config->getSceneStateModel());
+  ui->groups_tree_view->setModel(&data_->config->getKinematicGroupsModel());
+  ui->group_tcps_tree_view->setModel(&data_->config->getGroupTCPsModel());
+  ui->group_states_tree_view->setModel(&data_->config->getGroupJointStatesModel());
+  ui->acm_tree_view->setModel(&data_->config->getAllowedCollisionMatrixModel());
+  ui->cmd_history_tree_view->setModel(&data_->config->getEnvironmentCommandsModel());
 
   onModelsUpdated();
 
-  connect(config_.get(), SIGNAL(modelsUpdated()), this , SLOT(onModelsUpdated()));
-  connect(config_.get(), SIGNAL(environmentSet(tesseract_environment::Environment)), this , SIGNAL(environmentSet(tesseract_environment::Environment)));
-  connect(config_.get(), SIGNAL(environmentChanged(tesseract_environment::Environment)), this , SIGNAL(environmentChanged(tesseract_environment::Environment)));
-  connect(config_.get(), SIGNAL(environmentCurrentStateChanged(tesseract_environment::Environment)), this , SIGNAL(environmentCurrentStateChanged(tesseract_environment::Environment)));
+  connect(data_->config.get(), SIGNAL(modelsUpdated()), this , SLOT(onModelsUpdated()));
+  connect(data_->config.get(), SIGNAL(environmentSet(tesseract_environment::Environment)), this , SIGNAL(environmentSet(tesseract_environment::Environment)));
+  connect(data_->config.get(), SIGNAL(environmentChanged(tesseract_environment::Environment)), this , SIGNAL(environmentChanged(tesseract_environment::Environment)));
+  connect(data_->config.get(), SIGNAL(environmentCurrentStateChanged(tesseract_environment::Environment)), this , SIGNAL(environmentCurrentStateChanged(tesseract_environment::Environment)));
 
-  emit configurationSet(*config_);
-  emit environmentSet(config_->environment());
+  emit configurationSet(*data_->config);
+  emit environmentSet(data_->config->environment());
 }
 
 const tesseract_environment::Environment& EnvironmentWidget::environment() const
 {
-  return config_->environment();
+  return data_->config->environment();
 }
 
 tesseract_environment::Environment& EnvironmentWidget::environment()
 {
-  return config_->environment();
+  return data_->config->environment();
 }
 
 tesseract_environment::Environment::ConstPtr EnvironmentWidget::getEnvironment() const
 {
-  return config_->getEnvironment();
+  return data_->config->getEnvironment();
 }
 
 tesseract_environment::Environment::Ptr EnvironmentWidget::getEnvironment()
 {
-  return config_->getEnvironment();
+  return data_->config->getEnvironment();
+}
+
+const std::unordered_map<std::string, LinkVisibilityProperties> &EnvironmentWidget::getLinkVisibilityProperties() const
+{
+  return data_->config->getLinkVisibilityProperties();
 }
 
 void EnvironmentWidget::onModelsUpdated()
 {
-  if (!config_->environment().isInitialized())
+  if (!data_->config->environment().isInitialized())
     return;
 
   // This hides the root element
-  ui->group_states_tree_view->setRootIndex(config_->getGroupJointStatesModel().index(0,0));
+  ui->group_states_tree_view->setRootIndex(data_->config->getGroupJointStatesModel().index(0,0));
 
   // This hides the root element
-  ui->group_tcps_tree_view->setRootIndex(config_->getGroupTCPsModel().index(0,0));
+  ui->group_tcps_tree_view->setRootIndex(data_->config->getGroupTCPsModel().index(0,0));
 
   // This hides the root element
-  ui->cmd_history_tree_view->setRootIndex(config_->getEnvironmentCommandsModel().index(0,0));
+  ui->cmd_history_tree_view->setRootIndex(data_->config->getEnvironmentCommandsModel().index(0,0));
 
   // New data may have been added so resize first column
   ui->scene_tree_view->resizeColumnToContents(0);
@@ -145,8 +175,180 @@ void EnvironmentWidget::onModelsUpdated()
   ui->cmd_history_tree_view->resizeColumnToContents(0);
 }
 
-void EnvironmentWidget::onRender()
-{
+void EnvironmentWidget::onRender() { }
 
+void EnvironmentWidget::onShowAllLinks()
+{
+  LinkVisibilityPropertiesMap& link_visibility_properties = data_->config->getLinkVisibilityProperties();
+
+  std::vector<std::string> link_names;
+  link_names.reserve(link_visibility_properties.size());
+
+  for (auto& link : link_visibility_properties)
+  {
+    link.second.link = true;
+    link_names.push_back(link.first);
+  }
+
+  emit linkVisibilityChanged(link_names);
+}
+
+void EnvironmentWidget::onHideAllLinks()
+{
+  LinkVisibilityPropertiesMap& link_visibility_properties = data_->config->getLinkVisibilityProperties();
+
+  std::vector<std::string> link_names;
+  link_names.reserve(link_visibility_properties.size());
+
+  for (auto& link : link_visibility_properties)
+  {
+    link.second.link = false;
+    link_names.push_back(link.first);
+  }
+
+  emit linkVisibilityChanged(link_names);
+}
+
+void EnvironmentWidget::onShowVisualAllLinks()
+{
+  LinkVisibilityPropertiesMap& link_visibility_properties = data_->config->getLinkVisibilityProperties();
+
+  std::vector<std::string> link_names;
+  link_names.reserve(link_visibility_properties.size());
+
+  for (auto& link : link_visibility_properties)
+  {
+    link.second.visual = true;
+    link_names.push_back(link.first);
+  }
+
+  emit linkVisibilityChanged(link_names);
+}
+
+void EnvironmentWidget::onHideVisualAllLinks()
+{
+  LinkVisibilityPropertiesMap& link_visibility_properties = data_->config->getLinkVisibilityProperties();
+
+  std::vector<std::string> link_names;
+  link_names.reserve(link_visibility_properties.size());
+
+  for (auto& link : link_visibility_properties)
+  {
+    link.second.visual = false;
+    link_names.push_back(link.first);
+  }
+
+  emit linkVisibilityChanged(link_names);
+}
+
+void EnvironmentWidget::onShowCollisionAllLinks()
+{
+  LinkVisibilityPropertiesMap& link_visibility_properties = data_->config->getLinkVisibilityProperties();
+
+  std::vector<std::string> link_names;
+  link_names.reserve(link_visibility_properties.size());
+
+  for (auto& link : link_visibility_properties)
+  {
+    link.second.collision = true;
+    link_names.push_back(link.first);
+  }
+
+  emit linkVisibilityChanged(link_names);
+}
+void EnvironmentWidget::onHideCollisionAllLinks()
+{
+  LinkVisibilityPropertiesMap& link_visibility_properties = data_->config->getLinkVisibilityProperties();
+
+  std::vector<std::string> link_names;
+  link_names.reserve(link_visibility_properties.size());
+
+  for (auto& link : link_visibility_properties)
+  {
+    link.second.collision = false;
+    link_names.push_back(link.first);
+  }
+
+  emit linkVisibilityChanged(link_names);
+}
+
+void EnvironmentWidget::onShowAxisAllLinks()
+{
+  LinkVisibilityPropertiesMap& link_visibility_properties = data_->config->getLinkVisibilityProperties();
+
+  std::vector<std::string> link_names;
+  link_names.reserve(link_visibility_properties.size());
+
+  for (auto& link : link_visibility_properties)
+  {
+    link.second.axis = true;
+    link_names.push_back(link.first);
+  }
+
+  emit linkVisibilityChanged(link_names);
+}
+
+void EnvironmentWidget::onHideAxisAllLinks()
+{
+  LinkVisibilityPropertiesMap& link_visibility_properties = data_->config->getLinkVisibilityProperties();
+
+  std::vector<std::string> link_names;
+  link_names.reserve(link_visibility_properties.size());
+
+  for (auto& link : link_visibility_properties)
+  {
+    link.second.axis = false;
+    link_names.push_back(link.first);
+  }
+
+  emit linkVisibilityChanged(link_names);
+}
+
+void EnvironmentWidget::onSelectAllLinks()
+{
+  LinkVisibilityPropertiesMap& link_visibility_properties = data_->config->getLinkVisibilityProperties();
+
+  std::vector<std::string> link_names;
+  link_names.reserve(link_visibility_properties.size());
+
+  for (auto& link : link_visibility_properties)
+  {
+    link.second.wirebox = true;
+    link_names.push_back(link.first);
+  }
+
+  emit linkVisibilityChanged(link_names);
+}
+
+void EnvironmentWidget::onDeselectAllLinks()
+{
+  LinkVisibilityPropertiesMap& link_visibility_properties = data_->config->getLinkVisibilityProperties();
+
+  std::vector<std::string> link_names;
+  link_names.reserve(link_visibility_properties.size());
+
+  for (auto& link : link_visibility_properties)
+  {
+    link.second.wirebox = false;
+    link_names.push_back(link.first);
+  }
+
+  emit linkVisibilityChanged(link_names);
+}
+
+void EnvironmentWidget::createToolBar()
+{
+  data_->toolbar = new QToolBar; // NOLINT
+  data_->show_all_links_action = data_->toolbar->addAction(icons::getShowAllLinksIcon(),"Show All Links", this, SLOT(onShowAllLinks()));
+  data_->hide_all_links_action = data_->toolbar->addAction(icons::getHideAllLinksIcon(),"Hide All Links", this, SLOT(onHideAllLinks()));
+  data_->toolbar->addSeparator();
+  data_->show_visual_all_links_action = data_->toolbar->addAction(icons::getShowVisualAllLinksIcon(),"Show Visual All Links", this, SLOT(onShowVisualAllLinks()));
+  data_->hide_visual_all_links_action = data_->toolbar->addAction(icons::getHideVisualAllLinksIcon(),"Hide Visual All Links", this, SLOT(onHideVisualAllLinks()));
+  data_->toolbar->addSeparator();
+  data_->show_collision_all_links_action = data_->toolbar->addAction(icons::getShowCollisionAllLinksIcon(),"Show Collision All Links", this, SLOT(onShowCollisionAllLinks()));
+  data_->hide_collision_all_links_action = data_->toolbar->addAction(icons::getHideCollisionAllLinksIcon(),"Hide Collision All Links", this, SLOT(onHideCollisionAllLinks()));
+  data_->toolbar->addSeparator();
+  data_->select_all_links_action = data_->toolbar->addAction(icons::getSelectAllLinksIcon(),"Select All Links", this, SLOT(onSelectAllLinks()));
+  data_->deselect_all_links_action = data_->toolbar->addAction(icons::getDeselectAllLinksIcon(),"Deselect All Links", this, SLOT(onDeselectAllLinks()));
 }
 }

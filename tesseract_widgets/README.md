@@ -34,6 +34,13 @@ search: https://fonts.google.com/icons
   - restore.png
   - layout.png
 
+<div>Icons made by <a href="https://www.flaticon.com/free-icons/selection-tool" title="selection tool icons">Selection tool icons created by berkahicon - Flaticon</a></div>
+- select-box.png
+
+<div>Icons made by <a href="https://www.flaticon.com/free-icons/view" title="view icons">View icons created by th studio - Flaticon</a></div>
+- show.png
+- hide.png
+
 <div>Icons made by <a href="https://www.flaticon.com/authors/those-icons" title="Those Icons"> Those Icons </a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com'</a></div>
 - plugin.png
 

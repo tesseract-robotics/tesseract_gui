@@ -41,6 +41,10 @@ struct EnvironmentWidgetConfigImpl
 {
   std::size_t hash;
   tesseract_environment::Environment::Ptr environment;
+
+  // Store link visibility properties
+  LinkVisibilityPropertiesMap link_visibility_properties;
+
   QStandardItemModel scene_model;
   SceneStateModel scene_state_model;
   KinematicGroupsModel group_model;
@@ -99,6 +103,16 @@ tesseract_environment::Environment::Ptr EnvironmentWidgetConfig::getEnvironment(
   return data_->environment;
 }
 
+const LinkVisibilityPropertiesMap& EnvironmentWidgetConfig::getLinkVisibilityProperties() const
+{
+  return data_->link_visibility_properties;
+}
+
+LinkVisibilityPropertiesMap& EnvironmentWidgetConfig::getLinkVisibilityProperties()
+{
+  return data_->link_visibility_properties;
+}
+
 QStandardItemModel& EnvironmentWidgetConfig::getSceneGraphModel() {return data_->scene_model;}
 SceneStateModel& EnvironmentWidgetConfig::getSceneStateModel() {return data_->scene_state_model;}
 KinematicGroupsModel& EnvironmentWidgetConfig::getKinematicGroupsModel() {return data_->group_model;}
@@ -109,6 +123,7 @@ EnvironmentCommandsModel& EnvironmentWidgetConfig::getEnvironmentCommandsModel()
 
 void EnvironmentWidgetConfig::clear()
 {
+  data_->link_visibility_properties.clear();
   data_->scene_model.clear();
   data_->scene_state_model.clear();
   data_->acm_model.clear();
@@ -144,7 +159,22 @@ void EnvironmentWidgetConfig::onUpdateSceneGraphModel()
   data_->scene_model.setHorizontalHeaderLabels({"Name", "Values"});
   auto* scene_item = new tesseract_gui::SceneGraphStandardItem(data_->environment->getSceneGraph()->clone());
   data_->scene_model.appendRow(scene_item);
+
+  // Update link visibility properties
+  std::vector<std::string> link_names = data_->environment->getLinkNames();
+  LinkVisibilityPropertiesMap link_prop;
+  link_prop.reserve(link_names.size());
+  for (const auto& link_name : link_names)
+  {
+    auto it = data_->link_visibility_properties.find(link_name);
+    if (it == data_->link_visibility_properties.end())
+      link_prop[link_name] = LinkVisibilityProperties();
+    else
+      link_prop[link_name] = it->second;
+  }
+  data_->link_visibility_properties = link_prop;
 }
+
 void EnvironmentWidgetConfig::onUpdateCurrentStateModel()
 {
   if (!data_->environment->isInitialized())

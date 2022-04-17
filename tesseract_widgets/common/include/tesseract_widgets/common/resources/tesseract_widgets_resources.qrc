@@ -79,5 +79,13 @@
         <file>png/merge.png</file>
         <file>png/plugin.png</file>
         <file>svg/import.svg</file>
+        <file>ignition/show-link.png</file>
+        <file>ignition/hide-link.png</file>
+        <file>ignition/deselect-link.png</file>
+        <file>ignition/select-link.png</file>
+        <file>ignition/show-visual.png</file>
+        <file>ignition/show-collision.png</file>
+        <file>ignition/hide-visual.png</file>
+        <file>ignition/hide-collision.png</file>
     </qresource>
 </RCC>

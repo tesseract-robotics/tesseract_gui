@@ -34,13 +34,15 @@ class EnvironmentWidget;
 namespace tesseract_gui
 {
 class EnvironmentWidgetConfig;
+class EnvironmentWidgetImpl;
+struct LinkVisibilityProperties;
 
 class EnvironmentWidget : public QWidget
 {
   Q_OBJECT
 
 public:
-  explicit EnvironmentWidget(QWidget *parent = nullptr);
+  explicit EnvironmentWidget(QWidget *parent = nullptr, bool add_toolbar = true);
   ~EnvironmentWidget() override;
 
   /**
@@ -63,26 +65,39 @@ public:
   tesseract_environment::Environment::ConstPtr getEnvironment() const;
   tesseract_environment::Environment::Ptr getEnvironment();
 
+  /** @brief Get the link visibility properties */
+  const std::unordered_map<std::string, LinkVisibilityProperties>& getLinkVisibilityProperties() const;
+
+
 Q_SIGNALS:
   void configurationSet(EnvironmentWidgetConfig& config);
   void environmentSet(const tesseract_environment::Environment& env);
   void environmentChanged(const tesseract_environment::Environment& env);
   void environmentCurrentStateChanged(const tesseract_environment::Environment& env);
-  void linkVisibleChanged(const std::string& link_name, bool visible);
-  void linkCollisionVisibleChanged(const std::string& link_name, bool visible);
-  void linkVisualVisibleChanged(const std::string& link_name, bool visible);
-  void selectedLinksChanged(const std::vector<std::string>& selected_links);
+  void linkVisibilityChanged(const std::vector<std::string>& links);
   void triggerRender();
 
 public Q_SLOTS:
   virtual void onModelsUpdated();
   virtual void onRender();
+  virtual void onShowAllLinks();
+  virtual void onHideAllLinks();
+  virtual void onShowVisualAllLinks();
+  virtual void onHideVisualAllLinks();
+  virtual void onShowCollisionAllLinks();
+  virtual void onHideCollisionAllLinks();
+  virtual void onShowAxisAllLinks();
+  virtual void onHideAxisAllLinks();
+  virtual void onSelectAllLinks();
+  virtual void onDeselectAllLinks();
 
 protected:
   std::unique_ptr<Ui::EnvironmentWidget> ui;
-  std::shared_ptr<EnvironmentWidgetConfig> config_;
+  std::unique_ptr<EnvironmentWidgetImpl> data_;
 
   void updateModels();
+
+  void createToolBar();
 
 };
 }

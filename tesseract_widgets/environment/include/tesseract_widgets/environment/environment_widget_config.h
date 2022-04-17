@@ -38,6 +38,18 @@ class GroupJointStatesModel;
 class AllowedCollisionMatrixModel;
 class EnvironmentCommandsModel;
 
+/** @brief Stores the link visibility properties */
+struct LinkVisibilityProperties
+{
+  bool link {true};
+  bool visual {true};
+  bool collision {false};
+  bool wirebox {false};
+  bool axis {false};
+};
+
+using LinkVisibilityPropertiesMap = std::unordered_map<std::string, LinkVisibilityProperties>;
+
 struct EnvironmentWidgetConfigImpl;
 class EnvironmentWidgetConfig : public QObject
 {
@@ -72,6 +84,10 @@ public:
    */
   tesseract_environment::Environment::ConstPtr getEnvironment() const;
   tesseract_environment::Environment::Ptr getEnvironment();
+
+  /** @brief Get the link visibility properties */
+  const LinkVisibilityPropertiesMap& getLinkVisibilityProperties() const;
+  LinkVisibilityPropertiesMap& getLinkVisibilityProperties();
 
   QStandardItemModel& getSceneGraphModel();
   SceneStateModel &getSceneStateModel();

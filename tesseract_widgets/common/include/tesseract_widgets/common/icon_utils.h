@@ -114,6 +114,15 @@ QIcon getJointContinuousIcon();
 QIcon getJointPrismaticIcon();
 QIcon getJointUnknownIcon();
 
+QIcon getShowAllLinksIcon();
+QIcon getHideAllLinksIcon();
+QIcon getShowVisualAllLinksIcon();
+QIcon getHideVisualAllLinksIcon();
+QIcon getShowCollisionAllLinksIcon();
+QIcon getHideCollisionAllLinksIcon();
+QIcon getSelectAllLinksIcon();
+QIcon getDeselectAllLinksIcon();
+
 
 }
 #endif // TESSERACT_WIDGETS_COMMON_ICON_UTILS_H

@@ -43,21 +43,21 @@ struct EnvironmentWidgetImpl
   EnvironmentWidgetImpl()
     : config(std::make_shared<EnvironmentWidgetConfig>()) {}
 
-  EnvironmentWidgetConfig::Ptr config;
+  EnvironmentWidgetConfig::Ptr config {nullptr};
 
   // Toolbar
-  QToolBar* toolbar;
-  QAction* show_all_links_action;
-  QAction* hide_all_links_action;
+  QToolBar* toolbar {nullptr};
+  QAction* show_all_links_action{nullptr};
+  QAction* hide_all_links_action{nullptr};
 
-  QAction* show_visual_all_links_action;
-  QAction* hide_visual_all_links_action;
+  QAction* show_visual_all_links_action{nullptr};
+  QAction* hide_visual_all_links_action{nullptr};
 
-  QAction* show_collision_all_links_action;
-  QAction* hide_collision_all_links_action;
+  QAction* show_collision_all_links_action{nullptr};
+  QAction* hide_collision_all_links_action{nullptr};
 
-  QAction* select_all_links_action;
-  QAction* deselect_all_links_action;
+  QAction* select_all_links_action{nullptr};
+  QAction* deselect_all_links_action{nullptr};
 };
 
 EnvironmentWidget::EnvironmentWidget(QWidget *parent, bool add_toolbar)
@@ -91,7 +91,7 @@ EnvironmentWidget::EnvironmentWidget(QWidget *parent, bool add_toolbar)
   connect(ui->cmd_history_tree_view, &QTreeView::expanded, [this](){ui->cmd_history_tree_view->resizeColumnToContents(0);});
 
 //  connect(ui->acm_tree_view, SIGNAL(entrySelected()), this, SIGNAL(entrySelected()));
-  connect(ui->acm_tree_view, SIGNAL(selectedLinksChanged(std::vector<std::string>)), this, SIGNAL(selectedLinksChanged(std::vector<std::string>)));
+  connect(ui->acm_tree_view, SIGNAL(selectedLinksChanged(std::vector<std::string>)), this, SLOT(onACMSelectedLinks(std::vector<std::string>)));
 }
 
 EnvironmentWidget::~EnvironmentWidget() = default;
@@ -334,6 +334,29 @@ void EnvironmentWidget::onDeselectAllLinks()
   }
 
   emit linkVisibilityChanged(link_names);
+}
+
+void EnvironmentWidget::onACMSelectedLinks(const std::vector<std::string>& link_names)
+{
+  LinkVisibilityPropertiesMap& link_visibility_properties = data_->config->getLinkVisibilityProperties();
+
+  std::vector<std::string> changed_link_names;
+  changed_link_names.reserve(link_visibility_properties.size());
+
+  for (auto& link : link_visibility_properties)
+  {
+    link.second.wirebox = false;
+    changed_link_names.push_back(link.first);
+  }
+
+  for (const auto& link : link_names)
+  {
+    auto it = link_visibility_properties.find(link);
+    if (it != link_visibility_properties.end())
+      it->second.wirebox = true;
+  }
+
+  emit linkVisibilityChanged(changed_link_names);
 }
 
 void EnvironmentWidget::createToolBar()

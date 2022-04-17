@@ -91,6 +91,9 @@ public Q_SLOTS:
   virtual void onSelectAllLinks();
   virtual void onDeselectAllLinks();
 
+public Q_SLOTS:
+  void onACMSelectedLinks(const std::vector<std::string>& link_names);
+
 protected:
   std::unique_ptr<Ui::EnvironmentWidget> ui;
   std::unique_ptr<EnvironmentWidgetImpl> data_;

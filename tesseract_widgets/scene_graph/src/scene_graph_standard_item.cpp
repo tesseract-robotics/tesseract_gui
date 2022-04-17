@@ -66,6 +66,7 @@ void SceneGraphStandardItem::ctor()
     auto* item = new LinkStandardItem(QString::fromStdString(link->getName()), std::make_shared<tesseract_scene_graph::Link>(link->clone()));
     links_item->appendRow(item);
   }
+  links_item->sortChildren(0);
   appendRow(links_item);
 
   auto* joints_item = new QStandardItem(icons::getJointVectorIcon(), "Joints");
@@ -74,6 +75,7 @@ void SceneGraphStandardItem::ctor()
     auto* item = new JointStandardItem(QString::fromStdString(joint->getName()), std::make_shared<tesseract_scene_graph::Joint>(joint->clone()));
     joints_item->appendRow(item);
   }
+  joints_item->sortChildren(0);
   appendRow(joints_item);
 }
 }

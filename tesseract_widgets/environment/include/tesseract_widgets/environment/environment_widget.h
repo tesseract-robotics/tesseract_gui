@@ -95,6 +95,7 @@ public Q_SLOTS:
   virtual void onHideAxisAllLinks();
   virtual void onSelectAllLinks();
   virtual void onDeselectAllLinks();
+  virtual void onEnable();
 
 public Q_SLOTS:
   void onACMSelectedLinks(const std::vector<std::string>& link_names);

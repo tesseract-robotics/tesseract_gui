@@ -370,4 +370,14 @@ void JointTrajectoryWidget::onDisablePlayer()
   ui_->trajectoryPlayerFrame->setEnabled(false);
 }
 
+void JointTrajectoryWidget::onEnable()
+{
+
+}
+
+void JointTrajectoryWidget::onRender()
+{
+
+}
+
 }

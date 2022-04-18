@@ -53,7 +53,9 @@ class WorkbenchWidget : public QWidget
   Q_OBJECT
 
 public:
-  explicit WorkbenchWidget(EnvironmentWidget* environment_widget, QWidget *parent = nullptr);
+  explicit WorkbenchWidget(EnvironmentWidget* environment_widget,
+                           JointTrajectoryWidget* joint_trajectory_widget,
+                           QWidget *parent = nullptr);
   ~WorkbenchWidget();
 
   EnvironmentWidget& getEnvironmentWidget();
@@ -64,6 +66,7 @@ public:
 
 public Q_SLOTS:
   virtual void onRender();
+  virtual void onEnable();
 
 private Q_SLOTS:
   void onEnvironmentSet(const std::shared_ptr<tesseract_environment::Environment>& env);

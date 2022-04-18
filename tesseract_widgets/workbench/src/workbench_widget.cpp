@@ -44,7 +44,9 @@ struct WorkbenchWidgetImpl
   std::unordered_map<std::string, tesseract_gui::EnvironmentWidgetConfig::Ptr> joint_trajectory_environment_configs;
 };
 
-WorkbenchWidget::WorkbenchWidget(EnvironmentWidget* environment_widget, QWidget *parent)
+WorkbenchWidget::WorkbenchWidget(EnvironmentWidget* environment_widget,
+                                 JointTrajectoryWidget* joint_trajectory_widget,
+                                 QWidget *parent)
   : QWidget(parent)
   , ui(std::make_unique<Ui::WorkbenchWidget>())
   , data_(std::make_unique<WorkbenchWidgetImpl>())
@@ -52,7 +54,7 @@ WorkbenchWidget::WorkbenchWidget(EnvironmentWidget* environment_widget, QWidget 
   ui->setupUi(this);
   data_->environment_widget = environment_widget;
   data_->joint_trajectory_environment_widget = environment_widget->clone();
-  data_->joint_trajectory_widget = new JointTrajectoryWidget(); // NOLINT
+  data_->joint_trajectory_widget = joint_trajectory_widget;
   data_->joint_trajectory_model = new JointTrajectoryModel(); // NOLINT
   data_->joint_trajectory_widget->setModel(data_->joint_trajectory_model);
 
@@ -89,6 +91,13 @@ void WorkbenchWidget::onRender()
 {
   data_->environment_widget->onRender();
   data_->joint_trajectory_environment_widget->onRender();
+}
+
+void WorkbenchWidget::onEnable()
+{
+  data_->environment_widget->onEnable();
+  data_->joint_trajectory_environment_widget->onEnable();
+  data_->joint_trajectory_widget->onEnable();
 }
 
 void WorkbenchWidget::onEnvironmentSet(const std::shared_ptr<tesseract_environment::Environment>& env)

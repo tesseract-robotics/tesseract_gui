@@ -341,6 +341,19 @@ void EnvironmentWidget::onDeselectAllLinks()
   emit linkVisibilityChanged(link_names);
 }
 
+void EnvironmentWidget::onEnable()
+{
+  LinkVisibilityPropertiesMap& link_visibility_properties = data_->config->getLinkVisibilityProperties();
+
+  std::vector<std::string> link_names;
+  link_names.reserve(link_visibility_properties.size());
+
+  for (auto& link : link_visibility_properties)
+    link_names.push_back(link.first);
+
+  emit linkVisibilityChanged(link_names);
+}
+
 void EnvironmentWidget::onACMSelectedLinks(const std::vector<std::string>& link_names)
 {
   LinkVisibilityPropertiesMap& link_visibility_properties = data_->config->getLinkVisibilityProperties();

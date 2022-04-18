@@ -28,6 +28,7 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 #include <tesseract_widgets/workbench/workbench_widget.h>
 #include <tesseract_widgets/environment/environment_widget.h>
 #include <tesseract_widgets/environment/environment_widget_config.h>
+#include <tesseract_widgets/joint_trajectory/joint_trajectory_widget.h>
 #include <tesseract_support/tesseract_support_resource_locator.h>
 
 int main(int argc, char ** argv)
@@ -49,7 +50,9 @@ int main(int argc, char ** argv)
     auto* env_widget = new tesseract_gui::EnvironmentWidget(); // NOLINT
     env_widget->setConfiguration(std::move(config));
 
-    tesseract_gui::WorkbenchWidget widget(env_widget);
+    auto* jt_widget = new tesseract_gui::JointTrajectoryWidget(); // NOLINT
+
+    tesseract_gui::WorkbenchWidget widget(env_widget, jt_widget);
     widget.show();
 
     return QApplication::exec();

@@ -107,6 +107,8 @@ public Q_SLOTS:
   virtual void onSave();
   virtual void onRemove();
   virtual void onPlot();
+  virtual void onEnable();
+  virtual void onRender();
 
 private Q_SLOTS:
   void onCurrentRowChanged(const QModelIndex &current, const QModelIndex &previous);

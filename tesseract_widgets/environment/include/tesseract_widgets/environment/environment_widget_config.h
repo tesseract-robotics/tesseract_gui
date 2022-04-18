@@ -108,7 +108,7 @@ public:
   EnvironmentWidgetConfig::UPtr clone() const;
 
 Q_SIGNALS:
-  void environmentSet(const tesseract_environment::Environment& env);
+  void environmentSet(const std::shared_ptr<tesseract_environment::Environment>& env);
   void environmentChanged(const tesseract_environment::Environment& env);
   void environmentCurrentStateChanged(const tesseract_environment::Environment& env);
   void modelsUpdated();

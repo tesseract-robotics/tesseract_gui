@@ -20,7 +20,7 @@ IgnitionEnvironmentWidget::IgnitionEnvironmentWidget(std::string scene_name,
 , entity_container_(entity_manager.getEntityContainer(container_name_))
 {
   connect(this, SIGNAL(selectedLinksChanged(std::vector<std::string>)), this, SLOT(onSelectedLinksChanged(std::vector<std::string>)));
-  connect(this, SIGNAL(environmentSet(tesseract_environment::Environment)), this, SLOT(onEnvironmentSet(tesseract_environment::Environment)));
+  connect(this, SIGNAL(environmentSet(std::shared_ptr<tesseract_environment::Environment>)), this, SLOT(onEnvironmentSet(std::shared_ptr<tesseract_environment::Environment>)));
   connect(this, SIGNAL(environmentChanged(tesseract_environment::Environment)), this, SLOT(onEnvironmentChanged(tesseract_environment::Environment)));
   connect(this, SIGNAL(environmentCurrentStateChanged(tesseract_environment::Environment)), this, SLOT(onEnvironmentCurrentStateChanged(tesseract_environment::Environment)));
 }
@@ -46,7 +46,12 @@ IgnitionEnvironmentWidget::~IgnitionEnvironmentWidget()
   }
 }
 
-void IgnitionEnvironmentWidget::onEnvironmentSet(const tesseract_environment::Environment& /*env*/)
+tesseract_gui::EnvironmentWidget* IgnitionEnvironmentWidget::clone() const
+{
+  return new IgnitionEnvironmentWidget(scene_name_, entity_container_->getEntityManager());
+}
+
+void IgnitionEnvironmentWidget::onEnvironmentSet(const std::shared_ptr<tesseract_environment::Environment> & /*env*/)
 {
   render_revision_ = 0;
   render_dirty_ = true;

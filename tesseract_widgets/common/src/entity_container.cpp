@@ -141,4 +141,7 @@ void EntityContainer::clear()
   untracked_entity_map_.clear();
 }
 
+EntityManager& EntityContainer::getEntityManager() { return *manager_;}
+const EntityManager& EntityContainer::getEntityManager() const { return *manager_;}
+
 }  // namespace tesseract_gui

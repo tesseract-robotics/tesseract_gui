@@ -51,6 +51,7 @@ namespace tesseract_gui
 struct JointTrajectoryWidgetPrivate
 {
   JointTrajectoryModel* model{nullptr};
+  tesseract_environment::Environment::ConstPtr default_env{nullptr};
   std::unique_ptr<tesseract_visualization::TrajectoryPlayer> player;
   std::unique_ptr<QTimer> player_timer;
   std::unique_ptr<JointTrajectoryPlotDialog> plot_dialog;
@@ -114,6 +115,11 @@ void JointTrajectoryWidget::createToolBar()
   data_->plot_action->setDisabled(true);
 }
 
+void JointTrajectoryWidget::setDefaultEnvironment(std::shared_ptr<const tesseract_environment::Environment> env)
+{
+  data_->default_env = std::move(env);
+}
+
 void JointTrajectoryWidget::onOpen()
 {
   QString filename = QFileDialog::getOpenFileName(this,
@@ -174,8 +180,15 @@ void JointTrajectoryWidget::setModel(JointTrajectoryModel* model)
   connect(ui_->trajectoryTreeView->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)), this, SLOT(onCurrentRowChanged(QModelIndex,QModelIndex)));
 }
 
-QString JointTrajectoryWidget::addJointTrajectorySet(const tesseract_common::JointTrajectorySet& trajectory_set)
+QString JointTrajectoryWidget::addJointTrajectorySet(tesseract_common::JointTrajectorySet trajectory_set)
 {
+  if (trajectory_set.getEnvironment() != nullptr)
+    return data_->model->addJointTrajectorySet(trajectory_set);
+
+  if (data_->default_env == nullptr)
+    throw std::runtime_error("JointTrajectoryWidget: Must set default environment prior to adding trajectories that do not contain an environment");
+
+  trajectory_set.applyEnvironment(data_->default_env->clone());
   return data_->model->addJointTrajectorySet(trajectory_set);
 }
 
@@ -251,7 +264,7 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex &current, cons
       const tesseract_common::JointState& state = data_->model->getJointState(current);
       auto details = data_->model->getJointTrajectorySetDetails(current);
       emit configureJointTrajectorySet(details.first, details.second);
-      emit showState(state);
+      emit showJointState(state);
       break;
     }
   }
@@ -287,7 +300,7 @@ void JointTrajectoryWidget::onSliderValueChanged(int value)
   data_->current_duration = value * SLIDER_RESOLUTION;
   tesseract_common::JointState state = data_->player->setCurrentDuration(data_->current_duration);
   ui_->trajectoryCurrentDurationLabel->setText(QString().sprintf("%0.3f", data_->current_duration));
-  emit showState(state);
+  emit showJointState(state);
 }
 
 void JointTrajectoryWidget::onEnablePlayer()

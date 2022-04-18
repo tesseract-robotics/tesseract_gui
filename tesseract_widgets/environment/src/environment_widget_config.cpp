@@ -80,7 +80,7 @@ void EnvironmentWidgetConfig::setEnvironment(tesseract_environment::Environment:
 
   onUpdateModels();
 
-  emit environmentSet(*data_->environment);
+  emit environmentSet(data_->environment);
 }
 
 const tesseract_environment::Environment& EnvironmentWidgetConfig::environment() const

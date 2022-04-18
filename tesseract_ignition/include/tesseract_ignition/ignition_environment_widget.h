@@ -15,8 +15,10 @@ public:
   explicit IgnitionEnvironmentWidget(std::string scene_name, EntityManager &entity_manager, QWidget *parent = nullptr);
   ~IgnitionEnvironmentWidget() override;
 
+  tesseract_gui::EnvironmentWidget* clone() const override;
+
 private Q_SLOTS:
-  void onEnvironmentSet(const tesseract_environment::Environment& env);
+  void onEnvironmentSet(const std::shared_ptr<tesseract_environment::Environment>& env);
   void onEnvironmentChanged(const tesseract_environment::Environment& env);
   void onEnvironmentCurrentStateChanged(const tesseract_environment::Environment& env);
   void onLinkVisibleChanged(const std::string& link_name, bool visible);

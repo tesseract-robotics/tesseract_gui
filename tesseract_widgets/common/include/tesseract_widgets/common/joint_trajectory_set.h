@@ -97,6 +97,15 @@ public:
   void appendJointTrajectory(const JointTrajectory& joint_trajectory);
 
   /**
+   * @brief This is to be used if the trajectory only contains commands but no environment.
+   * @details This apply the stored commands to the provided and store the environment and clear the commands
+   * @throws If the trajectory set contains an environment it will throw an exception
+   * @throws If unable to apply stored commands to provided environment
+   * @param env The environment to apply internal command to
+   */
+  void applyEnvironment(tesseract_environment::Environment::UPtr env);
+
+  /**
    * @brief Get the environment for the joint trajectory set
    * @details This can be a nullptr. If nullptr then check for commands which should be applied to the existing environment.
    * @return The environment

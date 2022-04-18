@@ -101,7 +101,7 @@ void EnvironmentWidget::setConfiguration(std::shared_ptr<EnvironmentWidgetConfig
   if (config != nullptr)
   {
     disconnect(data_->config.get(), SIGNAL(modelsUpdated()), this , SLOT(onModelsUpdated()));
-    disconnect(data_->config.get(), SIGNAL(environmentSet(tesseract_environment::Environment)), this , SIGNAL(environmentSet(tesseract_environment::Environment)));
+    disconnect(data_->config.get(), SIGNAL(environmentSet(std::shared_ptr<tesseract_environment::Environment>)), this , SIGNAL(environmentSet(std::shared_ptr<tesseract_environment::Environment>)));
     disconnect(data_->config.get(), SIGNAL(environmentChanged(tesseract_environment::Environment)), this , SIGNAL(environmentChanged(tesseract_environment::Environment)));
     disconnect(data_->config.get(), SIGNAL(environmentCurrentStateChanged(tesseract_environment::Environment)), this , SIGNAL(environmentCurrentStateChanged(tesseract_environment::Environment)));
   }
@@ -118,12 +118,12 @@ void EnvironmentWidget::setConfiguration(std::shared_ptr<EnvironmentWidgetConfig
   onModelsUpdated();
 
   connect(data_->config.get(), SIGNAL(modelsUpdated()), this , SLOT(onModelsUpdated()));
-  connect(data_->config.get(), SIGNAL(environmentSet(tesseract_environment::Environment)), this , SIGNAL(environmentSet(tesseract_environment::Environment)));
+  connect(data_->config.get(), SIGNAL(environmentSet(std::shared_ptr<tesseract_environment::Environment>)), this , SIGNAL(environmentSet(std::shared_ptr<tesseract_environment::Environment>)));
   connect(data_->config.get(), SIGNAL(environmentChanged(tesseract_environment::Environment)), this , SIGNAL(environmentChanged(tesseract_environment::Environment)));
   connect(data_->config.get(), SIGNAL(environmentCurrentStateChanged(tesseract_environment::Environment)), this , SIGNAL(environmentCurrentStateChanged(tesseract_environment::Environment)));
 
   emit configurationSet(*data_->config);
-  emit environmentSet(data_->config->environment());
+  emit environmentSet(data_->config->getEnvironment());
 }
 
 const tesseract_environment::Environment& EnvironmentWidget::environment() const
@@ -149,6 +149,11 @@ tesseract_environment::Environment::Ptr EnvironmentWidget::getEnvironment()
 const std::unordered_map<std::string, LinkVisibilityProperties> &EnvironmentWidget::getLinkVisibilityProperties() const
 {
   return data_->config->getLinkVisibilityProperties();
+}
+
+EnvironmentWidget* EnvironmentWidget::clone() const
+{
+  return new EnvironmentWidget(nullptr, data_->toolbar!=nullptr); // NOLINT
 }
 
 void EnvironmentWidget::onModelsUpdated()

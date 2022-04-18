@@ -25,11 +25,20 @@
 
 #include <QWidget>
 #include <memory>
-#include <tesseract_environment/environment.h>
-#include <tesseract_common/joint_state.h>
 
 namespace Ui {
 class WorkbenchWidget;
+}
+
+namespace tesseract_environment
+{
+class Environment;
+}
+
+namespace tesseract_common
+{
+class JointTrajectorySet;
+class JointState;
 }
 
 namespace tesseract_gui
@@ -57,9 +66,11 @@ public Q_SLOTS:
   virtual void onRender();
 
 private Q_SLOTS:
-  void onConfigureJointTrajectoryEnvironment(tesseract_environment::Environment::Ptr environment,
-                                             const tesseract_environment::Commands& commands,
-                                             const tesseract_common::JointState& initial_state);
+  void onEnvironmentSet(const std::shared_ptr<tesseract_environment::Environment>& env);
+  void onConfigureJointTrajectorySet(const QString& uuid, const tesseract_common::JointTrajectorySet& joint_trajectory_set);
+  void onJointTrajectorySetRemoved(const QString& uuid);
+  void onJointTrajectorySetState(const tesseract_common::JointState& state);
+
 private:
   std::unique_ptr<Ui::WorkbenchWidget> ui;
   std::unique_ptr<WorkbenchWidgetImpl> data_;

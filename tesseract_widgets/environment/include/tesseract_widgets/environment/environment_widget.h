@@ -68,10 +68,15 @@ public:
   /** @brief Get the link visibility properties */
   const std::unordered_map<std::string, LinkVisibilityProperties>& getLinkVisibilityProperties() const;
 
+  /**
+   * @brief Make a clone of the widget
+   * @return A unique clone of the widget
+   */
+  virtual EnvironmentWidget* clone() const;
 
 Q_SIGNALS:
   void configurationSet(EnvironmentWidgetConfig& config);
-  void environmentSet(const tesseract_environment::Environment& env);
+  void environmentSet(const std::shared_ptr<tesseract_environment::Environment>& env);
   void environmentChanged(const tesseract_environment::Environment& env);
   void environmentCurrentStateChanged(const tesseract_environment::Environment& env);
   void linkVisibilityChanged(const std::vector<std::string>& links);

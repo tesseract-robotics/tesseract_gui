@@ -117,6 +117,10 @@ public:
   /** @brief Clear internal data */
   void clear();
 
+  /** @brief Get the entity manager that the container is associated with */
+  EntityManager& getEntityManager();
+  const EntityManager& getEntityManager() const;
+
 private:
   std::shared_ptr<EntityManager> manager_;
   std::string name_;

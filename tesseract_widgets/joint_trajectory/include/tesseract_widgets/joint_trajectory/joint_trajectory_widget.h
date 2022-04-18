@@ -72,11 +72,17 @@ public:
   void setModel(JointTrajectoryModel* model);
 
   /**
+   * @brief Set the default environment to use if environment was not provided with the trajectory set
+   * @param env The default environment to use for trajectory set not containing an environment
+   */
+  void setDefaultEnvironment(std::shared_ptr<const tesseract_environment::Environment> env);
+
+  /**
    * @brief Add joint trajectory set
    * @param trajectory_set The trajectory set associated with the key
    * @return The key associated with added trajectory for removal
    */
-  QString addJointTrajectorySet(const tesseract_common::JointTrajectorySet& trajectory_set);
+  QString addJointTrajectorySet(tesseract_common::JointTrajectorySet trajectory_set);
 
   /**
    * @brief Remove the joint trajectory set
@@ -92,7 +98,7 @@ public:
   bool hasJointTrajectorySet(const QString& key);
 
 Q_SIGNALS:
-  void showState(const tesseract_common::JointState& state);
+  void showJointState(const tesseract_common::JointState& state);
   void configureJointTrajectorySet(const QString& uuid, const tesseract_common::JointTrajectorySet& joint_trajectory_set);
   void jointTrajectorySetRemoved(const QString& uuid);
 

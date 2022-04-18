@@ -84,6 +84,18 @@ JointTrajectorySet::JointTrajectorySet(const std::unordered_map<std::string, dou
   environment_ = std::move(environment);
 }
 
+void JointTrajectorySet::applyEnvironment(tesseract_environment::Environment::UPtr env)
+{
+  if (environment_ != nullptr)
+    throw std::runtime_error("JointTrajectorySet: Cannot apply environment to trajectory set which already contains an environment");
+
+  environment_ = std::move(env);
+  if (!environment_->applyCommands(commands_))
+    throw std::runtime_error("JointTrajectorySet: Failed to apply commands to provided environment");
+
+  commands_.clear();
+}
+
 tesseract_environment::Environment::Ptr JointTrajectorySet::getEnvironment() const
 {
   return environment_;

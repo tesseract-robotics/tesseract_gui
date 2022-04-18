@@ -117,10 +117,13 @@ private Q_SLOTS:
   void onEnablePlayer();
   void onDisablePlayer();
 
-private:
+protected:
   std::unique_ptr<Ui::JointTrajectoryWidget> ui_;
   std::unique_ptr<JointTrajectoryWidgetPrivate> data_;
   void createToolBar();
+
+  bool saveJointTrajectorySet(QString filename, const QString& suffix);
+  bool openJointTrajectorySet(const QString& filename, const QString& suffix);
 };
 
 }

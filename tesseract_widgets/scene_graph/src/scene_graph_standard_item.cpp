@@ -26,48 +26,64 @@
 #include <tesseract_widgets/common/standard_item_utils.h>
 #include <tesseract_widgets/common/standard_item_type.h>
 #include <tesseract_widgets/common/icon_utils.h>
+#include <tesseract_scene_graph/graph.h>
 
 namespace tesseract_gui
 {
-SceneGraphStandardItem::SceneGraphStandardItem(tesseract_scene_graph::SceneGraph::UPtr scene_graph)
-  : QStandardItem(icons::getModelIcon(), "SceneGraph"), scene_graph(std::move(scene_graph))
+SceneGraphStandardItem::SceneGraphStandardItem() : QStandardItem(icons::getModelIcon(), "SceneGraph") {}
+
+SceneGraphStandardItem::SceneGraphStandardItem(const QString& text) : QStandardItem(icons::getModelIcon(), text) {}
+
+SceneGraphStandardItem::SceneGraphStandardItem(const QIcon& icon, const QString& text) : QStandardItem(icon, text) {}
+
+SceneGraphStandardItem::SceneGraphStandardItem(const tesseract_scene_graph::SceneGraph& scene_graph, bool checkable)
+  : QStandardItem(icons::getModelIcon(), "SceneGraph")
 {
-  ctor();
+  ctor(scene_graph, checkable);
 }
 
-SceneGraphStandardItem::SceneGraphStandardItem(const QString& text, tesseract_scene_graph::SceneGraph::UPtr scene_graph)
-  : QStandardItem(icons::getModelIcon(), text), scene_graph(std::move(scene_graph))
+SceneGraphStandardItem::SceneGraphStandardItem(const QString& text,
+                                               const tesseract_scene_graph::SceneGraph& scene_graph,
+                                               bool checkable)
+  : QStandardItem(icons::getModelIcon(), text)
 {
-  ctor();
+  ctor(scene_graph, checkable);
 }
 
 SceneGraphStandardItem::SceneGraphStandardItem(const QIcon& icon,
                                                const QString& text,
-                                               tesseract_scene_graph::SceneGraph::UPtr scene_graph)
-  : QStandardItem(icon, text), scene_graph(std::move(scene_graph))
+                                               const tesseract_scene_graph::SceneGraph& scene_graph,
+                                               bool checkable)
+  : QStandardItem(icon, text)
 {
-  ctor();
+  ctor(scene_graph, checkable);
 }
 
 int SceneGraphStandardItem::type() const { return static_cast<int>(StandardItemType::SCENE_GRAPH); }
 
-void SceneGraphStandardItem::ctor()
+void SceneGraphStandardItem::ctor(const tesseract_scene_graph::SceneGraph& scene_graph, bool checkable)
 {
-  appendRow(createStandardItemString("name", scene_graph->getName()));
-  appendRow(createStandardItemString("root_link", scene_graph->getRoot()));
+  appendRow(createStandardItemString("name", scene_graph.getName()));
+  appendRow(createStandardItemString("root_link", scene_graph.getRoot()));
 
   auto* links_item = new QStandardItem(icons::getLinkVectorIcon(), "Links");
-  for (const auto& link : scene_graph->getLinks())
+  for (const auto& link : scene_graph.getLinks())
   {
     auto* item = new LinkStandardItem(QString::fromStdString(link->getName()),
-                                      std::make_shared<tesseract_scene_graph::Link>(link->clone()));
+                                      std::make_shared<tesseract_scene_graph::Link>(link->clone()),
+                                      checkable);
+    if (checkable)
+    {
+      item->setCheckable(true);
+      item->setCheckState(Qt::CheckState::Checked);
+    }
     links_item->appendRow(item);
   }
   links_item->sortChildren(0);
   appendRow(links_item);
 
   auto* joints_item = new QStandardItem(icons::getJointVectorIcon(), "Joints");
-  for (const auto& joint : scene_graph->getJoints())
+  for (const auto& joint : scene_graph.getJoints())
   {
     auto* item = new JointStandardItem(QString::fromStdString(joint->getName()),
                                        std::make_shared<tesseract_scene_graph::Joint>(joint->clone()));
@@ -76,4 +92,5 @@ void SceneGraphStandardItem::ctor()
   joints_item->sortChildren(0);
   appendRow(joints_item);
 }
+
 }  // namespace tesseract_gui

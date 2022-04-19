@@ -38,8 +38,8 @@ class OPWParamsStandardItem : public QStandardItem
 {
 public:
   OPWParamsStandardItem(opw_kinematics::Parameters<double> params);
-  explicit OPWParamsStandardItem(const QString &text, opw_kinematics::Parameters<double> params);
-  OPWParamsStandardItem(const QIcon &icon, const QString &text, opw_kinematics::Parameters<double> params);
+  explicit OPWParamsStandardItem(const QString& text, opw_kinematics::Parameters<double> params);
+  OPWParamsStandardItem(const QIcon& icon, const QString& text, opw_kinematics::Parameters<double> params);
   int type() const override;
 
   opw_kinematics::Parameters<double> params;
@@ -47,6 +47,6 @@ public:
 private:
   void ctor();
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_KINEMATIC_GROUP_OPW_PARAMS_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_KINEMATIC_GROUP_OPW_PARAMS_STANDARD_ITEM_H

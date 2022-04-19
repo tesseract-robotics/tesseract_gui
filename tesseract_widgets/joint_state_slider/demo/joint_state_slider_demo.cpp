@@ -31,7 +31,7 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 #include <tesseract_urdf/urdf_parser.h>
 #include <tesseract_support/tesseract_support_resource_locator.h>
 
-int main(int argc, char ** argv)
+int main(int argc, char** argv)
 {
   QApplication app(argc, argv);
 

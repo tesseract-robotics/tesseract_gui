@@ -45,10 +45,7 @@ public:
 
   void reset() override;
 
-  const char* name() const override
-  {
-    return "Moving Average";
-  }
+  const char* name() const override { return "Moving Average"; }
 
   QWidget* optionsWidget() override;
 
@@ -60,5 +57,5 @@ private:
 
   std::optional<PlotData::Point> calculateNextPoint(size_t index) override;
 };
-}
-#endif // TESSERACT_WIDGETS_PLOT_TRANSFORMS_MOVING_AVERAGE_FILTER_H
+}  // namespace tesseract_gui
+#endif  // TESSERACT_WIDGETS_PLOT_TRANSFORMS_MOVING_AVERAGE_FILTER_H

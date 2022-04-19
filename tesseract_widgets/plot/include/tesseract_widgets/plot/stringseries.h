@@ -35,10 +35,7 @@ class StringSeries : public TimeseriesBase<StringRef>
 public:
   using TimeseriesBase<StringRef>::_points;
 
-  StringSeries(const std::string& name, PlotGroup::Ptr group)
-    : TimeseriesBase<StringRef>(name, group)
-  {
-  }
+  StringSeries(const std::string& name, PlotGroup::Ptr group) : TimeseriesBase<StringRef>(name, group) {}
 
   StringSeries(const StringSeries& other) = delete;
   StringSeries(StringSeries&& other) = default;

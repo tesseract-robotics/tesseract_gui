@@ -1,16 +1,24 @@
 find_package(tesseract_common REQUIRED)
 find_package(tesseract_environment REQUIRED)
-find_package(Qt5 COMPONENTS Core Gui Widgets Svg REQUIRED)
+find_package(
+  Qt5
+  COMPONENTS Core
+             Gui
+             Widgets
+             Svg
+  REQUIRED)
 
 # Load variable for clang tidy args, compiler options and cxx version
 tesseract_variables()
 
-QT5_ADD_RESOURCES(RESOURCES_common_RCC
+qt5_add_resources(
+  RESOURCES_common_RCC
   include/tesseract_widgets/common/resources/tesseract_widgets_resources.qrc
   include/tesseract_widgets/common/resources/themes/dark/qdarkstyle_dark.qrc
   include/tesseract_widgets/common/resources/themes/light/qdarkstyle_light.qrc)
 
-add_library(${PROJECT_NAME}_common SHARED
+add_library(
+  ${PROJECT_NAME}_common SHARED
   ${RESOURCES_common_RCC}
   src/calibration_info_standard_item.cpp
   src/collision_margin_data_standard_item.cpp
@@ -27,16 +35,18 @@ add_library(${PROJECT_NAME}_common SHARED
   src/entity_container.cpp
   src/joint_trajectory_set.cpp
   src/svg_util.cpp
-  src/icon_utils.cpp
-)
-target_link_libraries(${PROJECT_NAME}_common PUBLIC
-  tesseract::tesseract_common
-  tesseract::tesseract_environment
-  Qt5::Core Qt5::Gui Qt5::Widgets Qt5::Svg)
-target_include_directories(${PROJECT_NAME}_common PUBLIC
-    "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
-    "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/common>"
-    "$<INSTALL_INTERFACE:include>")
+  src/icon_utils.cpp)
+target_link_libraries(
+  ${PROJECT_NAME}_common
+  PUBLIC tesseract::tesseract_common
+         tesseract::tesseract_environment
+         Qt5::Core
+         Qt5::Gui
+         Qt5::Widgets
+         Qt5::Svg)
+target_include_directories(
+  ${PROJECT_NAME}_common PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
+                                "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/common>" "$<INSTALL_INTERFACE:include>")
 
 # Mark cpp header files for installation
 install(DIRECTORY include/${PROJECT_NAME} DESTINATION include)

@@ -40,25 +40,25 @@ std::string locateResource(const std::string& url)
   return mod_url;
 }
 
-int main(int argc, char ** argv)
+int main(int argc, char** argv)
 {
-    QApplication app(argc, argv);
+  QApplication app(argc, argv);
 
-    Q_INIT_RESOURCE(tesseract_gui_resources);
+  Q_INIT_RESOURCE(tesseract_gui_resources);
 
-    std::string path = std::string(TESSERACT_SUPPORT_DIR) + "/urdf/lbr_iiwa_14_r820.urdf";
+  std::string path = std::string(TESSERACT_SUPPORT_DIR) + "/urdf/lbr_iiwa_14_r820.urdf";
 
-    tesseract_common::SimpleResourceLocator locator(locateResource);
-    auto scene_graph = tesseract_urdf::parseURDFFile(path, locator);
+  tesseract_common::SimpleResourceLocator locator(locateResource);
+  auto scene_graph = tesseract_urdf::parseURDFFile(path, locator);
 
-    tesseract_gui::SimpleRenderWidget widget(scene_graph->getName());
-    widget.show();
+  tesseract_gui::SimpleRenderWidget widget(scene_graph->getName());
+  widget.show();
 
-    tesseract_gui::InteractiveViewControl view_control(scene_graph->getName());
-    app.installEventFilter(&view_control);
+  tesseract_gui::InteractiveViewControl view_control(scene_graph->getName());
+  app.installEventFilter(&view_control);
 
-    tesseract_gui::TransportSceneManager scene_manager(scene_graph->getName());
-    app.installEventFilter(&scene_manager);
+  tesseract_gui::TransportSceneManager scene_manager(scene_graph->getName());
+  app.installEventFilter(&scene_manager);
 
-    return app.exec();
+  return app.exec();
 }

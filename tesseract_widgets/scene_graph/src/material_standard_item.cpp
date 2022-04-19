@@ -29,30 +29,26 @@
 namespace tesseract_gui
 {
 MaterialStandardItem::MaterialStandardItem(tesseract_scene_graph::Material::Ptr material)
-  : QStandardItem(icons::getColorIcon(), "Material")
-  , material(std::move(material))
+  : QStandardItem(icons::getColorIcon(), "Material"), material(std::move(material))
 {
   ctor();
 }
 
-MaterialStandardItem::MaterialStandardItem(const QString &text, tesseract_scene_graph::Material::Ptr material)
-  : QStandardItem(icons::getColorIcon(), text)
-  , material(std::move(material))
+MaterialStandardItem::MaterialStandardItem(const QString& text, tesseract_scene_graph::Material::Ptr material)
+  : QStandardItem(icons::getColorIcon(), text), material(std::move(material))
 {
   ctor();
 }
 
-MaterialStandardItem::MaterialStandardItem(const QIcon &icon, const QString &text, tesseract_scene_graph::Material::Ptr material)
-  : QStandardItem(icon, text)
-  , material(std::move(material))
+MaterialStandardItem::MaterialStandardItem(const QIcon& icon,
+                                           const QString& text,
+                                           tesseract_scene_graph::Material::Ptr material)
+  : QStandardItem(icon, text), material(std::move(material))
 {
   ctor();
 }
 
-int MaterialStandardItem::type() const
-{
-  return static_cast<int>(StandardItemType::MATERIAL);
-}
+int MaterialStandardItem::type() const { return static_cast<int>(StandardItemType::MATERIAL); }
 
 void MaterialStandardItem::ctor()
 {
@@ -60,4 +56,4 @@ void MaterialStandardItem::ctor()
   appendRow(createStandardItemURL("texture", material->texture_filename));
   appendRow(new RGBAStandardItem(material->color));
 }
-}
+}  // namespace tesseract_gui

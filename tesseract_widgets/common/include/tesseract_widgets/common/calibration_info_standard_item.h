@@ -39,8 +39,10 @@ class CalibrationInfoStandardItem : public QStandardItem
 {
 public:
   CalibrationInfoStandardItem(tesseract_common::CalibrationInfo calibration_info);
-  explicit CalibrationInfoStandardItem(const QString &text, tesseract_common::CalibrationInfo calibration_info);
-  CalibrationInfoStandardItem(const QIcon &icon, const QString &text, tesseract_common::CalibrationInfo calibration_info);
+  explicit CalibrationInfoStandardItem(const QString& text, tesseract_common::CalibrationInfo calibration_info);
+  CalibrationInfoStandardItem(const QIcon& icon,
+                              const QString& text,
+                              tesseract_common::CalibrationInfo calibration_info);
   int type() const override;
 
   tesseract_common::CalibrationInfo calibration_info;
@@ -48,6 +50,6 @@ public:
 private:
   void ctor();
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_COMMON_CALIBRATION_INFO_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_COMMON_CALIBRATION_INFO_STANDARD_ITEM_H

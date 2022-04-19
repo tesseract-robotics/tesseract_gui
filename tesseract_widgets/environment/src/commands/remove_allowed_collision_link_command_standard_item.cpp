@@ -27,24 +27,26 @@
 
 namespace tesseract_gui
 {
-
-RemoveAllowedCollisionLinkCommandStandardItem::RemoveAllowedCollisionLinkCommandStandardItem(tesseract_environment::RemoveAllowedCollisionLinkCommand::ConstPtr command)
-  : QStandardItem(icons::getCommandEntryIcon(), "Remove Allowed Collision Link")
-  , command(std::move(command))
+RemoveAllowedCollisionLinkCommandStandardItem::RemoveAllowedCollisionLinkCommandStandardItem(
+    tesseract_environment::RemoveAllowedCollisionLinkCommand::ConstPtr command)
+  : QStandardItem(icons::getCommandEntryIcon(), "Remove Allowed Collision Link"), command(std::move(command))
 {
   ctor();
 }
 
-RemoveAllowedCollisionLinkCommandStandardItem::RemoveAllowedCollisionLinkCommandStandardItem(const QString &text, tesseract_environment::RemoveAllowedCollisionLinkCommand::ConstPtr command)
-  : QStandardItem(icons::getCommandEntryIcon(), text)
-  , command(std::move(command))
+RemoveAllowedCollisionLinkCommandStandardItem::RemoveAllowedCollisionLinkCommandStandardItem(
+    const QString& text,
+    tesseract_environment::RemoveAllowedCollisionLinkCommand::ConstPtr command)
+  : QStandardItem(icons::getCommandEntryIcon(), text), command(std::move(command))
 {
   ctor();
 }
 
-RemoveAllowedCollisionLinkCommandStandardItem::RemoveAllowedCollisionLinkCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::RemoveAllowedCollisionLinkCommand::ConstPtr command)
-  : QStandardItem(icon, text)
-  , command(std::move(command))
+RemoveAllowedCollisionLinkCommandStandardItem::RemoveAllowedCollisionLinkCommandStandardItem(
+    const QIcon& icon,
+    const QString& text,
+    tesseract_environment::RemoveAllowedCollisionLinkCommand::ConstPtr command)
+  : QStandardItem(icon, text), command(std::move(command))
 {
   ctor();
 }
@@ -58,4 +60,4 @@ void RemoveAllowedCollisionLinkCommandStandardItem::ctor()
 {
   appendRow(createStandardItemString("link name", command->getLinkName()));
 }
-}
+}  // namespace tesseract_gui

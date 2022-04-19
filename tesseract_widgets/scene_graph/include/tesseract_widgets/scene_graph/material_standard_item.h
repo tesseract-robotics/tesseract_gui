@@ -38,8 +38,8 @@ class MaterialStandardItem : public QStandardItem
 {
 public:
   MaterialStandardItem(tesseract_scene_graph::Material::Ptr material);
-  explicit MaterialStandardItem(const QString &text, tesseract_scene_graph::Material::Ptr material);
-  MaterialStandardItem(const QIcon &icon, const QString &text, tesseract_scene_graph::Material::Ptr material);
+  explicit MaterialStandardItem(const QString& text, tesseract_scene_graph::Material::Ptr material);
+  MaterialStandardItem(const QIcon& icon, const QString& text, tesseract_scene_graph::Material::Ptr material);
   int type() const override;
 
   tesseract_scene_graph::Material::Ptr material;
@@ -47,6 +47,6 @@ public:
 private:
   void ctor();
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_SCENE_GRAPH_MATERIAL_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_SCENE_GRAPH_MATERIAL_STANDARD_ITEM_H

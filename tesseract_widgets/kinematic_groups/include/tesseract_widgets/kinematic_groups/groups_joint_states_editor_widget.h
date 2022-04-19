@@ -37,7 +37,8 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <tesseract_widgets/kinematic_groups/group_joint_states_model.h>
 
-namespace Ui {
+namespace Ui
+{
 class GroupsJointStatesEditorWidget;
 }
 
@@ -50,9 +51,9 @@ class GroupsJointStatesEditorWidget : public QWidget
   Q_OBJECT
 
 public:
-  explicit GroupsJointStatesEditorWidget(QStringListModel *group_names_model,
+  explicit GroupsJointStatesEditorWidget(QStringListModel* group_names_model,
                                          GroupJointsRetriever group_joints_retriever,
-                                         QWidget *parent = nullptr);
+                                         QWidget* parent = nullptr);
   ~GroupsJointStatesEditorWidget();
 
   void setModel(GroupJointStatesModel* model);
@@ -70,6 +71,6 @@ private:
   GroupJointsRetriever group_joints_retriever_;
   GroupJointStatesModel* model_;
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_GROUPS_JOINT_STATES_EDITOR_WIDGET_H
+#endif  // TESSERACT_WIDGETS_GROUPS_JOINT_STATES_EDITOR_WIDGET_H

@@ -105,4 +105,4 @@ void TransformSelector::on_transform_selector_accepted()
   }
   *_default_trans = ui->comboDefault->currentText();
 }
-}
+}  // namespace tesseract_gui

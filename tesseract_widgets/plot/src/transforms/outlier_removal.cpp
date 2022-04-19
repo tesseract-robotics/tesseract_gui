@@ -25,7 +25,6 @@
 
 namespace tesseract_gui
 {
-
 OutlierRemovalFilter::OutlierRemovalFilter()
   : ui(std::make_unique<Ui::OutlierRemovalFilter>())
   , _widget(std::make_unique<QWidget>())
@@ -34,16 +33,14 @@ OutlierRemovalFilter::OutlierRemovalFilter()
 {
   ui->setupUi(_widget.get());
 
-  connect(ui->spinBoxFactor, qOverload<double>(&QDoubleSpinBox::valueChanged), this,
-          [=](int) { emit parametersChanged(); });
+  connect(ui->spinBoxFactor, qOverload<double>(&QDoubleSpinBox::valueChanged), this, [=](int) {
+    emit parametersChanged();
+  });
 }
 
-OutlierRemovalFilter::~OutlierRemovalFilter()=default;
+OutlierRemovalFilter::~OutlierRemovalFilter() = default;
 
-QWidget* OutlierRemovalFilter::optionsWidget()
-{
-  return _widget.get();
-}
+QWidget* OutlierRemovalFilter::optionsWidget() { return _widget.get(); }
 
 std::optional<PlotData::Point> OutlierRemovalFilter::calculateNextPoint(size_t index)
 {
@@ -70,4 +67,4 @@ std::optional<PlotData::Point> OutlierRemovalFilter::calculateNextPoint(size_t i
   }
   return dataSource()->at(index - 1);
 }
-}
+}  // namespace tesseract_gui

@@ -64,4 +64,4 @@ QPixmap LoadSvg(QString filename, QString style_name)
 
   return QPixmap::fromImage(image);
 }
-}
+}  // namespace tesseract_gui

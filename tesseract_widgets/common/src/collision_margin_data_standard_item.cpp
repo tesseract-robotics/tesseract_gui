@@ -28,32 +28,32 @@
 
 namespace tesseract_gui
 {
-
-CollisionMarginDataStandardItem::CollisionMarginDataStandardItem(tesseract_common::CollisionMarginData collision_margin_data)
+CollisionMarginDataStandardItem::CollisionMarginDataStandardItem(
+    tesseract_common::CollisionMarginData collision_margin_data)
   : QStandardItem(icons::getCubeIcon(), "Collision Margin Data")
   , collision_margin_data(std::move(collision_margin_data))
 {
   ctor();
 }
 
-CollisionMarginDataStandardItem::CollisionMarginDataStandardItem(const QString &text, tesseract_common::CollisionMarginData collision_margin_data)
-  : QStandardItem(icons::getCubeIcon(), text)
-  , collision_margin_data(std::move(collision_margin_data))
+CollisionMarginDataStandardItem::CollisionMarginDataStandardItem(
+    const QString& text,
+    tesseract_common::CollisionMarginData collision_margin_data)
+  : QStandardItem(icons::getCubeIcon(), text), collision_margin_data(std::move(collision_margin_data))
 {
   ctor();
 }
 
-CollisionMarginDataStandardItem::CollisionMarginDataStandardItem(const QIcon &icon, const QString &text, tesseract_common::CollisionMarginData collision_margin_data)
-  : QStandardItem(icon, text)
-  , collision_margin_data(std::move(collision_margin_data))
+CollisionMarginDataStandardItem::CollisionMarginDataStandardItem(
+    const QIcon& icon,
+    const QString& text,
+    tesseract_common::CollisionMarginData collision_margin_data)
+  : QStandardItem(icon, text), collision_margin_data(std::move(collision_margin_data))
 {
   ctor();
 }
 
-int CollisionMarginDataStandardItem::type() const
-{
-  return static_cast<int>(StandardItemType::COLLISION_MARGIN_DATA);
-}
+int CollisionMarginDataStandardItem::type() const { return static_cast<int>(StandardItemType::COLLISION_MARGIN_DATA); }
 
 void CollisionMarginDataStandardItem::ctor()
 {
@@ -61,5 +61,4 @@ void CollisionMarginDataStandardItem::ctor()
   appendRow(createStandardItemFloat("Max Margin", collision_margin_data.getMaxCollisionMargin()));
   appendRow(new PairsCollisionMarginDataStandardItem(collision_margin_data.getPairCollisionMargins()));
 }
-}
-
+}  // namespace tesseract_gui

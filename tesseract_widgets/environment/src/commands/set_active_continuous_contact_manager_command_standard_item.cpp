@@ -27,24 +27,26 @@
 
 namespace tesseract_gui
 {
-
-SetActiveContinuousContactManagerCommandStandardItem::SetActiveContinuousContactManagerCommandStandardItem(tesseract_environment::SetActiveContinuousContactManagerCommand::ConstPtr command)
-  : QStandardItem(icons::getCommandEntryIcon(), "Set Active Continuous Contact Manager")
-  , command(std::move(command))
+SetActiveContinuousContactManagerCommandStandardItem::SetActiveContinuousContactManagerCommandStandardItem(
+    tesseract_environment::SetActiveContinuousContactManagerCommand::ConstPtr command)
+  : QStandardItem(icons::getCommandEntryIcon(), "Set Active Continuous Contact Manager"), command(std::move(command))
 {
   ctor();
 }
 
-SetActiveContinuousContactManagerCommandStandardItem::SetActiveContinuousContactManagerCommandStandardItem(const QString &text, tesseract_environment::SetActiveContinuousContactManagerCommand::ConstPtr command)
-  : QStandardItem(icons::getCommandEntryIcon(), text)
-  , command(std::move(command))
+SetActiveContinuousContactManagerCommandStandardItem::SetActiveContinuousContactManagerCommandStandardItem(
+    const QString& text,
+    tesseract_environment::SetActiveContinuousContactManagerCommand::ConstPtr command)
+  : QStandardItem(icons::getCommandEntryIcon(), text), command(std::move(command))
 {
   ctor();
 }
 
-SetActiveContinuousContactManagerCommandStandardItem::SetActiveContinuousContactManagerCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::SetActiveContinuousContactManagerCommand::ConstPtr command)
-  : QStandardItem(icon, text)
-  , command(std::move(command))
+SetActiveContinuousContactManagerCommandStandardItem::SetActiveContinuousContactManagerCommandStandardItem(
+    const QIcon& icon,
+    const QString& text,
+    tesseract_environment::SetActiveContinuousContactManagerCommand::ConstPtr command)
+  : QStandardItem(icon, text), command(std::move(command))
 {
   ctor();
 }
@@ -58,4 +60,4 @@ void SetActiveContinuousContactManagerCommandStandardItem::ctor()
 {
   appendRow(createStandardItemString("contact manager", command->getName()));
 }
-}
+}  // namespace tesseract_gui

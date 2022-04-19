@@ -37,9 +37,7 @@ private:
   double _time_offset;
 
 public:
-  QwtSeriesWrapper(const PlotDataXY* data) : _data(data), _time_offset(0.0)
-  {
-  }
+  QwtSeriesWrapper(const PlotDataXY* data) : _data(data), _time_offset(0.0) {}
 
   QPointF sample(size_t i) const override;
 
@@ -63,9 +61,7 @@ public:
 class QwtTimeseries : public QwtSeriesWrapper
 {
 public:
-  QwtTimeseries(const PlotData* data) : QwtSeriesWrapper(data), _ts_data(data)
-  {
-  }
+  QwtTimeseries(const PlotData* data) : QwtSeriesWrapper(data), _ts_data(data) {}
 
   virtual RangeOpt getVisualizationRangeY(Range range_X) override;
 
@@ -102,5 +98,5 @@ protected:
 };
 
 //---------------------------------------------------------
-}
+}  // namespace tesseract_gui
 #endif  // TESSERACT_WIDGETS_PLOT_TIMESERIES_QWT_H

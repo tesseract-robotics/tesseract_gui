@@ -39,10 +39,7 @@ public:
 
   virtual ~PlotZoomer() override = default;
 
-  void keepAspectRatio(bool doKeep)
-  {
-    _keep_aspect_ratio = doKeep;
-  }
+  void keepAspectRatio(bool doKeep) { _keep_aspect_ratio = doKeep; }
 
 protected:
   virtual void widgetMousePressEvent(QMouseEvent* event) override;
@@ -60,5 +57,5 @@ private:
   bool _keep_aspect_ratio;
   QPoint _initial_pos;
 };
-}
+}  // namespace tesseract_gui
 #endif  // TESSERACT_WIDGETS_PLOT_PLOT_ZOOMER_H

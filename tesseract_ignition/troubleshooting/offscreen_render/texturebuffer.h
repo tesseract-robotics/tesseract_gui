@@ -7,32 +7,32 @@
 class TextureBuffer
 {
 public:
-    static TextureBuffer *instance();
+  static TextureBuffer* instance();
 
-    bool ready() const { return m_ready; }
+  bool ready() const { return m_ready; }
 
-    void createTexture(QOpenGLContext *context);
-    void deleteTexture(QOpenGLContext *context);
+  void createTexture(QOpenGLContext* context);
+  void deleteTexture(QOpenGLContext* context);
 
-    void updateTexture(QOpenGLContext *context, int width, int height);
-    void drawTexture(QOpenGLContext *context, int vertextCount);
-
-private:
-    TextureBuffer();
-    ~TextureBuffer();
+  void updateTexture(QOpenGLContext* context, int width, int height);
+  void drawTexture(QOpenGLContext* context, int vertextCount);
 
 private:
-    TextureBuffer(const TextureBuffer &) = delete;
-    TextureBuffer &operator =(const TextureBuffer &) = delete;
-    TextureBuffer(const TextureBuffer &&) = delete;
-    TextureBuffer &operator =(const TextureBuffer &&) = delete;
+  TextureBuffer();
+  ~TextureBuffer();
 
 private:
-    mutable QMutex m_mutex;
+  TextureBuffer(const TextureBuffer&) = delete;
+  TextureBuffer& operator=(const TextureBuffer&) = delete;
+  TextureBuffer(const TextureBuffer&&) = delete;
+  TextureBuffer& operator=(const TextureBuffer&&) = delete;
 
-    bool m_ready;
+private:
+  mutable QMutex m_mutex;
 
-    unsigned m_texture;
+  bool m_ready;
+
+  unsigned m_texture;
 };
 
-#endif // TEXTUREBUFFER_H
+#endif  // TEXTUREBUFFER_H

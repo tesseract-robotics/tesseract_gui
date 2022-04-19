@@ -27,18 +27,13 @@
 
 namespace tesseract_gui
 {
-
 IntegralTransform::IntegralTransform()
-  : _widget(std::make_unique<QWidget>())
-  , ui(std::make_unique<Ui::IntegralTransform>())
-  , _dT(0.0)
+  : _widget(std::make_unique<QWidget>()), ui(std::make_unique<Ui::IntegralTransform>()), _dT(0.0)
 {
   ui->setupUi(_widget.get());
-  ui->lineEditCustom->setValidator(
-      new QDoubleValidator(0.0001, 1000, 4, ui->lineEditCustom));
+  ui->lineEditCustom->setValidator(new QDoubleValidator(0.0001, 1000, 4, ui->lineEditCustom));
 
-  connect(ui->buttonCompute, &QPushButton::clicked, this,
-          &IntegralTransform::on_buttonCompute_clicked);
+  connect(ui->buttonCompute, &QPushButton::clicked, this, &IntegralTransform::on_buttonCompute_clicked);
 
   connect(ui->lineEditCustom, &QLineEdit::editingFinished, this, [=]() {
     _dT = ui->lineEditCustom->text().toDouble();
@@ -147,4 +142,4 @@ void IntegralTransform::on_buttonCompute_clicked()
     emit parametersChanged();
   }
 }
-}
+}  // namespace tesseract_gui

@@ -28,30 +28,26 @@
 namespace tesseract_gui
 {
 OPWParamsStandardItem::OPWParamsStandardItem(opw_kinematics::Parameters<double> params)
-  : QStandardItem(icons::getCubeIcon(), "OPW")
-  , params(params)
+  : QStandardItem(icons::getCubeIcon(), "OPW"), params(params)
 {
   ctor();
 }
 
-OPWParamsStandardItem::OPWParamsStandardItem(const QString &text, opw_kinematics::Parameters<double> params)
-  : QStandardItem(icons::getCubeIcon(), text)
-  , params(params)
+OPWParamsStandardItem::OPWParamsStandardItem(const QString& text, opw_kinematics::Parameters<double> params)
+  : QStandardItem(icons::getCubeIcon(), text), params(params)
 {
   ctor();
 }
 
-OPWParamsStandardItem::OPWParamsStandardItem(const QIcon &icon, const QString &text, opw_kinematics::Parameters<double> params)
-  : QStandardItem(icon, text)
-  , params(params)
+OPWParamsStandardItem::OPWParamsStandardItem(const QIcon& icon,
+                                             const QString& text,
+                                             opw_kinematics::Parameters<double> params)
+  : QStandardItem(icon, text), params(params)
 {
   ctor();
 }
 
-int OPWParamsStandardItem::type() const
-{
-  return static_cast<int>(StandardItemType::OPW_PARAMS);
-}
+int OPWParamsStandardItem::type() const { return static_cast<int>(StandardItemType::OPW_PARAMS); }
 
 void OPWParamsStandardItem::ctor()
 {
@@ -67,15 +63,15 @@ void OPWParamsStandardItem::ctor()
 
   auto* offsets_item = new QStandardItem("offsets");
   for (std::size_t i = 0; i < 6; ++i)
-    offsets_item->appendRow(createStandardItemFloat(QString("[%1]").arg(i).toStdString(),params.offsets[0]));
+    offsets_item->appendRow(createStandardItemFloat(QString("[%1]").arg(i).toStdString(), params.offsets[0]));
 
   appendRow(offsets_item);
 
   auto* correction_item = new QStandardItem("sign correction");
   for (std::size_t i = 0; i < 6; ++i)
-    correction_item->appendRow(createStandardItemFloat(QString("[%1]").arg(i).toStdString(), params.sign_corrections[0]));
+    correction_item->appendRow(
+        createStandardItemFloat(QString("[%1]").arg(i).toStdString(), params.sign_corrections[0]));
 
   appendRow(correction_item);
 }
-}
-
+}  // namespace tesseract_gui

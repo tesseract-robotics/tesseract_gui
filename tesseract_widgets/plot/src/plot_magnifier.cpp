@@ -32,8 +32,7 @@
 
 namespace tesseract_gui
 {
-PlotMagnifier::PlotMagnifier(QWidget* canvas)
-  : QwtPlotMagnifier(canvas), _default_mode(BOTH_AXES)
+PlotMagnifier::PlotMagnifier(QWidget* canvas) : QwtPlotMagnifier(canvas), _default_mode(BOTH_AXES)
 {
   for (int axisId = 0; axisId < QwtPlot::axisCnt; axisId++)
   {
@@ -42,9 +41,7 @@ PlotMagnifier::PlotMagnifier(QWidget* canvas)
   }
 }
 
-PlotMagnifier::~PlotMagnifier()
-{
-}
+PlotMagnifier::~PlotMagnifier() {}
 
 void PlotMagnifier::setAxisLimits(int axis, double lower, double upper)
 {
@@ -170,4 +167,4 @@ void PlotMagnifier::widgetMousePressEvent(QMouseEvent* event)
   _mouse_position = invTransform(event->pos());
   QwtPlotMagnifier::widgetMousePressEvent(event);
 }
-}
+}  // namespace tesseract_gui

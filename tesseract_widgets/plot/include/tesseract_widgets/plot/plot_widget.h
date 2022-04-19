@@ -71,15 +71,9 @@ public:
 
   void changeBackgroundColor(QColor color);
 
-  double timeOffset() const
-  {
-    return _time_offset;
-  }
+  double timeOffset() const { return _time_offset; }
 
-  PlotDataMapRef& datamap()
-  {
-    return _mapped_data;
-  }
+  PlotDataMapRef& datamap() { return _mapped_data; }
 
   CurveInfo* addCurveXY(std::string name_x, std::string name_y, QString curve_name = "");
 
@@ -207,16 +201,15 @@ private:
 
   QwtSeriesWrapper* createCurveXY(const PlotData* data_x, const PlotData* data_y);
 
-  QwtSeriesWrapper* createTimeSeries(const QString& transform_ID,
-                                     const PlotData* data) override;
+  QwtSeriesWrapper* createTimeSeries(const QString& transform_ID, const PlotData* data) override;
 
   double _time_offset;
 
   Range _custom_Y_limits;
 
-//  TransformSelector* _transform_select_dialog;
+  //  TransformSelector* _transform_select_dialog;
 
-//  SnippetsMap _snippets;
+  //  SnippetsMap _snippets;
 
   bool _context_menu_enabled;
 
@@ -224,6 +217,6 @@ private:
   void rescaleEqualAxisScaling();
   void overrideCursonMove();
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_PLOT_PLOT_WIDGET_H
+#endif  // TESSERACT_WIDGETS_PLOT_PLOT_WIDGET_H

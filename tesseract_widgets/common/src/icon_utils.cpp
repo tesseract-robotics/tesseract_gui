@@ -365,4 +365,4 @@ QIcon getDeselectAllLinksIcon()
   static QIcon icon = QIcon(":/tesseract_widgets/ignition/deselect-link.png");
   return icon;
 }
-}
+}  // namespace tesseract_gui::icons

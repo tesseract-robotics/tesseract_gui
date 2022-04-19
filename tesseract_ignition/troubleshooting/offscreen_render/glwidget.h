@@ -12,22 +12,22 @@ class RenderThread;
 class GLWidget : public QOpenGLWidget, public QOpenGLFunctions_4_5_Core
 {
 public:
-    GLWidget(QWidget *parent = nullptr);
-    ~GLWidget() override;
+  GLWidget(QWidget* parent = nullptr);
+  ~GLWidget() override;
 
 protected:
-    void initializeGL() override;
-    void paintGL() override;
-    void resizeGL(int w, int h) override;
+  void initializeGL() override;
+  void paintGL() override;
+  void resizeGL(int w, int h) override;
 
 private:
-    void initRenderThread();
+  void initRenderThread();
 
 private:
-    unsigned m_vao = 0;
-    unsigned m_vbo = 0;
-    std::unique_ptr<QOpenGLShaderProgram> m_program;
-    RenderThread *m_thread = nullptr;
+  unsigned m_vao = 0;
+  unsigned m_vbo = 0;
+  std::unique_ptr<QOpenGLShaderProgram> m_program;
+  RenderThread* m_thread = nullptr;
 };
 
-#endif // GLWIDGET_H
+#endif  // GLWIDGET_H

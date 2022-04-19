@@ -35,11 +35,9 @@ MovingAverageFilter::MovingAverageFilter()
 {
   ui->setupUi(_widget.get());
 
-  connect(ui->spinBoxSamples, qOverload<int>(&QSpinBox::valueChanged), this,
-          [=](int) { emit parametersChanged(); });
+  connect(ui->spinBoxSamples, qOverload<int>(&QSpinBox::valueChanged), this, [=](int) { emit parametersChanged(); });
 
-  connect(ui->checkBoxTimeOffset, &QCheckBox::toggled, this,
-          [=]() { emit parametersChanged(); });
+  connect(ui->checkBoxTimeOffset, &QCheckBox::toggled, this, [=]() { emit parametersChanged(); });
 }
 
 MovingAverageFilter::~MovingAverageFilter() = default;
@@ -52,8 +50,7 @@ void MovingAverageFilter::reset()
 
 std::optional<PlotData::Point> MovingAverageFilter::calculateNextPoint(size_t index)
 {
-  size_t buffer_size =
-      std::min(size_t(ui->spinBoxSamples->value()), size_t(dataSource()->size()));
+  size_t buffer_size = std::min(size_t(ui->spinBoxSamples->value()), size_t(dataSource()->size()));
   if (buffer_size != _buffer.size())
   {
     _buffer.resize(buffer_size);
@@ -85,8 +82,5 @@ std::optional<PlotData::Point> MovingAverageFilter::calculateNextPoint(size_t in
   return out;
 }
 
-QWidget* MovingAverageFilter::optionsWidget()
-{
-  return _widget.get();
-}
-}
+QWidget* MovingAverageFilter::optionsWidget() { return _widget.get(); }
+}  // namespace tesseract_gui

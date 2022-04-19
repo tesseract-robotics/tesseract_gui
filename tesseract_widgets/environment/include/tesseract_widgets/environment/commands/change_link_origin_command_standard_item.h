@@ -38,16 +38,18 @@ class ChangeLinkOriginCommandStandardItem : public QStandardItem
 {
 public:
   explicit ChangeLinkOriginCommandStandardItem(tesseract_environment::ChangeLinkOriginCommand::ConstPtr command);
-  explicit ChangeLinkOriginCommandStandardItem(const QString &text, tesseract_environment::ChangeLinkOriginCommand::ConstPtr command);
-  explicit ChangeLinkOriginCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::ChangeLinkOriginCommand::ConstPtr command);
+  explicit ChangeLinkOriginCommandStandardItem(const QString& text,
+                                               tesseract_environment::ChangeLinkOriginCommand::ConstPtr command);
+  explicit ChangeLinkOriginCommandStandardItem(const QIcon& icon,
+                                               const QString& text,
+                                               tesseract_environment::ChangeLinkOriginCommand::ConstPtr command);
   int type() const override;
-
 
   tesseract_environment::ChangeLinkOriginCommand::ConstPtr command;
 
 private:
   void ctor();
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_ENVIRONMENT_CHANGE_LINK_ORIGIN_COMMAND_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_ENVIRONMENT_CHANGE_LINK_ORIGIN_COMMAND_STANDARD_ITEM_H

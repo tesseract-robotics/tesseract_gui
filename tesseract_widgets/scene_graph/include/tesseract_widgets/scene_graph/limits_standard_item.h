@@ -38,8 +38,8 @@ class LimitsStandardItem : public QStandardItem
 {
 public:
   LimitsStandardItem(tesseract_scene_graph::JointLimits::Ptr limits);
-  explicit LimitsStandardItem(const QString &text, tesseract_scene_graph::JointLimits::Ptr limits);
-  LimitsStandardItem(const QIcon &icon, const QString &text, tesseract_scene_graph::JointLimits::Ptr limits);
+  explicit LimitsStandardItem(const QString& text, tesseract_scene_graph::JointLimits::Ptr limits);
+  LimitsStandardItem(const QIcon& icon, const QString& text, tesseract_scene_graph::JointLimits::Ptr limits);
   int type() const override;
 
   tesseract_scene_graph::JointLimits::Ptr limits;
@@ -47,6 +47,6 @@ public:
 private:
   void ctor();
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_SCENE_GRAPH_LIMITS_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_SCENE_GRAPH_LIMITS_STANDARD_ITEM_H

@@ -27,24 +27,26 @@
 
 namespace tesseract_gui
 {
-
-RemoveJointCommandStandardItem::RemoveJointCommandStandardItem(tesseract_environment::RemoveJointCommand::ConstPtr command)
-  : QStandardItem(icons::getCommandEntryIcon(), "Remove Joint")
-  , command(std::move(command))
+RemoveJointCommandStandardItem::RemoveJointCommandStandardItem(
+    tesseract_environment::RemoveJointCommand::ConstPtr command)
+  : QStandardItem(icons::getCommandEntryIcon(), "Remove Joint"), command(std::move(command))
 {
   ctor();
 }
 
-RemoveJointCommandStandardItem::RemoveJointCommandStandardItem(const QString &text, tesseract_environment::RemoveJointCommand::ConstPtr command)
-  : QStandardItem(icons::getCommandEntryIcon(), text)
-  , command(std::move(command))
+RemoveJointCommandStandardItem::RemoveJointCommandStandardItem(
+    const QString& text,
+    tesseract_environment::RemoveJointCommand::ConstPtr command)
+  : QStandardItem(icons::getCommandEntryIcon(), text), command(std::move(command))
 {
   ctor();
 }
 
-RemoveJointCommandStandardItem::RemoveJointCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::RemoveJointCommand::ConstPtr command)
-  : QStandardItem(icon, text)
-  , command(std::move(command))
+RemoveJointCommandStandardItem::RemoveJointCommandStandardItem(
+    const QIcon& icon,
+    const QString& text,
+    tesseract_environment::RemoveJointCommand::ConstPtr command)
+  : QStandardItem(icon, text), command(std::move(command))
 {
   ctor();
 }
@@ -58,4 +60,4 @@ void RemoveJointCommandStandardItem::ctor()
 {
   appendRow(createStandardItemString("joint name", command->getJointName()));
 }
-}
+}  // namespace tesseract_gui

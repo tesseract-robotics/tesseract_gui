@@ -25,9 +25,8 @@
 #include <QRegExpValidator>
 namespace tesseract_gui
 {
-AddAllowedCollisionEntryDialog::AddAllowedCollisionEntryDialog(QWidget *parent)
-  : QDialog(parent)
-  , ui_(std::make_unique<Ui::AddAllowedCollisionEntryDialog>())
+AddAllowedCollisionEntryDialog::AddAllowedCollisionEntryDialog(QWidget* parent)
+  : QDialog(parent), ui_(std::make_unique<Ui::AddAllowedCollisionEntryDialog>())
 {
   ui_->setupUi(this);
   ui_->linkName1LineEdit->setValidator(new QRegExpValidator(QRegExp("\\S*")));
@@ -38,19 +37,10 @@ AddAllowedCollisionEntryDialog::AddAllowedCollisionEntryDialog(QWidget *parent)
 
 AddAllowedCollisionEntryDialog::~AddAllowedCollisionEntryDialog() = default;
 
-QString AddAllowedCollisionEntryDialog::getLinkName1() const
-{
-  return ui_->linkName1LineEdit->text();
-}
+QString AddAllowedCollisionEntryDialog::getLinkName1() const { return ui_->linkName1LineEdit->text(); }
 
-QString AddAllowedCollisionEntryDialog::getLinkName2() const
-{
-  return ui_->linkName2LineEdit->text();
-}
+QString AddAllowedCollisionEntryDialog::getLinkName2() const { return ui_->linkName2LineEdit->text(); }
 
-QString AddAllowedCollisionEntryDialog::getReason() const
-{
-  return ui_->reasonLineEdit->text();
-}
+QString AddAllowedCollisionEntryDialog::getReason() const { return ui_->reasonLineEdit->text(); }
 
-}
+}  // namespace tesseract_gui

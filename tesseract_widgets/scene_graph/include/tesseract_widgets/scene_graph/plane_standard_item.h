@@ -38,8 +38,8 @@ class PlaneStandardItem : public QStandardItem
 {
 public:
   PlaneStandardItem(tesseract_geometry::Plane::Ptr plane);
-  explicit PlaneStandardItem(const QString &text, tesseract_geometry::Plane::Ptr plane);
-  PlaneStandardItem(const QIcon &icon, const QString &text, tesseract_geometry::Plane::Ptr plane);
+  explicit PlaneStandardItem(const QString& text, tesseract_geometry::Plane::Ptr plane);
+  PlaneStandardItem(const QIcon& icon, const QString& text, tesseract_geometry::Plane::Ptr plane);
   int type() const override;
 
   tesseract_geometry::Plane::Ptr plane;
@@ -47,6 +47,6 @@ public:
 private:
   void ctor();
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_SCENE_GRAPH_PLANE_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_SCENE_GRAPH_PLANE_STANDARD_ITEM_H

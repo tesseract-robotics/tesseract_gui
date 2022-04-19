@@ -31,10 +31,10 @@ class NamespaceStandardItem : public QStandardItem
 {
 public:
   explicit NamespaceStandardItem();
-  explicit NamespaceStandardItem(const QString &text);
-  explicit NamespaceStandardItem(const QIcon &icon, const QString &text);
+  explicit NamespaceStandardItem(const QString& text);
+  explicit NamespaceStandardItem(const QIcon& icon, const QString& text);
   int type() const override;
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_COMMON_NAMESPACE_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_COMMON_NAMESPACE_STANDARD_ITEM_H

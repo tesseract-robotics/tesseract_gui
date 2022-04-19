@@ -6,11 +6,11 @@
 
 namespace tesseract_gui
 {
-  QApplication* getApp();
+QApplication* getApp();
 
-  ignition::rendering::ScenePtr sceneFromFirstRenderEngine(const std::string& scene_name);
+ignition::rendering::ScenePtr sceneFromFirstRenderEngine(const std::string& scene_name);
 
-  ignition::rendering::ScenePtr sceneFromRenderEngine(const std::string& engine_name, const std::string& scene_name);
+ignition::rendering::ScenePtr sceneFromRenderEngine(const std::string& engine_name, const std::string& scene_name);
 
-}
-#endif // TESSERACT_IGNITION_GUI_UTILS_H
+}  // namespace tesseract_gui
+#endif  // TESSERACT_IGNITION_GUI_UTILS_H

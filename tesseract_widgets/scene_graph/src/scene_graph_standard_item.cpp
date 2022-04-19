@@ -30,30 +30,26 @@
 namespace tesseract_gui
 {
 SceneGraphStandardItem::SceneGraphStandardItem(tesseract_scene_graph::SceneGraph::UPtr scene_graph)
-  : QStandardItem(icons::getModelIcon(), "SceneGraph")
-  , scene_graph(std::move(scene_graph))
+  : QStandardItem(icons::getModelIcon(), "SceneGraph"), scene_graph(std::move(scene_graph))
 {
   ctor();
 }
 
-SceneGraphStandardItem::SceneGraphStandardItem(const QString &text, tesseract_scene_graph::SceneGraph::UPtr scene_graph)
-  : QStandardItem(icons::getModelIcon(), text)
-  , scene_graph(std::move(scene_graph))
+SceneGraphStandardItem::SceneGraphStandardItem(const QString& text, tesseract_scene_graph::SceneGraph::UPtr scene_graph)
+  : QStandardItem(icons::getModelIcon(), text), scene_graph(std::move(scene_graph))
 {
   ctor();
 }
 
-SceneGraphStandardItem::SceneGraphStandardItem(const QIcon &icon, const QString &text, tesseract_scene_graph::SceneGraph::UPtr scene_graph)
-  : QStandardItem(icon, text)
-  , scene_graph(std::move(scene_graph))
+SceneGraphStandardItem::SceneGraphStandardItem(const QIcon& icon,
+                                               const QString& text,
+                                               tesseract_scene_graph::SceneGraph::UPtr scene_graph)
+  : QStandardItem(icon, text), scene_graph(std::move(scene_graph))
 {
   ctor();
 }
 
-int SceneGraphStandardItem::type() const
-{
-  return static_cast<int>(StandardItemType::SCENE_GRAPH);
-}
+int SceneGraphStandardItem::type() const { return static_cast<int>(StandardItemType::SCENE_GRAPH); }
 
 void SceneGraphStandardItem::ctor()
 {
@@ -63,7 +59,8 @@ void SceneGraphStandardItem::ctor()
   auto* links_item = new QStandardItem(icons::getLinkVectorIcon(), "Links");
   for (const auto& link : scene_graph->getLinks())
   {
-    auto* item = new LinkStandardItem(QString::fromStdString(link->getName()), std::make_shared<tesseract_scene_graph::Link>(link->clone()));
+    auto* item = new LinkStandardItem(QString::fromStdString(link->getName()),
+                                      std::make_shared<tesseract_scene_graph::Link>(link->clone()));
     links_item->appendRow(item);
   }
   links_item->sortChildren(0);
@@ -72,10 +69,11 @@ void SceneGraphStandardItem::ctor()
   auto* joints_item = new QStandardItem(icons::getJointVectorIcon(), "Joints");
   for (const auto& joint : scene_graph->getJoints())
   {
-    auto* item = new JointStandardItem(QString::fromStdString(joint->getName()), std::make_shared<tesseract_scene_graph::Joint>(joint->clone()));
+    auto* item = new JointStandardItem(QString::fromStdString(joint->getName()),
+                                       std::make_shared<tesseract_scene_graph::Joint>(joint->clone()));
     joints_item->appendRow(item);
   }
   joints_item->sortChildren(0);
   appendRow(joints_item);
 }
-}
+}  // namespace tesseract_gui

@@ -27,7 +27,6 @@
 
 namespace tesseract_gui
 {
-
 class PointSeriesXY : public QwtSeriesWrapper
 {
 public:
@@ -49,20 +48,14 @@ public:
 
   RangeOpt getVisualizationRangeX() override;
 
-  const PlotData* dataX() const
-  {
-    return _x_axis;
-  }
-  const PlotData* dataY() const
-  {
-    return _y_axis;
-  }
+  const PlotData* dataX() const { return _x_axis; }
+  const PlotData* dataY() const { return _y_axis; }
 
 protected:
   const PlotData* _x_axis;
   const PlotData* _y_axis;
   PlotDataXY _cached_curve;
 };
-}
+}  // namespace tesseract_gui
 
 #endif  // TESSERACT_WIDGETS_PLOT_POINT_SERIES_H

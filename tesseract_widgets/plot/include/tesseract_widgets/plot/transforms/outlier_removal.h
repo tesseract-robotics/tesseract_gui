@@ -42,10 +42,7 @@ public:
 
   ~OutlierRemovalFilter() override;
 
-  const char* name() const override
-  {
-    return "Outlier Removal";
-  }
+  const char* name() const override { return "Outlier Removal"; }
 
   QWidget* optionsWidget() override;
 
@@ -57,5 +54,5 @@ private:
 
   std::optional<PlotData::Point> calculateNextPoint(size_t index) override;
 };
-}
-#endif // TESSERACT_WIDGETS_PLOT_TRANSFORMS_OUTLIER_REMOVAL_H
+}  // namespace tesseract_gui
+#endif  // TESSERACT_WIDGETS_PLOT_TRANSFORMS_OUTLIER_REMOVAL_H

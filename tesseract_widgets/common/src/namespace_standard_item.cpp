@@ -25,24 +25,12 @@
 
 namespace tesseract_gui
 {
-NamespaceStandardItem::NamespaceStandardItem()
-  : QStandardItem("Namespace")
-{
-}
+NamespaceStandardItem::NamespaceStandardItem() : QStandardItem("Namespace") {}
 
-NamespaceStandardItem::NamespaceStandardItem(const QString &text)
-  : QStandardItem(text)
-{
-}
+NamespaceStandardItem::NamespaceStandardItem(const QString& text) : QStandardItem(text) {}
 
-NamespaceStandardItem::NamespaceStandardItem(const QIcon &icon, const QString &text)
-  : QStandardItem(icon, text)
-{
-}
+NamespaceStandardItem::NamespaceStandardItem(const QIcon& icon, const QString& text) : QStandardItem(icon, text) {}
 
-int NamespaceStandardItem::type() const
-{
-  return static_cast<int>(StandardItemType::NAMESPACE);
-}
+int NamespaceStandardItem::type() const { return static_cast<int>(StandardItemType::NAMESPACE); }
 
-}
+}  // namespace tesseract_gui

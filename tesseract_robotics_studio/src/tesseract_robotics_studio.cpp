@@ -38,27 +38,22 @@
 
 namespace tesseract_gui
 {
-
 SceneInfo::SceneInfo(std::string scene_name)
   : scene_name(std::move(scene_name))
   , entity_manager(std::make_shared<EntityManager>())
   , view_control(std::make_unique<tesseract_gui::InteractiveViewControl>(this->scene_name))
 {
-  qobject_cast<QApplication *>(qGuiApp)->installEventFilter(view_control.get());
+  qobject_cast<QApplication*>(qGuiApp)->installEventFilter(view_control.get());
 }
-
-
 
 struct TesseractRoboticsStudioPrivate
 {
-  TesseractRoboticsStudioPrivate(TesseractRoboticsStudio* app) : app(app)
-  {
-  }
+  TesseractRoboticsStudioPrivate(TesseractRoboticsStudio* app) : app(app) {}
 
   TesseractRoboticsStudio* app;
-  ads::CDockManager* dock_manager {nullptr};
-  QWidgetAction* perspective_list_action {nullptr};
-  QComboBox* perspective_comboBox {nullptr};
+  ads::CDockManager* dock_manager{ nullptr };
+  QWidgetAction* perspective_list_action{ nullptr };
+  QComboBox* perspective_comboBox{ nullptr };
   std::unordered_map<std::string, std::shared_ptr<SceneInfo>> scene_infos;
 
   /** @brief Saves the dock manager state and the main window geometry */
@@ -75,7 +70,6 @@ struct TesseractRoboticsStudioPrivate
 
   /** @brief Restore the perspective list of the dock manager */
   void restorePerspectives();
-
 };
 
 void TesseractRoboticsStudioPrivate::saveState()
@@ -123,7 +117,7 @@ void TesseractRoboticsStudioPrivate::restorePerspectives()
   perspective_comboBox->addItems(dock_manager->perspectiveNames());
 }
 
-TesseractRoboticsStudio::TesseractRoboticsStudio(QWidget *parent)
+TesseractRoboticsStudio::TesseractRoboticsStudio(QWidget* parent)
   : QMainWindow(parent)
   , ui(std::make_unique<Ui::TesseractRoboticsStudio>())
   , d_(std::make_unique<TesseractRoboticsStudioPrivate>(this))
@@ -138,16 +132,19 @@ TesseractRoboticsStudio::TesseractRoboticsStudio(QWidget *parent)
   ui->actionSave_State->setIcon(QIcon(":/tesseract_widgets/png/save.png"));
   ui->actionRestore_State->setIcon(QIcon(":/tesseract_widgets/png/restore.png"));
   ui->actionCreate_Perspective->setIcon(QIcon(":/tesseract_widgets/png/layout.png"));
-  connect(ui->actionSave_State, &QAction::triggered, [this](){d_->saveState();});
-  connect(ui->actionRestore_State, &QAction::triggered, [this](){d_->restoreState();});
-  connect(ui->actionCreate_Perspective, &QAction::triggered, [this](){d_->createPerspective();});
+  connect(ui->actionSave_State, &QAction::triggered, [this]() { d_->saveState(); });
+  connect(ui->actionRestore_State, &QAction::triggered, [this]() { d_->restoreState(); });
+  connect(ui->actionCreate_Perspective, &QAction::triggered, [this]() { d_->createPerspective(); });
   d_->perspective_list_action = new QWidgetAction(this);
   d_->perspective_comboBox = new QComboBox(this);
   d_->perspective_comboBox->setSizeAdjustPolicy(QComboBox::AdjustToContents);
   d_->perspective_comboBox->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
   d_->perspective_list_action->setDefaultWidget(d_->perspective_comboBox);
   ui->toolBar->addAction(d_->perspective_list_action);
-  connect(d_->perspective_comboBox, SIGNAL(activated(const QString&)), d_->dock_manager, SLOT(openPerspective(const QString&)));
+  connect(d_->perspective_comboBox,
+          SIGNAL(activated(const QString&)),
+          d_->dock_manager,
+          SLOT(openPerspective(const QString&)));
 
   {
     auto locator = std::make_shared<tesseract_common::TesseractSupportResourceLocator>();
@@ -166,7 +163,7 @@ TesseractRoboticsStudio::TesseractRoboticsStudio(QWidget *parent)
 
       auto* widget = new tesseract_gui::IgnitionEnvironmentWidget(scene_info->scene_name, *scene_info->entity_manager);
       widget->setConfiguration(std::move(config));
-      qobject_cast<QApplication *>(qGuiApp)->installEventFilter(widget);
+      qobject_cast<QApplication*>(qGuiApp)->installEventFilter(widget);
       connect(widget, SIGNAL(triggerRender()), scene_info->render_widget, SLOT(update()));
 
       auto* dock_widget = new ads::CDockWidget("Environment");
@@ -177,7 +174,7 @@ TesseractRoboticsStudio::TesseractRoboticsStudio(QWidget *parent)
     }
   }
 
-//  d_->restoreState(); If this is enabled widgets do not show up if name change
+  //  d_->restoreState(); If this is enabled widgets do not show up if name change
   d_->restorePerspectives();
 }
 
@@ -200,10 +197,9 @@ SceneInfo::Ptr TesseractRoboticsStudio::createScene(const std::string& scene_nam
   return scene_info;
 }
 
-const std::unordered_map<std::string, SceneInfo::Ptr> &TesseractRoboticsStudio::getSceneInfos() const
+const std::unordered_map<std::string, SceneInfo::Ptr>& TesseractRoboticsStudio::getSceneInfos() const
 {
   return d_->scene_infos;
 }
 
-
-}
+}  // namespace tesseract_gui

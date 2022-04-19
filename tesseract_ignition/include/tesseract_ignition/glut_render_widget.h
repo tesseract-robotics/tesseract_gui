@@ -2,13 +2,13 @@
 #define TESSERACT_IGNITION_GLUT_RENDER_WIDGET_H
 
 #if __APPLE__
-  #include <OpenGL/gl.h>
-  #include <OpenGL/OpenGL.h>
-  #include <GLUT/glut.h>
+#include <OpenGL/gl.h>
+#include <OpenGL/OpenGL.h>
+#include <GLUT/glut.h>
 #else
-  #include <GL/glew.h>
-  #include <GL/gl.h>
-  #include <GL/glut.h>
+#include <GL/glew.h>
+#include <GL/gl.h>
+#include <GL/glut.h>
 #endif
 
 #include <ignition/common/KeyEvent.hh>
@@ -24,7 +24,6 @@
 
 namespace tesseract_gui
 {
-
 class GlutRendererImpl;
 
 /// \brief Ign-rendering renderer.
@@ -54,24 +53,24 @@ public:
 
   /// \brief New mouse event triggered
   /// \param[in] _e New mouse event
-  void NewMouseEvent(const ignition::common::MouseEvent &_e);
+  void NewMouseEvent(const ignition::common::MouseEvent& _e);
 
   /// \brief New hover event triggered.
   /// \param[in] _hoverPos Mouse hover screen position
-  void NewHoverEvent(const ignition::math::Vector2i &_hoverPos);
+  void NewHoverEvent(const ignition::math::Vector2i& _hoverPos);
 
   /// \brief New hover event triggered.
   /// \param[in] _dropText Text dropped on the scene
   /// \param[in] _dropPos Mouse drop screen position
-  void NewDropEvent(const std::string &_dropText, const ignition::math::Vector2i &_dropPos);
+  void NewDropEvent(const std::string& _dropText, const ignition::math::Vector2i& _dropPos);
 
   /// \brief Handle key press event for snapping
   /// \param[in] _e The key event to process.
-  void HandleKeyPress(const ignition::common::KeyEvent &_e);
+  void HandleKeyPress(const ignition::common::KeyEvent& _e);
 
   /// \brief Handle key release event for snapping
   /// \param[in] _e The key event to process.
-  void HandleKeyRelease(const ignition::common::KeyEvent &_e);
+  void HandleKeyRelease(const ignition::common::KeyEvent& _e);
 
   /// \brief Render engine to use
   std::string engineName = "ogre";
@@ -144,7 +143,7 @@ private:
   /// ray cast from the given 2D screen coordinates.
   /// \param[in] _screenPos 2D coordinates on the screen, in pixels.
   /// \return 3D coordinates of a point in the 3D scene.
-  ignition::math::Vector3d ScreenToScene(const ignition::math::Vector2i &_screenPos) const;
+  ignition::math::Vector3d ScreenToScene(const ignition::math::Vector2i& _screenPos) const;
 
   /// \internal
   /// \brief Pointer to private data.
@@ -165,23 +164,23 @@ public:
 
   /// \brief Set background color of render window
   /// \param[in] _color Color of render window background
-  void SetBackgroundColor(const ignition::math::Color &_color);
+  void SetBackgroundColor(const ignition::math::Color& _color);
 
   /// \brief Set ambient light of render window
   /// \param[in] _ambient Color of ambient light
-  void SetAmbientLight(const ignition::math::Color &_ambient);
+  void SetAmbientLight(const ignition::math::Color& _ambient);
 
   /// \brief Set engine name used to create the render window
   /// \param[in] _name Name of render engine
-  void SetEngineName(const std::string &_name);
+  void SetEngineName(const std::string& _name);
 
   /// \brief Set name of scene created inside the render window
   /// \param[in] _name Name of scene
-  void SetSceneName(const std::string &_name);
+  void SetSceneName(const std::string& _name);
 
   /// \brief Set the initial pose the render window camera
   /// \param[in] _pose Initial camera pose
-  void SetCameraPose(const ignition::math::Pose3d &_pose);
+  void SetCameraPose(const ignition::math::Pose3d& _pose);
 
   /// \brief Set the render window camera's near clipping plane distance
   /// \param[in] _near Near clipping plane distance
@@ -199,7 +198,7 @@ public:
   /// \brief Callback when receives a drop event.
   /// \param[in] _drop Dropped string.
   /// \param[in] _dropPos x coordinate of mouse position.
-  void OnDropped(const QString &_drop, int _mouseX, int _mouseY);
+  void OnDropped(const QString& _drop, int _mouseX, int _mouseY);
 
   /**
    * @brief This triggers an update
@@ -209,37 +208,37 @@ public:
 
   /// \brief Set if sky is enabled
   /// \param[in] _sky True to enable the sky, false otherwise.
-  void SetSkyEnabled(const bool &_sky);
+  void SetSkyEnabled(const bool& _sky);
 
   /// \brief Show grid view in the scene
   void SetGridEnabled(bool _grid);
 
   /// \brief Handle key press event for snapping
   /// \param[in] _e The key event to process.
-  void HandleKeyPress(const ignition::common::KeyEvent &_e);
+  void HandleKeyPress(const ignition::common::KeyEvent& _e);
 
   /// \brief Handle key release event for snapping
   /// \param[in] _e The key event to process.
-  void HandleKeyRelease(const ignition::common::KeyEvent &_e);
+  void HandleKeyRelease(const ignition::common::KeyEvent& _e);
 
 protected:
   // Documentation inherited
-  void mousePressEvent(QMouseEvent *_e) override;
+  void mousePressEvent(QMouseEvent* _e) override;
 
   // Documentation inherited
-  void mouseReleaseEvent(QMouseEvent *_e) override;
+  void mouseReleaseEvent(QMouseEvent* _e) override;
 
   // Documentation inherited
-  void mouseMoveEvent(QMouseEvent *_e) override;
+  void mouseMoveEvent(QMouseEvent* _e) override;
 
   // Documentation inherited
-  void keyPressEvent(QKeyEvent *_e) override;
+  void keyPressEvent(QKeyEvent* _e) override;
 
   // Documentation inherited
-  void keyReleaseEvent(QKeyEvent *_e) override;
+  void keyReleaseEvent(QKeyEvent* _e) override;
 
   // Documentation inherited
-  void wheelEvent(QWheelEvent *_e) override;
+  void wheelEvent(QWheelEvent* _e) override;
 
   // Documentation inherited
   void initializeGL() override;
@@ -254,5 +253,5 @@ protected:
   /// \brief Pointer to private data.
   std::unique_ptr<GlutRenderWidgetImpl> dataPtr;
 };
-}
-#endif // TESSERACT_IGNITION_GLUT_RENDER_WIDGET_H
+}  // namespace tesseract_gui
+#endif  // TESSERACT_IGNITION_GLUT_RENDER_WIDGET_H

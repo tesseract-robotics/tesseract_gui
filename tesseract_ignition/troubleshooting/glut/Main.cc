@@ -16,12 +16,12 @@
  */
 
 #if defined(__APPLE__)
-  #include <OpenGL/gl.h>
-  #include <GLUT/glut.h>
+#include <OpenGL/gl.h>
+#include <GLUT/glut.h>
 #elif not defined(_WIN32)
-  #include <GL/glew.h>
-  #include <GL/gl.h>
-  #include <GL/glut.h>
+#include <GL/glew.h>
+#include <GL/gl.h>
+#include <GL/glut.h>
 #endif
 
 #include <iostream>
@@ -37,8 +37,7 @@
 using namespace ignition;
 using namespace rendering;
 
-const std::string RESOURCE_PATH =
-    common::joinPaths(std::string(PROJECT_BINARY_PATH), "media");
+const std::string RESOURCE_PATH = common::joinPaths(std::string(PROJECT_BINARY_PATH), "media");
 
 //////////////////////////////////////////////////
 void buildScene(ScenePtr _scene)
@@ -55,18 +54,18 @@ void buildScene(ScenePtr _scene)
   light0->SetSpecularColor(0.5, 0.5, 0.5);
   root->AddChild(light0);
 
-//! [create a mesh]
+  //! [create a mesh]
   VisualPtr mesh = _scene->CreateVisual();
   mesh->SetLocalPosition(3, 0, 0);
   mesh->SetLocalRotation(1.5708, 0, 2.0);
   MeshDescriptor descriptor;
   descriptor.meshName = common::joinPaths(RESOURCE_PATH, "duck.dae");
-  common::MeshManager *meshManager = common::MeshManager::Instance();
+  common::MeshManager* meshManager = common::MeshManager::Instance();
   descriptor.mesh = meshManager->Load(descriptor.meshName);
   MeshPtr meshGeom = _scene->CreateMesh(descriptor);
   mesh->AddGeometry(meshGeom);
   root->AddChild(mesh);
-//! [create a mesh]
+  //! [create a mesh]
 
   // create gray material
   MaterialPtr gray = _scene->CreateMaterial();
@@ -74,7 +73,7 @@ void buildScene(ScenePtr _scene)
   gray->SetDiffuse(0.7, 0.7, 0.7);
   gray->SetSpecular(0.7, 0.7, 0.7);
 
-//! [create grid visual]
+  //! [create grid visual]
   VisualPtr grid = _scene->CreateVisual();
   GridPtr gridGeom = _scene->CreateGrid();
   gridGeom->SetCellCount(20);
@@ -84,9 +83,9 @@ void buildScene(ScenePtr _scene)
   grid->SetLocalPosition(3, 0, 0.0);
   grid->SetMaterial(gray);
   root->AddChild(grid);
-//! [create grid visual]
+  //! [create grid visual]
 
-//! [create camera]
+  //! [create camera]
   CameraPtr camera = _scene->CreateCamera("camera");
   camera->SetLocalPosition(0.0, 0.0, 0.5);
   camera->SetLocalRotation(0.0, 0.0, 0.0);
@@ -96,7 +95,7 @@ void buildScene(ScenePtr _scene)
   camera->SetAspectRatio(1.333);
   camera->SetHFOV(IGN_PI / 2);
   root->AddChild(camera);
-//! [create camera]
+  //! [create camera]
 
   ignition::rendering::AxisVisualPtr axis = _scene->CreateAxisVisual("world_axis");
   axis->SetInheritScale(false);
@@ -106,15 +105,13 @@ void buildScene(ScenePtr _scene)
 }
 
 //////////////////////////////////////////////////
-CameraPtr createCamera(const std::string &_engineName,
-    const std::map<std::string, std::string>& _params)
+CameraPtr createCamera(const std::string& _engineName, const std::map<std::string, std::string>& _params)
 {
   // create and populate scene
-  RenderEngine *engine = rendering::engine(_engineName, _params);
+  RenderEngine* engine = rendering::engine(_engineName, _params);
   if (!engine)
   {
-    ignwarn << "Engine '" << _engineName
-              << "' is not supported" << std::endl;
+    ignwarn << "Engine '" << _engineName << "' is not supported" << std::endl;
     return CameraPtr();
   }
   ScenePtr scene = engine->CreateScene("scene");
@@ -156,8 +153,7 @@ int main(int _argc, char** _argv)
     try
     {
       std::map<std::string, std::string> params;
-      if (engineName.compare("ogre2") == 0
-          && graphicsApi == GraphicsAPI::METAL)
+      if (engineName.compare("ogre2") == 0 && graphicsApi == GraphicsAPI::METAL)
       {
         params["metal"] = "1";
       }

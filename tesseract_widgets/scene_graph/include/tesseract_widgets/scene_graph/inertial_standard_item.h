@@ -38,8 +38,8 @@ class InertialStandardItem : public QStandardItem
 {
 public:
   InertialStandardItem(tesseract_scene_graph::Inertial::Ptr inertial);
-  explicit InertialStandardItem(const QString &text, tesseract_scene_graph::Inertial::Ptr inertial);
-  InertialStandardItem(const QIcon &icon, const QString &text, tesseract_scene_graph::Inertial::Ptr inertial);
+  explicit InertialStandardItem(const QString& text, tesseract_scene_graph::Inertial::Ptr inertial);
+  InertialStandardItem(const QIcon& icon, const QString& text, tesseract_scene_graph::Inertial::Ptr inertial);
   int type() const override;
 
   tesseract_scene_graph::Inertial::Ptr inertial;
@@ -47,6 +47,6 @@ public:
 private:
   void ctor();
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_SCENE_GRAPH_INERTIAL_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_SCENE_GRAPH_INERTIAL_STANDARD_ITEM_H

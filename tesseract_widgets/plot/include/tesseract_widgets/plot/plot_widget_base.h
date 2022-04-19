@@ -32,7 +32,6 @@ class QwtPlotCurve;
 class QwtPlotPanner;
 class QwtPlotMarker;
 
-
 namespace tesseract_gui
 {
 class QwtPlotPimpl;
@@ -49,7 +48,7 @@ public:
   {
     LINES,
     DOTS,
-//    LINES_AND_DOTS,
+    //    LINES_AND_DOTS,
     STICKS
   };
 
@@ -64,8 +63,7 @@ public:
 
   ~PlotWidgetBase();
 
-  virtual CurveInfo* addCurve(const std::string& name, PlotData& src_data,
-                              QColor color = Qt::transparent);
+  virtual CurveInfo* addCurve(const std::string& name, PlotData& src_data, QColor color = Qt::transparent);
 
   virtual void removeCurve(const QString& title);
 
@@ -79,8 +77,7 @@ public:
 
   CurveInfo* curveFromTitle(const QString& title);
 
-  virtual QwtSeriesWrapper* createTimeSeries(const QString& transform_ID,
-                                             const PlotData* data);
+  virtual QwtSeriesWrapper* createTimeSeries(const QString& transform_ID, const PlotData* data);
 
   virtual void resetZoom();
 

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
-*/
+ */
 
 #ifndef TESSERACT_GUI_TRANSPORT_MARKER_MANAGER_H
 #define TESSERACT_GUI_TRANSPORT_MARKER_MANAGER_H
@@ -23,38 +23,38 @@
 
 namespace tesseract_gui
 {
-  class TransportMarkerManagerPrivate;
+class TransportMarkerManagerPrivate;
 
-  /// \brief This plugin will be in charge of handling the markers in the
-  /// scene. It will allow to add, modify or remove markers.
-  ///
-  /// ## Parameters
-  ///
-  /// * `<topic_name>`: Options. Name of topic for marker service. Defaults
-  /// to `/marker`.
-  /// * `<warn_on_action_failure>`: True to display warnings if the user
-  /// attempts to perform an invalid action. Defaults to true.
-  class TransportMarkerManager : public QObject
-  {
-    Q_OBJECT
-  public:
-    /// \brief Constructor
-    TransportMarkerManager(const std::string& scene_name);
+/// \brief This plugin will be in charge of handling the markers in the
+/// scene. It will allow to add, modify or remove markers.
+///
+/// ## Parameters
+///
+/// * `<topic_name>`: Options. Name of topic for marker service. Defaults
+/// to `/marker`.
+/// * `<warn_on_action_failure>`: True to display warnings if the user
+/// attempts to perform an invalid action. Defaults to true.
+class TransportMarkerManager : public QObject
+{
+  Q_OBJECT
+public:
+  /// \brief Constructor
+  TransportMarkerManager(const std::string& scene_name);
 
-    /// \brief Destructor
-    virtual ~TransportMarkerManager();
+  /// \brief Destructor
+  virtual ~TransportMarkerManager();
 
-//    // Documentation inherited
-//    virtual void LoadConfig(const tinyxml2::XMLElement *_pluginElem)
-//        override;
-  private:
-    // Documentation inherited
-    bool eventFilter(QObject *_obj, QEvent *_event) override;
+  //    // Documentation inherited
+  //    virtual void LoadConfig(const tinyxml2::XMLElement *_pluginElem)
+  //        override;
+private:
+  // Documentation inherited
+  bool eventFilter(QObject* _obj, QEvent* _event) override;
 
-    /// \internal
-    /// \brief Pointer to private data.
-    std::unique_ptr<TransportMarkerManagerPrivate> dataPtr;
-  };
-}
+  /// \internal
+  /// \brief Pointer to private data.
+  std::unique_ptr<TransportMarkerManagerPrivate> dataPtr;
+};
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_GUI_TRANSPORT_MARKER_MANAGER_H
+#endif  // TESSERACT_GUI_TRANSPORT_MARKER_MANAGER_H

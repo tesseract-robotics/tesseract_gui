@@ -26,20 +26,18 @@
 
 namespace tesseract_gui
 {
-
-AllowedCollisionMatrixModel::AllowedCollisionMatrixModel(QObject *parent)
-  : QStandardItemModel(parent)
+AllowedCollisionMatrixModel::AllowedCollisionMatrixModel(QObject* parent) : QStandardItemModel(parent)
 {
   setColumnCount(3);
 }
 
-AllowedCollisionMatrixModel::AllowedCollisionMatrixModel(const AllowedCollisionMatrixModel &other)
+AllowedCollisionMatrixModel::AllowedCollisionMatrixModel(const AllowedCollisionMatrixModel& other)
   : QStandardItemModel(other.d_ptr->parent)
 {
   this->acm_ = other.acm_;
 }
 
-AllowedCollisionMatrixModel &AllowedCollisionMatrixModel::operator=(const AllowedCollisionMatrixModel &other)
+AllowedCollisionMatrixModel& AllowedCollisionMatrixModel::operator=(const AllowedCollisionMatrixModel& other)
 {
   this->acm_ = other.acm_;
   return *this;
@@ -51,13 +49,13 @@ void AllowedCollisionMatrixModel::setAllowedCollisionMatrix(const tesseract_comm
 
   acm_ = acm;
 
-  double elapse {0};
+  double elapse{ 0 };
   for (const auto& ac : acm.getAllAllowedCollisions())
   {
-    auto col0 = new QStandardItem(QString::fromStdString(ac.first.first)); // NOLINT
-    auto col1 = new QStandardItem(QString::fromStdString(ac.first.second)); // NOLINT
-    auto col2 = new QStandardItem(QString::fromStdString(ac.second)); // NOLINT
-    appendRow({col0, col1, col2});
+    auto col0 = new QStandardItem(QString::fromStdString(ac.first.first));   // NOLINT
+    auto col1 = new QStandardItem(QString::fromStdString(ac.first.second));  // NOLINT
+    auto col2 = new QStandardItem(QString::fromStdString(ac.second));        // NOLINT
+    appendRow({ col0, col1, col2 });
   }
 
   sort(0);
@@ -80,7 +78,7 @@ void AllowedCollisionMatrixModel::add(const QString& link1_name, const QString& 
   emit entryAdded(link1_name, link2_name, reason);
 }
 
-bool AllowedCollisionMatrixModel::removeRows(int row, int count, const QModelIndex &parent)
+bool AllowedCollisionMatrixModel::removeRows(int row, int count, const QModelIndex& parent)
 {
   if (row >= 0)
   {
@@ -92,7 +90,7 @@ bool AllowedCollisionMatrixModel::removeRows(int row, int count, const QModelInd
 
     if (success)
     {
-     emit entryRemoved(link1_name, link2_name);
+      emit entryRemoved(link1_name, link2_name);
     }
 
     return success;
@@ -107,25 +105,23 @@ void AllowedCollisionMatrixModel::clear()
   acm_.clearAllowedCollisions();
 }
 
-tesseract_common::AllowedCollisionMatrix AllowedCollisionMatrixModel::getAllowedCollisionMatrix() const
-{
-  return acm_;
-}
+tesseract_common::AllowedCollisionMatrix AllowedCollisionMatrixModel::getAllowedCollisionMatrix() const { return acm_; }
 
 QVariant AllowedCollisionMatrixModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
   if (role == Qt::DisplayRole && orientation == Qt::Horizontal)
   {
-      switch (section) {
+    switch (section)
+    {
       case 0:
-          return QString("Link 1");
+        return QString("Link 1");
       case 1:
-          return QString("Link 2");
+        return QString("Link 2");
       case 2:
-          return QString("Reason");
-      }
+        return QString("Reason");
+    }
   }
   return QVariant();
 }
 
-}
+}  // namespace tesseract_gui

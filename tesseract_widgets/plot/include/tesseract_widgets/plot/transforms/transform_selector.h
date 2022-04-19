@@ -60,6 +60,6 @@ private:
 
   QString* _default_trans;
 };
-}
+}  // namespace tesseract_gui
 
 #endif  // TESSERACT_WIDGETS_PLOT_TRANSFORMS_TRANSFORM_SELECTOR_H

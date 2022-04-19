@@ -25,9 +25,7 @@
 
 namespace tesseract_gui
 {
-ScaleTransform::ScaleTransform()
-  : _widget(std::make_unique<QWidget>())
-  , ui(std::make_unique<Ui::ScaleTransform>())
+ScaleTransform::ScaleTransform() : _widget(std::make_unique<QWidget>()), ui(std::make_unique<Ui::ScaleTransform>())
 {
   ui->setupUi(_widget.get());
 
@@ -45,25 +43,16 @@ ScaleTransform::ScaleTransform()
     emit parametersChanged();
   });
 
-  connect(ui->lineEditTimeOffset, &QLineEdit::editingFinished, this,
-          [=]() { emit parametersChanged(); });
-  connect(ui->lineEditValueOffset, &QLineEdit::editingFinished, this,
-          [=]() { emit parametersChanged(); });
-  connect(ui->lineEditValueScale, &QLineEdit::editingFinished, this,
-          [=]() { emit parametersChanged(); });
+  connect(ui->lineEditTimeOffset, &QLineEdit::editingFinished, this, [=]() { emit parametersChanged(); });
+  connect(ui->lineEditValueOffset, &QLineEdit::editingFinished, this, [=]() { emit parametersChanged(); });
+  connect(ui->lineEditValueScale, &QLineEdit::editingFinished, this, [=]() { emit parametersChanged(); });
 }
 
-ScaleTransform::~ScaleTransform()=default;
+ScaleTransform::~ScaleTransform() = default;
 
-const char* ScaleTransform::name() const
-{
-  return "Scale/Offset";
-}
+const char* ScaleTransform::name() const { return "Scale/Offset"; }
 
-QWidget* ScaleTransform::optionsWidget()
-{
-  return _widget.get();
-}
+QWidget* ScaleTransform::optionsWidget() { return _widget.get(); }
 
 std::optional<PlotData::Point> ScaleTransform::calculateNextPoint(size_t index)
 {
@@ -75,4 +64,4 @@ std::optional<PlotData::Point> ScaleTransform::calculateNextPoint(size_t index)
   PlotData::Point out = { p.x + off_x, scale * p.y + off_y };
   return out;
 }
-}
+}  // namespace tesseract_gui

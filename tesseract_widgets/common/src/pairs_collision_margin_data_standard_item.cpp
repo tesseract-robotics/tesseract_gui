@@ -27,24 +27,26 @@
 
 namespace tesseract_gui
 {
-
-PairsCollisionMarginDataStandardItem::PairsCollisionMarginDataStandardItem(tesseract_common::PairsCollisionMarginData pairs_margin_data)
-  : QStandardItem(icons::getCubeIcon(), "Pairs Collision Margin Data")
-  , pairs_margin_data(std::move(pairs_margin_data))
+PairsCollisionMarginDataStandardItem::PairsCollisionMarginDataStandardItem(
+    tesseract_common::PairsCollisionMarginData pairs_margin_data)
+  : QStandardItem(icons::getCubeIcon(), "Pairs Collision Margin Data"), pairs_margin_data(std::move(pairs_margin_data))
 {
   ctor();
 }
 
-PairsCollisionMarginDataStandardItem::PairsCollisionMarginDataStandardItem(const QString &text, tesseract_common::PairsCollisionMarginData pairs_margin_data)
-  : QStandardItem(icons::getCubeIcon(), text)
-  , pairs_margin_data(std::move(pairs_margin_data))
+PairsCollisionMarginDataStandardItem::PairsCollisionMarginDataStandardItem(
+    const QString& text,
+    tesseract_common::PairsCollisionMarginData pairs_margin_data)
+  : QStandardItem(icons::getCubeIcon(), text), pairs_margin_data(std::move(pairs_margin_data))
 {
   ctor();
 }
 
-PairsCollisionMarginDataStandardItem::PairsCollisionMarginDataStandardItem(const QIcon &icon, const QString &text, tesseract_common::PairsCollisionMarginData pairs_margin_data)
-  : QStandardItem(icon, text)
-  , pairs_margin_data(std::move(pairs_margin_data))
+PairsCollisionMarginDataStandardItem::PairsCollisionMarginDataStandardItem(
+    const QIcon& icon,
+    const QString& text,
+    tesseract_common::PairsCollisionMarginData pairs_margin_data)
+  : QStandardItem(icon, text), pairs_margin_data(std::move(pairs_margin_data))
 {
   ctor();
 }
@@ -62,14 +64,15 @@ void PairsCollisionMarginDataStandardItem::ctor()
   sortChildren(0);
 }
 
-void PairsCollisionMarginDataStandardItem::addPairCollisionMargin(const tesseract_common::LinkNamesPair& pair, double collision_margin)
+void PairsCollisionMarginDataStandardItem::addPairCollisionMargin(const tesseract_common::LinkNamesPair& pair,
+                                                                  double collision_margin)
 {
   QStandardItem* item;
   auto it = items_.find(pair.first);
   if (it == items_.end())
   {
     item = new QStandardItem(pair.first.c_str());
-    appendRow({item, new QStandardItem()});
+    appendRow({ item, new QStandardItem() });
     items_[pair.first] = item;
   }
   else
@@ -79,5 +82,4 @@ void PairsCollisionMarginDataStandardItem::addPairCollisionMargin(const tesserac
 
   item->appendRow(createStandardItemFloat(pair.second, collision_margin));
 }
-}
-
+}  // namespace tesseract_gui

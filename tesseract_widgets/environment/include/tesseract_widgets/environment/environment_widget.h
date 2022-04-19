@@ -27,7 +27,8 @@
 #include <memory>
 #include <tesseract_environment/environment.h>
 
-namespace Ui {
+namespace Ui
+{
 class EnvironmentWidget;
 }
 
@@ -42,7 +43,7 @@ class EnvironmentWidget : public QWidget
   Q_OBJECT
 
 public:
-  explicit EnvironmentWidget(QWidget *parent = nullptr, bool add_toolbar = true);
+  explicit EnvironmentWidget(QWidget* parent = nullptr, bool add_toolbar = true);
   ~EnvironmentWidget() override;
 
   /**
@@ -107,8 +108,7 @@ protected:
   void updateModels();
 
   void createToolBar();
-
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_ENVIRONMENT_ENVIRONMENT_WIDGET_H
+#endif  // TESSERACT_WIDGETS_ENVIRONMENT_ENVIRONMENT_WIDGET_H

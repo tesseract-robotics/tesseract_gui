@@ -14,7 +14,6 @@ class PlotWidgetEditor;
 
 namespace tesseract_gui
 {
-
 class EditorRowWidget : public QWidget
 {
   Q_OBJECT
@@ -85,7 +84,7 @@ private slots:
 private:
   std::unique_ptr<Ui::PlotWidgetEditor> ui;
 
-  QColor _color{Qt::blue};
+  QColor _color{ Qt::blue };
   std::unique_ptr<PlotWidget> _plotwidget;
   PlotWidget* _plotwidget_origin;
   QRectF _bounding_rect_original;
@@ -99,6 +98,6 @@ private:
 
   std::unordered_map<std::string, std::shared_ptr<TransformFunction>> _transforms;
 };
-}
+}  // namespace tesseract_gui
 
 #endif  // TESSERACT_WIDGETS_PLOT_PLOT_WIDGET_EDITOR_H

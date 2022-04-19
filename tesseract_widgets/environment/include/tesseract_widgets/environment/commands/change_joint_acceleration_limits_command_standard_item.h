@@ -37,17 +37,22 @@ namespace tesseract_gui
 class ChangeJointAccelerationLimitsCommandStandardItem : public QStandardItem
 {
 public:
-  explicit ChangeJointAccelerationLimitsCommandStandardItem(tesseract_environment::ChangeJointAccelerationLimitsCommand::ConstPtr command);
-  explicit ChangeJointAccelerationLimitsCommandStandardItem(const QString &text, tesseract_environment::ChangeJointAccelerationLimitsCommand::ConstPtr command);
-  explicit ChangeJointAccelerationLimitsCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::ChangeJointAccelerationLimitsCommand::ConstPtr command);
+  explicit ChangeJointAccelerationLimitsCommandStandardItem(
+      tesseract_environment::ChangeJointAccelerationLimitsCommand::ConstPtr command);
+  explicit ChangeJointAccelerationLimitsCommandStandardItem(
+      const QString& text,
+      tesseract_environment::ChangeJointAccelerationLimitsCommand::ConstPtr command);
+  explicit ChangeJointAccelerationLimitsCommandStandardItem(
+      const QIcon& icon,
+      const QString& text,
+      tesseract_environment::ChangeJointAccelerationLimitsCommand::ConstPtr command);
   int type() const override;
-
 
   tesseract_environment::ChangeJointAccelerationLimitsCommand::ConstPtr command;
 
 private:
   void ctor();
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_ENVIRONMENT_CHANGE_JOINT_ACCELERATION_LIMITS_COMMAND_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_ENVIRONMENT_CHANGE_JOINT_ACCELERATION_LIMITS_COMMAND_STANDARD_ITEM_H

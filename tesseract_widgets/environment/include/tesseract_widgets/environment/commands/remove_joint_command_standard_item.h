@@ -38,16 +38,18 @@ class RemoveJointCommandStandardItem : public QStandardItem
 {
 public:
   explicit RemoveJointCommandStandardItem(tesseract_environment::RemoveJointCommand::ConstPtr command);
-  explicit RemoveJointCommandStandardItem(const QString &text, tesseract_environment::RemoveJointCommand::ConstPtr command);
-  explicit RemoveJointCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::RemoveJointCommand::ConstPtr command);
+  explicit RemoveJointCommandStandardItem(const QString& text,
+                                          tesseract_environment::RemoveJointCommand::ConstPtr command);
+  explicit RemoveJointCommandStandardItem(const QIcon& icon,
+                                          const QString& text,
+                                          tesseract_environment::RemoveJointCommand::ConstPtr command);
   int type() const override;
-
 
   tesseract_environment::RemoveJointCommand::ConstPtr command;
 
 private:
   void ctor();
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_ENVIRONMENT_REMOVE_JOINT_COMMAND_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_ENVIRONMENT_REMOVE_JOINT_COMMAND_STANDARD_ITEM_H

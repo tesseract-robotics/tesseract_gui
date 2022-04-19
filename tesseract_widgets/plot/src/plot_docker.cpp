@@ -38,8 +38,7 @@ namespace tesseract_gui
 class SplittableComponentsFactory : public ads::CDockComponentsFactory
 {
 public:
-  ads::CDockAreaTitleBar*
-  createDockAreaTitleBar(ads::CDockAreaWidget* dock_area) const override
+  ads::CDockAreaTitleBar* createDockAreaTitleBar(ads::CDockAreaWidget* dock_area) const override
   {
     auto title_bar = new ads::CDockAreaTitleBar(dock_area);
     title_bar->setVisible(false);
@@ -73,15 +72,9 @@ PlotDocker::PlotDocker(QString name, PlotDataMapRef& datamap, QWidget* parent)
   CreateFirstWidget();
 }
 
-QString PlotDocker::name() const
-{
-  return _name;
-}
+QString PlotDocker::name() const { return _name; }
 
-void PlotDocker::setName(QString name)
-{
-  _name = name;
-}
+void PlotDocker::setName(QString name) { _name = name; }
 
 QDomElement saveChildNodesState(QDomDocument& doc, QWidget* widget)
 {
@@ -89,8 +82,7 @@ QDomElement saveChildNodesState(QDomDocument& doc, QWidget* widget)
   if (splitter)
   {
     QDomElement splitter_elem = doc.createElement("DockSplitter");
-    splitter_elem.setAttribute("orientation",
-                               (splitter->orientation() == Qt::Horizontal) ? "|" : "-");
+    splitter_elem.setAttribute("orientation", (splitter->orientation() == Qt::Horizontal) ? "|" : "-");
     splitter_elem.setAttribute("count", QString::number(splitter->count()));
 
     QString sizes_str;
@@ -136,15 +128,11 @@ QDomElement saveChildNodesState(QDomDocument& doc, QWidget* widget)
   return {};
 }
 
-int PlotDocker::plotCount() const
-{
-  return dockAreaCount();
-}
+int PlotDocker::plotCount() const { return dockAreaCount(); }
 
 PlotWidget* PlotDocker::plotAt(int index)
 {
-  DockWidget* dock_widget =
-      dynamic_cast<DockWidget*>(dockArea(index)->currentDockWidget());
+  DockWidget* dock_widget = dynamic_cast<DockWidget*>(dockArea(index)->currentDockWidget());
   return static_cast<PlotWidget*>(dock_widget->plotWidget());
 }
 
@@ -178,8 +166,7 @@ void PlotDocker::on_stylesheetChanged(QString theme)
   }
 }
 
-DockWidget::DockWidget(PlotDataMapRef& datamap, QWidget* parent)
-  : ads::CDockWidget("Plot", parent), _datamap(datamap)
+DockWidget::DockWidget(PlotDataMapRef& datamap, QWidget* parent) : ads::CDockWidget("Plot", parent), _datamap(datamap)
 {
   setFrameShape(QFrame::NoFrame);
   _plot_widget = std::make_unique<PlotWidget>(datamap, this);
@@ -191,11 +178,9 @@ DockWidget::DockWidget(PlotDataMapRef& datamap, QWidget* parent)
   _toolbar->label()->setText("...");
   qobject_cast<QBoxLayout*>(layout())->insertWidget(0, _toolbar);
 
-  connect(_toolbar->buttonSplitHorizontal(), &QPushButton::clicked, this,
-          &DockWidget::splitHorizontal);
+  connect(_toolbar->buttonSplitHorizontal(), &QPushButton::clicked, this, &DockWidget::splitHorizontal);
 
-  connect(_toolbar->buttonSplitVertical(), &QPushButton::clicked, this,
-          &DockWidget::splitVertical);
+  connect(_toolbar->buttonSplitVertical(), &QPushButton::clicked, this, &DockWidget::splitVertical);
 
   connect(_plot_widget.get(), &PlotWidget::splitHorizontal, this, &DockWidget::splitHorizontal);
 
@@ -236,8 +221,7 @@ DockWidget* DockWidget::splitHorizontal()
   auto new_widget = new DockWidget(_datamap, qobject_cast<QWidget*>(parent()));
 
   PlotDocker* parent_docker = static_cast<PlotDocker*>(dockManager());
-  auto area = parent_docker->addDockWidget(ads::RightDockWidgetArea, new_widget,
-                                           dockAreaWidget());
+  auto area = parent_docker->addDockWidget(ads::RightDockWidgetArea, new_widget, dockAreaWidget());
 
   area->setAllowedAreas(ads::OuterDockAreas);
 
@@ -256,8 +240,7 @@ DockWidget* DockWidget::splitVertical()
 
   PlotDocker* parent_docker = static_cast<PlotDocker*>(dockManager());
 
-  auto area = parent_docker->addDockWidget(ads::BottomDockWidgetArea, new_widget,
-                                           dockAreaWidget());
+  auto area = parent_docker->addDockWidget(ads::BottomDockWidgetArea, new_widget, dockAreaWidget());
 
   area->setAllowedAreas(ads::OuterDockAreas);
   parent_docker->plotWidgetAdded(new_widget->plotWidget());
@@ -269,15 +252,9 @@ DockWidget* DockWidget::splitVertical()
   return new_widget;
 }
 
-PlotWidget* DockWidget::plotWidget()
-{
-  return _plot_widget.get();
-}
+PlotWidget* DockWidget::plotWidget() { return _plot_widget.get(); }
 
-DraggableToolbar* DockWidget::toolBar()
-{
-  return _toolbar;
-}
+DraggableToolbar* DockWidget::toolBar() { return _toolbar; }
 
 static void setButtonIcon(QPushButton* button, QIcon icon)
 {
@@ -286,10 +263,7 @@ static void setButtonIcon(QPushButton* button, QIcon icon)
 }
 
 DraggableToolbar::DraggableToolbar(ads::CDockWidget* parent)
-  : QWidget(parent)
-  , _parent(parent)
-  , ui(std::make_unique<Ui::DraggableToolbar>())
-  , _fullscreen_mode(false)
+  : QWidget(parent), _parent(parent), ui(std::make_unique<Ui::DraggableToolbar>()), _fullscreen_mode(false)
 {
   ui->setupUi(this);
 
@@ -309,30 +283,15 @@ DraggableToolbar::DraggableToolbar(ads::CDockWidget* parent)
 
 DraggableToolbar::~DraggableToolbar() = default;
 
-QLabel* DraggableToolbar::label()
-{
-  return ui->label;
-}
+QLabel* DraggableToolbar::label() { return ui->label; }
 
-QPushButton* DraggableToolbar::buttonFullscreen()
-{
-  return ui->buttonFullscreen;
-}
+QPushButton* DraggableToolbar::buttonFullscreen() { return ui->buttonFullscreen; }
 
-QPushButton* DraggableToolbar::buttonClose()
-{
-  return ui->buttonClose;
-}
+QPushButton* DraggableToolbar::buttonClose() { return ui->buttonClose; }
 
-QPushButton* DraggableToolbar::buttonSplitHorizontal()
-{
-  return ui->buttonSplitHorizontal;
-}
+QPushButton* DraggableToolbar::buttonSplitHorizontal() { return ui->buttonSplitHorizontal; }
 
-QPushButton* DraggableToolbar::buttonSplitVertical()
-{
-  return ui->buttonSplitVertical;
-}
+QPushButton* DraggableToolbar::buttonSplitVertical() { return ui->buttonSplitVertical; }
 
 void DraggableToolbar::toggleFullscreen()
 {
@@ -363,9 +322,8 @@ bool DraggableToolbar::eventFilter(QObject* object, QEvent* event)
   if (event->type() == QEvent::MouseButtonDblClick)
   {
     bool ok = true;
-    QString newName =
-        QInputDialog::getText(this, tr("Change name of the Area"), tr("New name:"),
-                              QLineEdit::Normal, ui->label->text(), &ok);
+    QString newName = QInputDialog::getText(
+        this, tr("Change name of the Area"), tr("New name:"), QLineEdit::Normal, ui->label->text(), &ok);
     if (ok)
     {
       ui->label->setText(newName);
@@ -395,4 +353,4 @@ void DraggableToolbar::leaveEvent(QEvent* ev)
   ui->buttonSplitVertical->setVisible(false);
   QWidget::leaveEvent(ev);
 }
-}
+}  // namespace tesseract_gui

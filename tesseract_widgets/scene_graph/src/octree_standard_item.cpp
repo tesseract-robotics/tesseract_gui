@@ -28,36 +28,30 @@
 namespace tesseract_gui
 {
 OctreeStandardItem::OctreeStandardItem(tesseract_geometry::Octree::Ptr octree)
-  : QStandardItem(icons::getOctreeIcon(), "Octree")
-  , octree(std::move(octree))
+  : QStandardItem(icons::getOctreeIcon(), "Octree"), octree(std::move(octree))
 {
   ctor();
 }
 
-OctreeStandardItem::OctreeStandardItem(const QString &text, tesseract_geometry::Octree::Ptr octree)
-  : QStandardItem(icons::getOctreeIcon(), text)
-  , octree(std::move(octree))
+OctreeStandardItem::OctreeStandardItem(const QString& text, tesseract_geometry::Octree::Ptr octree)
+  : QStandardItem(icons::getOctreeIcon(), text), octree(std::move(octree))
 {
   ctor();
 }
 
-OctreeStandardItem::OctreeStandardItem(const QIcon &icon, const QString &text, tesseract_geometry::Octree::Ptr octree)
-  : QStandardItem(icon, text)
-  , octree(std::move(octree))
+OctreeStandardItem::OctreeStandardItem(const QIcon& icon, const QString& text, tesseract_geometry::Octree::Ptr octree)
+  : QStandardItem(icon, text), octree(std::move(octree))
 {
   ctor();
 }
 
-int OctreeStandardItem::type() const
-{
-  return static_cast<int>(StandardItemType::OCTREE);
-}
+int OctreeStandardItem::type() const { return static_cast<int>(StandardItemType::OCTREE); }
 
 void OctreeStandardItem::ctor()
 {
   appendRow(createStandardItemString("pruned", (octree->getPruned()) ? "True" : "False"));
 
-   switch (octree->getSubType())
+  switch (octree->getSubType())
   {
     case tesseract_geometry::Octree::BOX:
     {
@@ -78,5 +72,4 @@ void OctreeStandardItem::ctor()
 
   appendRow(createStandardItemFloat("shape count", octree->calcNumSubShapes()));
 }
-}
-
+}  // namespace tesseract_gui

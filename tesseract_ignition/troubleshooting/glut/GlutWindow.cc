@@ -16,17 +16,17 @@
  */
 #include <sstream>
 #if __APPLE__
-  #include <OpenGL/gl.h>
-  #include <OpenGL/OpenGL.h>
-  #include <GLUT/glut.h>
+#include <OpenGL/gl.h>
+#include <OpenGL/OpenGL.h>
+#include <GLUT/glut.h>
 #else
-  #include <GL/glew.h>
-  #include <GL/gl.h>
-  #include <GL/glut.h>
+#include <GL/glew.h>
+#include <GL/gl.h>
+#include <GL/glut.h>
 #endif
 
 #if !defined(__APPLE__) && !defined(_WIN32)
-  #include <GL/glx.h>
+#include <GL/glx.h>
 #endif
 
 #include <mutex>
@@ -42,7 +42,7 @@
 #include "GlutWindow.hh"
 
 #define KEY_ESC 27
-#define KEY_TAB  9
+#define KEY_TAB 9
 
 //////////////////////////////////////////////////
 unsigned int imgw = 0;
@@ -55,19 +55,19 @@ unsigned int g_cameraIndex = 0;
 ir::ImagePtr g_image;
 
 bool g_initContext = false;
-GLuint g_texture{0};
+GLuint g_texture{ 0 };
 
 #if __APPLE__
-  CGLContextObj g_context;
-  CGLContextObj g_glutContext;
+CGLContextObj g_context;
+CGLContextObj g_glutContext;
 #elif _WIN32
 #else
-  GLXContext g_context;
-  Display *g_display;
-  GLXDrawable g_drawable;
-  GLXContext g_glutContext;
-  Display *g_glutDisplay;
-  GLXDrawable g_glutDrawable;
+GLXContext g_context;
+Display* g_display;
+GLXDrawable g_drawable;
+GLXContext g_glutContext;
+Display* g_glutDisplay;
+GLXDrawable g_glutDrawable;
 #endif
 
 // view control variables
@@ -149,12 +149,10 @@ void handleMouse()
   if (g_mouse.buttonDirty)
   {
     g_mouse.buttonDirty = false;
-    double nx =
-        2.0 * g_mouse.x / static_cast<double>(rayCamera->ImageWidth()) - 1.0;
-    double ny = 1.0 -
-        2.0 * g_mouse.y / static_cast<double>(rayCamera->ImageHeight());
+    double nx = 2.0 * g_mouse.x / static_cast<double>(rayCamera->ImageWidth()) - 1.0;
+    double ny = 1.0 - 2.0 * g_mouse.y / static_cast<double>(rayCamera->ImageHeight());
     g_rayQuery->SetFromCamera(rayCamera, ignition::math::Vector2d(nx, ny));
-    g_target  = g_rayQuery->ClosestPoint();
+    g_target = g_rayQuery->ClosestPoint();
     if (!g_target)
     {
       // set point to be 10m away if no intersection found
@@ -163,12 +161,10 @@ void handleMouse()
     }
 
     // mouse wheel scroll zoom
-    if ((g_mouse.button == 3 || g_mouse.button == 4) &&
-        g_mouse.state == GLUT_UP)
+    if ((g_mouse.button == 3 || g_mouse.button == 4) && g_mouse.state == GLUT_UP)
     {
       double scroll = (g_mouse.button == 3) ? -1.0 : 1.0;
-      double distance = rayCamera->WorldPosition().Distance(
-          g_target.point);
+      double distance = rayCamera->WorldPosition().Distance(g_target.point);
       int factor = 1;
       double amount = -(scroll * factor) * (distance / 5.0);
       for (ir::CameraPtr camera : g_cameras)
@@ -208,13 +204,10 @@ void handleMouse()
     else if (g_mouse.button == GLUT_RIGHT_BUTTON && g_mouse.state == GLUT_DOWN)
     {
       double hfov = rayCamera->HFOV().Radian();
-      double vfov = 2.0f * atan(tan(hfov / 2.0f) /
-          rayCamera->AspectRatio());
-      double distance = rayCamera->WorldPosition().Distance(
-          g_target.point);
-      double amount = ((-g_mouse.dragY /
-          static_cast<double>(rayCamera->ImageHeight()))
-          * distance * tan(vfov/2.0) * 6.0);
+      double vfov = 2.0f * atan(tan(hfov / 2.0f) / rayCamera->AspectRatio());
+      double distance = rayCamera->WorldPosition().Distance(g_target.point);
+      double amount =
+          ((-g_mouse.dragY / static_cast<double>(rayCamera->ImageHeight())) * distance * tan(vfov / 2.0) * 6.0);
       for (ir::CameraPtr camera : g_cameras)
       {
         g_viewControl.SetCamera(camera);
@@ -224,7 +217,6 @@ void handleMouse()
     }
   }
 }
-
 
 //////////////////////////////////////////////////
 void displayCB()
@@ -246,7 +238,7 @@ void displayCB()
   g_image = std::make_shared<ir::Image>(image);
   camera->Capture(*g_image);
 
-  auto *data = g_image->Data<unsigned char>();
+  auto* data = g_image->Data<unsigned char>();
 
   ignition::common::Image tmp;
   tmp.SetFromData(data, g_image->Width(), g_image->Height(), ignition::common::Image::RGB_INT8);
@@ -263,35 +255,35 @@ void displayCB()
 
   glClearColor(0.5, 0.5, 0.5, 1);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  bool use_texture{true};
+  bool use_texture{ true };
   if (use_texture)
   {
     glEnable(GL_TEXTURE_RECTANGLE);
-    glViewport (0, 0, (GLsizei) imgw, (GLsizei) imgh);
+    glViewport(0, 0, (GLsizei)imgw, (GLsizei)imgh);
     glDeleteTextures(1, &g_texture);
-    glGenTextures (1, &g_texture);
-    glBindTexture (GL_TEXTURE_RECTANGLE, g_texture);
+    glGenTextures(1, &g_texture);
+    glBindTexture(GL_TEXTURE_RECTANGLE, g_texture);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
     glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
     glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
-    glTexImage2D (GL_TEXTURE_RECTANGLE, 0, GL_RGBA8, (GLint)imgw, (GLint)imgh, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-    glBegin (GL_QUADS);
+    glTexImage2D(GL_TEXTURE_RECTANGLE, 0, GL_RGBA8, (GLint)imgw, (GLint)imgh, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+    glBegin(GL_QUADS);
     // Bottom left
-    glTexCoord2d (imgw, imgh);
+    glTexCoord2d(imgw, imgh);
     glVertex2f(-1, -1);
 
     // Top left
-    glTexCoord2d (0, imgh);
-    glVertex2f (1, -1);
+    glTexCoord2d(0, imgh);
+    glVertex2f(1, -1);
 
     // Top right
-    glTexCoord2d (0, 0);
-    glVertex2f (1, 1);
+    glTexCoord2d(0, 0);
+    glVertex2f(1, 1);
 
     // Bottom right
-    glTexCoord2d (imgw, 0);
-    glVertex2f (-1, 1);
+    glTexCoord2d(imgw, 0);
+    glVertex2f(-1, 1);
     glEnd();
     glDisable(GL_TEXTURE_RECTANGLE);
   }
@@ -315,7 +307,7 @@ void displayCB()
     {
       for (int c = 0; c < 4; ++c)
       {
-        ss << glmvm[4*r+c] << ", ";
+        ss << glmvm[4 * r + c] << ", ";
       }
       ss << std::endl;
     }
@@ -331,7 +323,7 @@ void displayCB()
     {
       for (int c = 0; c < 4; ++c)
       {
-        ss << glmvm[4*r+c] << ", ";
+        ss << glmvm[4 * r + c] << ", ";
       }
       ss << std::endl;
     }
@@ -347,7 +339,7 @@ void displayCB()
     {
       for (int c = 0; c < 4; ++c)
       {
-        ss << glmvm[4*r+c] << ", ";
+        ss << glmvm[4 * r + c] << ", ";
       }
       ss << std::endl;
     }
@@ -364,7 +356,8 @@ void displayCB()
   {
     GLfloat crp[4];
     glGetFloatv(GL_CURRENT_RASTER_TEXTURE_COORDS, &crp[0]);
-    ignerr << "Raster Texture Coord: x: " << crp[0] << " y: " << crp[1] << " z: " << crp[2] << " w: " << crp[2] << std::endl;
+    ignerr << "Raster Texture Coord: x: " << crp[0] << " y: " << crp[1] << " z: " << crp[2] << " w: " << crp[2]
+           << std::endl;
   }
 
   {
@@ -377,10 +370,7 @@ void displayCB()
 }
 
 //////////////////////////////////////////////////
-void idleCB()
-{
-  glutPostRedisplay();
-}
+void idleCB() { glutPostRedisplay(); }
 
 //////////////////////////////////////////////////
 void keyboardCB(unsigned char _key, int, int)
@@ -459,7 +449,7 @@ void run(std::vector<ir::CameraPtr> _cameras)
   initCamera(_cameras[0]);
   initContext();
   printUsage();
-  glGenTextures( 1, &g_texture );
+  glGenTextures(1, &g_texture);
 
 #if __APPLE__
   g_glutContext = CGLGetCurrentContext();
@@ -472,5 +462,3 @@ void run(std::vector<ir::CameraPtr> _cameras)
 
   glutMainLoop();
 }
-
-

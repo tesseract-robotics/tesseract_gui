@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
-*/
+ */
 
 #include <tesseract_ignition/glut_render_widget.h>
 #include <tesseract_ignition/gui_utils.h>
@@ -49,19 +49,18 @@
 
 namespace tesseract_gui
 {
-
 // \brief Private data class for GlutRenderer
 class GlutRendererImpl
 {
 public:
   /// \brief Flag to indicate if mouse event is dirty
-  bool mouseDirty{false};
+  bool mouseDirty{ false };
 
   /// \brief Flag to indicate if hover event is dirty
-  bool hoverDirty{false};
+  bool hoverDirty{ false };
 
   /// \brief Flag to indicate if drop event is dirty
-  bool dropDirty{false};
+  bool dropDirty{ false };
 
   /// \brief Mouse event
   ignition::common::MouseEvent mouseEvent;
@@ -73,34 +72,30 @@ public:
   std::mutex mutex;
 
   /// \brief User camera
-  ignition::rendering::CameraPtr camera{nullptr};
+  ignition::rendering::CameraPtr camera{ nullptr };
 
   /// \brief The currently hovered mouse position in screen coordinates
-  ignition::math::Vector2i mouseHoverPos{ignition::math::Vector2i::Zero};
+  ignition::math::Vector2i mouseHoverPos{ ignition::math::Vector2i::Zero };
 
   /// \brief The currently drop mouse position in screen coordinates
-  ignition::math::Vector2i mouseDropPos{ignition::math::Vector2i::Zero};
+  ignition::math::Vector2i mouseDropPos{ ignition::math::Vector2i::Zero };
 
   /// \brief The dropped text in the scene
   std::string dropText;
 
   /// \brief Ray query for mouse clicks
-  ignition::rendering::RayQueryPtr rayQuery{nullptr};
+  ignition::rendering::RayQueryPtr rayQuery{ nullptr };
 
   /// \brief View control focus target
   ignition::math::Vector3d target;
 };
 
 /////////////////////////////////////////////////
-GlutRenderer::GlutRenderer()
-  : dataPtr(std::make_unique<GlutRendererImpl>())
-{
-}
+GlutRenderer::GlutRenderer() : dataPtr(std::make_unique<GlutRendererImpl>()) {}
 
 /////////////////////////////////////////////////
 ignition::rendering::Image GlutRenderer::Render()
 {
-
   if (!initialized)
     return ignition::rendering::Image();
 
@@ -109,7 +104,8 @@ ignition::rendering::Image GlutRenderer::Render()
     std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
     this->dataPtr->camera->SetImageWidth(this->textureSize.width());
     this->dataPtr->camera->SetImageHeight(this->textureSize.height());
-    this->dataPtr->camera->SetAspectRatio(static_cast<double>(this->textureSize.width()) / static_cast<double>(this->textureSize.height()));
+    this->dataPtr->camera->SetAspectRatio(static_cast<double>(this->textureSize.width()) /
+                                          static_cast<double>(this->textureSize.height()));
     // setting the size should cause the render texture to be rebuilt
     this->dataPtr->camera->PreRender();
     this->textureDirty = false;
@@ -162,7 +158,7 @@ void GlutRenderer::HandleMouseEvent()
 }
 
 ////////////////////////////////////////////////
-void GlutRenderer::HandleKeyPress(const ignition::common::KeyEvent &_e)
+void GlutRenderer::HandleKeyPress(const ignition::common::KeyEvent& _e)
 {
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
 
@@ -174,7 +170,7 @@ void GlutRenderer::HandleKeyPress(const ignition::common::KeyEvent &_e)
 }
 
 ////////////////////////////////////////////////
-void GlutRenderer::HandleKeyRelease(const ignition::common::KeyEvent &_e)
+void GlutRenderer::HandleKeyRelease(const ignition::common::KeyEvent& _e)
 {
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
 
@@ -190,8 +186,7 @@ void GlutRenderer::BroadcastDrop()
 {
   if (!this->dataPtr->dropDirty)
     return;
-  events::DropOnScene dropOnSceneEvent(
-    this->dataPtr->dropText, this->dataPtr->mouseDropPos, this->sceneName);
+  events::DropOnScene dropOnSceneEvent(this->dataPtr->dropText, this->dataPtr->mouseDropPos, this->sceneName);
   QApplication::sendEvent(tesseract_gui::getApp(), &dropOnSceneEvent);
   this->dataPtr->dropDirty = false;
 }
@@ -339,10 +334,10 @@ void GlutRenderer::Initialize()
   std::map<std::string, std::string> params;
   params["useCurrentGLContext"] = "1";
   params["gammaCorrect"] = "1";
-//  params["winID"] = std::to_string(tesseract_gui::getApp()->activeWindow()->winId());
-//  params["winID"] = std::to_string(
-//    ignition::gui::App()->findChild<ignition::gui::MainWindow *>()->
-//      QuickWindow()-winId());
+  //  params["winID"] = std::to_string(tesseract_gui::getApp()->activeWindow()->winId());
+  //  params["winID"] = std::to_string(
+  //    ignition::gui::App()->findChild<ignition::gui::MainWindow *>()->
+  //      QuickWindow()-winId());
   auto* engine = ignition::rendering::engine(this->engineName, params);
   if (engine == nullptr)
   {
@@ -379,15 +374,13 @@ void GlutRenderer::Initialize()
       gray->SetSpecular(0.7, 0.7, 0.7);
 
       // create grid visual
-      unsigned id = 1000; //static_cast<unsigned>(this->dataPtr->entity_manager.addVisual("tesseract_grid"));
+      unsigned id = 1000;  // static_cast<unsigned>(this->dataPtr->entity_manager.addVisual("tesseract_grid"));
       ignition::rendering::VisualPtr visual = scene->CreateVisual(id, "tesseract_grid");
       ignition::rendering::GridPtr gridGeom = scene->CreateGrid();
       if (!gridGeom)
       {
-        ignwarn << "Failed to create grid for scene ["
-          << scene->Name() << "] on engine ["
-            << scene->Engine()->Name() << "]"
-              << std::endl;
+        ignwarn << "Failed to create grid for scene [" << scene->Name() << "] on engine [" << scene->Engine()->Name()
+                << "]" << std::endl;
         return;
       }
       gridGeom->SetCellCount(20);
@@ -460,7 +453,7 @@ void GlutRenderer::Destroy()
 }
 
 /////////////////////////////////////////////////
-void GlutRenderer::NewHoverEvent(const ignition::math::Vector2i &_hoverPos)
+void GlutRenderer::NewHoverEvent(const ignition::math::Vector2i& _hoverPos)
 {
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
   this->dataPtr->mouseHoverPos = _hoverPos;
@@ -468,8 +461,7 @@ void GlutRenderer::NewHoverEvent(const ignition::math::Vector2i &_hoverPos)
 }
 
 /////////////////////////////////////////////////
-void GlutRenderer::NewDropEvent(const std::string &_dropText,
-  const ignition::math::Vector2i &_dropPos)
+void GlutRenderer::NewDropEvent(const std::string& _dropText, const ignition::math::Vector2i& _dropPos)
 {
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
   this->dataPtr->dropText = _dropText;
@@ -478,7 +470,7 @@ void GlutRenderer::NewDropEvent(const std::string &_dropText,
 }
 
 /////////////////////////////////////////////////
-void GlutRenderer::NewMouseEvent(const ignition::common::MouseEvent &_e)
+void GlutRenderer::NewMouseEvent(const ignition::common::MouseEvent& _e)
 {
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
   this->dataPtr->mouseEvent = _e;
@@ -486,8 +478,7 @@ void GlutRenderer::NewMouseEvent(const ignition::common::MouseEvent &_e)
 }
 
 /////////////////////////////////////////////////
-ignition::math::Vector3d GlutRenderer::ScreenToScene(
-    const ignition::math::Vector2i &_screenPos) const
+ignition::math::Vector3d GlutRenderer::ScreenToScene(const ignition::math::Vector2i& _screenPos) const
 {
   // TODO(ahcorde): Replace this code with function in ign-rendering
   // Require this commit
@@ -502,16 +493,14 @@ ignition::math::Vector3d GlutRenderer::ScreenToScene(
   double ny = 1.0 - 2.0 * _screenPos.Y() / height;
 
   // Make a ray query
-  this->dataPtr->rayQuery->SetFromCamera(
-      this->dataPtr->camera, ignition::math::Vector2d(nx, ny));
+  this->dataPtr->rayQuery->SetFromCamera(this->dataPtr->camera, ignition::math::Vector2d(nx, ny));
 
   auto result = this->dataPtr->rayQuery->ClosestPoint();
   if (result)
     return result.point;
 
   // Set point to be 10m away if no intersection found
-  return this->dataPtr->rayQuery->Origin() +
-      this->dataPtr->rayQuery->Direction() * 10;
+  return this->dataPtr->rayQuery->Origin() + this->dataPtr->rayQuery->Direction() * 10;
 }
 
 /// \brief Private data class for RenderWindowItem
@@ -524,16 +513,15 @@ public:
   /// \brief Ign-rendering renderer
   GlutRenderer renderer;
 
-  GLuint texture{0};
+  GLuint texture{ 0 };
 
   /// \brief List of our QT connections.
   QList<QMetaObject::Connection> connections;
 };
 
 /////////////////////////////////////////////////
-GlutRenderWidget::GlutRenderWidget(const std::string& scene_name, QWidget *_parent)
-  : QOpenGLWidget(_parent)
-  , dataPtr(std::make_unique<GlutRenderWidgetImpl>())
+GlutRenderWidget::GlutRenderWidget(const std::string& scene_name, QWidget* _parent)
+  : QOpenGLWidget(_parent), dataPtr(std::make_unique<GlutRenderWidgetImpl>())
 {
   dataPtr->renderer.sceneName = scene_name;
   connect(this, &QOpenGLWidget::resized, this, &GlutRenderWidget::OnResized);
@@ -543,19 +531,19 @@ GlutRenderWidget::GlutRenderWidget(const std::string& scene_name, QWidget *_pare
 GlutRenderWidget::~GlutRenderWidget()
 {
   // Disconnect our QT connections.
-  for(const auto& conn : this->dataPtr->connections)
+  for (const auto& conn : this->dataPtr->connections)
     QObject::disconnect(conn);
 }
 
 void GlutRenderWidget::initializeGL()
 {
   makeCurrent();
-  glewExperimental=true;
+  glewExperimental = true;
   GLenum err = glewInit();
   if (err != GLEW_OK)
   {
-      std::cerr << "Failed to initialize GLEW\n";
-      std::cerr << glewGetErrorString(err);
+    std::cerr << "Failed to initialize GLEW\n";
+    std::cerr << glewGetErrorString(err);
   }
 
   std::cerr << "using OpenGL " << format().majorVersion() << "." << format().minorVersion() << "\n";
@@ -602,67 +590,67 @@ void GlutRenderWidget::paintGL()
   auto imgh = image.Height();
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  bool use_texture{false};
+  bool use_texture{ false };
   if (use_texture)
   {
-//    glMatrixMode(GL_PROJECTION);
-//    glLoadIdentity();
-//    glMatrixMode(GL_MODELVIEW);
-//    glLoadIdentity();
-//    glMatrixMode(GL_TEXTURE);
-//    glLoadIdentity();
+    //    glMatrixMode(GL_PROJECTION);
+    //    glLoadIdentity();
+    //    glMatrixMode(GL_MODELVIEW);
+    //    glLoadIdentity();
+    //    glMatrixMode(GL_TEXTURE);
+    //    glLoadIdentity();
 
     glEnable(GL_TEXTURE_RECTANGLE);
-    glViewport (0, 0, (GLsizei) imgw, (GLsizei) imgh);
+    glViewport(0, 0, (GLsizei)imgw, (GLsizei)imgh);
     glDeleteTextures(1, &(this->dataPtr->texture));
-    glGenTextures (1, &(this->dataPtr->texture));
-    glBindTexture (GL_TEXTURE_RECTANGLE, this->dataPtr->texture);
+    glGenTextures(1, &(this->dataPtr->texture));
+    glBindTexture(GL_TEXTURE_RECTANGLE, this->dataPtr->texture);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
     glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
     glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
-    glTexImage2D (GL_TEXTURE_RECTANGLE, 0, GL_RGBA, (GLint)imgw, (GLint)imgh, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-    glBegin (GL_QUADS);
+    glTexImage2D(GL_TEXTURE_RECTANGLE, 0, GL_RGBA, (GLint)imgw, (GLint)imgh, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+    glBegin(GL_QUADS);
     // Bottom left
-    glTexCoord2d (imgw, imgh);
+    glTexCoord2d(imgw, imgh);
     glVertex2f(-1, -1);
 
     // Top left
-    glTexCoord2d (0, imgh);
-    glVertex2f (1, -1);
+    glTexCoord2d(0, imgh);
+    glVertex2f(1, -1);
 
     // Top right
-    glTexCoord2d (0, 0);
-    glVertex2f (1, 1);
+    glTexCoord2d(0, 0);
+    glVertex2f(1, 1);
 
     // Bottom right
-    glTexCoord2d (imgw, 0);
-    glVertex2f (-1, 1);
+    glTexCoord2d(imgw, 0);
+    glVertex2f(-1, 1);
     glEnd();
     glDisable(GL_TEXTURE_RECTANGLE);
   }
   else
   {
-//    glMatrixMode(GL_PROJECTION);
-//    glLoadIdentity();
-//    glMatrixMode(GL_MODELVIEW);
-//    glLoadIdentity();
-//    glMatrixMode(GL_TEXTURE);
-//    glLoadIdentity();
+    //    glMatrixMode(GL_PROJECTION);
+    //    glLoadIdentity();
+    //    glMatrixMode(GL_MODELVIEW);
+    //    glLoadIdentity();
+    //    glMatrixMode(GL_TEXTURE);
+    //    glLoadIdentity();
 
-//    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-//    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
-//    glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
-//    glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
+    //    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    //    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+    //    glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
+    //    glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
 
-//    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-//    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
-//    glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
-//    glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
+    //    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    //    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+    //    glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
+    //    glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
 
     glPixelZoom(1, -1);
     glRasterPos2f(-1, 1);
-//    glDrawPixels(imgw, imgh, GL_RGB, GL_UNSIGNED_BYTE, data);
+    //    glDrawPixels(imgw, imgh, GL_RGB, GL_UNSIGNED_BYTE, data);
 
     glPixelStorei(GL_UNPACK_ROW_LENGTH, qimg_convert.bytesPerLine() / 4);
     glDrawPixels(qimg_convert.width(), qimg_convert.height(), GL_RGBA, GL_UNSIGNED_BYTE, qimg_convert.bits());
@@ -672,61 +660,42 @@ void GlutRenderWidget::paintGL()
 }
 
 /////////////////////////////////////////////////
-void GlutRenderWidget::SetBackgroundColor(const ignition::math::Color &_color)
+void GlutRenderWidget::SetBackgroundColor(const ignition::math::Color& _color)
 {
   this->dataPtr->renderer.backgroundColor = _color;
 }
 
 /////////////////////////////////////////////////
-void GlutRenderWidget::SetAmbientLight(const ignition::math::Color &_ambient)
+void GlutRenderWidget::SetAmbientLight(const ignition::math::Color& _ambient)
 {
   this->dataPtr->renderer.ambientLight = _ambient;
 }
 
 /////////////////////////////////////////////////
-void GlutRenderWidget::SetEngineName(const std::string &_name)
-{
-  this->dataPtr->renderer.engineName = _name;
-}
+void GlutRenderWidget::SetEngineName(const std::string& _name) { this->dataPtr->renderer.engineName = _name; }
 
 /////////////////////////////////////////////////
-void GlutRenderWidget::SetSceneName(const std::string &_name)
-{
-  this->dataPtr->renderer.sceneName = _name;
-}
+void GlutRenderWidget::SetSceneName(const std::string& _name) { this->dataPtr->renderer.sceneName = _name; }
 
 /////////////////////////////////////////////////
-void GlutRenderWidget::SetCameraPose(const ignition::math::Pose3d &_pose)
+void GlutRenderWidget::SetCameraPose(const ignition::math::Pose3d& _pose)
 {
   this->dataPtr->renderer.cameraPose = _pose;
 }
 
 /////////////////////////////////////////////////
-void GlutRenderWidget::SetCameraNearClip(double _near)
-{
-  this->dataPtr->renderer.cameraNearClip = _near;
-}
+void GlutRenderWidget::SetCameraNearClip(double _near) { this->dataPtr->renderer.cameraNearClip = _near; }
 
 /////////////////////////////////////////////////
-void GlutRenderWidget::SetCameraFarClip(double _far)
-{
-  this->dataPtr->renderer.cameraFarClip = _far;
-}
+void GlutRenderWidget::SetCameraFarClip(double _far) { this->dataPtr->renderer.cameraFarClip = _far; }
 
 /////////////////////////////////////////////////
-void GlutRenderWidget::SetSkyEnabled(const bool &_sky)
-{
-  this->dataPtr->renderer.skyEnable = _sky;
-}
+void GlutRenderWidget::SetSkyEnabled(const bool& _sky) { this->dataPtr->renderer.skyEnable = _sky; }
 
-void GlutRenderWidget::SetGridEnabled(bool _grid)
-{
-  this->dataPtr->renderer.gridEnable = _grid;
-}
-
+void GlutRenderWidget::SetGridEnabled(bool _grid) { this->dataPtr->renderer.gridEnable = _grid; }
 
 /////////////////////////////////////////////////
-//void MinimalScene::LoadConfig(const tinyxml2::XMLElement *_pluginElem)
+// void MinimalScene::LoadConfig(const tinyxml2::XMLElement *_pluginElem)
 //{
 //  RenderWindowItem *renderWindow =
 //      this->PluginItem()->findChild<RenderWindowItem *>();
@@ -849,35 +818,31 @@ void GlutRenderWidget::SetGridEnabled(bool _grid)
 /////////////////////////////////////////////////
 void GlutRenderWidget::OnHovered(int _mouseX, int _mouseY)
 {
-  this->dataPtr->renderer.NewHoverEvent({_mouseX, _mouseY});
+  this->dataPtr->renderer.NewHoverEvent({ _mouseX, _mouseY });
   update();
 }
 
 /////////////////////////////////////////////////
-void GlutRenderWidget::OnDropped(const QString &_drop, int _mouseX, int _mouseY)
+void GlutRenderWidget::OnDropped(const QString& _drop, int _mouseX, int _mouseY)
 {
-  this->dataPtr->renderer.NewDropEvent(_drop.toStdString(), {_mouseX, _mouseY});
+  this->dataPtr->renderer.NewDropEvent(_drop.toStdString(), { _mouseX, _mouseY });
   update();
 }
 
-void GlutRenderWidget::OnResized()
-{
-  update();
-}
+void GlutRenderWidget::OnResized() { update(); }
 
 /////////////////////////////////////////////////
-void GlutRenderWidget::mousePressEvent(QMouseEvent *_e)
+void GlutRenderWidget::mousePressEvent(QMouseEvent* _e)
 {
   this->dataPtr->mouseEvent = convert(*_e);
   this->dataPtr->mouseEvent.SetPressPos(this->dataPtr->mouseEvent.Pos());
 
-  this->dataPtr->renderer.NewMouseEvent(
-      this->dataPtr->mouseEvent);
+  this->dataPtr->renderer.NewMouseEvent(this->dataPtr->mouseEvent);
   update();
 }
 
 ////////////////////////////////////////////////
-void GlutRenderWidget::keyPressEvent(QKeyEvent *_e)
+void GlutRenderWidget::keyPressEvent(QKeyEvent* _e)
 {
   if (_e->isAutoRepeat())
     return;
@@ -888,7 +853,7 @@ void GlutRenderWidget::keyPressEvent(QKeyEvent *_e)
 }
 
 ////////////////////////////////////////////////
-void GlutRenderWidget::keyReleaseEvent(QKeyEvent *_e)
+void GlutRenderWidget::keyReleaseEvent(QKeyEvent* _e)
 {
   if (_e->isAutoRepeat())
     return;
@@ -899,7 +864,7 @@ void GlutRenderWidget::keyReleaseEvent(QKeyEvent *_e)
 }
 
 ////////////////////////////////////////////////
-void GlutRenderWidget::mouseReleaseEvent(QMouseEvent *_e)
+void GlutRenderWidget::mouseReleaseEvent(QMouseEvent* _e)
 {
   // Store values that depend on previous events
   auto pressPos = this->dataPtr->mouseEvent.PressPos();
@@ -909,13 +874,12 @@ void GlutRenderWidget::mouseReleaseEvent(QMouseEvent *_e)
   this->dataPtr->mouseEvent.SetPressPos(pressPos);
   this->dataPtr->mouseEvent.SetDragging(dragging);
 
-  this->dataPtr->renderer.NewMouseEvent(
-      this->dataPtr->mouseEvent);
+  this->dataPtr->renderer.NewMouseEvent(this->dataPtr->mouseEvent);
   update();
 }
 
 ////////////////////////////////////////////////
-void GlutRenderWidget::mouseMoveEvent(QMouseEvent *_e)
+void GlutRenderWidget::mouseMoveEvent(QMouseEvent* _e)
 {
   // Store values that depend on previous events
   auto pressPos = this->dataPtr->mouseEvent.PressPos();
@@ -925,33 +889,31 @@ void GlutRenderWidget::mouseMoveEvent(QMouseEvent *_e)
   if (this->dataPtr->mouseEvent.Dragging())
     this->dataPtr->mouseEvent.SetPressPos(pressPos);
 
-  this->dataPtr->renderer.NewMouseEvent(
-      this->dataPtr->mouseEvent);
+  this->dataPtr->renderer.NewMouseEvent(this->dataPtr->mouseEvent);
   update();
 }
 
 ////////////////////////////////////////////////
-void GlutRenderWidget::wheelEvent(QWheelEvent *_e)
+void GlutRenderWidget::wheelEvent(QWheelEvent* _e)
 {
-//  this->forceActiveFocus();
+  //  this->forceActiveFocus();
 
   this->dataPtr->mouseEvent = convert(*_e);
-  this->dataPtr->renderer.NewMouseEvent(
-    this->dataPtr->mouseEvent);
+  this->dataPtr->renderer.NewMouseEvent(this->dataPtr->mouseEvent);
   update();
 }
 
 ////////////////////////////////////////////////
-void GlutRenderWidget::HandleKeyPress(const ignition::common::KeyEvent &_e)
+void GlutRenderWidget::HandleKeyPress(const ignition::common::KeyEvent& _e)
 {
   this->dataPtr->renderer.HandleKeyPress(_e);
   update();
 }
 
 ////////////////////////////////////////////////
-void GlutRenderWidget::HandleKeyRelease(const ignition::common::KeyEvent &_e)
+void GlutRenderWidget::HandleKeyRelease(const ignition::common::KeyEvent& _e)
 {
   this->dataPtr->renderer.HandleKeyRelease(_e);
   update();
 }
-}
+}  // namespace tesseract_gui

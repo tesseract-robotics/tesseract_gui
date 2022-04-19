@@ -54,5 +54,5 @@ private:
     QColor _color;
   };
 };
-}
+}  // namespace tesseract_gui
 #endif  // TESSERACT_WIDGETS_PLOT_PLOT_WIDGET_TRANSFORMS_H

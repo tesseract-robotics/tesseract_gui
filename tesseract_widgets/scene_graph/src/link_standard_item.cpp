@@ -31,30 +31,24 @@
 namespace tesseract_gui
 {
 LinkStandardItem::LinkStandardItem(tesseract_scene_graph::Link::Ptr link)
-  : QStandardItem(icons::getLinkIcon(), "Link")
-  , link(std::move(link))
+  : QStandardItem(icons::getLinkIcon(), "Link"), link(std::move(link))
 {
   ctor();
 }
 
-LinkStandardItem::LinkStandardItem(const QString &text, tesseract_scene_graph::Link::Ptr link)
-  : QStandardItem(icons::getLinkIcon(), text)
-  , link(std::move(link))
+LinkStandardItem::LinkStandardItem(const QString& text, tesseract_scene_graph::Link::Ptr link)
+  : QStandardItem(icons::getLinkIcon(), text), link(std::move(link))
 {
   ctor();
 }
 
-LinkStandardItem::LinkStandardItem(const QIcon &icon, const QString &text, tesseract_scene_graph::Link::Ptr link)
-  : QStandardItem(icon, text)
-  , link(std::move(link))
+LinkStandardItem::LinkStandardItem(const QIcon& icon, const QString& text, tesseract_scene_graph::Link::Ptr link)
+  : QStandardItem(icon, text), link(std::move(link))
 {
   ctor();
 }
 
-int LinkStandardItem::type() const
-{
-  return static_cast<int>(StandardItemType::LINK);
-}
+int LinkStandardItem::type() const { return static_cast<int>(StandardItemType::LINK); }
 
 void LinkStandardItem::ctor()
 {
@@ -81,4 +75,4 @@ void LinkStandardItem::ctor()
     appendRow(collisions_item);
   }
 }
-}
+}  // namespace tesseract_gui

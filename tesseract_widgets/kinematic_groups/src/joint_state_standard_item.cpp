@@ -33,22 +33,24 @@ JointStateStandardItem::JointStateStandardItem(QString name, const std::unordere
   ctor(state);
 }
 
-JointStateStandardItem::JointStateStandardItem(const QString &text, QString name, const std::unordered_map<std::string, double>& state)
+JointStateStandardItem::JointStateStandardItem(const QString& text,
+                                               QString name,
+                                               const std::unordered_map<std::string, double>& state)
   : QStandardItem(icons::getCubeIcon(), text)
 {
   ctor(state);
 }
 
-JointStateStandardItem::JointStateStandardItem(const QIcon &icon, const QString &text, QString name, const std::unordered_map<std::string, double>& state)
+JointStateStandardItem::JointStateStandardItem(const QIcon& icon,
+                                               const QString& text,
+                                               QString name,
+                                               const std::unordered_map<std::string, double>& state)
   : QStandardItem(icon, text)
 {
   ctor(state);
 }
 
-int JointStateStandardItem::type() const
-{
-  return static_cast<int>(StandardItemType::JOINT_STATE);
-}
+int JointStateStandardItem::type() const { return static_cast<int>(StandardItemType::JOINT_STATE); }
 
 void JointStateStandardItem::ctor(const std::unordered_map<std::string, double>& state)
 {
@@ -57,5 +59,4 @@ void JointStateStandardItem::ctor(const std::unordered_map<std::string, double>&
 
   sortChildren(0);
 }
-}
-
+}  // namespace tesseract_gui

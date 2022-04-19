@@ -30,7 +30,6 @@
 
 namespace tesseract_gui
 {
-
 class EntityContainer;
 
 class EntityManager : public std::enable_shared_from_this<EntityManager>
@@ -77,5 +76,5 @@ private:
   std::unordered_map<std::string, std::shared_ptr<const EntityContainer>> containers_const_;
   static int entity_counter_; /**< Start entity counter to avoid clashing with gazebo */
 };
-}
-#endif // TESSERACT_GUI_COMMON_ENTITY_MANAGER_H
+}  // namespace tesseract_gui
+#endif  // TESSERACT_GUI_COMMON_ENTITY_MANAGER_H

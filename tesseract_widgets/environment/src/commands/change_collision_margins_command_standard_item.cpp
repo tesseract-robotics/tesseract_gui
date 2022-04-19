@@ -28,24 +28,26 @@
 
 namespace tesseract_gui
 {
-
-ChangeCollisionMarginsCommandStandardItem::ChangeCollisionMarginsCommandStandardItem(tesseract_environment::ChangeCollisionMarginsCommand::ConstPtr command)
-  : QStandardItem(icons::getCommandEntryIcon(), "Change Collision Margins")
-  , command(std::move(command))
+ChangeCollisionMarginsCommandStandardItem::ChangeCollisionMarginsCommandStandardItem(
+    tesseract_environment::ChangeCollisionMarginsCommand::ConstPtr command)
+  : QStandardItem(icons::getCommandEntryIcon(), "Change Collision Margins"), command(std::move(command))
 {
   ctor();
 }
 
-ChangeCollisionMarginsCommandStandardItem::ChangeCollisionMarginsCommandStandardItem(const QString &text, tesseract_environment::ChangeCollisionMarginsCommand::ConstPtr command)
-  : QStandardItem(icons::getCommandEntryIcon(), text)
-  , command(std::move(command))
+ChangeCollisionMarginsCommandStandardItem::ChangeCollisionMarginsCommandStandardItem(
+    const QString& text,
+    tesseract_environment::ChangeCollisionMarginsCommand::ConstPtr command)
+  : QStandardItem(icons::getCommandEntryIcon(), text), command(std::move(command))
 {
   ctor();
 }
 
-ChangeCollisionMarginsCommandStandardItem::ChangeCollisionMarginsCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::ChangeCollisionMarginsCommand::ConstPtr command)
-  : QStandardItem(icon, text)
-  , command(std::move(command))
+ChangeCollisionMarginsCommandStandardItem::ChangeCollisionMarginsCommandStandardItem(
+    const QIcon& icon,
+    const QString& text,
+    tesseract_environment::ChangeCollisionMarginsCommand::ConstPtr command)
+  : QStandardItem(icon, text), command(std::move(command))
 {
   ctor();
 }
@@ -92,6 +94,6 @@ void ChangeCollisionMarginsCommandStandardItem::ctor()
   }
 
   auto* cmd_item = new CollisionMarginDataStandardItem(command->getCollisionMarginData());
-  appendRow({cmd_item, new QStandardItem()});
+  appendRow({ cmd_item, new QStandardItem() });
 }
-}
+}  // namespace tesseract_gui

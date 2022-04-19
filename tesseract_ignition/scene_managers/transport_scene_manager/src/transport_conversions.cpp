@@ -55,8 +55,8 @@ ignition::msgs::Material toMsg(const Eigen::Vector4d& rgba)
 }
 
 ignition::msgs::Scene toMsg(EntityManager& entity_manager,
-           const tesseract_scene_graph::SceneGraph& scene_graph,
-           const tesseract_common::TransformMap& link_transforms)
+                            const tesseract_scene_graph::SceneGraph& scene_graph,
+                            const tesseract_common::TransformMap& link_transforms)
 {
   ignition::msgs::Scene scene_msg;
   scene_msg.set_name("scene");
@@ -289,7 +289,8 @@ ignition::msgs::Scene toMsg(EntityManager& entity_manager,
           //        }
         default:
         {
-          throw std::runtime_error("This geometric shape type " + std::to_string(static_cast<int>(vs->geometry->getType())) + " is not supported");
+          throw std::runtime_error("This geometric shape type " +
+                                   std::to_string(static_cast<int>(vs->geometry->getType())) + " is not supported");
           break;
         }
       }
@@ -298,7 +299,7 @@ ignition::msgs::Scene toMsg(EntityManager& entity_manager,
   return scene_msg;
 }
 
-ignition::rendering::VisualPtr loadModel(ignition::rendering::Scene& scene, const ignition::msgs::Model &msg)
+ignition::rendering::VisualPtr loadModel(ignition::rendering::Scene& scene, const ignition::msgs::Model& msg)
 {
   ignition::rendering::VisualPtr modelVis;
   if (!msg.name().empty() && !scene.HasVisualName(msg.name()))
@@ -330,13 +331,12 @@ ignition::rendering::VisualPtr loadModel(ignition::rendering::Scene& scene, cons
     if (nestedModelVis)
       modelVis->AddChild(nestedModelVis);
     else
-      ignerr << "Failed to load nested model: " << msg.model(i).name()
-             << std::endl;
+      ignerr << "Failed to load nested model: " << msg.model(i).name() << std::endl;
   }
 
   return modelVis;
 }
-ignition::rendering::VisualPtr loadLink(ignition::rendering::Scene& scene, const ignition::msgs::Link &msg)
+ignition::rendering::VisualPtr loadLink(ignition::rendering::Scene& scene, const ignition::msgs::Link& msg)
 {
   ignition::rendering::VisualPtr linkVis;
   if (!msg.name().empty() && !scene.HasVisualName(msg.name()))
@@ -374,7 +374,7 @@ ignition::rendering::VisualPtr loadLink(ignition::rendering::Scene& scene, const
   return linkVis;
 }
 
-ignition::rendering::VisualPtr loadVisual(ignition::rendering::Scene& scene, const ignition::msgs::Visual &msg)
+ignition::rendering::VisualPtr loadVisual(ignition::rendering::Scene& scene, const ignition::msgs::Visual& msg)
 {
   if (!msg.has_geometry())
     return ignition::rendering::VisualPtr();
@@ -404,7 +404,7 @@ ignition::rendering::VisualPtr loadVisual(ignition::rendering::Scene& scene, con
     visualVis->SetLocalScale(scale);
 
     // set material
-    ignition::rendering::MaterialPtr material{nullptr};
+    ignition::rendering::MaterialPtr material{ nullptr };
     if (msg.has_material())
     {
       material = loadMaterial(scene, msg.material());
@@ -437,8 +437,7 @@ ignition::rendering::VisualPtr loadVisual(ignition::rendering::Scene& scene, con
         auto submeshMat = submesh->Material();
         if (submeshMat)
         {
-          double productAlpha = (1.0-msg.transparency()) *
-              (1.0 - submeshMat->Transparency());
+          double productAlpha = (1.0 - msg.transparency()) * (1.0 - submeshMat->Transparency());
           submeshMat->SetTransparency(1 - productAlpha);
           submeshMat->SetCastShadows(msg.cast_shadows());
         }
@@ -469,11 +468,14 @@ ignition::rendering::VisualPtr loadVisual(ignition::rendering::Scene& scene, con
   return visualVis;
 }
 
-ignition::rendering::GeometryPtr loadGeometry(ignition::rendering::Scene& scene, const ignition::msgs::Geometry &msg, ignition::math::Vector3d &_scale, ignition::math::Pose3d &_localPose)
+ignition::rendering::GeometryPtr loadGeometry(ignition::rendering::Scene& scene,
+                                              const ignition::msgs::Geometry& msg,
+                                              ignition::math::Vector3d& _scale,
+                                              ignition::math::Pose3d& _localPose)
 {
   ignition::math::Vector3d scale = ignition::math::Vector3d::One;
   ignition::math::Pose3d localPose = ignition::math::Pose3d::Zero;
-  ignition::rendering::GeometryPtr geom{nullptr};
+  ignition::rendering::GeometryPtr geom{ nullptr };
   if (msg.has_box())
   {
     geom = scene.CreateBox();
@@ -543,8 +545,7 @@ ignition::rendering::GeometryPtr loadGeometry(ignition::rendering::Scene& scene,
     // Assume absolute path to mesh file
     descriptor.meshName = msg.mesh().filename();
 
-    ignition::common::MeshManager* meshManager =
-        ignition::common::MeshManager::Instance();
+    ignition::common::MeshManager* meshManager = ignition::common::MeshManager::Instance();
     descriptor.mesh = meshManager->Load(descriptor.meshName);
     geom = scene.CreateMesh(descriptor);
 
@@ -559,8 +560,8 @@ ignition::rendering::GeometryPtr loadGeometry(ignition::rendering::Scene& scene,
   return geom;
 }
 ignition::rendering::MaterialPtr loadMaterial(ignition::rendering::Scene& scene,
-                                              tesseract_gui::EntityContainer &entity_container,
-                                              const ignition::msgs::Material &msg)
+                                              tesseract_gui::EntityContainer& entity_container,
+                                              const ignition::msgs::Material& msg)
 {
   ignition::rendering::MaterialPtr material = scene.CreateMaterial();
   if (msg.has_ambient())
@@ -582,7 +583,7 @@ ignition::rendering::MaterialPtr loadMaterial(ignition::rendering::Scene& scene,
 
   return material;
 }
-ignition::rendering::LightPtr loadLight(ignition::rendering::Scene& scene, const ignition::msgs::Light &msg)
+ignition::rendering::LightPtr loadLight(ignition::rendering::Scene& scene, const ignition::msgs::Light& msg)
 {
   ignition::rendering::LightPtr light;
 
@@ -594,8 +595,7 @@ ignition::rendering::LightPtr loadLight(ignition::rendering::Scene& scene, const
     case ignition::msgs::Light_LightType_SPOT:
     {
       light = scene.CreateSpotLight();
-      ignition::rendering::SpotLightPtr spotLight =
-          std::dynamic_pointer_cast<ignition::rendering::SpotLight>(light);
+      ignition::rendering::SpotLightPtr spotLight = std::dynamic_pointer_cast<ignition::rendering::SpotLight>(light);
       spotLight->SetInnerAngle(msg.spot_inner_angle());
       spotLight->SetOuterAngle(msg.spot_outer_angle());
       spotLight->SetFalloff(msg.spot_falloff());
@@ -632,7 +632,6 @@ ignition::rendering::LightPtr loadLight(ignition::rendering::Scene& scene, const
 
   light->SetCastShadows(msg.cast_shadows());
 
-
   return light;
 }
-}
+}  // namespace tesseract_gui

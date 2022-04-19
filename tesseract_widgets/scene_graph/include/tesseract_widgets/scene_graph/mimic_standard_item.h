@@ -38,8 +38,8 @@ class MimicStandardItem : public QStandardItem
 {
 public:
   MimicStandardItem(tesseract_scene_graph::JointMimic::Ptr mimic);
-  explicit MimicStandardItem(const QString &text, tesseract_scene_graph::JointMimic::Ptr mimic);
-  MimicStandardItem(const QIcon &icon, const QString &text, tesseract_scene_graph::JointMimic::Ptr mimic);
+  explicit MimicStandardItem(const QString& text, tesseract_scene_graph::JointMimic::Ptr mimic);
+  MimicStandardItem(const QIcon& icon, const QString& text, tesseract_scene_graph::JointMimic::Ptr mimic);
   int type() const override;
 
   tesseract_scene_graph::JointMimic::Ptr mimic;
@@ -47,6 +47,6 @@ public:
 private:
   void ctor();
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_SCENE_GRAPH_MIMIC_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_SCENE_GRAPH_MIMIC_STANDARD_ITEM_H

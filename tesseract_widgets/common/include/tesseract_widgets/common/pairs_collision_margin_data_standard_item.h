@@ -39,10 +39,12 @@ class PairsCollisionMarginDataStandardItem : public QStandardItem
 {
 public:
   PairsCollisionMarginDataStandardItem(tesseract_common::PairsCollisionMarginData pairs_margin_data);
-  explicit PairsCollisionMarginDataStandardItem(const QString &text, tesseract_common::PairsCollisionMarginData pairs_margin_data);
-  PairsCollisionMarginDataStandardItem(const QIcon &icon, const QString &text, tesseract_common::PairsCollisionMarginData pairs_margin_data);
+  explicit PairsCollisionMarginDataStandardItem(const QString& text,
+                                                tesseract_common::PairsCollisionMarginData pairs_margin_data);
+  PairsCollisionMarginDataStandardItem(const QIcon& icon,
+                                       const QString& text,
+                                       tesseract_common::PairsCollisionMarginData pairs_margin_data);
   int type() const override;
-
 
   tesseract_common::PairsCollisionMarginData pairs_margin_data;
 
@@ -53,6 +55,6 @@ private:
 
   std::unordered_map<std::string, QStandardItem*> items_;
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_COMMON_PAIRS_COLLISION_MARGIN_DATA_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_COMMON_PAIRS_COLLISION_MARGIN_DATA_STANDARD_ITEM_H

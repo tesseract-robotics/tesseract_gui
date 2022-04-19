@@ -26,32 +26,32 @@ namespace tesseract_gui
 /// \brief Return the equivalent Qt color
 /// \param[in] _color Ignition color to convert
 /// \return Qt color value
-QColor convert(const ignition::math::Color &_color);
+QColor convert(const ignition::math::Color& _color);
 
 /// \brief Return the equivalent Ignition color
 /// \param[in] _color Qt color to convert
 /// \return Ignition color value
-ignition::math::Color convert(const QColor &_color);
+ignition::math::Color convert(const QColor& _color);
 
 /// \brief Return the equivalent QPointF.
 /// \param[in] _pt Ignition vector to convert.
 /// \return QPointF.
-QPointF convert(const ignition::math::Vector2d &_pt);
+QPointF convert(const ignition::math::Vector2d& _pt);
 
 /// \brief Return the equivalent Ignition vector.
 /// \param[in] _pt QPointF to convert
 /// \return Ignition Vector2d.
-ignition::math::Vector2d convert(const QPointF &_pt);
+ignition::math::Vector2d convert(const QPointF& _pt);
 
 /// \brief Return the equivalent Qt vector 3d.
 /// \param[in] _vec Ignition vector 3d to convert.
 /// \return Qt vector 3d value.
-QVector3D convert(const ignition::math::Vector3d &_vec);
+QVector3D convert(const ignition::math::Vector3d& _vec);
 
 /// \brief Return the equivalent Ignition vector 3d.
 /// \param[in] _vec Qt vector 3d to convert.
 /// \return Ignition vector 3d value
-ignition::math::Vector3d convert(const QVector3D &_vec);
+ignition::math::Vector3d convert(const QVector3D& _vec);
 
 /// \brief Return the equivalent Ignition mouse event.
 ///
@@ -59,20 +59,20 @@ ignition::math::Vector3d convert(const QVector3D &_vec);
 /// as common::MouseEvent::PressPos need to be set afterwards.
 /// \param[in] _e Qt mouse event
 /// \return Ignition mouse event
-ignition::common::MouseEvent convert(const QMouseEvent &_e);
+ignition::common::MouseEvent convert(const QMouseEvent& _e);
 
 /// \brief Return the equivalent Ignition mouse event.
 ///
 /// Note that there isn't a 1-1 mapping between these types.
 /// \param[in] _e Qt wheel event
 /// \return Ignition mouse event
-ignition::common::MouseEvent convert(const QWheelEvent &_e);
+ignition::common::MouseEvent convert(const QWheelEvent& _e);
 
 /// \brief Return the equivalent ignition key event.
 ///
 /// \param[in] _e Qt key event
 /// \return Ignition key event
-ignition::common::KeyEvent convert(const QKeyEvent &_e);
+ignition::common::KeyEvent convert(const QKeyEvent& _e);
 
 bool isMeshWithColor(const std::string& file_path);
 
@@ -112,6 +112,6 @@ ignition::rendering::VisualPtr loadLinkGeometry(ignition::rendering::Scene& scen
 ignition::rendering::MaterialPtr loadMaterial(ignition::rendering::Scene& scene,
                                               const tesseract_scene_graph::Material::ConstPtr& material);
 //  ignition::rendering::LightPtr loadLight(ignition::rendering::Scene& scene, const ignition::msgs::Light &msg);
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_IGNITION_CONVERSIONS_H
+#endif  // TESSERACT_IGNITION_CONVERSIONS_H

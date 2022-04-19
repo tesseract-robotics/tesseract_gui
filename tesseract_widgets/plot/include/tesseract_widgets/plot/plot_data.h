@@ -62,16 +62,13 @@ struct PlotDataMapRef
 
   PlotDataMap::iterator addNumeric(const std::string& name, PlotGroup::Ptr group = {});
 
-  AnySeriesMap::iterator addUserDefined(const std::string& name,
-                                        PlotGroup::Ptr group = {});
+  AnySeriesMap::iterator addUserDefined(const std::string& name, PlotGroup::Ptr group = {});
 
-  StringSeriesMap::iterator addStringSeries(const std::string& name,
-                                            PlotGroup::Ptr group = {});
+  StringSeriesMap::iterator addStringSeries(const std::string& name, PlotGroup::Ptr group = {});
 
   PlotData& getOrCreateNumeric(const std::string& name, PlotGroup::Ptr group = {});
 
-  StringSeries& getOrCreateStringSeries(const std::string& name,
-                                        PlotGroup::Ptr group = {});
+  StringSeries& getOrCreateStringSeries(const std::string& name, PlotGroup::Ptr group = {});
 
   PlotDataAny& getOrCreateUserDefined(const std::string& name, PlotGroup::Ptr group = {});
 
@@ -87,8 +84,7 @@ struct PlotDataMapRef
 };
 
 template <typename Value>
-inline void AddPrefixToPlotData(const std::string& prefix,
-                                std::unordered_map<std::string, Value>& data)
+inline void AddPrefixToPlotData(const std::string& prefix, std::unordered_map<std::string, Value>& data)
 {
   if (prefix.empty())
   {
@@ -116,9 +112,9 @@ inline void AddPrefixToPlotData(const std::string& prefix,
   {
     const std::string& key = temp_key[i];
 
-    auto it = data.emplace(std::piecewise_construct, std::forward_as_tuple(key),
-                           std::forward_as_tuple(key, PlotGroup::Ptr()))
-                  .first;
+    auto it =
+        data.emplace(std::piecewise_construct, std::forward_as_tuple(key), std::forward_as_tuple(key, PlotGroup::Ptr()))
+            .first;
 
     it->second = std::move(temp_value[i]);
   }

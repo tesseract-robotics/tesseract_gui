@@ -28,30 +28,27 @@
 namespace tesseract_gui
 {
 CalibrationStandardItem::CalibrationStandardItem(tesseract_scene_graph::JointCalibration::Ptr calibration)
-  : QStandardItem(icons::getCalibrationIcon(), "Calibration")
-  , calibration(std::move(calibration))
+  : QStandardItem(icons::getCalibrationIcon(), "Calibration"), calibration(std::move(calibration))
 {
   ctor();
 }
 
-CalibrationStandardItem::CalibrationStandardItem(const QString &text, tesseract_scene_graph::JointCalibration::Ptr calibration)
-  : QStandardItem(icons::getCalibrationIcon(), text)
-  , calibration(std::move(calibration))
+CalibrationStandardItem::CalibrationStandardItem(const QString& text,
+                                                 tesseract_scene_graph::JointCalibration::Ptr calibration)
+  : QStandardItem(icons::getCalibrationIcon(), text), calibration(std::move(calibration))
 {
   ctor();
 }
 
-CalibrationStandardItem::CalibrationStandardItem(const QIcon &icon, const QString &text, tesseract_scene_graph::JointCalibration::Ptr calibration)
-  : QStandardItem(icon, text)
-  , calibration(std::move(calibration))
+CalibrationStandardItem::CalibrationStandardItem(const QIcon& icon,
+                                                 const QString& text,
+                                                 tesseract_scene_graph::JointCalibration::Ptr calibration)
+  : QStandardItem(icon, text), calibration(std::move(calibration))
 {
   ctor();
 }
 
-int CalibrationStandardItem::type() const
-{
-  return static_cast<int>(StandardItemType::CALIBRATION);
-}
+int CalibrationStandardItem::type() const { return static_cast<int>(StandardItemType::CALIBRATION); }
 
 void CalibrationStandardItem::ctor()
 {
@@ -59,4 +56,4 @@ void CalibrationStandardItem::ctor()
   appendRow(createStandardItemFloat("rising", calibration->rising));
   appendRow(createStandardItemFloat("falling", calibration->falling));
 }
-}
+}  // namespace tesseract_gui

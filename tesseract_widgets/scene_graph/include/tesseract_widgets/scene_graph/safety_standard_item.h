@@ -38,8 +38,8 @@ class SafetyStandardItem : public QStandardItem
 {
 public:
   SafetyStandardItem(tesseract_scene_graph::JointSafety::Ptr safety);
-  explicit SafetyStandardItem(const QString &text, tesseract_scene_graph::JointSafety::Ptr safety);
-  SafetyStandardItem(const QIcon &icon, const QString &text, tesseract_scene_graph::JointSafety::Ptr safety);
+  explicit SafetyStandardItem(const QString& text, tesseract_scene_graph::JointSafety::Ptr safety);
+  SafetyStandardItem(const QIcon& icon, const QString& text, tesseract_scene_graph::JointSafety::Ptr safety);
   int type() const override;
 
   tesseract_scene_graph::JointSafety::Ptr safety;
@@ -47,6 +47,6 @@ public:
 private:
   void ctor();
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_SCENE_GRAPH_SAFETY_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_SCENE_GRAPH_SAFETY_STANDARD_ITEM_H

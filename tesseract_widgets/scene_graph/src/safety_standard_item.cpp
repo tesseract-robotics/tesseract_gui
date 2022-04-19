@@ -28,30 +28,26 @@
 namespace tesseract_gui
 {
 SafetyStandardItem::SafetyStandardItem(tesseract_scene_graph::JointSafety::Ptr safety)
-  : QStandardItem(icons::getSafetyIcon(), "Safety")
-  , safety(std::move(safety))
+  : QStandardItem(icons::getSafetyIcon(), "Safety"), safety(std::move(safety))
 {
   ctor();
 }
 
-SafetyStandardItem::SafetyStandardItem(const QString &text, tesseract_scene_graph::JointSafety::Ptr safety)
-  : QStandardItem(icons::getSafetyIcon(), text)
-  , safety(std::move(safety))
+SafetyStandardItem::SafetyStandardItem(const QString& text, tesseract_scene_graph::JointSafety::Ptr safety)
+  : QStandardItem(icons::getSafetyIcon(), text), safety(std::move(safety))
 {
   ctor();
 }
 
-SafetyStandardItem::SafetyStandardItem(const QIcon &icon, const QString &text, tesseract_scene_graph::JointSafety::Ptr safety)
-  : QStandardItem(icon, text)
-  , safety(std::move(safety))
+SafetyStandardItem::SafetyStandardItem(const QIcon& icon,
+                                       const QString& text,
+                                       tesseract_scene_graph::JointSafety::Ptr safety)
+  : QStandardItem(icon, text), safety(std::move(safety))
 {
   ctor();
 }
 
-int SafetyStandardItem::type() const
-{
-  return static_cast<int>(StandardItemType::SAFETY);
-}
+int SafetyStandardItem::type() const { return static_cast<int>(StandardItemType::SAFETY); }
 
 void SafetyStandardItem::ctor()
 {
@@ -60,4 +56,4 @@ void SafetyStandardItem::ctor()
   appendRow(createStandardItemFloat("k_position", safety->k_position));
   appendRow(createStandardItemFloat("k_velocity", safety->k_velocity));
 }
-}
+}  // namespace tesseract_gui

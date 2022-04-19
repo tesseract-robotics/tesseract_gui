@@ -28,24 +28,26 @@
 
 namespace tesseract_gui
 {
-
-ReplaceJointCommandStandardItem::ReplaceJointCommandStandardItem(tesseract_environment::ReplaceJointCommand::ConstPtr command)
-  : QStandardItem(icons::getCommandEntryIcon(), "Replace Joint")
-  , command(std::move(command))
+ReplaceJointCommandStandardItem::ReplaceJointCommandStandardItem(
+    tesseract_environment::ReplaceJointCommand::ConstPtr command)
+  : QStandardItem(icons::getCommandEntryIcon(), "Replace Joint"), command(std::move(command))
 {
   ctor();
 }
 
-ReplaceJointCommandStandardItem::ReplaceJointCommandStandardItem(const QString &text, tesseract_environment::ReplaceJointCommand::ConstPtr command)
-  : QStandardItem(icons::getCommandEntryIcon(), text)
-  , command(std::move(command))
+ReplaceJointCommandStandardItem::ReplaceJointCommandStandardItem(
+    const QString& text,
+    tesseract_environment::ReplaceJointCommand::ConstPtr command)
+  : QStandardItem(icons::getCommandEntryIcon(), text), command(std::move(command))
 {
   ctor();
 }
 
-ReplaceJointCommandStandardItem::ReplaceJointCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::ReplaceJointCommand::ConstPtr command)
-  : QStandardItem(icon, text)
-  , command(std::move(command))
+ReplaceJointCommandStandardItem::ReplaceJointCommandStandardItem(
+    const QIcon& icon,
+    const QString& text,
+    tesseract_environment::ReplaceJointCommand::ConstPtr command)
+  : QStandardItem(icon, text), command(std::move(command))
 {
   ctor();
 }
@@ -58,6 +60,6 @@ int ReplaceJointCommandStandardItem::type() const
 void ReplaceJointCommandStandardItem::ctor()
 {
   auto* item = new JointStandardItem(std::make_shared<tesseract_scene_graph::Joint>(command->getJoint()->clone()));
-  appendRow({item, new QStandardItem()});
+  appendRow({ item, new QStandardItem() });
 }
-}
+}  // namespace tesseract_gui

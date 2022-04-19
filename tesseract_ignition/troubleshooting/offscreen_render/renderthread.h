@@ -10,36 +10,36 @@
 
 class RenderThread : public QThread, public QOpenGLFunctions
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    RenderThread(QSurface *surface, QOpenGLContext *mainContext, QObject *parent = nullptr);
-    ~RenderThread();
+  RenderThread(QSurface* surface, QOpenGLContext* mainContext, QObject* parent = nullptr);
+  ~RenderThread();
 
-    void setNewSize(int width, int height);
+  void setNewSize(int width, int height);
 
 signals:
-    void imageReady();
+  void imageReady();
 
 protected:
-    void run() override;
+  void run() override;
 
 private:
-    RenderThread(const RenderThread &) = delete;
-    RenderThread &operator =(const RenderThread &) = delete;
-    RenderThread(const RenderThread &&) = delete;
-    RenderThread &operator =(const RenderThread &&) = delete;
+  RenderThread(const RenderThread&) = delete;
+  RenderThread& operator=(const RenderThread&) = delete;
+  RenderThread(const RenderThread&&) = delete;
+  RenderThread& operator=(const RenderThread&&) = delete;
 
 private:
-    bool m_running = true;
+  bool m_running = true;
 
-    int m_width = 100;
-    int m_height = 100;
-    QMutex m_mutex;
+  int m_width = 100;
+  int m_height = 100;
+  QMutex m_mutex;
 
-    QOpenGLContext *m_mainContext;
-    QOpenGLContext *m_renderContext = nullptr;
-    QSurface *m_surface;
+  QOpenGLContext* m_mainContext;
+  QOpenGLContext* m_renderContext = nullptr;
+  QSurface* m_surface;
 };
 
-#endif // RENDERTHREAD_H
+#endif  // RENDERTHREAD_H

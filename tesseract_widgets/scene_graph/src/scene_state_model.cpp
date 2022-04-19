@@ -34,28 +34,21 @@ struct SceneStateModelPrivate
   }
 };
 
-SceneStateModel::SceneStateModel(QObject *parent)
-  : QStandardItemModel(parent)
-  , data_(std::make_unique<SceneStateModelPrivate>())
+SceneStateModel::SceneStateModel(QObject* parent)
+  : QStandardItemModel(parent), data_(std::make_unique<SceneStateModelPrivate>())
 {
   clear();
 }
 
 SceneStateModel::~SceneStateModel() = default;
 
-SceneStateModel::SceneStateModel(const SceneStateModel &other)
-: QStandardItemModel(other.d_ptr->parent)
-{
-}
+SceneStateModel::SceneStateModel(const SceneStateModel& other) : QStandardItemModel(other.d_ptr->parent) {}
 
-SceneStateModel &SceneStateModel::operator=(const SceneStateModel &other)
-{
-  return *this;
-}
+SceneStateModel& SceneStateModel::operator=(const SceneStateModel& other) { return *this; }
 
 void SceneStateModel::setState(const tesseract_scene_graph::SceneState& scene_state)
 {
-  bool sort_required{false};
+  bool sort_required{ false };
   for (const auto& joint : scene_state.joints)
   {
     auto it = data_->values.find(joint.first);
@@ -157,7 +150,7 @@ void SceneStateModel::clear()
   data_->clear();
 
   setColumnCount(2);
-  setHorizontalHeaderLabels({"Name", "Values"});
+  setHorizontalHeaderLabels({ "Name", "Values" });
 
   data_->values_item = new QStandardItem(icons::getJointVectorIcon(), "Values");
   data_->links_item = new QStandardItem(icons::getLinkVectorIcon(), "Links");
@@ -168,4 +161,4 @@ void SceneStateModel::clear()
   appendRow(data_->joints_item);
 }
 
-}
+}  // namespace tesseract_gui

@@ -60,10 +60,7 @@ public Q_SLOTS:
 
   bool isEnabled() const;
 
-  void redraw()
-  {
-    setPosition(_prev_trackerpoint);
-  }
+  void redraw() { setPosition(_prev_trackerpoint); }
 
 private:
   QLineF curveLineAt(const QwtPlotCurve*, double x) const;
@@ -80,5 +77,5 @@ private:
   Parameter _param;
   bool _visible;
 };
-}
+}  // namespace tesseract_gui
 #endif  // TESSERACT_WIDGETS_PLOT_CUSTOM_TRACKER_H

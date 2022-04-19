@@ -28,33 +28,29 @@
 namespace tesseract_gui
 {
 DynamicsStandardItem::DynamicsStandardItem(tesseract_scene_graph::JointDynamics::Ptr dynamics)
-  : QStandardItem(icons::getDynamicsIcon(), "Dynamics")
-  , dynamics(std::move(dynamics))
+  : QStandardItem(icons::getDynamicsIcon(), "Dynamics"), dynamics(std::move(dynamics))
 {
   ctor();
 }
 
-DynamicsStandardItem::DynamicsStandardItem(const QString &text, tesseract_scene_graph::JointDynamics::Ptr dynamics)
-  : QStandardItem(icons::getDynamicsIcon(), text)
-  , dynamics(std::move(dynamics))
+DynamicsStandardItem::DynamicsStandardItem(const QString& text, tesseract_scene_graph::JointDynamics::Ptr dynamics)
+  : QStandardItem(icons::getDynamicsIcon(), text), dynamics(std::move(dynamics))
 {
   ctor();
 }
-DynamicsStandardItem::DynamicsStandardItem(const QIcon &icon, const QString &text, tesseract_scene_graph::JointDynamics::Ptr dynamics)
-  : QStandardItem(icon, text)
-  , dynamics(std::move(dynamics))
+DynamicsStandardItem::DynamicsStandardItem(const QIcon& icon,
+                                           const QString& text,
+                                           tesseract_scene_graph::JointDynamics::Ptr dynamics)
+  : QStandardItem(icon, text), dynamics(std::move(dynamics))
 {
   ctor();
 }
 
-int DynamicsStandardItem::type() const
-{
-  return static_cast<int>(StandardItemType::DYNAMICS);
-}
+int DynamicsStandardItem::type() const { return static_cast<int>(StandardItemType::DYNAMICS); }
 
 void DynamicsStandardItem::ctor()
 {
   appendRow(createStandardItemFloat("damping", dynamics->damping));
   appendRow(createStandardItemFloat("friction", dynamics->friction));
 }
-}
+}  // namespace tesseract_gui

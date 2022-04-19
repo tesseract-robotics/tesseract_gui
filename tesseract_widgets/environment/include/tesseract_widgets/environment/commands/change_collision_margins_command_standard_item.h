@@ -37,17 +37,22 @@ namespace tesseract_gui
 class ChangeCollisionMarginsCommandStandardItem : public QStandardItem
 {
 public:
-  explicit ChangeCollisionMarginsCommandStandardItem(tesseract_environment::ChangeCollisionMarginsCommand::ConstPtr command);
-  explicit ChangeCollisionMarginsCommandStandardItem(const QString &text, tesseract_environment::ChangeCollisionMarginsCommand::ConstPtr command);
-  explicit ChangeCollisionMarginsCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::ChangeCollisionMarginsCommand::ConstPtr command);
+  explicit ChangeCollisionMarginsCommandStandardItem(
+      tesseract_environment::ChangeCollisionMarginsCommand::ConstPtr command);
+  explicit ChangeCollisionMarginsCommandStandardItem(
+      const QString& text,
+      tesseract_environment::ChangeCollisionMarginsCommand::ConstPtr command);
+  explicit ChangeCollisionMarginsCommandStandardItem(
+      const QIcon& icon,
+      const QString& text,
+      tesseract_environment::ChangeCollisionMarginsCommand::ConstPtr command);
   int type() const override;
-
 
   tesseract_environment::ChangeCollisionMarginsCommand::ConstPtr command;
 
 private:
   void ctor();
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_ENVIRONMENT_CHANGE_COLLISION_MARGINS_COMMAND_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_ENVIRONMENT_CHANGE_COLLISION_MARGINS_COMMAND_STANDARD_ITEM_H

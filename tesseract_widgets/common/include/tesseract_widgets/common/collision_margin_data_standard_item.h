@@ -38,8 +38,11 @@ class CollisionMarginDataStandardItem : public QStandardItem
 {
 public:
   CollisionMarginDataStandardItem(tesseract_common::CollisionMarginData collision_margin_data);
-  explicit CollisionMarginDataStandardItem(const QString &text, tesseract_common::CollisionMarginData collision_margin_data);
-  CollisionMarginDataStandardItem(const QIcon &icon, const QString &text, tesseract_common::CollisionMarginData collision_margin_data);
+  explicit CollisionMarginDataStandardItem(const QString& text,
+                                           tesseract_common::CollisionMarginData collision_margin_data);
+  CollisionMarginDataStandardItem(const QIcon& icon,
+                                  const QString& text,
+                                  tesseract_common::CollisionMarginData collision_margin_data);
   int type() const override;
 
   tesseract_common::CollisionMarginData collision_margin_data;
@@ -47,6 +50,6 @@ public:
 private:
   void ctor();
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_COMMON_COLLISION_MARGIN_DATA_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_COMMON_COLLISION_MARGIN_DATA_STANDARD_ITEM_H

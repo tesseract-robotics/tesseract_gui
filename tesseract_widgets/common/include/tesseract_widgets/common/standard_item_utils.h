@@ -29,13 +29,13 @@
 
 namespace tesseract_gui
 {
-  QList<QStandardItem*> createStandardItemFloat(const std::string& text, double data);
-  QList<QStandardItem*> createStandardItemFloat(const QIcon &icon, const std::string& text, double data);
-  QList<QStandardItem*> createStandardItemInt(const std::string& text, int data);
-  QList<QStandardItem*> createStandardItemInt(const QIcon &icon, const std::string& text, int data);
-  QList<QStandardItem*> createStandardItemString(const std::string& text, const std::string& data);
-  QList<QStandardItem*> createStandardItemString(const QIcon &icon, const std::string& text, const std::string& data);
-  QList<QStandardItem*> createStandardItemURL(const std::string& text, const std::string& data);
-}
+QList<QStandardItem*> createStandardItemFloat(const std::string& text, double data);
+QList<QStandardItem*> createStandardItemFloat(const QIcon& icon, const std::string& text, double data);
+QList<QStandardItem*> createStandardItemInt(const std::string& text, int data);
+QList<QStandardItem*> createStandardItemInt(const QIcon& icon, const std::string& text, int data);
+QList<QStandardItem*> createStandardItemString(const std::string& text, const std::string& data);
+QList<QStandardItem*> createStandardItemString(const QIcon& icon, const std::string& text, const std::string& data);
+QList<QStandardItem*> createStandardItemURL(const std::string& text, const std::string& data);
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_COMMON_STANDARD_ITEM_UTILS_H
+#endif  // TESSERACT_WIDGETS_COMMON_STANDARD_ITEM_UTILS_H

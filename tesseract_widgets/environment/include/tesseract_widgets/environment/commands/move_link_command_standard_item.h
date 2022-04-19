@@ -38,16 +38,17 @@ class MoveLinkCommandStandardItem : public QStandardItem
 {
 public:
   explicit MoveLinkCommandStandardItem(tesseract_environment::MoveLinkCommand::ConstPtr command);
-  explicit MoveLinkCommandStandardItem(const QString &text, tesseract_environment::MoveLinkCommand::ConstPtr command);
-  explicit MoveLinkCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::MoveLinkCommand::ConstPtr command);
+  explicit MoveLinkCommandStandardItem(const QString& text, tesseract_environment::MoveLinkCommand::ConstPtr command);
+  explicit MoveLinkCommandStandardItem(const QIcon& icon,
+                                       const QString& text,
+                                       tesseract_environment::MoveLinkCommand::ConstPtr command);
   int type() const override;
-
 
   tesseract_environment::MoveLinkCommand::ConstPtr command;
 
 private:
   void ctor();
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_ENVIRONMENT_MOVE_LINK_COMMAND_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_ENVIRONMENT_MOVE_LINK_COMMAND_STANDARD_ITEM_H

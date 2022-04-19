@@ -28,35 +28,28 @@
 namespace tesseract_gui
 {
 ConeStandardItem::ConeStandardItem(tesseract_geometry::Cone::Ptr cone)
-  : QStandardItem(icons::getConeIcon(), "Cone")
-  , cone(std::move(cone))
+  : QStandardItem(icons::getConeIcon(), "Cone"), cone(std::move(cone))
 {
   ctor();
 }
 
-ConeStandardItem::ConeStandardItem(const QString &text, tesseract_geometry::Cone::Ptr cone)
-  : QStandardItem(icons::getConeIcon(), text)
-  , cone(std::move(cone))
+ConeStandardItem::ConeStandardItem(const QString& text, tesseract_geometry::Cone::Ptr cone)
+  : QStandardItem(icons::getConeIcon(), text), cone(std::move(cone))
 {
   ctor();
 }
 
-ConeStandardItem::ConeStandardItem(const QIcon &icon, const QString &text, tesseract_geometry::Cone::Ptr cone)
-  : QStandardItem(icon, text)
-  , cone(std::move(cone))
+ConeStandardItem::ConeStandardItem(const QIcon& icon, const QString& text, tesseract_geometry::Cone::Ptr cone)
+  : QStandardItem(icon, text), cone(std::move(cone))
 {
   ctor();
 }
 
-int ConeStandardItem::type() const
-{
-  return static_cast<int>(StandardItemType::CONE);
-}
+int ConeStandardItem::type() const { return static_cast<int>(StandardItemType::CONE); }
 
 void ConeStandardItem::ctor()
 {
   appendRow(createStandardItemFloat("radius", cone->getRadius()));
   appendRow(createStandardItemFloat("length", cone->getLength()));
 }
-}
-
+}  // namespace tesseract_gui

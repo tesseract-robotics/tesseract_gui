@@ -38,8 +38,8 @@ class TransformStandardItem : public QStandardItem
 {
 public:
   explicit TransformStandardItem(const Eigen::Isometry3d& transform);
-  explicit TransformStandardItem(const QString &text, const Eigen::Isometry3d& transform);
-  explicit TransformStandardItem(const QIcon &icon, const QString &text, const Eigen::Isometry3d& transform);
+  explicit TransformStandardItem(const QString& text, const Eigen::Isometry3d& transform);
+  explicit TransformStandardItem(const QIcon& icon, const QString& text, const Eigen::Isometry3d& transform);
   int type() const override;
 
   void setTransform(const Eigen::Isometry3d& transform);
@@ -49,6 +49,6 @@ private:
   QStandardItem* position_;
   QStandardItem* orientation_;
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_COMMON_TRANSFORM_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_COMMON_TRANSFORM_STANDARD_ITEM_H

@@ -24,17 +24,13 @@
 
 namespace tesseract_gui
 {
-
 TransformFunction::TransformFunction() : _data(nullptr)
 {
   static unsigned order = 0;
   _order = order++;
 }
 
-std::vector<const PlotData*>& TransformFunction::dataSources()
-{
-  return _src_vector;
-}
+std::vector<const PlotData*>& TransformFunction::dataSources() { return _src_vector; }
 
 void TransformFunction::setData(PlotDataMapRef* data,
                                 const std::vector<const PlotData*>& src_vect,
@@ -54,10 +50,7 @@ void TransformFunction::setData(PlotDataMapRef* data,
   _dst_vector = dst_vect;
 }
 
-void TransformFunction_SISO::reset()
-{
-  _last_timestamp = -std::numeric_limits<double>::max();
-}
+void TransformFunction_SISO::reset() { _last_timestamp = -std::numeric_limits<double>::max(); }
 
 void TransformFunction_SISO::calculate()
 {
@@ -131,9 +124,6 @@ TransformFactory* TransformFactory::instance()
   return _ptr;
 }
 
-const std::set<std::string>& TransformFactory::registeredTransforms()
-{
-  return instance()->names_;
-}
+const std::set<std::string>& TransformFactory::registeredTransforms() { return instance()->names_; }
 
 }  // namespace tesseract_gui

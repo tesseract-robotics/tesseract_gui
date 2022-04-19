@@ -39,8 +39,11 @@ class ContactManagersPluginInfoStandardItem : public QStandardItem
 {
 public:
   ContactManagersPluginInfoStandardItem(tesseract_common::ContactManagersPluginInfo plugin_info);
-  explicit ContactManagersPluginInfoStandardItem(const QString &text, tesseract_common::ContactManagersPluginInfo plugin_info);
-  ContactManagersPluginInfoStandardItem(const QIcon &icon, const QString &text, tesseract_common::ContactManagersPluginInfo plugin_info);
+  explicit ContactManagersPluginInfoStandardItem(const QString& text,
+                                                 tesseract_common::ContactManagersPluginInfo plugin_info);
+  ContactManagersPluginInfoStandardItem(const QIcon& icon,
+                                        const QString& text,
+                                        tesseract_common::ContactManagersPluginInfo plugin_info);
   int type() const override;
 
   tesseract_common::ContactManagersPluginInfo plugin_info;
@@ -48,6 +51,6 @@ public:
 private:
   void ctor();
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_COMMON_CONTACT_MANAGERS_PLUGIN_INFO_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_COMMON_CONTACT_MANAGERS_PLUGIN_INFO_STANDARD_ITEM_H

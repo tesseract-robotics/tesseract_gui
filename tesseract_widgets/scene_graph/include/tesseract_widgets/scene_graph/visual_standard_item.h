@@ -38,8 +38,8 @@ class VisualStandardItem : public QStandardItem
 {
 public:
   VisualStandardItem(tesseract_scene_graph::Visual::Ptr visual);
-  explicit VisualStandardItem(const QString &text, tesseract_scene_graph::Visual::Ptr visual);
-  VisualStandardItem(const QIcon &icon, const QString &text, tesseract_scene_graph::Visual::Ptr visual);
+  explicit VisualStandardItem(const QString& text, tesseract_scene_graph::Visual::Ptr visual);
+  VisualStandardItem(const QIcon& icon, const QString& text, tesseract_scene_graph::Visual::Ptr visual);
   int type() const override;
 
   tesseract_scene_graph::Visual::Ptr visual;
@@ -47,6 +47,6 @@ public:
 private:
   void ctor();
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_SCENE_GRAPH_VISUAL_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_SCENE_GRAPH_VISUAL_STANDARD_ITEM_H

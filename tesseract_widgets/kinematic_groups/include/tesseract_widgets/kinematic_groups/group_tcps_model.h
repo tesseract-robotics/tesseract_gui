@@ -35,16 +35,14 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 namespace tesseract_gui
 {
-
 class GroupTCPsModel : public QStandardItemModel
 {
   Q_OBJECT
 
 public:
-
-  explicit GroupTCPsModel(QObject *parent = nullptr);
-  GroupTCPsModel(const GroupTCPsModel &other);
-  GroupTCPsModel &operator=(const GroupTCPsModel &other);
+  explicit GroupTCPsModel(QObject* parent = nullptr);
+  GroupTCPsModel(const GroupTCPsModel& other);
+  GroupTCPsModel& operator=(const GroupTCPsModel& other);
 
   void set(const tesseract_srdf::GroupTCPs& group_tcps);
   void addGroupTCP(const QString& group_name, const QString& tcp_name, const Eigen::Isometry3d& tcp);
@@ -58,6 +56,6 @@ private:
   const GroupTCPsStandardItem* getRoot() const;
 };
 
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_KINEMATIC_GROUP_GROUP_TCPS_MODEL_H
+#endif  // TESSERACT_WIDGETS_KINEMATIC_GROUP_GROUP_TCPS_MODEL_H

@@ -25,21 +25,16 @@
 
 namespace tesseract_gui
 {
-
 const std::string EntityContainer::VISUAL_NS = "visual";
 const std::string EntityContainer::SENSOR_NS = "sensor";
 const std::string EntityContainer::RESOURCE_NS = "resource";
 
 EntityContainer::EntityContainer(std::shared_ptr<EntityManager> manager, std::string name)
-  : manager_(std::move(manager))
-  , name_(std::move(name))
+  : manager_(std::move(manager)), name_(std::move(name))
 {
 }
 
-std::string EntityContainer::getName() const
-{
-  return name_;
-}
+std::string EntityContainer::getName() const { return name_; }
 
 Entity EntityContainer::addTrackedEntity(const std::string& ns, const std::string& name)
 {
@@ -54,11 +49,11 @@ Entity EntityContainer::getTrackedEntity(const std::string& ns, const std::strin
   std::shared_lock<std::shared_mutex> lock(mutex_);
   auto ns_it = tracked_entity_map_.find(ns);
   if (ns_it == tracked_entity_map_.end())
-    throw std::runtime_error("Tracked entity namespace does not exist for name '" + ns  + "'.");
+    throw std::runtime_error("Tracked entity namespace does not exist for name '" + ns + "'.");
 
   auto it = ns_it->second.find(name);
   if (it == ns_it->second.end())
-    throw std::runtime_error("Tracked entity '" + name  + "' does not exist under namespace '" + ns + "'.");
+    throw std::runtime_error("Tracked entity '" + name + "' does not exist under namespace '" + ns + "'.");
 
   return it->second;
 }
@@ -141,7 +136,7 @@ void EntityContainer::clear()
   untracked_entity_map_.clear();
 }
 
-EntityManager& EntityContainer::getEntityManager() { return *manager_;}
-const EntityManager& EntityContainer::getEntityManager() const { return *manager_;}
+EntityManager& EntityContainer::getEntityManager() { return *manager_; }
+const EntityManager& EntityContainer::getEntityManager() const { return *manager_; }
 
 }  // namespace tesseract_gui

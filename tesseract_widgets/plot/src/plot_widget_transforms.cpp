@@ -13,10 +13,8 @@
 
 namespace tesseract_gui
 {
-
 DialogTransformEditor::DialogTransformEditor(PlotWidget* plotwidget)
-  : QDialog(plotwidget->widget())
-  , _plotwidget_origin(plotwidget)
+  : QDialog(plotwidget->widget()), _plotwidget_origin(plotwidget)
 {
   ui = std::make_unique<Ui::PlotWidgetTransforms>();
   ui->setupUi(this);
@@ -94,15 +92,9 @@ DialogTransformEditor::RowWidget::RowWidget(QString text, QColor color)
   layout->addWidget(_text);
 }
 
-QString DialogTransformEditor::RowWidget::text() const
-{
-  return _text->text();
-}
+QString DialogTransformEditor::RowWidget::text() const { return _text->text(); }
 
-QColor DialogTransformEditor::RowWidget::color() const
-{
-  return _color;
-}
+QColor DialogTransformEditor::RowWidget::color() const { return _color; }
 
 void DialogTransformEditor::on_listCurves_itemSelectionChanged()
 {
@@ -156,8 +148,7 @@ void DialogTransformEditor::on_listTransforms_itemSelectionChanged()
   {
     return;
   }
-  auto row_widget =
-      dynamic_cast<RowWidget*>(ui->listCurves->itemWidget(selected_curves.front()));
+  auto row_widget = dynamic_cast<RowWidget*>(ui->listCurves->itemWidget(selected_curves.front()));
 
   QString curve_name = row_widget->text();
 
@@ -223,10 +214,7 @@ void DialogTransformEditor::on_listTransforms_itemSelectionChanged()
   _plotwidget->zoomOut(false);
 }
 
-void DialogTransformEditor::on_pushButtonCancel_clicked()
-{
-  this->reject();
-}
+void DialogTransformEditor::on_pushButtonCancel_clicked() { this->reject(); }
 
 void DialogTransformEditor::on_pushButtonSave_clicked()
 {
@@ -247,8 +235,7 @@ void DialogTransformEditor::on_lineEditAlias_editingFinished()
   {
     return;
   }
-  auto row_widget =
-      dynamic_cast<RowWidget*>(ui->listCurves->itemWidget(selected_curves.front()));
+  auto row_widget = dynamic_cast<RowWidget*>(ui->listCurves->itemWidget(selected_curves.front()));
 
   QString curve_name = row_widget->text();
 
@@ -264,4 +251,4 @@ void DialogTransformEditor::on_lineEditAlias_editingFinished()
 
   _plotwidget->replot();
 }
-}
+}  // namespace tesseract_gui

@@ -37,17 +37,22 @@ namespace tesseract_gui
 class ChangeLinkCollisionEnabledCommandStandardItem : public QStandardItem
 {
 public:
-  explicit ChangeLinkCollisionEnabledCommandStandardItem(tesseract_environment::ChangeLinkCollisionEnabledCommand::ConstPtr command);
-  explicit ChangeLinkCollisionEnabledCommandStandardItem(const QString &text, tesseract_environment::ChangeLinkCollisionEnabledCommand::ConstPtr command);
-  explicit ChangeLinkCollisionEnabledCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::ChangeLinkCollisionEnabledCommand::ConstPtr command);
+  explicit ChangeLinkCollisionEnabledCommandStandardItem(
+      tesseract_environment::ChangeLinkCollisionEnabledCommand::ConstPtr command);
+  explicit ChangeLinkCollisionEnabledCommandStandardItem(
+      const QString& text,
+      tesseract_environment::ChangeLinkCollisionEnabledCommand::ConstPtr command);
+  explicit ChangeLinkCollisionEnabledCommandStandardItem(
+      const QIcon& icon,
+      const QString& text,
+      tesseract_environment::ChangeLinkCollisionEnabledCommand::ConstPtr command);
   int type() const override;
-
 
   tesseract_environment::ChangeLinkCollisionEnabledCommand::ConstPtr command;
 
 private:
   void ctor();
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_ENVIRONMENT_CHANGE_LINK_COLLISION_ENABLED_COMMAND_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_ENVIRONMENT_CHANGE_LINK_COLLISION_ENABLED_COMMAND_STANDARD_ITEM_H

@@ -40,22 +40,22 @@ void onEntrySelected(const tesseract_common::AllowedCollisionEntries& selection)
   qDebug() << QString::fromStdString(ss.str());
 }
 
-int main(int argc, char ** argv)
+int main(int argc, char** argv)
 {
-    QApplication app(argc, argv);
+  QApplication app(argc, argv);
 
-    std::vector<std::string> links {"link_1", "link_2", "link_3", "link_4"};
+  std::vector<std::string> links{ "link_1", "link_2", "link_3", "link_4" };
 
-    tesseract_gui::AllowedCollisionMatrixModel model;
-    model.add("link_1", "link_2", "Adjacent");
-    model.add("link_2", "link_3", "Adjacent");
-    model.add("link_3", "link_4", "Adjacent");
+  tesseract_gui::AllowedCollisionMatrixModel model;
+  model.add("link_1", "link_2", "Adjacent");
+  model.add("link_2", "link_3", "Adjacent");
+  model.add("link_3", "link_4", "Adjacent");
 
-    tesseract_gui::AllowedCollisionMatrixWidget widget;
-    QObject::connect(&widget, &tesseract_gui::AllowedCollisionMatrixWidget::entrySelected, &onEntrySelected);
+  tesseract_gui::AllowedCollisionMatrixWidget widget;
+  QObject::connect(&widget, &tesseract_gui::AllowedCollisionMatrixWidget::entrySelected, &onEntrySelected);
 
-    widget.setModel(&model);
-    widget.show();
+  widget.setModel(&model);
+  widget.show();
 
-    return app.exec();
+  return app.exec();
 }

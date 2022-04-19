@@ -38,8 +38,10 @@ class CalibrationStandardItem : public QStandardItem
 {
 public:
   CalibrationStandardItem(tesseract_scene_graph::JointCalibration::Ptr calibration);
-  explicit CalibrationStandardItem(const QString &text, tesseract_scene_graph::JointCalibration::Ptr calibration);
-  CalibrationStandardItem(const QIcon &icon, const QString &text, tesseract_scene_graph::JointCalibration::Ptr calibration);
+  explicit CalibrationStandardItem(const QString& text, tesseract_scene_graph::JointCalibration::Ptr calibration);
+  CalibrationStandardItem(const QIcon& icon,
+                          const QString& text,
+                          tesseract_scene_graph::JointCalibration::Ptr calibration);
   int type() const override;
 
   tesseract_scene_graph::JointCalibration::Ptr calibration;
@@ -47,6 +49,6 @@ public:
 private:
   void ctor();
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_SCENE_GRAPH_CALIBRATION_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_SCENE_GRAPH_CALIBRATION_STANDARD_ITEM_H

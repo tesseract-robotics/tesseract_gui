@@ -29,25 +29,25 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 #include <tesseract_widgets/environment/environment_widget_config.h>
 #include <tesseract_support/tesseract_support_resource_locator.h>
 
-int main(int argc, char ** argv)
+int main(int argc, char** argv)
 {
-    QApplication app(argc, argv);
+  QApplication app(argc, argv);
 
-    Q_INIT_RESOURCE(tesseract_widgets_resources);
+  Q_INIT_RESOURCE(tesseract_widgets_resources);
 
-    auto locator = std::make_shared<tesseract_common::TesseractSupportResourceLocator>();
-    tesseract_common::fs::path urdf_path = std::string(TESSERACT_SUPPORT_DIR) + "/urdf/lbr_iiwa_14_r820.urdf";
-    tesseract_common::fs::path srdf_path = std::string(TESSERACT_SUPPORT_DIR) + "/urdf/lbr_iiwa_14_r820.srdf";
+  auto locator = std::make_shared<tesseract_common::TesseractSupportResourceLocator>();
+  tesseract_common::fs::path urdf_path = std::string(TESSERACT_SUPPORT_DIR) + "/urdf/lbr_iiwa_14_r820.urdf";
+  tesseract_common::fs::path srdf_path = std::string(TESSERACT_SUPPORT_DIR) + "/urdf/lbr_iiwa_14_r820.srdf";
 
-    auto env = std::make_unique<tesseract_environment::Environment>();
-    env->init(urdf_path, srdf_path, locator);
+  auto env = std::make_unique<tesseract_environment::Environment>();
+  env->init(urdf_path, srdf_path, locator);
 
-    auto config = std::make_shared<tesseract_gui::EnvironmentWidgetConfig>();
-    config->setEnvironment(std::move(env));
+  auto config = std::make_shared<tesseract_gui::EnvironmentWidgetConfig>();
+  config->setEnvironment(std::move(env));
 
-    tesseract_gui::EnvironmentWidget widget;
-    widget.setConfiguration(std::move(config));
-    widget.show();
+  tesseract_gui::EnvironmentWidget widget;
+  widget.setConfiguration(std::move(config));
+  widget.show();
 
-    return QApplication::exec();
+  return QApplication::exec();
 }

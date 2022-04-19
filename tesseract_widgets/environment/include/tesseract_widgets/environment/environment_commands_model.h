@@ -36,16 +36,14 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 namespace tesseract_gui
 {
-
 class EnvironmentCommandsModel : public QStandardItemModel
 {
   Q_OBJECT
 
 public:
-
-  explicit EnvironmentCommandsModel(QObject *parent = nullptr);
-  EnvironmentCommandsModel(const EnvironmentCommandsModel &other);
-  EnvironmentCommandsModel &operator=(const EnvironmentCommandsModel &other);
+  explicit EnvironmentCommandsModel(QObject* parent = nullptr);
+  EnvironmentCommandsModel(const EnvironmentCommandsModel& other);
+  EnvironmentCommandsModel& operator=(const EnvironmentCommandsModel& other);
 
   void set(const tesseract_environment::Commands& commands);
   void appendCommand(const tesseract_environment::Command::ConstPtr& command);
@@ -56,9 +54,8 @@ public:
 private:
   EnvironmentCommandsStandardItem* getRoot();
   const EnvironmentCommandsStandardItem* getRoot() const;
-
 };
 
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_WIDGETS_ENVIRONMENT_ENVIRONMENT_COMMANDS_MODEL_H
+#endif  // TESSERACT_WIDGETS_WIDGETS_ENVIRONMENT_ENVIRONMENT_COMMANDS_MODEL_H

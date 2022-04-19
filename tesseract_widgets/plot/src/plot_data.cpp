@@ -25,9 +25,9 @@
 namespace tesseract_gui
 {
 template <typename T>
-typename std::unordered_map<std::string, T>::iterator
-addImpl(std::unordered_map<std::string, T>& series, const std::string& name,
-        PlotGroup::Ptr group)
+typename std::unordered_map<std::string, T>::iterator addImpl(std::unordered_map<std::string, T>& series,
+                                                              const std::string& name,
+                                                              PlotGroup::Ptr group)
 {
   std::string ID;
   if (group)
@@ -40,15 +40,12 @@ addImpl(std::unordered_map<std::string, T>& series, const std::string& name,
   }
   ID += name;
 
-  return series
-      .emplace(std::piecewise_construct, std::forward_as_tuple(name),
-               std::forward_as_tuple(name, group))
+  return series.emplace(std::piecewise_construct, std::forward_as_tuple(name), std::forward_as_tuple(name, group))
       .first;
 }
 
 template <typename T>
-T& getOrCreateImpl(std::unordered_map<std::string, T>& series, const std::string& name,
-                   const PlotGroup::Ptr& group)
+T& getOrCreateImpl(std::unordered_map<std::string, T>& series, const std::string& name, const PlotGroup::Ptr& group)
 {
   auto it = series.find(name);
   if (it == series.end())
@@ -58,38 +55,32 @@ T& getOrCreateImpl(std::unordered_map<std::string, T>& series, const std::string
   return it->second;
 }
 
-PlotDataMap::iterator PlotDataMapRef::addNumeric(const std::string& name,
-                                                 PlotGroup::Ptr group)
+PlotDataMap::iterator PlotDataMapRef::addNumeric(const std::string& name, PlotGroup::Ptr group)
 {
   return addImpl(numeric, name, group);
 }
 
-AnySeriesMap::iterator PlotDataMapRef::addUserDefined(const std::string& name,
-                                                      PlotGroup::Ptr group)
+AnySeriesMap::iterator PlotDataMapRef::addUserDefined(const std::string& name, PlotGroup::Ptr group)
 {
   return addImpl(user_defined, name, group);
 }
 
-StringSeriesMap::iterator PlotDataMapRef::addStringSeries(const std::string& name,
-                                                          PlotGroup::Ptr group)
+StringSeriesMap::iterator PlotDataMapRef::addStringSeries(const std::string& name, PlotGroup::Ptr group)
 {
   return addImpl(strings, name, group);
 }
 
-PlotData& PlotDataMapRef::getOrCreateNumeric(const std::string& name,
-                                             PlotGroup::Ptr group)
+PlotData& PlotDataMapRef::getOrCreateNumeric(const std::string& name, PlotGroup::Ptr group)
 {
   return getOrCreateImpl(numeric, name, group);
 }
 
-StringSeries& PlotDataMapRef::getOrCreateStringSeries(const std::string& name,
-                                                      PlotGroup::Ptr group)
+StringSeries& PlotDataMapRef::getOrCreateStringSeries(const std::string& name, PlotGroup::Ptr group)
 {
   return getOrCreateImpl(strings, name, group);
 }
 
-PlotDataAny& PlotDataMapRef::getOrCreateUserDefined(const std::string& name,
-                                                    PlotGroup::Ptr group)
+PlotDataAny& PlotDataMapRef::getOrCreateUserDefined(const std::string& name, PlotGroup::Ptr group)
 {
   return getOrCreateImpl(user_defined, name, group);
 }

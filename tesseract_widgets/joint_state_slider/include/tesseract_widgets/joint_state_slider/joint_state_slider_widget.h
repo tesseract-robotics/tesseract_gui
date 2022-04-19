@@ -35,7 +35,8 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 class QGridLayout;
 
-namespace Ui {
+namespace Ui
+{
 class JointStateSliderWidget;
 }
 
@@ -46,7 +47,7 @@ class JointStateSliderWidget : public QWidget
   Q_OBJECT
 
 public:
-  explicit JointStateSliderWidget(QWidget *parent = nullptr);
+  explicit JointStateSliderWidget(QWidget* parent = nullptr);
   ~JointStateSliderWidget();
 
   void setJoints(const std::vector<tesseract_scene_graph::Joint::ConstPtr>& joints);
@@ -60,8 +61,7 @@ private:
   std::unique_ptr<Ui::JointStateSliderWidget> ui_;
   QGridLayout* layout_;
   std::unordered_map<std::string, double> state_;
-
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_JOINT_STATE_SLIDER_WIDGET_H
+#endif  // TESSERACT_WIDGETS_JOINT_STATE_SLIDER_WIDGET_H

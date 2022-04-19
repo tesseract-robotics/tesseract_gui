@@ -57,25 +57,25 @@ std::vector<tesseract_scene_graph::Joint::ConstPtr> getGroupJoints(QString group
   return joints;
 }
 
-int main(int argc, char ** argv)
+int main(int argc, char** argv)
 {
-    QApplication app(argc, argv);
+  QApplication app(argc, argv);
 
-    Q_INIT_RESOURCE(tesseract_widgets_resources);
+  Q_INIT_RESOURCE(tesseract_widgets_resources);
 
-    // Load Scene Graph
-    std::string path = std::string(TESSERACT_SUPPORT_DIR) + "/urdf/lbr_iiwa_14_r820.urdf";
-    tesseract_common::TesseractSupportResourceLocator locator;
-    sg = tesseract_urdf::parseURDFFile(path, locator);
+  // Load Scene Graph
+  std::string path = std::string(TESSERACT_SUPPORT_DIR) + "/urdf/lbr_iiwa_14_r820.urdf";
+  tesseract_common::TesseractSupportResourceLocator locator;
+  sg = tesseract_urdf::parseURDFFile(path, locator);
 
-    tesseract_gui::GroupJointStatesModel model;
-    QStringList list {"group1", "group2"};
-    QStringListModel group_names;
-    group_names.setStringList(list);
-    tesseract_gui::GroupJointsRetriever func = getGroupJoints;
-    tesseract_gui::GroupsJointStatesEditorWidget widget(&group_names, func);
-    widget.setModel(&model);
-    widget.show();
+  tesseract_gui::GroupJointStatesModel model;
+  QStringList list{ "group1", "group2" };
+  QStringListModel group_names;
+  group_names.setStringList(list);
+  tesseract_gui::GroupJointsRetriever func = getGroupJoints;
+  tesseract_gui::GroupsJointStatesEditorWidget widget(&group_names, func);
+  widget.setModel(&model);
+  widget.show();
 
-    return app.exec();
+  return app.exec();
 }

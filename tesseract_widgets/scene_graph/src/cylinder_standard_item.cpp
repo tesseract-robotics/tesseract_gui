@@ -28,35 +28,30 @@
 namespace tesseract_gui
 {
 CylinderStandardItem::CylinderStandardItem(tesseract_geometry::Cylinder::Ptr cylinder)
-  : QStandardItem(icons::getCylinderIcon(), "Cylinder")
-  , cylinder(std::move(cylinder))
+  : QStandardItem(icons::getCylinderIcon(), "Cylinder"), cylinder(std::move(cylinder))
 {
   ctor();
 }
 
-CylinderStandardItem::CylinderStandardItem(const QString &text, tesseract_geometry::Cylinder::Ptr cylinder)
-  : QStandardItem(icons::getCylinderIcon(), text)
-  , cylinder(std::move(cylinder))
+CylinderStandardItem::CylinderStandardItem(const QString& text, tesseract_geometry::Cylinder::Ptr cylinder)
+  : QStandardItem(icons::getCylinderIcon(), text), cylinder(std::move(cylinder))
 {
   ctor();
 }
 
-CylinderStandardItem::CylinderStandardItem(const QIcon &icon, const QString &text, tesseract_geometry::Cylinder::Ptr cylinder)
-  : QStandardItem(icon, text)
-  , cylinder(std::move(cylinder))
+CylinderStandardItem::CylinderStandardItem(const QIcon& icon,
+                                           const QString& text,
+                                           tesseract_geometry::Cylinder::Ptr cylinder)
+  : QStandardItem(icon, text), cylinder(std::move(cylinder))
 {
   ctor();
 }
 
-int CylinderStandardItem::type() const
-{
-  return static_cast<int>(StandardItemType::CYLINDER);
-}
+int CylinderStandardItem::type() const { return static_cast<int>(StandardItemType::CYLINDER); }
 
 void CylinderStandardItem::ctor()
 {
   appendRow(createStandardItemFloat("radius", cylinder->getRadius()));
   appendRow(createStandardItemFloat("length", cylinder->getLength()));
 }
-}
-
+}  // namespace tesseract_gui

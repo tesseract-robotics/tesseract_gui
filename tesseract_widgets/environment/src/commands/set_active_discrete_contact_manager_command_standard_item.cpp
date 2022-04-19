@@ -27,24 +27,26 @@
 
 namespace tesseract_gui
 {
-
-SetActiveDiscreteContactManagerCommandStandardItem::SetActiveDiscreteContactManagerCommandStandardItem(tesseract_environment::SetActiveDiscreteContactManagerCommand::ConstPtr command)
-  : QStandardItem(icons::getCommandEntryIcon(), "Set Active Discrete Contact Manager")
-  , command(std::move(command))
+SetActiveDiscreteContactManagerCommandStandardItem::SetActiveDiscreteContactManagerCommandStandardItem(
+    tesseract_environment::SetActiveDiscreteContactManagerCommand::ConstPtr command)
+  : QStandardItem(icons::getCommandEntryIcon(), "Set Active Discrete Contact Manager"), command(std::move(command))
 {
   ctor();
 }
 
-SetActiveDiscreteContactManagerCommandStandardItem::SetActiveDiscreteContactManagerCommandStandardItem(const QString &text, tesseract_environment::SetActiveDiscreteContactManagerCommand::ConstPtr command)
-  : QStandardItem(icons::getCommandEntryIcon(), text)
-  , command(std::move(command))
+SetActiveDiscreteContactManagerCommandStandardItem::SetActiveDiscreteContactManagerCommandStandardItem(
+    const QString& text,
+    tesseract_environment::SetActiveDiscreteContactManagerCommand::ConstPtr command)
+  : QStandardItem(icons::getCommandEntryIcon(), text), command(std::move(command))
 {
   ctor();
 }
 
-SetActiveDiscreteContactManagerCommandStandardItem::SetActiveDiscreteContactManagerCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::SetActiveDiscreteContactManagerCommand::ConstPtr command)
-  : QStandardItem(icon, text)
-  , command(std::move(command))
+SetActiveDiscreteContactManagerCommandStandardItem::SetActiveDiscreteContactManagerCommandStandardItem(
+    const QIcon& icon,
+    const QString& text,
+    tesseract_environment::SetActiveDiscreteContactManagerCommand::ConstPtr command)
+  : QStandardItem(icon, text), command(std::move(command))
 {
   ctor();
 }
@@ -58,4 +60,4 @@ void SetActiveDiscreteContactManagerCommandStandardItem::ctor()
 {
   appendRow(createStandardItemString("contact manager", command->getName()));
 }
-}
+}  // namespace tesseract_gui

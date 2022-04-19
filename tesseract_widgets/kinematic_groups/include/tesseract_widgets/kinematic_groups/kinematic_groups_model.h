@@ -34,16 +34,14 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 namespace tesseract_gui
 {
-
 class KinematicGroupsModel : public QStandardItemModel
 {
   Q_OBJECT
 
 public:
-
-  explicit KinematicGroupsModel(QObject *parent = nullptr);
-  KinematicGroupsModel(const KinematicGroupsModel &other);
-  KinematicGroupsModel &operator=(const KinematicGroupsModel &other);
+  explicit KinematicGroupsModel(QObject* parent = nullptr);
+  KinematicGroupsModel(const KinematicGroupsModel& other);
+  KinematicGroupsModel& operator=(const KinematicGroupsModel& other);
 
   void set(const tesseract_srdf::ChainGroups& chain_groups,
            const tesseract_srdf::JointGroups& joint_groups,
@@ -72,6 +70,6 @@ private:
   tesseract_srdf::LinkGroups link_groups_;
 };
 
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_KINEMATIC_GROUP_MODEL_H
+#endif  // TESSERACT_WIDGETS_KINEMATIC_GROUP_MODEL_H

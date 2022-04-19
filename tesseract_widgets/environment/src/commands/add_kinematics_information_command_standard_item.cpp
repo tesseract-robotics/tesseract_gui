@@ -27,24 +27,26 @@
 
 namespace tesseract_gui
 {
-
-AddKinematicsInformationCommandStandardItem::AddKinematicsInformationCommandStandardItem(tesseract_environment::AddKinematicsInformationCommand::ConstPtr command)
-  : QStandardItem(icons::getCommandEntryIcon(), "Add Kinematics Information")
-  , command(std::move(command))
+AddKinematicsInformationCommandStandardItem::AddKinematicsInformationCommandStandardItem(
+    tesseract_environment::AddKinematicsInformationCommand::ConstPtr command)
+  : QStandardItem(icons::getCommandEntryIcon(), "Add Kinematics Information"), command(std::move(command))
 {
   ctor();
 }
 
-AddKinematicsInformationCommandStandardItem::AddKinematicsInformationCommandStandardItem(const QString &text, tesseract_environment::AddKinematicsInformationCommand::ConstPtr command)
-  : QStandardItem(icons::getCommandEntryIcon(), text)
-  , command(std::move(command))
+AddKinematicsInformationCommandStandardItem::AddKinematicsInformationCommandStandardItem(
+    const QString& text,
+    tesseract_environment::AddKinematicsInformationCommand::ConstPtr command)
+  : QStandardItem(icons::getCommandEntryIcon(), text), command(std::move(command))
 {
   ctor();
 }
 
-AddKinematicsInformationCommandStandardItem::AddKinematicsInformationCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::AddKinematicsInformationCommand::ConstPtr command)
-  : QStandardItem(icon, text)
-  , command(std::move(command))
+AddKinematicsInformationCommandStandardItem::AddKinematicsInformationCommandStandardItem(
+    const QIcon& icon,
+    const QString& text,
+    tesseract_environment::AddKinematicsInformationCommand::ConstPtr command)
+  : QStandardItem(icon, text), command(std::move(command))
 {
   ctor();
 }
@@ -59,4 +61,4 @@ void AddKinematicsInformationCommandStandardItem::ctor()
   auto* kin_info = new KinematicsInfoStandardItem(command->getKinematicsInformation());
   appendRow(kin_info);
 }
-}
+}  // namespace tesseract_gui

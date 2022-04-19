@@ -29,32 +29,28 @@
 
 namespace tesseract_gui
 {
-
 AddLinkCommandStandardItem::AddLinkCommandStandardItem(tesseract_environment::AddLinkCommand::ConstPtr command)
-  : QStandardItem(icons::getCommandEntryIcon(), "Add Link")
-  , command(std::move(command))
+  : QStandardItem(icons::getCommandEntryIcon(), "Add Link"), command(std::move(command))
 {
   ctor();
 }
 
-AddLinkCommandStandardItem::AddLinkCommandStandardItem(const QString &text, tesseract_environment::AddLinkCommand::ConstPtr command)
-  : QStandardItem(icons::getCommandEntryIcon(), text)
-  , command(std::move(command))
+AddLinkCommandStandardItem::AddLinkCommandStandardItem(const QString& text,
+                                                       tesseract_environment::AddLinkCommand::ConstPtr command)
+  : QStandardItem(icons::getCommandEntryIcon(), text), command(std::move(command))
 {
   ctor();
 }
 
-AddLinkCommandStandardItem::AddLinkCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::AddLinkCommand::ConstPtr command)
-  : QStandardItem(icon, text)
-  , command(std::move(command))
+AddLinkCommandStandardItem::AddLinkCommandStandardItem(const QIcon& icon,
+                                                       const QString& text,
+                                                       tesseract_environment::AddLinkCommand::ConstPtr command)
+  : QStandardItem(icon, text), command(std::move(command))
 {
   ctor();
 }
 
-int AddLinkCommandStandardItem::type() const
-{
-  return static_cast<int>(StandardItemType::ENV_COMMAND_ADD_LINK);
-}
+int AddLinkCommandStandardItem::type() const { return static_cast<int>(StandardItemType::ENV_COMMAND_ADD_LINK); }
 
 void AddLinkCommandStandardItem::ctor()
 {
@@ -67,4 +63,4 @@ void AddLinkCommandStandardItem::ctor()
 
   appendRow(createStandardItemString("replace allowed", (command->replaceAllowed()) ? "True" : "False"));
 }
-}
+}  // namespace tesseract_gui

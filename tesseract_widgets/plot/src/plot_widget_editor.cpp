@@ -17,7 +17,6 @@ const double MAX_DOUBLE = std::numeric_limits<double>::max() / 2;
 
 namespace tesseract_gui
 {
-
 PlotWidgetEditor::PlotWidgetEditor(PlotWidget* plotwidget, QWidget* parent)
   : QDialog(parent), _plotwidget_origin(plotwidget)
 {
@@ -28,7 +27,8 @@ PlotWidgetEditor::PlotWidgetEditor(PlotWidget* plotwidget, QWidget* parent)
 
   //  setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
 
-  ui->colorPreviewWidget->setStyleSheet(QString("background-color: rgb(%1, %2, %3)").arg(_color.red()).arg(_color.green()).arg(_color.blue()));
+  ui->colorPreviewWidget->setStyleSheet(
+      QString("background-color: rgb(%1, %2, %3)").arg(_color.red()).arg(_color.green()).arg(_color.blue()));
 
   QDomDocument doc;
   auto saved_state = plotwidget->xmlSaveState(doc);
@@ -114,7 +114,8 @@ PlotWidgetEditor::~PlotWidgetEditor()
 void PlotWidgetEditor::onColorChanged(QColor c)
 {
   _color = c;
-  ui->colorPreviewWidget->setStyleSheet(QString("background-color: rgb(%1, %2, %3)").arg(_color.red()).arg(_color.green()).arg(_color.blue()));
+  ui->colorPreviewWidget->setStyleSheet(
+      QString("background-color: rgb(%1, %2, %3)").arg(_color.red()).arg(_color.green()).arg(_color.blue()));
   {
     QSignalBlocker block(ui->editColorText);
     ui->editColorText->setText(_color.name());
@@ -187,8 +188,7 @@ void PlotWidgetEditor::setupTable()
     item->setSizeHint(plot_row->sizeHint());
     ui->listWidget->setItemWidget(item, plot_row);
 
-    connect(plot_row, &EditorRowWidget::deleteRow, this,
-            [this](QWidget* w) { onDeleteRow(w); });
+    connect(plot_row, &EditorRowWidget::deleteRow, this, [this](QWidget* w) { onDeleteRow(w); });
     row++;
   }
   if (row == 0)
@@ -238,8 +238,8 @@ void PlotWidgetEditor::updateLimits()
 
 void PlotWidgetEditor::on_editColorButton_clicked()
 {
-  QColor color = QColorDialog::getColor(_color, this );
-  if( color.isValid() )
+  QColor color = QColorDialog::getColor(_color, this);
+  if (color.isValid())
     onColorChanged(color);
 }
 
@@ -269,7 +269,7 @@ void PlotWidgetEditor::on_radioBoth_toggled(bool checked)
 {
   if (checked)
   {
-//    _plotwidget->changeCurvesStyle(PlotWidgetBase::LINES_AND_DOTS);
+    //    _plotwidget->changeCurvesStyle(PlotWidgetBase::LINES_AND_DOTS);
     _plotwidget->changeCurvesStyle(PlotWidgetBase::LINES);
   }
 }
@@ -309,20 +309,11 @@ void PlotWidgetEditor::on_pushButtonReset_clicked()
   ui->lineLimitMax->setText(QString::number(limits.max));
 }
 
-void PlotWidgetEditor::on_lineLimitMax_textChanged(const QString&)
-{
-  updateLimits();
-}
+void PlotWidgetEditor::on_lineLimitMax_textChanged(const QString&) { updateLimits(); }
 
-void PlotWidgetEditor::on_lineLimitMin_textChanged(const QString&)
-{
-  updateLimits();
-}
+void PlotWidgetEditor::on_lineLimitMin_textChanged(const QString&) { updateLimits(); }
 
-void PlotWidgetEditor::on_pushButtonCancel_pressed()
-{
-  this->reject();
-}
+void PlotWidgetEditor::on_pushButtonCancel_pressed() { this->reject(); }
 
 void PlotWidgetEditor::on_pushButtonSave_pressed()
 {
@@ -361,8 +352,7 @@ EditorRowWidget::EditorRowWidget(QString text, QColor color) : QWidget()
 
   _delete_button->setHidden(true);
 
-  connect(_delete_button, &QPushButton::clicked, this,
-          [this]() { emit deleteRow(this); });
+  connect(_delete_button, &QPushButton::clicked, this, [this]() { emit deleteRow(this); });
 }
 
 void EditorRowWidget::enterEvent(QEvent* ev)
@@ -377,10 +367,7 @@ void EditorRowWidget::leaveEvent(QEvent* ev)
   _empty_spacer->setHidden(false);
 }
 
-QString EditorRowWidget::text() const
-{
-  return _text->text();
-}
+QString EditorRowWidget::text() const { return _text->text(); }
 
 void EditorRowWidget::setColor(QColor color)
 {
@@ -388,10 +375,7 @@ void EditorRowWidget::setColor(QColor color)
   _color = color;
 }
 
-QColor EditorRowWidget::color() const
-{
-  return _color;
-}
+QColor EditorRowWidget::color() const { return _color; }
 
 void PlotWidgetEditor::on_listWidget_itemSelectionChanged()
 {
@@ -417,4 +401,4 @@ void PlotWidgetEditor::on_listWidget_itemSelectionChanged()
     ui->editColorText->setText(row_widget->color().name());
   }
 }
-}
+}  // namespace tesseract_gui

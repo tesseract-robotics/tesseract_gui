@@ -37,29 +37,25 @@
 namespace tesseract_gui
 {
 CollisionStandardItem::CollisionStandardItem(tesseract_scene_graph::Collision::Ptr collision)
-  : QStandardItem(icons::getCollisionIcon(), "Collision")
-  , collision(std::move(collision))
+  : QStandardItem(icons::getCollisionIcon(), "Collision"), collision(std::move(collision))
 {
   ctor();
 }
 
-CollisionStandardItem::CollisionStandardItem(const QString &text, tesseract_scene_graph::Collision::Ptr collision)
-  : QStandardItem(icons::getCollisionIcon(),text)
-  , collision(std::move(collision))
+CollisionStandardItem::CollisionStandardItem(const QString& text, tesseract_scene_graph::Collision::Ptr collision)
+  : QStandardItem(icons::getCollisionIcon(), text), collision(std::move(collision))
 {
   ctor();
 }
-CollisionStandardItem::CollisionStandardItem(const QIcon &icon, const QString &text, tesseract_scene_graph::Collision::Ptr collision)
-  : QStandardItem(icon, text)
-  , collision(std::move(collision))
+CollisionStandardItem::CollisionStandardItem(const QIcon& icon,
+                                             const QString& text,
+                                             tesseract_scene_graph::Collision::Ptr collision)
+  : QStandardItem(icon, text), collision(std::move(collision))
 {
   ctor();
 }
 
-int CollisionStandardItem::type() const
-{
-  return static_cast<int>(StandardItemType::COLLISION);
-}
+int CollisionStandardItem::type() const { return static_cast<int>(StandardItemType::COLLISION); }
 
 void CollisionStandardItem::ctor()
 {
@@ -76,7 +72,8 @@ void CollisionStandardItem::ctor()
     }
     case tesseract_geometry::GeometryType::CAPSULE:
     {
-      geometry_item = new CapsuleStandardItem(std::static_pointer_cast<tesseract_geometry::Capsule>(collision->geometry));
+      geometry_item =
+          new CapsuleStandardItem(std::static_pointer_cast<tesseract_geometry::Capsule>(collision->geometry));
       break;
     }
     case tesseract_geometry::GeometryType::CONE:
@@ -86,7 +83,8 @@ void CollisionStandardItem::ctor()
     }
     case tesseract_geometry::GeometryType::CYLINDER:
     {
-      geometry_item = new CylinderStandardItem(std::static_pointer_cast<tesseract_geometry::Cylinder>(collision->geometry));
+      geometry_item =
+          new CylinderStandardItem(std::static_pointer_cast<tesseract_geometry::Cylinder>(collision->geometry));
       break;
     }
     case tesseract_geometry::GeometryType::PLANE:
@@ -108,11 +106,12 @@ void CollisionStandardItem::ctor()
     case tesseract_geometry::GeometryType::MESH:
     case tesseract_geometry::GeometryType::SDF_MESH:
     {
-      geometry_item = new PolygonMeshStandardItem(std::static_pointer_cast<tesseract_geometry::PolygonMesh>(collision->geometry));
+      geometry_item =
+          new PolygonMeshStandardItem(std::static_pointer_cast<tesseract_geometry::PolygonMesh>(collision->geometry));
       break;
     }
   }
   setIcon(geometry_item->icon());
   appendRow(geometry_item);
 }
-}
+}  // namespace tesseract_gui

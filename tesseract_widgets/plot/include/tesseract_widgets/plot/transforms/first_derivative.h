@@ -40,10 +40,7 @@ public:
 
   ~FirstDerivative() override;
 
-  const char* name() const override
-  {
-    return "Derivative";
-  }
+  const char* name() const override { return "Derivative"; }
 
   QWidget* optionsWidget() override;
 
@@ -56,6 +53,6 @@ private:
   std::unique_ptr<Ui::FirstDerivariveForm> ui;
   double _dT;
 };
-}
+}  // namespace tesseract_gui
 
 #endif  // TESSERACT_WIDGETS_PLOT_TRANSFORMS_FIRST_DERIVATIVE_H

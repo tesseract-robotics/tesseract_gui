@@ -32,26 +32,20 @@ static const QString LINK_GROUPS_KEY = "Link Groups";
 
 namespace tesseract_gui
 {
-
-KinematicGroupsModel::KinematicGroupsModel(QObject *parent)
-  : QStandardItemModel(parent)
-{
-  clear();
-}
-KinematicGroupsModel::KinematicGroupsModel(const KinematicGroupsModel &other)
-: QStandardItemModel(other.d_ptr->parent)
+KinematicGroupsModel::KinematicGroupsModel(QObject* parent) : QStandardItemModel(parent) { clear(); }
+KinematicGroupsModel::KinematicGroupsModel(const KinematicGroupsModel& other) : QStandardItemModel(other.d_ptr->parent)
 {
   this->group_names_ = other.group_names_;
-  this->chain_groups_ =  other.chain_groups_;
-  this->joint_groups_ =  other.joint_groups_;
-  this->link_groups_ =  other.link_groups_;
+  this->chain_groups_ = other.chain_groups_;
+  this->joint_groups_ = other.joint_groups_;
+  this->link_groups_ = other.link_groups_;
 }
-KinematicGroupsModel &KinematicGroupsModel::operator=(const KinematicGroupsModel &other)
+KinematicGroupsModel& KinematicGroupsModel::operator=(const KinematicGroupsModel& other)
 {
   this->group_names_ = other.group_names_;
-  this->chain_groups_ =  other.chain_groups_;
-  this->joint_groups_ =  other.joint_groups_;
-  this->link_groups_ =  other.link_groups_;
+  this->chain_groups_ = other.chain_groups_;
+  this->joint_groups_ = other.joint_groups_;
+  this->link_groups_ = other.link_groups_;
   return *this;
 }
 
@@ -59,7 +53,7 @@ void KinematicGroupsModel::clear()
 {
   QStandardItemModel::clear();
   setColumnCount(2);
-  setHorizontalHeaderLabels({"Name", "Values"});
+  setHorizontalHeaderLabels({ "Name", "Values" });
 
   appendRow(new QStandardItem(CHAIN_GROUPS_KEY));
   appendRow(new QStandardItem(JOINT_GROUPS_KEY));
@@ -85,7 +79,7 @@ void KinematicGroupsModel::set(const tesseract_srdf::ChainGroups& chain_groups,
 
 void KinematicGroupsModel::addChainGroup(QString group_name, tesseract_srdf::ChainGroup group)
 {
-  if(group_names_.find(group_name.toStdString()) != group_names_.end())
+  if (group_names_.find(group_name.toStdString()) != group_names_.end())
     removeGroup(group_name);
 
   QStandardItem* item = findItems(CHAIN_GROUPS_KEY).at(0);
@@ -99,7 +93,7 @@ void KinematicGroupsModel::addChainGroup(QString group_name, tesseract_srdf::Cha
 
 void KinematicGroupsModel::addJointGroup(QString group_name, tesseract_srdf::JointGroup group)
 {
-  if(group_names_.find(group_name.toStdString()) != group_names_.end())
+  if (group_names_.find(group_name.toStdString()) != group_names_.end())
     removeGroup(group_name);
 
   QStandardItem* item = findItems(JOINT_GROUPS_KEY).at(0);
@@ -113,7 +107,7 @@ void KinematicGroupsModel::addJointGroup(QString group_name, tesseract_srdf::Joi
 
 void KinematicGroupsModel::addLinkGroup(QString group_name, tesseract_srdf::LinkGroup group)
 {
-  if(group_names_.find(group_name.toStdString()) != group_names_.end())
+  if (group_names_.find(group_name.toStdString()) != group_names_.end())
     removeGroup(group_name);
 
   QStandardItem* item = findItems(LINK_GROUPS_KEY).at(0);
@@ -133,13 +127,13 @@ void KinematicGroupsModel::removeGroup(QString group_name)
     QStandardItem* item = findItems(CHAIN_GROUPS_KEY).at(0);
     for (int i = item->rowCount(); i > 0; i--)
     {
-      QStandardItem* child_item = item->child(i-1);
+      QStandardItem* child_item = item->child(i - 1);
       if (child_item->text() == group_name)
         item->removeRow(i - 1);
     }
 
     auto it = chain_groups_.find(group_name.toStdString());
-    if(it != chain_groups_.end())
+    if (it != chain_groups_.end())
       chain_groups_.erase(it);
   }
 
@@ -147,13 +141,13 @@ void KinematicGroupsModel::removeGroup(QString group_name)
     QStandardItem* item = findItems(JOINT_GROUPS_KEY).at(0);
     for (int i = item->rowCount(); i > 0; i--)
     {
-      QStandardItem* child_item = item->child(i-1);
+      QStandardItem* child_item = item->child(i - 1);
       if (child_item->text() == group_name)
-        item->removeRow(i-1);
+        item->removeRow(i - 1);
     }
 
     auto it = joint_groups_.find(group_name.toStdString());
-    if(it != joint_groups_.end())
+    if (it != joint_groups_.end())
       joint_groups_.erase(it);
   }
 
@@ -161,37 +155,25 @@ void KinematicGroupsModel::removeGroup(QString group_name)
     QStandardItem* item = findItems(LINK_GROUPS_KEY).at(0);
     for (int i = item->rowCount(); i > 0; i--)
     {
-      QStandardItem* child_item = item->child(i-1);
+      QStandardItem* child_item = item->child(i - 1);
       if (child_item->text() == group_name)
-        item->removeRow(i-1);
+        item->removeRow(i - 1);
     }
 
     auto it = link_groups_.find(group_name.toStdString());
-    if(it != link_groups_.end())
+    if (it != link_groups_.end())
       link_groups_.erase(it);
   }
 
   Q_EMIT groupRemoved(group_name);
 }
 
-const tesseract_srdf::GroupNames& KinematicGroupsModel::getGroupNames() const
-{
-  return group_names_;
-}
+const tesseract_srdf::GroupNames& KinematicGroupsModel::getGroupNames() const { return group_names_; }
 
-const tesseract_srdf::ChainGroups& KinematicGroupsModel::getChainGroups() const
-{
-  return chain_groups_;
-}
+const tesseract_srdf::ChainGroups& KinematicGroupsModel::getChainGroups() const { return chain_groups_; }
 
-const tesseract_srdf::JointGroups& KinematicGroupsModel::getJointGroups() const
-{
-  return joint_groups_;
-}
+const tesseract_srdf::JointGroups& KinematicGroupsModel::getJointGroups() const { return joint_groups_; }
 
-const tesseract_srdf::LinkGroups& KinematicGroupsModel::getLinkGroups() const
-{
-  return link_groups_;
-}
+const tesseract_srdf::LinkGroups& KinematicGroupsModel::getLinkGroups() const { return link_groups_; }
 
-}
+}  // namespace tesseract_gui

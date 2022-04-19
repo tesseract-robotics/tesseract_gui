@@ -33,9 +33,8 @@ const double SLIDER_RESOLUTION = 0.001;
 
 namespace tesseract_gui
 {
-JointStateSliderWidget::JointStateSliderWidget(QWidget *parent)
-  : QWidget(parent)
-  , ui_(std::make_unique<Ui::JointStateSliderWidget>())
+JointStateSliderWidget::JointStateSliderWidget(QWidget* parent)
+  : QWidget(parent), ui_(std::make_unique<Ui::JointStateSliderWidget>())
 {
   ui_->setupUi(this);
 
@@ -48,14 +47,14 @@ JointStateSliderWidget::~JointStateSliderWidget() = default;
 void JointStateSliderWidget::setJoints(const std::vector<tesseract_scene_graph::Joint::ConstPtr>& joints)
 {
   state_.clear();
-  while(layout_->count() > 0)
+  while (layout_->count() > 0)
   {
-    QLayoutItem *item = layout_->takeAt(0);
+    QLayoutItem* item = layout_->takeAt(0);
     delete item->widget();
     delete item;
   }
 
-  int row {0};
+  int row{ 0 };
   for (const auto& joint : joints)
   {
     std::string name = joint->getName();
@@ -97,7 +96,7 @@ void JointStateSliderWidget::setJoints(const std::vector<tesseract_scene_graph::
     spin->setSingleStep(SLIDER_RESOLUTION);
     layout_->addWidget(spin, row, 4);
 
-    connect(slider, &QSlider::sliderMoved, spin, [this, name, spin](int value){
+    connect(slider, &QSlider::sliderMoved, spin, [this, name, spin](int value) {
       double v = value * SLIDER_RESOLUTION;
       spin->blockSignals(true);
       spin->setValue(v);
@@ -107,7 +106,7 @@ void JointStateSliderWidget::setJoints(const std::vector<tesseract_scene_graph::
       Q_EMIT jointStateChanged(state_);
     });
 
-    connect(spin, qOverload<double>(&QDoubleSpinBox::valueChanged), slider, [this, name, slider](double value){
+    connect(spin, qOverload<double>(&QDoubleSpinBox::valueChanged), slider, [this, name, slider](double value) {
       slider->blockSignals(true);
       slider->setValue(value / SLIDER_RESOLUTION);
       slider->blockSignals(false);
@@ -122,9 +121,6 @@ void JointStateSliderWidget::setJoints(const std::vector<tesseract_scene_graph::
   layout_->setColumnStretch(0, 0);
 }
 
-std::unordered_map<std::string, double> JointStateSliderWidget::getJointState() const
-{
-  return state_;
-}
+std::unordered_map<std::string, double> JointStateSliderWidget::getJointState() const { return state_; }
 
-}
+}  // namespace tesseract_gui

@@ -27,11 +27,8 @@
 
 namespace tesseract_gui
 {
-
 PlotSubplots::PlotSubplots(PlotDataMapRef& datamap, int rows, int cols, QWidget* parent)
-  : QWidget(parent)
-  , rows_(rows)
-  , cols_(cols)
+  : QWidget(parent), rows_(rows), cols_(cols)
 {
   if (rows < 1)
     throw std::runtime_error("PlotSubplots, rows must be greater than zero!");
@@ -39,7 +36,7 @@ PlotSubplots::PlotSubplots(PlotDataMapRef& datamap, int rows, int cols, QWidget*
   if (cols < 1)
     throw std::runtime_error("PlotSubplots, cols must be greater than zero!");
 
-  QGridLayout *grid_layout = new QGridLayout(this);
+  QGridLayout* grid_layout = new QGridLayout(this);
   grid_layout->setHorizontalSpacing(cols);
   grid_layout->setVerticalSpacing(rows);
   grid_layout->setSpacing(0);
@@ -49,11 +46,11 @@ PlotSubplots::PlotSubplots(PlotDataMapRef& datamap, int rows, int cols, QWidget*
   {
     std::vector<std::unique_ptr<PlotWidget>>& row = subplots_[r];
     row.resize(cols);
-    for  (std::size_t c = 0; c < cols; ++c)
+    for (std::size_t c = 0; c < cols; ++c)
     {
       QFrame* frame = new QFrame(this);
       frame->setFrameStyle(QFrame::Box);
-      QGridLayout *layout = new QGridLayout(frame);
+      QGridLayout* layout = new QGridLayout(frame);
 
       auto plot_widget = std::make_unique<PlotWidget>(datamap);
       layout->addWidget(plot_widget->widget());
@@ -63,22 +60,19 @@ PlotSubplots::PlotSubplots(PlotDataMapRef& datamap, int rows, int cols, QWidget*
   }
 }
 
-PlotWidget* PlotSubplots::getSubplot(int row, int col)
-{
-  return subplots_.at(row).at(col).get();
-}
+PlotWidget* PlotSubplots::getSubplot(int row, int col) { return subplots_.at(row).at(col).get(); }
 
-int PlotSubplots::rows() const { return rows_;}
-int PlotSubplots::cols() const { return cols_;}
+int PlotSubplots::rows() const { return rows_; }
+int PlotSubplots::cols() const { return cols_; }
 
 void PlotSubplots::replot()
 {
   for (std::size_t r = 0; r < rows_; ++r)
   {
-    for  (std::size_t c = 0; c < cols_; ++c)
+    for (std::size_t c = 0; c < cols_; ++c)
     {
       subplots_.at(r).at(c)->replot();
     }
   }
 }
-}
+}  // namespace tesseract_gui

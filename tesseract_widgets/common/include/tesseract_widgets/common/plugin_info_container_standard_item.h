@@ -39,8 +39,11 @@ class PluginInfoContainerStandardItem : public QStandardItem
 {
 public:
   PluginInfoContainerStandardItem(tesseract_common::PluginInfoContainer plugin_info_container);
-  explicit PluginInfoContainerStandardItem(const QString &text, tesseract_common::PluginInfoContainer plugin_info_container);
-  PluginInfoContainerStandardItem(const QIcon &icon, const QString &text, tesseract_common::PluginInfoContainer plugin_info_container);
+  explicit PluginInfoContainerStandardItem(const QString& text,
+                                           tesseract_common::PluginInfoContainer plugin_info_container);
+  PluginInfoContainerStandardItem(const QIcon& icon,
+                                  const QString& text,
+                                  tesseract_common::PluginInfoContainer plugin_info_container);
   int type() const override;
 
   tesseract_common::PluginInfoContainer plugin_info_container;
@@ -48,6 +51,6 @@ public:
 private:
   void ctor();
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_COMMON_PLUGIN_INFO_CONTAINER_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_COMMON_PLUGIN_INFO_CONTAINER_STANDARD_ITEM_H

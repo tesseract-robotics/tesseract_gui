@@ -38,8 +38,8 @@ class JointGroupStandardItem : public QStandardItem
 {
 public:
   JointGroupStandardItem(tesseract_srdf::JointGroup group);
-  explicit JointGroupStandardItem(const QString &text, tesseract_srdf::JointGroup group);
-  JointGroupStandardItem(const QIcon &icon, const QString &text, tesseract_srdf::JointGroup group);
+  explicit JointGroupStandardItem(const QString& text, tesseract_srdf::JointGroup group);
+  JointGroupStandardItem(const QIcon& icon, const QString& text, tesseract_srdf::JointGroup group);
   int type() const override;
 
   tesseract_srdf::JointGroup group;
@@ -47,6 +47,6 @@ public:
 private:
   void ctor();
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_KINEMATICS_GROUP_JOINT_GROUP_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_KINEMATICS_GROUP_JOINT_GROUP_STANDARD_ITEM_H

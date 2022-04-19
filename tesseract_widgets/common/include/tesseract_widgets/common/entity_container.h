@@ -90,7 +90,6 @@ public:
    */
   std::unordered_map<std::string, EntityMap> getTrackedEntities() const;
 
-
   /**
    * @brief Add untracked entity under the provided namespace
    * @param ns The namespace to store it under
@@ -129,5 +128,5 @@ private:
 
   mutable std::shared_mutex mutex_;
 };
-}
-#endif // TESSERACT_GUI_COMMON_ENTITY_CONTAINER_H
+}  // namespace tesseract_gui
+#endif  // TESSERACT_GUI_COMMON_ENTITY_CONTAINER_H

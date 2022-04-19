@@ -38,8 +38,8 @@ class CylinderStandardItem : public QStandardItem
 {
 public:
   CylinderStandardItem(tesseract_geometry::Cylinder::Ptr cylinder);
-  explicit CylinderStandardItem(const QString &text, tesseract_geometry::Cylinder::Ptr cylinder);
-  CylinderStandardItem(const QIcon &icon, const QString &text, tesseract_geometry::Cylinder::Ptr cylinder);
+  explicit CylinderStandardItem(const QString& text, tesseract_geometry::Cylinder::Ptr cylinder);
+  CylinderStandardItem(const QIcon& icon, const QString& text, tesseract_geometry::Cylinder::Ptr cylinder);
   int type() const override;
 
   tesseract_geometry::Cylinder::Ptr cylinder;
@@ -47,6 +47,6 @@ public:
 private:
   void ctor();
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_SCENE_GRAPH_CYLINDER_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_SCENE_GRAPH_CYLINDER_STANDARD_ITEM_H

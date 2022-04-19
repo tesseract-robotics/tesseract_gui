@@ -28,30 +28,24 @@
 namespace tesseract_gui
 {
 BoxStandardItem::BoxStandardItem(tesseract_geometry::Box::Ptr box)
-  : QStandardItem(icons::getCubeIcon(), "Box")
-  , box(std::move(box))
+  : QStandardItem(icons::getCubeIcon(), "Box"), box(std::move(box))
 {
   ctor();
 }
 
-BoxStandardItem::BoxStandardItem(const QString &text, tesseract_geometry::Box::Ptr box)
-  : QStandardItem(icons::getCubeIcon(), text)
-  , box(std::move(box))
+BoxStandardItem::BoxStandardItem(const QString& text, tesseract_geometry::Box::Ptr box)
+  : QStandardItem(icons::getCubeIcon(), text), box(std::move(box))
 {
   ctor();
 }
 
-BoxStandardItem::BoxStandardItem(const QIcon &icon, const QString &text, tesseract_geometry::Box::Ptr box)
-  : QStandardItem(icon, text)
-  , box(std::move(box))
+BoxStandardItem::BoxStandardItem(const QIcon& icon, const QString& text, tesseract_geometry::Box::Ptr box)
+  : QStandardItem(icon, text), box(std::move(box))
 {
   ctor();
 }
 
-int BoxStandardItem::type() const
-{
-  return static_cast<int>(StandardItemType::BOX);
-}
+int BoxStandardItem::type() const { return static_cast<int>(StandardItemType::BOX); }
 
 void BoxStandardItem::ctor()
 {
@@ -59,5 +53,4 @@ void BoxStandardItem::ctor()
   appendRow(createStandardItemFloat("y", box->getY()));
   appendRow(createStandardItemFloat("z", box->getZ()));
 }
-}
-
+}  // namespace tesseract_gui

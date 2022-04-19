@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
-*/
+ */
 
 #include <tesseract_ignition/conversions.h>
 #include <tesseract_geometry/geometries.h>
@@ -24,51 +24,36 @@
 
 namespace tesseract_gui
 {
-
 //////////////////////////////////////////////////
-QColor convert(const ignition::math::Color &_color)
+QColor convert(const ignition::math::Color& _color)
 {
-  return QColor(_color.R()*255.0,
-                _color.G()*255.0,
-                _color.B()*255.0,
-                _color.A()*255.0);
+  return QColor(_color.R() * 255.0, _color.G() * 255.0, _color.B() * 255.0, _color.A() * 255.0);
 }
 
 //////////////////////////////////////////////////
-ignition::math::Color convert(const QColor &_color)
+ignition::math::Color convert(const QColor& _color)
 {
-  return ignition::math::Color(_color.red() / 255.0,
-                       _color.green() / 255.0,
-                       _color.blue() / 255.0,
-                       _color.alpha() / 255.0);
+  return ignition::math::Color(
+      _color.red() / 255.0, _color.green() / 255.0, _color.blue() / 255.0, _color.alpha() / 255.0);
 }
 
 //////////////////////////////////////////////////
-QPointF convert(const ignition::math::Vector2d &_pt)
-{
-  return QPointF(_pt.X(), _pt.Y());
-}
+QPointF convert(const ignition::math::Vector2d& _pt) { return QPointF(_pt.X(), _pt.Y()); }
 
 //////////////////////////////////////////////////
-ignition::math::Vector2d convert(const QPointF &_pt)
-{
-  return ignition::math::Vector2d(_pt.x(), _pt.y());
-}
+ignition::math::Vector2d convert(const QPointF& _pt) { return ignition::math::Vector2d(_pt.x(), _pt.y()); }
 
 //////////////////////////////////////////////////
-QVector3D convert(const ignition::math::Vector3d &_vec)
-{
-  return QVector3D(_vec.X(), _vec.Y(), _vec.Z());
-}
+QVector3D convert(const ignition::math::Vector3d& _vec) { return QVector3D(_vec.X(), _vec.Y(), _vec.Z()); }
 
 //////////////////////////////////////////////////
-ignition::math::Vector3d convert(const QVector3D &_vec)
+ignition::math::Vector3d convert(const QVector3D& _vec)
 {
   return ignition::math::Vector3d(_vec.x(), _vec.y(), _vec.z());
 }
 
 //////////////////////////////////////////////////
-ignition::common::MouseEvent convert(const QMouseEvent &_e)
+ignition::common::MouseEvent convert(const QMouseEvent& _e)
 {
   ignition::common::MouseEvent event;
   event.SetPos(_e.pos().x(), _e.pos().y());
@@ -119,7 +104,7 @@ ignition::common::MouseEvent convert(const QMouseEvent &_e)
 }
 
 //////////////////////////////////////////////////
-ignition::common::MouseEvent convert(const QWheelEvent &_e)
+ignition::common::MouseEvent convert(const QWheelEvent& _e)
 {
   ignition::common::MouseEvent event;
 
@@ -156,7 +141,7 @@ ignition::common::MouseEvent convert(const QWheelEvent &_e)
 }
 
 //////////////////////////////////////////////////
-ignition::common::KeyEvent convert(const QKeyEvent &_e)
+ignition::common::KeyEvent convert(const QKeyEvent& _e)
 {
   ignition::common::KeyEvent event;
   event.SetKey(_e.key());
@@ -182,7 +167,6 @@ ignition::common::KeyEvent convert(const QKeyEvent &_e)
   return event;
 }
 
-
 bool isMeshWithColor(const std::string& file_path)
 {
   if (file_path.length() >= 4)
@@ -198,7 +182,7 @@ bool isMeshWithColor(const std::string& file_path)
 }
 
 std::vector<std::string> loadSceneGraph(ignition::rendering::Scene& scene,
-                                        tesseract_gui::EntityContainer &entity_container,
+                                        tesseract_gui::EntityContainer& entity_container,
                                         const tesseract_scene_graph::SceneGraph& scene_graph,
                                         const std::string& prefix)
 {
@@ -225,7 +209,7 @@ std::vector<std::string> loadSceneGraph(ignition::rendering::Scene& scene,
 }
 
 ignition::rendering::VisualPtr loadLink(ignition::rendering::Scene& scene,
-                                        tesseract_gui::EntityContainer &entity_container,
+                                        tesseract_gui::EntityContainer& entity_container,
                                         const tesseract_scene_graph::Link& link)
 {
   auto entity = entity_container.addTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, link.getName());
@@ -248,7 +232,8 @@ ignition::rendering::VisualPtr loadLinkVisuals(ignition::rendering::Scene& scene
   ignition::rendering::VisualPtr ign_link_visuals = scene.CreateVisual(entity.id, entity.unique_name);
 
   for (const auto& visual : link.visual)
-    ign_link_visuals->AddChild(loadLinkGeometry(scene, entity_container, *visual->geometry, Eigen::Vector3d::Ones(), visual->origin, visual->material));
+    ign_link_visuals->AddChild(loadLinkGeometry(
+        scene, entity_container, *visual->geometry, Eigen::Vector3d::Ones(), visual->origin, visual->material));
 
   return ign_link_visuals;
 }
@@ -262,7 +247,8 @@ ignition::rendering::VisualPtr loadLinkCollisions(ignition::rendering::Scene& sc
   ignition::rendering::VisualPtr ign_link_collisions = scene.CreateVisual(entity.id, entity.unique_name);
 
   for (const auto& visual : link.visual)
-    ign_link_collisions->AddChild(loadLinkGeometry(scene, entity_container, *visual->geometry, Eigen::Vector3d::Ones(), visual->origin, visual->material));
+    ign_link_collisions->AddChild(loadLinkGeometry(
+        scene, entity_container, *visual->geometry, Eigen::Vector3d::Ones(), visual->origin, visual->material));
 
   ign_link_collisions->SetVisible(false);
   return ign_link_collisions;
@@ -270,8 +256,8 @@ ignition::rendering::VisualPtr loadLinkCollisions(ignition::rendering::Scene& sc
 
 ignition::rendering::VisualPtr loadLinkWireBox(ignition::rendering::Scene& scene,
                                                EntityContainer& entity_container,
-                                               const tesseract_scene_graph::Link &link,
-                                               const ignition::math::v6::AxisAlignedBox &aabb)
+                                               const tesseract_scene_graph::Link& link,
+                                               const ignition::math::v6::AxisAlignedBox& aabb)
 {
   std::string name = link.getName() + "::WireBox";
   auto entity = entity_container.addTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, name);
@@ -340,7 +326,7 @@ ignition::rendering::VisualPtr loadLinkAxis(ignition::rendering::Scene& scene,
     auto gv_entity = entity_container.addUntrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS);
     ignition::rendering::VisualPtr cylinder = scene.CreateVisual(gv_entity.id, gv_entity.unique_name);
     Eigen::Isometry3d pose = Eigen::Isometry3d::Identity();
-    pose.translation() = Eigen::Vector3d(0,0,0.5);
+    pose.translation() = Eigen::Vector3d(0, 0, 0.5);
     cylinder->SetLocalPose(ignition::math::eigen3::convert(pose));
     cylinder->AddGeometry(scene.CreateCylinder());
     cylinder->Scale(0.1, 0.1, 1.0);
@@ -353,7 +339,7 @@ ignition::rendering::VisualPtr loadLinkAxis(ignition::rendering::Scene& scene,
     ignition::rendering::VisualPtr cylinder = scene.CreateVisual(gv_entity.id, gv_entity.unique_name);
     Eigen::Isometry3d pose = Eigen::Isometry3d::Identity();
     pose.rotate(Eigen::AngleAxisd(M_PI_2, Eigen::Vector3d::UnitY()));
-    pose.translation() = Eigen::Vector3d(0.5,0,0);
+    pose.translation() = Eigen::Vector3d(0.5, 0, 0);
     cylinder->SetLocalPose(ignition::math::eigen3::convert(pose));
     cylinder->AddGeometry(scene.CreateCylinder());
     cylinder->Scale(0.1, 0.1, 1.0);
@@ -366,7 +352,7 @@ ignition::rendering::VisualPtr loadLinkAxis(ignition::rendering::Scene& scene,
     ignition::rendering::VisualPtr cylinder = scene.CreateVisual(gv_entity.id, gv_entity.unique_name);
     Eigen::Isometry3d pose = Eigen::Isometry3d::Identity();
     pose.rotate(Eigen::AngleAxisd(-M_PI_2, Eigen::Vector3d::UnitX()));
-    pose.translation() = Eigen::Vector3d(0,0.5,0);
+    pose.translation() = Eigen::Vector3d(0, 0.5, 0);
     cylinder->SetLocalPose(ignition::math::eigen3::convert(pose));
     cylinder->AddGeometry(scene.CreateCylinder());
     cylinder->Scale(0.1, 0.1, 1.0);
@@ -381,11 +367,11 @@ ignition::rendering::VisualPtr loadLinkAxis(ignition::rendering::Scene& scene,
 }
 
 ignition::rendering::VisualPtr loadLinkGeometry(ignition::rendering::Scene& scene,
-                                            tesseract_gui::EntityContainer &entity_container,
-                                            const tesseract_geometry::Geometry& geometry,
-                                            const Eigen::Vector3d& scale,
-                                            const Eigen::Isometry3d& local_pose,
-                                            const tesseract_scene_graph::Material::ConstPtr& material)
+                                                tesseract_gui::EntityContainer& entity_container,
+                                                const tesseract_geometry::Geometry& geometry,
+                                                const Eigen::Vector3d& scale,
+                                                const Eigen::Isometry3d& local_pose,
+                                                const tesseract_scene_graph::Material::ConstPtr& material)
 {
   ignition::rendering::MaterialPtr ign_material = loadMaterial(scene, material);
   switch (geometry.getType())
@@ -504,9 +490,9 @@ ignition::rendering::VisualPtr loadLinkGeometry(ignition::rendering::Scene& scen
     }
     default:
     {
-//      CONSOLE_BRIDGE_logError("This geometric shape type (%d) is not supported",
-//                              static_cast<int>(geometry->getType()));
-     return nullptr;
+      //      CONSOLE_BRIDGE_logError("This geometric shape type (%d) is not supported",
+      //                              static_cast<int>(geometry->getType()));
+      return nullptr;
     }
   }
 }
@@ -544,4 +530,4 @@ ignition::rendering::MaterialPtr loadMaterial(ignition::rendering::Scene& scene,
 
   return nullptr;
 }
-}
+}  // namespace tesseract_gui

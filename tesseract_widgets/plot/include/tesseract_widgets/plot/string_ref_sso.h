@@ -59,22 +59,13 @@ private:
   } _storage;
 
 public:
-  bool isSSO() const
-  {
-    return !(_storage.no_sso.size & TYPE_BIT);
-  }
+  bool isSSO() const { return !(_storage.no_sso.size & TYPE_BIT); }
 
-  StringRef() : StringRef(nullptr, 0)
-  {
-  }
+  StringRef() : StringRef(nullptr, 0) {}
 
-  StringRef(const std::string& str) : StringRef(str.data(), str.size())
-  {
-  }
+  StringRef(const std::string& str) : StringRef(str.data(), str.size()) {}
 
-  StringRef(const char* str) : StringRef(str, strlen(str))
-  {
-  }
+  StringRef(const char* str) : StringRef(str, strlen(str)) {}
 
   explicit StringRef(const char* data_ptr, size_t length)
   {
@@ -94,16 +85,9 @@ public:
     }
   }
 
-  const char* data() const
-  {
-    return isSSO() ? _storage.sso.data : _storage.no_sso.data;
-  }
+  const char* data() const { return isSSO() ? _storage.sso.data : _storage.no_sso.data; }
 
-  size_t size() const
-  {
-    return isSSO() ? (SSO_SIZE - _storage.sso.data[SSO_SIZE]) :
-                     _storage.no_sso.size & ~TYPE_BIT;
-  }
+  size_t size() const { return isSSO() ? (SSO_SIZE - _storage.sso.data[SSO_SIZE]) : _storage.no_sso.size & ~TYPE_BIT; }
 };
 
 }  // namespace tesseract_gui

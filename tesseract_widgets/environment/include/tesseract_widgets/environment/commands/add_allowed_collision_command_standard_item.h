@@ -38,8 +38,11 @@ class AddAllowedCollisionCommandStandardItem : public QStandardItem
 {
 public:
   explicit AddAllowedCollisionCommandStandardItem(tesseract_environment::AddAllowedCollisionCommand::ConstPtr command);
-  explicit AddAllowedCollisionCommandStandardItem(const QString &text, tesseract_environment::AddAllowedCollisionCommand::ConstPtr command);
-  explicit AddAllowedCollisionCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::AddAllowedCollisionCommand::ConstPtr command);
+  explicit AddAllowedCollisionCommandStandardItem(const QString& text,
+                                                  tesseract_environment::AddAllowedCollisionCommand::ConstPtr command);
+  explicit AddAllowedCollisionCommandStandardItem(const QIcon& icon,
+                                                  const QString& text,
+                                                  tesseract_environment::AddAllowedCollisionCommand::ConstPtr command);
   int type() const override;
 
   tesseract_environment::AddAllowedCollisionCommand::ConstPtr command;
@@ -47,6 +50,6 @@ public:
 private:
   void ctor();
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_ENVIRONMENT_ADD_ALLOWED_COLLISION_COMMAND_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_ENVIRONMENT_ADD_ALLOWED_COLLISION_COMMAND_STANDARD_ITEM_H

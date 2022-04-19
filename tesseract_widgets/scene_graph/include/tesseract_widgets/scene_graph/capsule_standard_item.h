@@ -38,8 +38,8 @@ class CapsuleStandardItem : public QStandardItem
 {
 public:
   CapsuleStandardItem(tesseract_geometry::Capsule::Ptr capsule);
-  explicit CapsuleStandardItem(const QString &text, tesseract_geometry::Capsule::Ptr capsule);
-  CapsuleStandardItem(const QIcon &icon, const QString &text, tesseract_geometry::Capsule::Ptr capsule);
+  explicit CapsuleStandardItem(const QString& text, tesseract_geometry::Capsule::Ptr capsule);
+  CapsuleStandardItem(const QIcon& icon, const QString& text, tesseract_geometry::Capsule::Ptr capsule);
   int type() const override;
 
   tesseract_geometry::Capsule::Ptr capsule;
@@ -47,6 +47,6 @@ public:
 private:
   void ctor();
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_SCENE_GRAPH_CAPSULE_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_SCENE_GRAPH_CAPSULE_STANDARD_ITEM_H

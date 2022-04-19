@@ -24,7 +24,6 @@
 
 namespace tesseract_gui
 {
-
 class TesseractRenderSync;
 
 /// \brief Ign-rendering renderer.
@@ -41,7 +40,7 @@ public:
 
   /// \param[in] _renderSync RenderSync to safely
   /// synchronize Qt and worker thread (this)
-  void Render(TesseractRenderSync *_renderSync);
+  void Render(TesseractRenderSync* _renderSync);
 
   /// \brief Initialize the render engine
   void Initialize();
@@ -51,24 +50,24 @@ public:
 
   /// \brief New mouse event triggered
   /// \param[in] _e New mouse event
-  void NewMouseEvent(const ignition::common::MouseEvent &_e);
+  void NewMouseEvent(const ignition::common::MouseEvent& _e);
 
   /// \brief New hover event triggered.
   /// \param[in] _hoverPos Mouse hover screen position
-  void NewHoverEvent(const ignition::math::Vector2i &_hoverPos);
+  void NewHoverEvent(const ignition::math::Vector2i& _hoverPos);
 
   /// \brief New hover event triggered.
   /// \param[in] _dropText Text dropped on the scene
   /// \param[in] _dropPos Mouse drop screen position
-  void NewDropEvent(const std::string &_dropText, const ignition::math::Vector2i &_dropPos);
+  void NewDropEvent(const std::string& _dropText, const ignition::math::Vector2i& _dropPos);
 
   /// \brief Handle key press event for snapping
   /// \param[in] _e The key event to process.
-  void HandleKeyPress(const ignition::common::KeyEvent &_e);
+  void HandleKeyPress(const ignition::common::KeyEvent& _e);
 
   /// \brief Handle key release event for snapping
   /// \param[in] _e The key event to process.
-  void HandleKeyRelease(const ignition::common::KeyEvent &_e);
+  void HandleKeyRelease(const ignition::common::KeyEvent& _e);
 
   /// Values is constantly constantly cycled/swapped/changed
   /// from a worker thread
@@ -146,7 +145,7 @@ private:
   /// ray cast from the given 2D screen coordinates.
   /// \param[in] _screenPos 2D coordinates on the screen, in pixels.
   /// \return 3D coordinates of a point in the 3D scene.
-  ignition::math::Vector3d ScreenToScene(const ignition::math::Vector2i &_screenPos) const;
+  ignition::math::Vector3d ScreenToScene(const ignition::math::Vector2i& _screenPos) const;
 
   /// \internal
   /// \brief Pointer to private data.
@@ -162,10 +161,10 @@ public:
   RenderThread();
 
   /// \brief Offscreen surface to render to
-  QOffscreenSurface *surface = nullptr;
+  QOffscreenSurface* surface = nullptr;
 
   /// \brief OpenGL context to be passed to the render engine
-  QOpenGLContext *context = nullptr;
+  QOpenGLContext* context = nullptr;
 
   /// \brief Ign-rendering renderer
   TesseractRenderer renderer;
@@ -173,13 +172,16 @@ public:
   /// \brief Render when safe
   /// \param[in] _renderSync RenderSync to safely
   /// synchronize Qt and worker thread (this)
-  public slots: void RenderNext(TesseractRenderSync *_renderSync);
+public slots:
+  void RenderNext(TesseractRenderSync* _renderSync);
 
   /// \brief Shutdown the thread and the render engine
-  public slots: void ShutDown();
+public slots:
+  void ShutDown();
 
   /// \brief Slot called to update render texture size
-  public slots: void SizeChanged();
+public slots:
+  void SizeChanged();
 
   /// \brief Signal to indicate that a frame has been rendered and ready
   /// to be displayed
@@ -187,10 +189,8 @@ public:
   /// \param[in] _size Size of the texture
 
 signals:
-    void TextureReady(uint _id, const QSize &_size);
-    void ContextWanted();
-
-
+  void TextureReady(uint _id, const QSize& _size);
+  void ContextWanted();
 };
 
 class RenderWidget;
@@ -204,45 +204,57 @@ class TextureNode : public QObject
   /// \param[in] _window Window to display the texture
   /// \param[in] _renderSync RenderSync to safely
   /// synchronize Qt (this) and worker thread
-  public: explicit TextureNode(RenderWidget *_window, TesseractRenderSync &_renderSync);
+public:
+  explicit TextureNode(RenderWidget* _window, TesseractRenderSync& _renderSync);
 
   /// \brief Destructor
-  public: ~TextureNode() override;
+public:
+  ~TextureNode() override;
 
   /// \brief This function gets called on the FBO rendering thread and will
   ///  store the texture id and size and schedule an update on the window.
   /// \param[in] _id OpenGL render texture Id
   /// \param[in] _size Texture size
-  public slots: void NewTexture(uint _id, const QSize &_size);
+public slots:
+  void NewTexture(uint _id, const QSize& _size);
 
   /// \brief Before the scene graph starts to render, we update to the
   /// pending texture
-  public slots: void PrepareNode();
+public slots:
+  void PrepareNode();
 
   /// \param[in] _renderSync RenderSync to send to the worker thread
-  signals: void TextureInUse(TesseractRenderSync *_renderSync);
+signals:
+  void TextureInUse(TesseractRenderSync* _renderSync);
 
   /// \brief Signal emitted when a new texture is ready to trigger window
   /// update
-  signals: void PendingNewTexture();
+signals:
+  void PendingNewTexture();
 
   /// \brief OpenGL texture id
-  public: uint id = 0;
+public:
+  uint id = 0;
 
   /// \brief Texture size
-  public: QSize size = QSize(0, 0);
+public:
+  QSize size = QSize(0, 0);
 
   /// \brief Mutex to protect the texture variables
-  public: QMutex mutex;
+public:
+  QMutex mutex;
 
   /// \brief See RenderSync
-  public: TesseractRenderSync &renderSync;
+public:
+  TesseractRenderSync& renderSync;
 
   /// \brief Qt's scene graph texture
-  public: QOpenGLTexture *texture = nullptr;
+public:
+  QOpenGLTexture* texture = nullptr;
 
   /// \brief Qt quick window
-  public: RenderWidget *window = nullptr;
+public:
+  RenderWidget* window = nullptr;
 };
 
 /// \brief A QWidget that manages the render window
@@ -258,23 +270,23 @@ public:
 
   /// \brief Set background color of render window
   /// \param[in] _color Color of render window background
-  void SetBackgroundColor(const ignition::math::Color &_color);
+  void SetBackgroundColor(const ignition::math::Color& _color);
 
   /// \brief Set ambient light of render window
   /// \param[in] _ambient Color of ambient light
-  void SetAmbientLight(const ignition::math::Color &_ambient);
+  void SetAmbientLight(const ignition::math::Color& _ambient);
 
   /// \brief Set engine name used to create the render window
   /// \param[in] _name Name of render engine
-  void SetEngineName(const std::string &_name);
+  void SetEngineName(const std::string& _name);
 
   /// \brief Set name of scene created inside the render window
   /// \param[in] _name Name of scene
-  void SetSceneName(const std::string &_name);
+  void SetSceneName(const std::string& _name);
 
   /// \brief Set the initial pose the render window camera
   /// \param[in] _pose Initial camera pose
-  void SetCameraPose(const ignition::math::Pose3d &_pose);
+  void SetCameraPose(const ignition::math::Pose3d& _pose);
 
   /// \brief Set the render window camera's near clipping plane distance
   /// \param[in] _near Near clipping plane distance
@@ -288,65 +300,66 @@ public:
   /// \param[in] _hoverPos 2D coordinates of the hovered mouse position on
   /// the render window.
   void OnHovered(int _mouseX, int _mouseY);
-//    public: void OnHovered(const ignition::math::Vector2i &_hoverPos);
+  //    public: void OnHovered(const ignition::math::Vector2i &_hoverPos);
 
   /// \brief Callback when receives a drop event.
   /// \param[in] _drop Dropped string.
   /// \param[in] _dropPos x coordinate of mouse position.
-  void OnDropped(const QString &_drop, int _mouseX, int _mouseY);
+  void OnDropped(const QString& _drop, int _mouseX, int _mouseY);
 
-//    public: void OnDropped(const QString &_drop,
-//        const ignition::math::Vector2i &_dropPos);
+  //    public: void OnDropped(const QString &_drop,
+  //        const ignition::math::Vector2i &_dropPos);
 
   /// \brief Set if sky is enabled
   /// \param[in] _sky True to enable the sky, false otherwise.
-  void SetSkyEnabled(const bool &_sky);
+  void SetSkyEnabled(const bool& _sky);
 
   /// \brief Show grid view in the scene
   void SetGridEnabled(bool _grid);
 
   /// \brief Slot called when thread is ready to be started
-  public Q_SLOTS: void Ready();
+public Q_SLOTS:
+  void Ready();
 
   /// \brief Handle key press event for snapping
   /// \param[in] _e The key event to process.
-  void HandleKeyPress(const ignition::common::KeyEvent &_e);
+  void HandleKeyPress(const ignition::common::KeyEvent& _e);
 
   /// \brief Handle key release event for snapping
   /// \param[in] _e The key event to process.
-  void HandleKeyRelease(const ignition::common::KeyEvent &_e);
+  void HandleKeyRelease(const ignition::common::KeyEvent& _e);
 
 signals:
-    void renderRequested();
+  void renderRequested();
 
 public slots:
-    void grabContext();
+  void grabContext();
 
 private slots:
-    void onAboutToCompose();
-    void onFrameSwapped();
-    void onAboutToResize();
-    void onResized();
-    void onTextureReady();
+  void onAboutToCompose();
+  void onFrameSwapped();
+  void onAboutToResize();
+  void onResized();
+  void onTextureReady();
 
 protected:
   // Documentation inherited
-  void mousePressEvent(QMouseEvent *_e) override;
+  void mousePressEvent(QMouseEvent* _e) override;
 
   // Documentation inherited
-  void mouseReleaseEvent(QMouseEvent *_e) override;
+  void mouseReleaseEvent(QMouseEvent* _e) override;
 
   // Documentation inherited
-  void mouseMoveEvent(QMouseEvent *_e) override;
+  void mouseMoveEvent(QMouseEvent* _e) override;
 
   // Documentation inherited
-  void keyPressEvent(QKeyEvent *_e) override;
+  void keyPressEvent(QKeyEvent* _e) override;
 
   // Documentation inherited
-  void keyReleaseEvent(QKeyEvent *_e) override;
+  void keyReleaseEvent(QKeyEvent* _e) override;
 
   // Documentation inherited
-  void wheelEvent(QWheelEvent *_e) override;
+  void wheelEvent(QWheelEvent* _e) override;
 
   /// \brief Overrides the paint event to render the render engine
   /// camera view
@@ -354,17 +367,17 @@ protected:
   /// function. It represents the visual representation of the item.
   /// \param[in] _data The node transformation data.
   /// \return Updated node.
-//  QSGNode *updatePaintNode(QSGNode *_oldNode, QQuickItem::UpdatePaintNodeData *_data) override;
+  //  QSGNode *updatePaintNode(QSGNode *_oldNode, QQuickItem::UpdatePaintNodeData *_data) override;
 
-//  void paintGL() override;
+  //  void paintGL() override;
 
-  void paintEvent(QPaintEvent *) override { }
+  void paintEvent(QPaintEvent*) override {}
 
   /// \internal
   /// \brief Pointer to private data.
   IGN_UTILS_UNIQUE_IMPL_PTR(dataPtr)
 };
 
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_IGNITION_RENDER_WIDGET_H
+#endif  // TESSERACT_IGNITION_RENDER_WIDGET_H

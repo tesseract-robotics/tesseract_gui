@@ -26,17 +26,16 @@ install(FILES "${CMAKE_CURRENT_LIST_DIR}/cmake/tesseract_widgets-extras.cmake" D
 
 configure_package(
   NAMESPACE tesseract
-  DEPENDENCIES
-    "Qt5 COMPONENTS Core Gui Widgets Svg OpenGL Xml"
-    tesseract_environment
-    tesseract_kinematics
-    tesseract_scene_graph
-    tesseract_common
-    tesseract_support
-    tesseract_urdf
-    tesseract_srdf
-    tesseract_visualization
-    qtadvanceddocking
-  CFG_EXTRAS
-    tesseract_widgets-extras.cmake
-)
+            DEPENDENCIES
+            "Qt5 COMPONENTS Core Gui Widgets Svg OpenGL Xml"
+            tesseract_environment
+            tesseract_kinematics
+            tesseract_scene_graph
+            tesseract_common
+            tesseract_support
+            tesseract_urdf
+            tesseract_srdf
+            tesseract_visualization
+            qtadvanceddocking
+            CFG_EXTRAS
+            tesseract_widgets-extras.cmake)

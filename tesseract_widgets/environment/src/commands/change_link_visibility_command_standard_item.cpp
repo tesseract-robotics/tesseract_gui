@@ -27,24 +27,26 @@
 
 namespace tesseract_gui
 {
-
-ChangeLinkVisibilityCommandStandardItem::ChangeLinkVisibilityCommandStandardItem(tesseract_environment::ChangeLinkVisibilityCommand::ConstPtr command)
-  : QStandardItem(icons::getCommandEntryIcon(), "Change Link Visibility")
-  , command(std::move(command))
+ChangeLinkVisibilityCommandStandardItem::ChangeLinkVisibilityCommandStandardItem(
+    tesseract_environment::ChangeLinkVisibilityCommand::ConstPtr command)
+  : QStandardItem(icons::getCommandEntryIcon(), "Change Link Visibility"), command(std::move(command))
 {
   ctor();
 }
 
-ChangeLinkVisibilityCommandStandardItem::ChangeLinkVisibilityCommandStandardItem(const QString &text, tesseract_environment::ChangeLinkVisibilityCommand::ConstPtr command)
-  : QStandardItem(icons::getCommandEntryIcon(), text)
-  , command(std::move(command))
+ChangeLinkVisibilityCommandStandardItem::ChangeLinkVisibilityCommandStandardItem(
+    const QString& text,
+    tesseract_environment::ChangeLinkVisibilityCommand::ConstPtr command)
+  : QStandardItem(icons::getCommandEntryIcon(), text), command(std::move(command))
 {
   ctor();
 }
 
-ChangeLinkVisibilityCommandStandardItem::ChangeLinkVisibilityCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::ChangeLinkVisibilityCommand::ConstPtr command)
-  : QStandardItem(icon, text)
-  , command(std::move(command))
+ChangeLinkVisibilityCommandStandardItem::ChangeLinkVisibilityCommandStandardItem(
+    const QIcon& icon,
+    const QString& text,
+    tesseract_environment::ChangeLinkVisibilityCommand::ConstPtr command)
+  : QStandardItem(icon, text), command(std::move(command))
 {
   ctor();
 }
@@ -56,6 +58,7 @@ int ChangeLinkVisibilityCommandStandardItem::type() const
 
 void ChangeLinkVisibilityCommandStandardItem::ctor()
 {
-  appendRow(createStandardItemString(icons::getLinkIcon(), command->getLinkName(), (command->getEnabled()) ? "True" : "False"));
+  appendRow(createStandardItemString(
+      icons::getLinkIcon(), command->getLinkName(), (command->getEnabled()) ? "True" : "False"));
 }
-}
+}  // namespace tesseract_gui

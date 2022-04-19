@@ -33,8 +33,8 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 #include <QWidget>
 #include <QItemSelectionModel>
 
-
-namespace Ui {
+namespace Ui
+{
 class JointTrajectoryWidget;
 }
 
@@ -47,13 +47,13 @@ namespace tesseract_common
 {
 class JointState;
 class JointTrajectorySet;
-}
+}  // namespace tesseract_common
 
 namespace tesseract_environment
 {
 class Environment;
 class Command;
-}
+}  // namespace tesseract_environment
 
 namespace tesseract_gui
 {
@@ -66,7 +66,7 @@ class JointTrajectoryWidget : public QWidget
   Q_OBJECT
 
 public:
-  explicit JointTrajectoryWidget(QWidget *parent = nullptr, bool add_toolbar = true);
+  explicit JointTrajectoryWidget(QWidget* parent = nullptr, bool add_toolbar = true);
   ~JointTrajectoryWidget();
 
   void setModel(JointTrajectoryModel* model);
@@ -99,7 +99,8 @@ public:
 
 Q_SIGNALS:
   void showJointState(const tesseract_common::JointState& state);
-  void configureJointTrajectorySet(const QString& uuid, const tesseract_common::JointTrajectorySet& joint_trajectory_set);
+  void configureJointTrajectorySet(const QString& uuid,
+                                   const tesseract_common::JointTrajectorySet& joint_trajectory_set);
   void jointTrajectorySetRemoved(const QString& uuid);
 
 public Q_SLOTS:
@@ -111,7 +112,7 @@ public Q_SLOTS:
   virtual void onRender();
 
 private Q_SLOTS:
-  void onCurrentRowChanged(const QModelIndex &current, const QModelIndex &previous);
+  void onCurrentRowChanged(const QModelIndex& current, const QModelIndex& previous);
   void onPauseButtonClicked();
   void onPlayButtonClicked();
   void onPlayerTimerTimeout();
@@ -128,6 +129,6 @@ protected:
   bool openJointTrajectorySet(const QString& filename, const QString& suffix);
 };
 
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_JOINT_TRAJECTORY_JOINT_TRAJECTORY_WIDGET_H
+#endif  // TESSERACT_WIDGETS_JOINT_TRAJECTORY_JOINT_TRAJECTORY_WIDGET_H

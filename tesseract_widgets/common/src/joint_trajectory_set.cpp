@@ -48,7 +48,8 @@ void JointTrajectoryInfo::serialize(Archive& ar, const unsigned int /*version*/)
   ar& BOOST_SERIALIZATION_NVP(trajectory);
 }
 
-JointTrajectorySet::JointTrajectorySet(const std::unordered_map<std::string, double>& initial_state, std::string description)
+JointTrajectorySet::JointTrajectorySet(const std::unordered_map<std::string, double>& initial_state,
+                                       std::string description)
   : description_(std::move(description))
 {
   initial_state_.joint_names.reserve(initial_state.size());
@@ -87,7 +88,8 @@ JointTrajectorySet::JointTrajectorySet(const std::unordered_map<std::string, dou
 void JointTrajectorySet::applyEnvironment(tesseract_environment::Environment::UPtr env)
 {
   if (environment_ != nullptr)
-    throw std::runtime_error("JointTrajectorySet: Cannot apply environment to trajectory set which already contains an environment");
+    throw std::runtime_error("JointTrajectorySet: Cannot apply environment to trajectory set which already contains an "
+                             "environment");
 
   environment_ = std::move(env);
   if (!environment_->applyCommands(commands_))
@@ -96,15 +98,9 @@ void JointTrajectorySet::applyEnvironment(tesseract_environment::Environment::UP
   commands_.clear();
 }
 
-tesseract_environment::Environment::Ptr JointTrajectorySet::getEnvironment() const
-{
-  return environment_;
-}
+tesseract_environment::Environment::Ptr JointTrajectorySet::getEnvironment() const { return environment_; }
 
-const tesseract_environment::Commands& JointTrajectorySet::getEnvironmentCommands() const
-{
-  return commands_;
-}
+const tesseract_environment::Commands& JointTrajectorySet::getEnvironmentCommands() const { return commands_; }
 
 JointState JointTrajectorySet::getNewTrajectoryInitialState() const
 {
@@ -270,4 +266,3 @@ void JointTrajectorySet::serialize(Archive& ar, const unsigned int /*version*/)
 #include <tesseract_common/serialization.h>
 TESSERACT_SERIALIZE_ARCHIVES_INSTANTIATE(tesseract_common::JointTrajectoryInfo)
 TESSERACT_SERIALIZE_ARCHIVES_INSTANTIATE(tesseract_common::JointTrajectorySet)
-

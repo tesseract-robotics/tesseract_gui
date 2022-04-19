@@ -28,24 +28,26 @@
 
 namespace tesseract_gui
 {
-
-ChangeLinkOriginCommandStandardItem::ChangeLinkOriginCommandStandardItem(tesseract_environment::ChangeLinkOriginCommand::ConstPtr command)
-  : QStandardItem(icons::getCommandEntryIcon(), "Change Link Origin")
-  , command(std::move(command))
+ChangeLinkOriginCommandStandardItem::ChangeLinkOriginCommandStandardItem(
+    tesseract_environment::ChangeLinkOriginCommand::ConstPtr command)
+  : QStandardItem(icons::getCommandEntryIcon(), "Change Link Origin"), command(std::move(command))
 {
   ctor();
 }
 
-ChangeLinkOriginCommandStandardItem::ChangeLinkOriginCommandStandardItem(const QString &text, tesseract_environment::ChangeLinkOriginCommand::ConstPtr command)
-  : QStandardItem(icons::getCommandEntryIcon(), text)
-  , command(std::move(command))
+ChangeLinkOriginCommandStandardItem::ChangeLinkOriginCommandStandardItem(
+    const QString& text,
+    tesseract_environment::ChangeLinkOriginCommand::ConstPtr command)
+  : QStandardItem(icons::getCommandEntryIcon(), text), command(std::move(command))
 {
   ctor();
 }
 
-ChangeLinkOriginCommandStandardItem::ChangeLinkOriginCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::ChangeLinkOriginCommand::ConstPtr command)
-  : QStandardItem(icon, text)
-  , command(std::move(command))
+ChangeLinkOriginCommandStandardItem::ChangeLinkOriginCommandStandardItem(
+    const QIcon& icon,
+    const QString& text,
+    tesseract_environment::ChangeLinkOriginCommand::ConstPtr command)
+  : QStandardItem(icon, text), command(std::move(command))
 {
   ctor();
 }
@@ -58,6 +60,6 @@ int ChangeLinkOriginCommandStandardItem::type() const
 void ChangeLinkOriginCommandStandardItem::ctor()
 {
   auto* item = new TransformStandardItem(icons::getLinkIcon(), command->getLinkName().c_str(), command->getOrigin());
-  appendRow({item, new QStandardItem()});
+  appendRow({ item, new QStandardItem() });
 }
-}
+}  // namespace tesseract_gui

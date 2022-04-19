@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
-*/
+ */
 
 #include <tesseract_ignition/render_widget.h>
 #include <tesseract_ignition/gui_utils.h>
@@ -52,13 +52,13 @@ class tesseract_gui::TesseractRenderer::Implementation
 {
 public:
   /// \brief Flag to indicate if mouse event is dirty
-  bool mouseDirty{false};
+  bool mouseDirty{ false };
 
   /// \brief Flag to indicate if hover event is dirty
-  bool hoverDirty{false};
+  bool hoverDirty{ false };
 
   /// \brief Flag to indicate if drop event is dirty
-  bool dropDirty{false};
+  bool dropDirty{ false };
 
   /// \brief Mouse event
   ignition::common::MouseEvent mouseEvent;
@@ -70,19 +70,19 @@ public:
   std::mutex mutex;
 
   /// \brief User camera
-  ignition::rendering::CameraPtr camera{nullptr};
+  ignition::rendering::CameraPtr camera{ nullptr };
 
   /// \brief The currently hovered mouse position in screen coordinates
-  ignition::math::Vector2i mouseHoverPos{ignition::math::Vector2i::Zero};
+  ignition::math::Vector2i mouseHoverPos{ ignition::math::Vector2i::Zero };
 
   /// \brief The currently drop mouse position in screen coordinates
-  ignition::math::Vector2i mouseDropPos{ignition::math::Vector2i::Zero};
+  ignition::math::Vector2i mouseDropPos{ ignition::math::Vector2i::Zero };
 
   /// \brief The dropped text in the scene
   std::string dropText;
 
   /// \brief Ray query for mouse clicks
-  ignition::rendering::RayQueryPtr rayQuery{nullptr};
+  ignition::rendering::RayQueryPtr rayQuery{ nullptr };
 
   /// \brief View control focus target
   ignition::math::Vector3d target;
@@ -138,32 +138,31 @@ public:
   std::condition_variable cv;
 
   enum class RenderStallState
-          {
-            /// Qt is stuck inside WaitForWorkerThread
-            /// Worker thread can proceed
-            WorkerCanProceed,
-            /// Qt is stuck inside WaitForWorkerThread
-            /// Worker thread is between WaitForQtThreadAndBlock
-            /// and ReleaseQtThreadFromBlock
-            WorkerIsProceeding,
-            /// Worker is stuck inside WaitForQtThreadAndBlock
-            /// Qt can proceed
-            QtCanProceed,
-            /// Do not block
-            ShuttingDown,
-          };
+  {
+    /// Qt is stuck inside WaitForWorkerThread
+    /// Worker thread can proceed
+    WorkerCanProceed,
+    /// Qt is stuck inside WaitForWorkerThread
+    /// Worker thread is between WaitForQtThreadAndBlock
+    /// and ReleaseQtThreadFromBlock
+    WorkerIsProceeding,
+    /// Worker is stuck inside WaitForQtThreadAndBlock
+    /// Qt can proceed
+    QtCanProceed,
+    /// Do not block
+    ShuttingDown,
+  };
 
   /// \brief See TextureNode::RenderSync::RenderStallState
-  RenderStallState renderStallState =
-      RenderStallState::QtCanProceed /*GUARDED_BY(sharedRenderMutex)*/;
+  RenderStallState renderStallState = RenderStallState::QtCanProceed /*GUARDED_BY(sharedRenderMutex)*/;
 
   /// \brief Must be called from worker thread when we want to block
   /// \param[in] lock Acquired lock. Must be based on this->mutex
-  void WaitForQtThreadAndBlock(std::unique_lock<std::mutex> &_lock);
+  void WaitForQtThreadAndBlock(std::unique_lock<std::mutex>& _lock);
 
   /// \brief Must be called from worker thread when we are done
   /// \param[in] lock Acquired lock. Must be based on this->mutex
-  void ReleaseQtThreadFromBlock(std::unique_lock<std::mutex> &_lock);
+  void ReleaseQtThreadFromBlock(std::unique_lock<std::mutex>& _lock);
 
   /// \brief Must be called from Qt thread periodically
   void WaitForWorkerThread();
@@ -180,7 +179,7 @@ public:
   ignition::common::MouseEvent mouseEvent;
 
   /// \brief Render thread
-  RenderThread *renderThread = nullptr;
+  RenderThread* renderThread = nullptr;
 
   /// \brief See RenderSync
   TesseractRenderSync renderSync;
@@ -189,7 +188,7 @@ public:
   TextureNode* textureNode;
 
   /// \brief List of threads
-  static QList<QThread *> threads;
+  static QList<QThread*> threads;
 
   /// \brief List of our QT connections.
   QList<QMetaObject::Connection> connections;
@@ -197,20 +196,21 @@ public:
 
 using namespace tesseract_gui;
 
-QList<QThread *> RenderWidget::Implementation::threads;
+QList<QThread*> RenderWidget::Implementation::threads;
 
 /////////////////////////////////////////////////
-void TesseractRenderSync::WaitForQtThreadAndBlock(std::unique_lock<std::mutex> &_lock)
+void TesseractRenderSync::WaitForQtThreadAndBlock(std::unique_lock<std::mutex>& _lock)
 {
-  this->cv.wait(_lock, [this]
-  { return this->renderStallState == RenderStallState::WorkerCanProceed ||
-           this->renderStallState == RenderStallState::ShuttingDown; });
+  this->cv.wait(_lock, [this] {
+    return this->renderStallState == RenderStallState::WorkerCanProceed ||
+           this->renderStallState == RenderStallState::ShuttingDown;
+  });
 
   this->renderStallState = RenderStallState::WorkerIsProceeding;
 }
 
 /////////////////////////////////////////////////
-void TesseractRenderSync::ReleaseQtThreadFromBlock(std::unique_lock<std::mutex> &_lock)
+void TesseractRenderSync::ReleaseQtThreadFromBlock(std::unique_lock<std::mutex>& _lock)
 {
   this->renderStallState = RenderStallState::QtCanProceed;
   _lock.unlock();
@@ -223,11 +223,10 @@ void TesseractRenderSync::WaitForWorkerThread()
   std::unique_lock<std::mutex> lock(this->mutex);
 
   // Wait until we're clear to go
-  this->cv.wait( lock, [this]
-  {
+  this->cv.wait(lock, [this] {
     return this->renderStallState == RenderStallState::QtCanProceed ||
            this->renderStallState == RenderStallState::ShuttingDown;
-  } );
+  });
 
   // Worker thread asked us to wait!
   this->renderStallState = RenderStallState::WorkerCanProceed;
@@ -238,11 +237,10 @@ void TesseractRenderSync::WaitForWorkerThread()
   lock.lock();
 
   // Wait until we're clear to go
-  this->cv.wait( lock, [this]
-  {
+  this->cv.wait(lock, [this] {
     return this->renderStallState == RenderStallState::QtCanProceed ||
            this->renderStallState == RenderStallState::ShuttingDown;
-  } );
+  });
 }
 
 /////////////////////////////////////////////////
@@ -259,13 +257,10 @@ void TesseractRenderSync::Shutdown()
 }
 
 /////////////////////////////////////////////////
-TesseractRenderer::TesseractRenderer()
-  : dataPtr(ignition::utils::MakeUniqueImpl<Implementation>())
-{
-}
+TesseractRenderer::TesseractRenderer() : dataPtr(ignition::utils::MakeUniqueImpl<Implementation>()) {}
 
 /////////////////////////////////////////////////
-void TesseractRenderer::Render(TesseractRenderSync *_renderSync)
+void TesseractRenderer::Render(TesseractRenderSync* _renderSync)
 {
   std::unique_lock<std::mutex> lock(_renderSync->mutex);
   _renderSync->WaitForQtThreadAndBlock(lock);
@@ -300,9 +295,9 @@ void TesseractRenderer::Render(TesseractRenderSync *_renderSync)
   {
     tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), new events::PreRender(this->sceneName));
 
-//    ignition::gui::App()->sendEvent(
-//        ignition::gui::App()->findChild<ignition::gui::MainWindow *>(),
-//        new ignition::gui::events::PreRender());
+    //    ignition::gui::App()->sendEvent(
+    //        ignition::gui::App()->findChild<ignition::gui::MainWindow *>(),
+    //        new ignition::gui::events::PreRender());
   }
 
   // update and render to texture
@@ -311,9 +306,9 @@ void TesseractRenderer::Render(TesseractRenderSync *_renderSync)
   if (tesseract_gui::getApp())
   {
     tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), new events::Render(this->sceneName));
-//    ignition::gui::App()->sendEvent(
-//        ignition::gui::App()->findChild<ignition::gui::MainWindow *>(),
-//        new ignition::gui::events::Render());
+    //    ignition::gui::App()->sendEvent(
+    //        ignition::gui::App()->findChild<ignition::gui::MainWindow *>(),
+    //        new ignition::gui::events::Render());
   }
 
   _renderSync->ReleaseQtThreadFromBlock(lock);
@@ -336,7 +331,7 @@ void TesseractRenderer::HandleMouseEvent()
 }
 
 ////////////////////////////////////////////////
-void TesseractRenderer::HandleKeyPress(const ignition::common::KeyEvent &_e)
+void TesseractRenderer::HandleKeyPress(const ignition::common::KeyEvent& _e)
 {
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
 
@@ -348,7 +343,7 @@ void TesseractRenderer::HandleKeyPress(const ignition::common::KeyEvent &_e)
 }
 
 ////////////////////////////////////////////////
-void TesseractRenderer::HandleKeyRelease(const ignition::common::KeyEvent &_e)
+void TesseractRenderer::HandleKeyRelease(const ignition::common::KeyEvent& _e)
 {
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
 
@@ -364,10 +359,10 @@ void TesseractRenderer::BroadcastDrop()
 {
   if (!this->dataPtr->dropDirty)
     return;
-  events::DropOnScene dropOnSceneEvent(
-    this->dataPtr->dropText, this->dataPtr->mouseDropPos, this->sceneName);
+  events::DropOnScene dropOnSceneEvent(this->dataPtr->dropText, this->dataPtr->mouseDropPos, this->sceneName);
   tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &dropOnSceneEvent);
-//  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &dropOnSceneEvent);
+  //  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(),
+  //  &dropOnSceneEvent);
   this->dataPtr->dropDirty = false;
 }
 
@@ -381,7 +376,8 @@ void TesseractRenderer::BroadcastHoverPos()
 
   events::HoverToScene hoverToSceneEvent(pos, this->sceneName);
   tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &hoverToSceneEvent);
-//  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &hoverToSceneEvent);
+  //  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(),
+  //  &hoverToSceneEvent);
 
   ignition::common::MouseEvent hoverMouseEvent = this->dataPtr->mouseEvent;
   hoverMouseEvent.SetPos(this->dataPtr->mouseHoverPos);
@@ -389,7 +385,8 @@ void TesseractRenderer::BroadcastHoverPos()
   hoverMouseEvent.SetType(ignition::common::MouseEvent::MOVE);
   events::HoverOnScene hoverOnSceneEvent(hoverMouseEvent, this->sceneName);
   tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &hoverOnSceneEvent);
-//  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &hoverOnSceneEvent);
+  //  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(),
+  //  &hoverOnSceneEvent);
 
   this->dataPtr->hoverDirty = false;
 }
@@ -406,7 +403,7 @@ void TesseractRenderer::BroadcastDrag()
 
   events::DragOnScene dragEvent(this->dataPtr->mouseEvent, this->sceneName);
   tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &dragEvent);
-//  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &dragEvent);
+  //  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &dragEvent);
 
   this->dataPtr->mouseDirty = false;
 }
@@ -425,11 +422,13 @@ void TesseractRenderer::BroadcastLeftClick()
 
   events::LeftClickToScene leftClickToSceneEvent(pos, this->sceneName);
   tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &leftClickToSceneEvent);
-//  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &leftClickToSceneEvent);
+  //  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(),
+  //  &leftClickToSceneEvent);
 
   events::LeftClickOnScene leftClickOnSceneEvent(this->dataPtr->mouseEvent, this->sceneName);
   tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &leftClickOnSceneEvent);
-//  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &leftClickOnSceneEvent);
+  //  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(),
+  //  &leftClickOnSceneEvent);
 
   this->dataPtr->mouseDirty = false;
 }
@@ -448,11 +447,13 @@ void TesseractRenderer::BroadcastRightClick()
 
   events::RightClickToScene rightClickToSceneEvent(pos, this->sceneName);
   tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &rightClickToSceneEvent);
-//  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &rightClickToSceneEvent);
+  //  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(),
+  //  &rightClickToSceneEvent);
 
   events::RightClickOnScene rightClickOnSceneEvent(this->dataPtr->mouseEvent, this->sceneName);
   tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &rightClickOnSceneEvent);
-//  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &rightClickOnSceneEvent);
+  //  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(),
+  //  &rightClickOnSceneEvent);
 
   this->dataPtr->mouseDirty = false;
 }
@@ -468,7 +469,7 @@ void TesseractRenderer::BroadcastMousePress()
 
   events::MousePressOnScene event(this->dataPtr->mouseEvent, this->sceneName);
   tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &event);
-//  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &event);
+  //  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &event);
 
   this->dataPtr->mouseDirty = false;
 }
@@ -484,7 +485,8 @@ void TesseractRenderer::BroadcastScroll()
 
   events::ScrollOnScene scrollOnSceneEvent(this->dataPtr->mouseEvent, this->sceneName);
   tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &scrollOnSceneEvent);
-//  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &scrollOnSceneEvent);
+  //  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(),
+  //  &scrollOnSceneEvent);
 
   this->dataPtr->mouseDirty = false;
 }
@@ -497,7 +499,7 @@ void TesseractRenderer::BroadcastKeyRelease()
 
   events::KeyReleaseOnScene keyRelease(this->dataPtr->keyEvent, this->sceneName);
   tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &keyRelease);
-//  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &keyRelease);
+  //  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &keyRelease);
 
   this->dataPtr->keyEvent.SetType(ignition::common::KeyEvent::NO_EVENT);
 }
@@ -510,7 +512,7 @@ void TesseractRenderer::BroadcastKeyPress()
 
   events::KeyPressOnScene keyPress(this->dataPtr->keyEvent, this->sceneName);
   tesseract_gui::getApp()->sendEvent(tesseract_gui::getApp(), &keyPress);
-//  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &keyPress);
+  //  ignition::gui::App()->sendEvent(ignition::gui::App()->findChild<ignition::gui::MainWindow *>(), &keyPress);
 
   this->dataPtr->keyEvent.SetType(ignition::common::KeyEvent::NO_EVENT);
 }
@@ -523,15 +525,14 @@ void TesseractRenderer::Initialize()
 
   std::map<std::string, std::string> params;
   params["useCurrentGLContext"] = "1";
-//  params["winID"] = std::to_string(tesseract_gui::getApp()->activeWindow()->winId());
-//  params["winID"] = std::to_string(
-//    ignition::gui::App()->findChild<ignition::gui::MainWindow *>()->
-//      QuickWindow()-winId());
+  //  params["winID"] = std::to_string(tesseract_gui::getApp()->activeWindow()->winId());
+  //  params["winID"] = std::to_string(
+  //    ignition::gui::App()->findChild<ignition::gui::MainWindow *>()->
+  //      QuickWindow()-winId());
   auto engine = ignition::rendering::engine(this->engineName, params);
   if (!engine)
   {
-    ignerr << "Engine [" << this->engineName << "] is not supported"
-           << std::endl;
+    ignerr << "Engine [" << this->engineName << "] is not supported" << std::endl;
     return;
   }
 
@@ -564,15 +565,13 @@ void TesseractRenderer::Initialize()
       gray->SetSpecular(0.7, 0.7, 0.7);
 
       // create grid visual
-      unsigned id = 1000; //static_cast<unsigned>(this->dataPtr->entity_manager.addVisual("tesseract_grid"));
+      unsigned id = 1000;  // static_cast<unsigned>(this->dataPtr->entity_manager.addVisual("tesseract_grid"));
       ignition::rendering::VisualPtr visual = scene->CreateVisual(id, "tesseract_grid");
       ignition::rendering::GridPtr gridGeom = scene->CreateGrid();
       if (!gridGeom)
       {
-        ignwarn << "Failed to create grid for scene ["
-          << scene->Name() << "] on engine ["
-            << scene->Engine()->Name() << "]"
-              << std::endl;
+        ignwarn << "Failed to create grid for scene [" << scene->Name() << "] on engine [" << scene->Engine()->Name()
+                << "]" << std::endl;
         return;
       }
       gridGeom->SetCellCount(20);
@@ -634,7 +633,7 @@ void TesseractRenderer::Destroy()
 }
 
 /////////////////////////////////////////////////
-void TesseractRenderer::NewHoverEvent(const ignition::math::Vector2i &_hoverPos)
+void TesseractRenderer::NewHoverEvent(const ignition::math::Vector2i& _hoverPos)
 {
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
   this->dataPtr->mouseHoverPos = _hoverPos;
@@ -642,8 +641,7 @@ void TesseractRenderer::NewHoverEvent(const ignition::math::Vector2i &_hoverPos)
 }
 
 /////////////////////////////////////////////////
-void TesseractRenderer::NewDropEvent(const std::string &_dropText,
-  const ignition::math::Vector2i &_dropPos)
+void TesseractRenderer::NewDropEvent(const std::string& _dropText, const ignition::math::Vector2i& _dropPos)
 {
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
   this->dataPtr->dropText = _dropText;
@@ -652,7 +650,7 @@ void TesseractRenderer::NewDropEvent(const std::string &_dropText,
 }
 
 /////////////////////////////////////////////////
-void TesseractRenderer::NewMouseEvent(const ignition::common::MouseEvent &_e)
+void TesseractRenderer::NewMouseEvent(const ignition::common::MouseEvent& _e)
 {
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
   this->dataPtr->mouseEvent = _e;
@@ -660,7 +658,7 @@ void TesseractRenderer::NewMouseEvent(const ignition::common::MouseEvent &_e)
 }
 
 /////////////////////////////////////////////////
-ignition::math::Vector3d TesseractRenderer::ScreenToScene(const ignition::math::Vector2i &_screenPos) const
+ignition::math::Vector3d TesseractRenderer::ScreenToScene(const ignition::math::Vector2i& _screenPos) const
 {
   // TODO(ahcorde): Replace this code with function in ign-rendering
   // Require this commit
@@ -682,8 +680,7 @@ ignition::math::Vector3d TesseractRenderer::ScreenToScene(const ignition::math::
     return result.point;
 
   // Set point to be 10m away if no intersection found
-  return this->dataPtr->rayQuery->Origin() +
-      this->dataPtr->rayQuery->Direction() * 10;
+  return this->dataPtr->rayQuery->Origin() + this->dataPtr->rayQuery->Direction() * 10;
 }
 
 /////////////////////////////////////////////////
@@ -694,7 +691,7 @@ RenderThread::RenderThread()
 }
 
 /////////////////////////////////////////////////
-void RenderThread::RenderNext(TesseractRenderSync *_renderSync)
+void RenderThread::RenderNext(TesseractRenderSync* _renderSync)
 {
   this->context->makeCurrent(this->surface);
 
@@ -739,7 +736,7 @@ void RenderThread::ShutDown()
 /////////////////////////////////////////////////
 void RenderThread::SizeChanged()
 {
-  auto item = qobject_cast<QWidget *>(this->sender());
+  auto item = qobject_cast<QWidget*>(this->sender());
   if (!item)
   {
     ignerr << "Internal error, sender is not QQuickItem." << std::endl;
@@ -754,25 +751,21 @@ void RenderThread::SizeChanged()
 }
 
 /////////////////////////////////////////////////
-TextureNode::TextureNode(RenderWidget *_window, TesseractRenderSync &_renderSync)
-    : renderSync(_renderSync), window(_window)
+TextureNode::TextureNode(RenderWidget* _window, TesseractRenderSync& _renderSync)
+  : renderSync(_renderSync), window(_window)
 {
-
   // Our texture node must have a texture, so use the default 0 texture.
   this->texture = new QOpenGLTexture(QImage());
-//  this->texture->bind(0);
-//  this->texture->setSize(1, 1);
+  //  this->texture->bind(0);
+  //  this->texture->setSize(1, 1);
   // this->window->createTextureFromId(0, QSize(1, 1));
 }
 
 /////////////////////////////////////////////////
-TextureNode::~TextureNode()
-{
-  delete this->texture;
-}
+TextureNode::~TextureNode() { delete this->texture; }
 
 /////////////////////////////////////////////////
-void TextureNode::NewTexture(uint _id, const QSize &_size)
+void TextureNode::NewTexture(uint _id, const QSize& _size)
 {
   this->mutex.lock();
   this->id = _id;
@@ -798,11 +791,11 @@ void TextureNode::PrepareNode()
     // note: include QQuickWindow::TextureHasAlphaChannel if the rendered
     // content has alpha.
     this->texture = new QOpenGLTexture(QImage());
-//    this->texture->bind(newId);
-//    this->texture->setSize(sz.width(), sz.height());
-//    this->setTexture(this->texture);
+    //    this->texture->bind(newId);
+    //    this->texture->setSize(sz.width(), sz.height());
+    //    this->setTexture(this->texture);
 
-//    this->markDirty(DirtyMaterial);
+    //    this->markDirty(DirtyMaterial);
 
     // This will notify the rendering thread that the texture is now being
     // rendered and it can start rendering to the other one.
@@ -834,17 +827,16 @@ void TextureNode::PrepareNode()
 }
 
 /////////////////////////////////////////////////
-RenderWidget::RenderWidget(QWidget *_parent)
-  : QOpenGLWidget(_parent)
-  , dataPtr(ignition::utils::MakeUniqueImpl<Implementation>())
+RenderWidget::RenderWidget(QWidget* _parent)
+  : QOpenGLWidget(_parent), dataPtr(ignition::utils::MakeUniqueImpl<Implementation>())
 {
   connect(this, &QOpenGLWidget::aboutToCompose, this, &RenderWidget::onAboutToCompose);
   connect(this, &QOpenGLWidget::frameSwapped, this, &RenderWidget::onFrameSwapped);
   connect(this, &QOpenGLWidget::aboutToResize, this, &RenderWidget::onAboutToResize);
   connect(this, &QOpenGLWidget::resized, this, &RenderWidget::onResized);
 
-//  this->setAcceptedMouseButtons(Qt::AllButtons);
-//  this->setFlag(ItemHasContents);
+  //  this->setAcceptedMouseButtons(Qt::AllButtons);
+  //  this->setFlag(ItemHasContents);
   this->dataPtr->renderThread = new RenderThread();
 
   connect(this->dataPtr->renderThread, &RenderThread::TextureReady, this, &RenderWidget::onTextureReady);
@@ -855,13 +847,11 @@ RenderWidget::RenderWidget(QWidget *_parent)
 RenderWidget::~RenderWidget()
 {
   // Disconnect our QT connections.
-  for(auto conn : this->dataPtr->connections)
+  for (auto conn : this->dataPtr->connections)
     QObject::disconnect(conn);
 
   this->dataPtr->renderSync.Shutdown();
-  QMetaObject::invokeMethod(this->dataPtr->renderThread,
-                            "ShutDown",
-                            Qt::QueuedConnection);
+  QMetaObject::invokeMethod(this->dataPtr->renderThread, "ShutDown", Qt::QueuedConnection);
 
   this->dataPtr->renderThread->wait();
 }
@@ -870,17 +860,14 @@ RenderWidget::~RenderWidget()
 void RenderWidget::Ready()
 {
   this->dataPtr->renderThread->surface = new QOffscreenSurface();
-  this->dataPtr->renderThread->surface->setFormat(
-      this->dataPtr->renderThread->context->format());
+  this->dataPtr->renderThread->surface->setFormat(this->dataPtr->renderThread->context->format());
   this->dataPtr->renderThread->surface->create();
 
-  this->dataPtr->renderThread->renderer.textureSize =
-      QSize(std::max(this->width(), 1), std::max(this->height(), 1));
+  this->dataPtr->renderThread->renderer.textureSize = QSize(std::max(this->width(), 1), std::max(this->height(), 1));
 
   this->dataPtr->renderThread->moveToThread(this->dataPtr->renderThread);
 
-  this->connect(this, &QOpenGLWidget::resized,
-      this->dataPtr->renderThread, &RenderThread::SizeChanged);
+  this->connect(this, &QOpenGLWidget::resized, this->dataPtr->renderThread, &RenderThread::SizeChanged);
 
   this->dataPtr->renderThread->start();
   this->dataPtr->renderThread->RenderNext(&this->dataPtr->renderSync);
@@ -889,14 +876,14 @@ void RenderWidget::Ready()
 
 void RenderWidget::onAboutToCompose()
 {
-//  this->dataPtr->renderSync.WaitForWorkerThread();
+  //  this->dataPtr->renderSync.WaitForWorkerThread();
 }
 
 void RenderWidget::onFrameSwapped()
 {
   if (!this->dataPtr->renderThread->context)
   {
-    QOpenGLContext *current = context();
+    QOpenGLContext* current = context();
     // Some GL implementations require that the currently bound context is
     // made non-current before we set up sharing, so we doneCurrent here
     // and makeCurrent down below while setting up our own context.
@@ -914,40 +901,34 @@ void RenderWidget::onFrameSwapped()
     return;
   }
 
-//  if (!this->dataPtr->textureNode)
-//  {
-//    this->dataPtr->textureNode = new TextureNode(this, this->dataPtr->renderSync);
-//    this->dataPtr->connections << this->connect(this->dataPtr->renderThread,
-//        &RenderThread::TextureReady, this->dataPtr->textureNode, &TextureNode::NewTexture,
-//        Qt::DirectConnection);
-//    this->dataPtr->connections << this->connect(this->dataPtr->textureNode,
-//        &tesseract_gui::TextureNode::PendingNewTexture, this, [this](){this->update();}, Qt::QueuedConnection);
-//    this->dataPtr->connections << this->connect(this,
-//        &QOpenGLWidget::aboutToCompose, this->dataPtr->textureNode, &TextureNode::PrepareNode,
-//        Qt::DirectConnection);
-//    this->dataPtr->connections << this->connect(this->dataPtr->textureNode,
-//        &TextureNode::TextureInUse, this->dataPtr->renderThread,
-//        &RenderThread::RenderNext, Qt::QueuedConnection);
+  //  if (!this->dataPtr->textureNode)
+  //  {
+  //    this->dataPtr->textureNode = new TextureNode(this, this->dataPtr->renderSync);
+  //    this->dataPtr->connections << this->connect(this->dataPtr->renderThread,
+  //        &RenderThread::TextureReady, this->dataPtr->textureNode, &TextureNode::NewTexture,
+  //        Qt::DirectConnection);
+  //    this->dataPtr->connections << this->connect(this->dataPtr->textureNode,
+  //        &tesseract_gui::TextureNode::PendingNewTexture, this, [this](){this->update();}, Qt::QueuedConnection);
+  //    this->dataPtr->connections << this->connect(this,
+  //        &QOpenGLWidget::aboutToCompose, this->dataPtr->textureNode, &TextureNode::PrepareNode,
+  //        Qt::DirectConnection);
+  //    this->dataPtr->connections << this->connect(this->dataPtr->textureNode,
+  //        &TextureNode::TextureInUse, this->dataPtr->renderThread,
+  //        &RenderThread::RenderNext, Qt::QueuedConnection);
 
-//    // Get the production of FBO textures started..
-//    QMetaObject::invokeMethod(this->dataPtr->renderThread, "RenderNext",
-//      Qt::QueuedConnection,
-//      Q_ARG(TesseractRenderSync*, &this->dataPtr->textureNode->renderSync));
-//  }
+  //    // Get the production of FBO textures started..
+  //    QMetaObject::invokeMethod(this->dataPtr->renderThread, "RenderNext",
+  //      Qt::QueuedConnection,
+  //      Q_ARG(TesseractRenderSync*, &this->dataPtr->textureNode->renderSync));
+  //  }
 }
-void RenderWidget::onAboutToResize()
-{
+void RenderWidget::onAboutToResize() {}
 
-}
-
-void RenderWidget::onResized()
-{
-
-}
+void RenderWidget::onResized() {}
 
 void RenderWidget::onTextureReady()
 {
-  QOpenGLContext *current = context();
+  QOpenGLContext* current = context();
   current->moveToThread(qGuiApp->thread());
   update();
   this->dataPtr->renderThread->RenderNext(&this->dataPtr->renderSync);
@@ -959,9 +940,8 @@ void RenderWidget::grabContext()
   context()->moveToThread(this->dataPtr->renderThread);
 }
 
-
 /////////////////////////////////////////////////
-//void RenderWidget::paintGL()
+// void RenderWidget::paintGL()
 //{
 //  if (!this->dataPtr->renderThread->context)
 //  {
@@ -1008,61 +988,42 @@ void RenderWidget::grabContext()
 //}
 
 /////////////////////////////////////////////////
-void RenderWidget::SetBackgroundColor(const ignition::math::Color &_color)
+void RenderWidget::SetBackgroundColor(const ignition::math::Color& _color)
 {
   this->dataPtr->renderThread->renderer.backgroundColor = _color;
 }
 
 /////////////////////////////////////////////////
-void RenderWidget::SetAmbientLight(const ignition::math::Color &_ambient)
+void RenderWidget::SetAmbientLight(const ignition::math::Color& _ambient)
 {
   this->dataPtr->renderThread->renderer.ambientLight = _ambient;
 }
 
 /////////////////////////////////////////////////
-void RenderWidget::SetEngineName(const std::string &_name)
-{
-  this->dataPtr->renderThread->renderer.engineName = _name;
-}
+void RenderWidget::SetEngineName(const std::string& _name) { this->dataPtr->renderThread->renderer.engineName = _name; }
 
 /////////////////////////////////////////////////
-void RenderWidget::SetSceneName(const std::string &_name)
-{
-  this->dataPtr->renderThread->renderer.sceneName = _name;
-}
+void RenderWidget::SetSceneName(const std::string& _name) { this->dataPtr->renderThread->renderer.sceneName = _name; }
 
 /////////////////////////////////////////////////
-void RenderWidget::SetCameraPose(const ignition::math::Pose3d &_pose)
+void RenderWidget::SetCameraPose(const ignition::math::Pose3d& _pose)
 {
   this->dataPtr->renderThread->renderer.cameraPose = _pose;
 }
 
 /////////////////////////////////////////////////
-void RenderWidget::SetCameraNearClip(double _near)
-{
-  this->dataPtr->renderThread->renderer.cameraNearClip = _near;
-}
+void RenderWidget::SetCameraNearClip(double _near) { this->dataPtr->renderThread->renderer.cameraNearClip = _near; }
 
 /////////////////////////////////////////////////
-void RenderWidget::SetCameraFarClip(double _far)
-{
-  this->dataPtr->renderThread->renderer.cameraFarClip = _far;
-}
+void RenderWidget::SetCameraFarClip(double _far) { this->dataPtr->renderThread->renderer.cameraFarClip = _far; }
 
 /////////////////////////////////////////////////
-void RenderWidget::SetSkyEnabled(const bool &_sky)
-{
-  this->dataPtr->renderThread->renderer.skyEnable = _sky;
-}
+void RenderWidget::SetSkyEnabled(const bool& _sky) { this->dataPtr->renderThread->renderer.skyEnable = _sky; }
 
-void RenderWidget::SetGridEnabled(bool _grid)
-{
-  this->dataPtr->renderThread->renderer.gridEnable = _grid;
-}
-
+void RenderWidget::SetGridEnabled(bool _grid) { this->dataPtr->renderThread->renderer.gridEnable = _grid; }
 
 /////////////////////////////////////////////////
-//void MinimalScene::LoadConfig(const tinyxml2::XMLElement *_pluginElem)
+// void MinimalScene::LoadConfig(const tinyxml2::XMLElement *_pluginElem)
 //{
 //  RenderWindowItem *renderWindow =
 //      this->PluginItem()->findChild<RenderWindowItem *>();
@@ -1185,19 +1146,19 @@ void RenderWidget::SetGridEnabled(bool _grid)
 /////////////////////////////////////////////////
 void RenderWidget::OnHovered(int _mouseX, int _mouseY)
 {
-  this->dataPtr->renderThread->renderer.NewHoverEvent({_mouseX, _mouseY});
+  this->dataPtr->renderThread->renderer.NewHoverEvent({ _mouseX, _mouseY });
   update();
 }
 
 /////////////////////////////////////////////////
-void RenderWidget::OnDropped(const QString &_drop, int _mouseX, int _mouseY)
+void RenderWidget::OnDropped(const QString& _drop, int _mouseX, int _mouseY)
 {
-  this->dataPtr->renderThread->renderer.NewDropEvent(_drop.toStdString(), {_mouseX, _mouseY});
+  this->dataPtr->renderThread->renderer.NewDropEvent(_drop.toStdString(), { _mouseX, _mouseY });
   update();
 }
 
 /////////////////////////////////////////////////
-void RenderWidget::mousePressEvent(QMouseEvent *_e)
+void RenderWidget::mousePressEvent(QMouseEvent* _e)
 {
   this->dataPtr->mouseEvent = convert(*_e);
   this->dataPtr->mouseEvent.SetPressPos(this->dataPtr->mouseEvent.Pos());
@@ -1207,7 +1168,7 @@ void RenderWidget::mousePressEvent(QMouseEvent *_e)
 }
 
 ////////////////////////////////////////////////
-void RenderWidget::keyPressEvent(QKeyEvent *_e)
+void RenderWidget::keyPressEvent(QKeyEvent* _e)
 {
   if (_e->isAutoRepeat())
     return;
@@ -1218,7 +1179,7 @@ void RenderWidget::keyPressEvent(QKeyEvent *_e)
 }
 
 ////////////////////////////////////////////////
-void RenderWidget::keyReleaseEvent(QKeyEvent *_e)
+void RenderWidget::keyReleaseEvent(QKeyEvent* _e)
 {
   if (_e->isAutoRepeat())
     return;
@@ -1229,7 +1190,7 @@ void RenderWidget::keyReleaseEvent(QKeyEvent *_e)
 }
 
 ////////////////////////////////////////////////
-void RenderWidget::mouseReleaseEvent(QMouseEvent *_e)
+void RenderWidget::mouseReleaseEvent(QMouseEvent* _e)
 {
   // Store values that depend on previous events
   auto pressPos = this->dataPtr->mouseEvent.PressPos();
@@ -1244,7 +1205,7 @@ void RenderWidget::mouseReleaseEvent(QMouseEvent *_e)
 }
 
 ////////////////////////////////////////////////
-void RenderWidget::mouseMoveEvent(QMouseEvent *_e)
+void RenderWidget::mouseMoveEvent(QMouseEvent* _e)
 {
   // Store values that depend on previous events
   auto pressPos = this->dataPtr->mouseEvent.PressPos();
@@ -1259,9 +1220,9 @@ void RenderWidget::mouseMoveEvent(QMouseEvent *_e)
 }
 
 ////////////////////////////////////////////////
-void RenderWidget::wheelEvent(QWheelEvent *_e)
+void RenderWidget::wheelEvent(QWheelEvent* _e)
 {
-//  this->forceActiveFocus();
+  //  this->forceActiveFocus();
 
   this->dataPtr->mouseEvent = convert(*_e);
   this->dataPtr->renderThread->renderer.NewMouseEvent(this->dataPtr->mouseEvent);
@@ -1269,21 +1230,21 @@ void RenderWidget::wheelEvent(QWheelEvent *_e)
 }
 
 ////////////////////////////////////////////////
-void RenderWidget::HandleKeyPress(const ignition::common::KeyEvent &_e)
+void RenderWidget::HandleKeyPress(const ignition::common::KeyEvent& _e)
 {
   this->dataPtr->renderThread->renderer.HandleKeyPress(_e);
   update();
 }
 
 ////////////////////////////////////////////////
-void RenderWidget::HandleKeyRelease(const ignition::common::KeyEvent &_e)
+void RenderWidget::HandleKeyRelease(const ignition::common::KeyEvent& _e)
 {
   this->dataPtr->renderThread->renderer.HandleKeyRelease(_e);
   update();
 }
 
 ///////////////////////////////////////////////////
-//void MinimalScene::onHovered(int _mouseX, int _mouseY)
+// void MinimalScene::onHovered(int _mouseX, int _mouseY)
 //{
 ////  auto renderWindow = this->PluginItem()->findChild<RenderWindowItem *>();
 //  auto renderWindow = tesseract_gui::getApp()->findChild<RenderWindowItem *>();
@@ -1291,7 +1252,7 @@ void RenderWidget::HandleKeyRelease(const ignition::common::KeyEvent &_e)
 //}
 
 ///////////////////////////////////////////////////
-//void MinimalScene::onDropped(const QString &_drop, int _mouseX, int _mouseY)
+// void MinimalScene::onDropped(const QString &_drop, int _mouseX, int _mouseY)
 //{
 ////  auto renderWindow = this->PluginItem()->findChild<RenderWindowItem *>();
 //  auto renderWindow = tesseract_gui::getApp()->findChild<RenderWindowItem *>();
@@ -1299,7 +1260,7 @@ void RenderWidget::HandleKeyRelease(const ignition::common::KeyEvent &_e)
 //}
 
 ///////////////////////////////////////////////////
-//void MinimalScene::onFocusWindow()
+// void MinimalScene::onFocusWindow()
 //{
 ////  auto renderWindow = this->PluginItem()->findChild<RenderWindowItem *>();
 //  auto renderWindow = tesseract_gui::getApp()->findChild<RenderWindowItem *>();

@@ -38,16 +38,17 @@ class MoveJointCommandStandardItem : public QStandardItem
 {
 public:
   explicit MoveJointCommandStandardItem(tesseract_environment::MoveJointCommand::ConstPtr command);
-  explicit MoveJointCommandStandardItem(const QString &text, tesseract_environment::MoveJointCommand::ConstPtr command);
-  explicit MoveJointCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::MoveJointCommand::ConstPtr command);
+  explicit MoveJointCommandStandardItem(const QString& text, tesseract_environment::MoveJointCommand::ConstPtr command);
+  explicit MoveJointCommandStandardItem(const QIcon& icon,
+                                        const QString& text,
+                                        tesseract_environment::MoveJointCommand::ConstPtr command);
   int type() const override;
-
 
   tesseract_environment::MoveJointCommand::ConstPtr command;
 
 private:
   void ctor();
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_ENVIRONMENT_MOVE_JOINT_COMMAND_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_ENVIRONMENT_MOVE_JOINT_COMMAND_STANDARD_ITEM_H

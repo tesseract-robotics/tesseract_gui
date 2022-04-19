@@ -39,8 +39,8 @@ class GroupTCPsStandardItem : public QStandardItem
 public:
   GroupTCPsStandardItem();
   explicit GroupTCPsStandardItem(tesseract_srdf::GroupTCPs group_tcps);
-  explicit GroupTCPsStandardItem(const QString &text, tesseract_srdf::GroupTCPs group_tcps);
-  explicit GroupTCPsStandardItem(const QIcon &icon, const QString &text, tesseract_srdf::GroupTCPs group_tcps);
+  explicit GroupTCPsStandardItem(const QString& text, tesseract_srdf::GroupTCPs group_tcps);
+  explicit GroupTCPsStandardItem(const QIcon& icon, const QString& text, tesseract_srdf::GroupTCPs group_tcps);
   int type() const override;
 
   void addGroupTCP(const QString& group_name, const QString& tcp_name, const Eigen::Isometry3d& tcp);
@@ -56,5 +56,5 @@ private:
 
   void addGroupTCPItem(const QString& group_name, const QString& tcp_name, const Eigen::Isometry3d& tcp);
 };
-}
-#endif // TESSERACT_WIDGETS_KINEMATIC_GROUP_GROUPS_TCPS_STANDARD_ITEM_H
+}  // namespace tesseract_gui
+#endif  // TESSERACT_WIDGETS_KINEMATIC_GROUP_GROUPS_TCPS_STANDARD_ITEM_H

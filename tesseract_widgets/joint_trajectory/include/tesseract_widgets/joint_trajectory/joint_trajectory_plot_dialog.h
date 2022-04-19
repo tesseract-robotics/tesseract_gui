@@ -35,7 +35,8 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 #include <QDialog>
 #include <tesseract_widgets/plot/plot_data.h>
 
-namespace Ui {
+namespace Ui
+{
 class JointTrajectoryPlotDialog;
 }
 
@@ -48,7 +49,8 @@ class JointTrajectoryPlotDialog : public QDialog
   Q_OBJECT
 
 public:
-  explicit JointTrajectoryPlotDialog(tesseract_common::JointTrajectoryInfo current_trajectory, QWidget *parent = nullptr);
+  explicit JointTrajectoryPlotDialog(tesseract_common::JointTrajectoryInfo current_trajectory,
+                                     QWidget* parent = nullptr);
   ~JointTrajectoryPlotDialog();
 
 private Q_SLOTS:
@@ -62,5 +64,5 @@ private:
   tesseract_gui::PlotSubplots* velocity_subplots_;
   tesseract_gui::PlotSubplots* acceleration_subplots_;
 };
-}
-#endif // TESSERACT_WIDGETS_JOINT_TRAJECTORY_PLOT_DIALOG_H
+}  // namespace tesseract_gui
+#endif  // TESSERACT_WIDGETS_JOINT_TRAJECTORY_PLOT_DIALOG_H

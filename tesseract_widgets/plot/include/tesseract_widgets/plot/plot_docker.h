@@ -41,8 +41,9 @@
 #include <tesseract_widgets/plot/plot_data.h>
 #include <tesseract_widgets/plot/plot_widget.h>
 
-namespace Ui {
-  class DraggableToolbar;
+namespace Ui
+{
+class DraggableToolbar;
 }
 
 namespace tesseract_gui
@@ -67,10 +68,7 @@ public:
 
   void toggleFullscreen();
 
-  bool isFullscreen() const
-  {
-    return _fullscreen_mode;
-  }
+  bool isFullscreen() const { return _fullscreen_mode; }
 
   bool eventFilter(QObject* object, QEvent* event) override;
 
@@ -155,5 +153,5 @@ Q_SIGNALS:
 
   void undoableChange();
 };
-}
+}  // namespace tesseract_gui
 #endif  // TESSERACT_WIDGETS_PLOT_PLOT_DOCKER_H

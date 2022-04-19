@@ -13,16 +13,28 @@ namespace tesseract_gui
 {
 IgnitionEnvironmentWidget::IgnitionEnvironmentWidget(std::string scene_name,
                                                      EntityManager& entity_manager,
-                                                     QWidget *parent)
-: EnvironmentWidget(parent)
-, container_name_(QUuid::createUuid().toString().toStdString())
-, scene_name_(std::move(scene_name))
-, entity_container_(entity_manager.getEntityContainer(container_name_))
+                                                     QWidget* parent)
+  : EnvironmentWidget(parent)
+  , container_name_(QUuid::createUuid().toString().toStdString())
+  , scene_name_(std::move(scene_name))
+  , entity_container_(entity_manager.getEntityContainer(container_name_))
 {
-  connect(this, SIGNAL(selectedLinksChanged(std::vector<std::string>)), this, SLOT(onSelectedLinksChanged(std::vector<std::string>)));
-  connect(this, SIGNAL(environmentSet(std::shared_ptr<tesseract_environment::Environment>)), this, SLOT(onEnvironmentSet(std::shared_ptr<tesseract_environment::Environment>)));
-  connect(this, SIGNAL(environmentChanged(tesseract_environment::Environment)), this, SLOT(onEnvironmentChanged(tesseract_environment::Environment)));
-  connect(this, SIGNAL(environmentCurrentStateChanged(tesseract_environment::Environment)), this, SLOT(onEnvironmentCurrentStateChanged(tesseract_environment::Environment)));
+  connect(this,
+          SIGNAL(selectedLinksChanged(std::vector<std::string>)),
+          this,
+          SLOT(onSelectedLinksChanged(std::vector<std::string>)));
+  connect(this,
+          SIGNAL(environmentSet(std::shared_ptr<tesseract_environment::Environment>)),
+          this,
+          SLOT(onEnvironmentSet(std::shared_ptr<tesseract_environment::Environment>)));
+  connect(this,
+          SIGNAL(environmentChanged(tesseract_environment::Environment)),
+          this,
+          SLOT(onEnvironmentChanged(tesseract_environment::Environment)));
+  connect(this,
+          SIGNAL(environmentCurrentStateChanged(tesseract_environment::Environment)),
+          this,
+          SLOT(onEnvironmentCurrentStateChanged(tesseract_environment::Environment)));
 }
 
 IgnitionEnvironmentWidget::~IgnitionEnvironmentWidget()
@@ -51,7 +63,7 @@ tesseract_gui::EnvironmentWidget* IgnitionEnvironmentWidget::clone() const
   return new IgnitionEnvironmentWidget(scene_name_, entity_container_->getEntityManager());
 }
 
-void IgnitionEnvironmentWidget::onEnvironmentSet(const std::shared_ptr<tesseract_environment::Environment> & /*env*/)
+void IgnitionEnvironmentWidget::onEnvironmentSet(const std::shared_ptr<tesseract_environment::Environment>& /*env*/)
 {
   render_revision_ = 0;
   render_dirty_ = true;
@@ -101,7 +113,7 @@ void IgnitionEnvironmentWidget::onSelectedLinksChanged(const std::vector<std::st
   emit triggerRender();
 }
 
-bool IgnitionEnvironmentWidget::eventFilter(QObject *_obj, QEvent *_event)
+bool IgnitionEnvironmentWidget::eventFilter(QObject* _obj, QEvent* _event)
 {
   if (_event->type() == events::PreRender::kType)
   {
@@ -111,7 +123,7 @@ bool IgnitionEnvironmentWidget::eventFilter(QObject *_obj, QEvent *_event)
       ignition::rendering::ScenePtr scene = sceneFromFirstRenderEngine(scene_name_);
       if (scene != nullptr)
       {
-        if (render_reset_) // Remove all
+        if (render_reset_)  // Remove all
         {
           if (!entity_container_->empty())
           {
@@ -135,7 +147,7 @@ bool IgnitionEnvironmentWidget::eventFilter(QObject *_obj, QEvent *_event)
           render_reset_ = false;
         }
 
-        { // Check environment
+        {  // Check environment
           auto lock = environment().lockRead();
           auto revision = environment().getRevision();
           auto state_timestamp = environment().getCurrentStateTimestamp();
@@ -145,7 +157,7 @@ bool IgnitionEnvironmentWidget::eventFilter(QObject *_obj, QEvent *_event)
             {
               tesseract_environment::Commands commands = environment().getCommandHistory();
 
-              bool links_removed {false};
+              bool links_removed{ false };
               for (std::size_t i = render_revision_; i < commands.size(); ++i)
               {
                 const tesseract_environment::Command::ConstPtr& command = commands.at(i);
@@ -154,7 +166,8 @@ bool IgnitionEnvironmentWidget::eventFilter(QObject *_obj, QEvent *_event)
                   case tesseract_environment::CommandType::ADD_SCENE_GRAPH:
                   {
                     auto cmd = std::static_pointer_cast<const tesseract_environment::AddSceneGraphCommand>(command);
-                    auto link_names = loadSceneGraph(*scene, *entity_container_, *cmd->getSceneGraph(), cmd->getPrefix());
+                    auto link_names =
+                        loadSceneGraph(*scene, *entity_container_, *cmd->getSceneGraph(), cmd->getPrefix());
                     render_link_names_.insert(render_link_names_.end(), link_names.begin(), link_names.end());
                     break;
                   }
@@ -168,8 +181,10 @@ bool IgnitionEnvironmentWidget::eventFilter(QObject *_obj, QEvent *_event)
                   }
                   case tesseract_environment::CommandType::CHANGE_LINK_VISIBILITY:
                   {
-                    auto cmd = std::static_pointer_cast<const tesseract_environment::ChangeLinkVisibilityCommand>(command);
-                    auto entity = entity_container_->getTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, cmd->getLinkName());
+                    auto cmd =
+                        std::static_pointer_cast<const tesseract_environment::ChangeLinkVisibilityCommand>(command);
+                    auto entity = entity_container_->getTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS,
+                                                                      cmd->getLinkName());
                     auto visual_node = scene->VisualById(entity.id);
                     if (visual_node != nullptr)
                       visual_node->SetVisible(cmd->getEnabled());
@@ -209,7 +224,7 @@ bool IgnitionEnvironmentWidget::eventFilter(QObject *_obj, QEvent *_event)
                   default:
                   {
                     CONSOLE_BRIDGE_logError("IgnitionEnvironmentWidget, Unhandled environment command");
-    //                success &= false;
+                    //                success &= false;
                   }
                     // LCOV_EXCL_STOP
                 }
@@ -231,7 +246,8 @@ bool IgnitionEnvironmentWidget::eventFilter(QObject *_obj, QEvent *_event)
 
                 for (const auto& removed_link : diff)
                 {
-                  auto entity = entity_container_->getTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, removed_link);
+                  auto entity =
+                      entity_container_->getTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, removed_link);
                   scene->DestroyNodeById(entity.id);
                 }
               }
@@ -244,7 +260,8 @@ bool IgnitionEnvironmentWidget::eventFilter(QObject *_obj, QEvent *_event)
             tesseract_scene_graph::SceneState state = environment().getState();
             for (const auto& pair : state.link_transforms)
             {
-              Entity entity = entity_container_->getTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, pair.first);
+              Entity entity =
+                  entity_container_->getTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, pair.first);
               scene->VisualById(entity.id)->SetWorldPose(ignition::math::eigen3::convert(pair.second));
             }
             render_state_timestamp_ = state_timestamp;
@@ -308,4 +325,4 @@ bool IgnitionEnvironmentWidget::eventFilter(QObject *_obj, QEvent *_event)
   return QObject::eventFilter(_obj, _event);
 }
 
-}
+}  // namespace tesseract_gui

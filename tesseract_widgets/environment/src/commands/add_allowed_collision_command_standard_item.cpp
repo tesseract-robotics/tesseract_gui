@@ -27,24 +27,26 @@
 
 namespace tesseract_gui
 {
-
-AddAllowedCollisionCommandStandardItem::AddAllowedCollisionCommandStandardItem(tesseract_environment::AddAllowedCollisionCommand::ConstPtr command)
-  : QStandardItem(icons::getCommandEntryIcon(), "Add Allowed Collision")
-  , command(std::move(command))
+AddAllowedCollisionCommandStandardItem::AddAllowedCollisionCommandStandardItem(
+    tesseract_environment::AddAllowedCollisionCommand::ConstPtr command)
+  : QStandardItem(icons::getCommandEntryIcon(), "Add Allowed Collision"), command(std::move(command))
 {
   ctor();
 }
 
-AddAllowedCollisionCommandStandardItem::AddAllowedCollisionCommandStandardItem(const QString &text, tesseract_environment::AddAllowedCollisionCommand::ConstPtr command)
-  : QStandardItem(icons::getCommandEntryIcon(), text)
-  , command(std::move(command))
+AddAllowedCollisionCommandStandardItem::AddAllowedCollisionCommandStandardItem(
+    const QString& text,
+    tesseract_environment::AddAllowedCollisionCommand::ConstPtr command)
+  : QStandardItem(icons::getCommandEntryIcon(), text), command(std::move(command))
 {
   ctor();
 }
 
-AddAllowedCollisionCommandStandardItem::AddAllowedCollisionCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::AddAllowedCollisionCommand::ConstPtr command)
-  : QStandardItem(icon, text)
-  , command(std::move(command))
+AddAllowedCollisionCommandStandardItem::AddAllowedCollisionCommandStandardItem(
+    const QIcon& icon,
+    const QString& text,
+    tesseract_environment::AddAllowedCollisionCommand::ConstPtr command)
+  : QStandardItem(icon, text), command(std::move(command))
 {
   ctor();
 }
@@ -60,5 +62,4 @@ void AddAllowedCollisionCommandStandardItem::ctor()
   appendRow(createStandardItemString("link_name2", command->getLinkName2()));
   appendRow(createStandardItemString("reason", command->getReason()));
 }
-}
-
+}  // namespace tesseract_gui

@@ -21,7 +21,7 @@
  */
 struct StatusDialogPrivate
 {
-  CStatusDialog *_this;
+  CStatusDialog* _this;
   Ui::CStatusDialogClass ui;
   ads::CDockManager* DockManager;
   QMap<QString, ads::CDockWidget*> DockWidgets;
@@ -29,21 +29,15 @@ struct StatusDialogPrivate
   /**
    * Private data constructor
    */
-  StatusDialogPrivate(CStatusDialog *_public);
+  StatusDialogPrivate(CStatusDialog* _public);
 };
 // struct StatusDialogPrivate
 
 //============================================================================
-StatusDialogPrivate::StatusDialogPrivate(CStatusDialog *_public) :
-  _this(_public)
-{
-
-}
+StatusDialogPrivate::StatusDialogPrivate(CStatusDialog* _public) : _this(_public) {}
 
 //============================================================================
-CStatusDialog::CStatusDialog(ads::CDockManager* DockManager) :
-  QDialog(DockManager),
-  d(new StatusDialogPrivate(this))
+CStatusDialog::CStatusDialog(ads::CDockManager* DockManager) : QDialog(DockManager), d(new StatusDialogPrivate(this))
 {
   d->ui.setupUi(this);
   d->DockManager = DockManager;
@@ -57,11 +51,7 @@ CStatusDialog::CStatusDialog(ads::CDockManager* DockManager) :
 }
 
 //============================================================================
-CStatusDialog::~CStatusDialog()
-{
-  delete d;
-}
-
+CStatusDialog::~CStatusDialog() { delete d; }
 
 //============================================================================
 void CStatusDialog::on_dockWidgetsComboBox_currentIndexChanged(int index)

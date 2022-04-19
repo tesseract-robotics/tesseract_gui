@@ -33,11 +33,10 @@ MovingRMS::MovingRMS()
 {
   ui->setupUi(_widget.get());
 
-  connect(ui->spinBoxSamples, qOverload<int>(&QSpinBox::valueChanged), this,
-          [=](int) { emit parametersChanged(); });
+  connect(ui->spinBoxSamples, qOverload<int>(&QSpinBox::valueChanged), this, [=](int) { emit parametersChanged(); });
 }
 
-MovingRMS::~MovingRMS()=default;
+MovingRMS::~MovingRMS() = default;
 
 void MovingRMS::reset()
 {
@@ -45,15 +44,11 @@ void MovingRMS::reset()
   TransformFunction_SISO::reset();
 }
 
-QWidget* MovingRMS::optionsWidget()
-{
-  return _widget.get();
-}
+QWidget* MovingRMS::optionsWidget() { return _widget.get(); }
 
 std::optional<PlotData::Point> MovingRMS::calculateNextPoint(size_t index)
 {
-  size_t buffer_size =
-      std::min(size_t(ui->spinBoxSamples->value()), size_t(dataSource()->size()));
+  size_t buffer_size = std::min(size_t(ui->spinBoxSamples->value()), size_t(dataSource()->size()));
   if (buffer_size != _buffer.size())
   {
     _buffer.resize(buffer_size);
@@ -81,4 +76,4 @@ std::optional<PlotData::Point> MovingRMS::calculateNextPoint(size_t index)
   PlotData::Point out = { time, sqrt(total_sqr / _ring_view.size()) };
   return out;
 }
-}
+}  // namespace tesseract_gui

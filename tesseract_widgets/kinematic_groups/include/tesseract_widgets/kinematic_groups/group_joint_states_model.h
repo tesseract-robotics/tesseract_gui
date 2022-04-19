@@ -35,16 +35,14 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 namespace tesseract_gui
 {
-
 class GroupJointStatesModel : public QStandardItemModel
 {
   Q_OBJECT
 
 public:
-
-  explicit GroupJointStatesModel(QObject *parent = nullptr);
-  GroupJointStatesModel(const GroupJointStatesModel &other);
-  GroupJointStatesModel &operator=(const GroupJointStatesModel &other);
+  explicit GroupJointStatesModel(QObject* parent = nullptr);
+  GroupJointStatesModel(const GroupJointStatesModel& other);
+  GroupJointStatesModel& operator=(const GroupJointStatesModel& other);
 
   void set(const tesseract_srdf::GroupJointStates& group_joint_states);
   void addGroupJointState(QString group_name, QString state_name, tesseract_srdf::GroupsJointState state);
@@ -58,6 +56,6 @@ private:
   const GroupJointStatesStandardItem* getRoot() const;
 };
 
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_GROUPS_JOINT_STATES_MODEL_H
+#endif  // TESSERACT_WIDGETS_GROUPS_JOINT_STATES_MODEL_H

@@ -38,16 +38,17 @@ class AddLinkCommandStandardItem : public QStandardItem
 {
 public:
   explicit AddLinkCommandStandardItem(tesseract_environment::AddLinkCommand::ConstPtr command);
-  explicit AddLinkCommandStandardItem(const QString &text, tesseract_environment::AddLinkCommand::ConstPtr command);
-  explicit AddLinkCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::AddLinkCommand::ConstPtr command);
+  explicit AddLinkCommandStandardItem(const QString& text, tesseract_environment::AddLinkCommand::ConstPtr command);
+  explicit AddLinkCommandStandardItem(const QIcon& icon,
+                                      const QString& text,
+                                      tesseract_environment::AddLinkCommand::ConstPtr command);
   int type() const override;
-
 
   tesseract_environment::AddLinkCommand::ConstPtr command;
 
 private:
   void ctor();
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_ENVIRONMENT_ADD_LINK_COMMAND_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_ENVIRONMENT_ADD_LINK_COMMAND_STANDARD_ITEM_H

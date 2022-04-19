@@ -37,17 +37,22 @@ namespace tesseract_gui
 class RemoveAllowedCollisionLinkCommandStandardItem : public QStandardItem
 {
 public:
-  explicit RemoveAllowedCollisionLinkCommandStandardItem(tesseract_environment::RemoveAllowedCollisionLinkCommand::ConstPtr command);
-  explicit RemoveAllowedCollisionLinkCommandStandardItem(const QString &text, tesseract_environment::RemoveAllowedCollisionLinkCommand::ConstPtr command);
-  explicit RemoveAllowedCollisionLinkCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::RemoveAllowedCollisionLinkCommand::ConstPtr command);
+  explicit RemoveAllowedCollisionLinkCommandStandardItem(
+      tesseract_environment::RemoveAllowedCollisionLinkCommand::ConstPtr command);
+  explicit RemoveAllowedCollisionLinkCommandStandardItem(
+      const QString& text,
+      tesseract_environment::RemoveAllowedCollisionLinkCommand::ConstPtr command);
+  explicit RemoveAllowedCollisionLinkCommandStandardItem(
+      const QIcon& icon,
+      const QString& text,
+      tesseract_environment::RemoveAllowedCollisionLinkCommand::ConstPtr command);
   int type() const override;
-
 
   tesseract_environment::RemoveAllowedCollisionLinkCommand::ConstPtr command;
 
 private:
   void ctor();
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_ENVIRONMENT_REMOVE_ALLOWED_COLLISION_LINK_COMMAND_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_ENVIRONMENT_REMOVE_ALLOWED_COLLISION_LINK_COMMAND_STANDARD_ITEM_H

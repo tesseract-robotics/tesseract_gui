@@ -27,24 +27,26 @@
 
 namespace tesseract_gui
 {
-
-ChangeLinkCollisionEnabledCommandStandardItem::ChangeLinkCollisionEnabledCommandStandardItem(tesseract_environment::ChangeLinkCollisionEnabledCommand::ConstPtr command)
-  : QStandardItem(icons::getCommandEntryIcon(), "Change Link Collision Enabled")
-  , command(std::move(command))
+ChangeLinkCollisionEnabledCommandStandardItem::ChangeLinkCollisionEnabledCommandStandardItem(
+    tesseract_environment::ChangeLinkCollisionEnabledCommand::ConstPtr command)
+  : QStandardItem(icons::getCommandEntryIcon(), "Change Link Collision Enabled"), command(std::move(command))
 {
   ctor();
 }
 
-ChangeLinkCollisionEnabledCommandStandardItem::ChangeLinkCollisionEnabledCommandStandardItem(const QString &text, tesseract_environment::ChangeLinkCollisionEnabledCommand::ConstPtr command)
-  : QStandardItem(icons::getCommandEntryIcon(), text)
-  , command(std::move(command))
+ChangeLinkCollisionEnabledCommandStandardItem::ChangeLinkCollisionEnabledCommandStandardItem(
+    const QString& text,
+    tesseract_environment::ChangeLinkCollisionEnabledCommand::ConstPtr command)
+  : QStandardItem(icons::getCommandEntryIcon(), text), command(std::move(command))
 {
   ctor();
 }
 
-ChangeLinkCollisionEnabledCommandStandardItem::ChangeLinkCollisionEnabledCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::ChangeLinkCollisionEnabledCommand::ConstPtr command)
-  : QStandardItem(icon, text)
-  , command(std::move(command))
+ChangeLinkCollisionEnabledCommandStandardItem::ChangeLinkCollisionEnabledCommandStandardItem(
+    const QIcon& icon,
+    const QString& text,
+    tesseract_environment::ChangeLinkCollisionEnabledCommand::ConstPtr command)
+  : QStandardItem(icon, text), command(std::move(command))
 {
   ctor();
 }
@@ -56,6 +58,7 @@ int ChangeLinkCollisionEnabledCommandStandardItem::type() const
 
 void ChangeLinkCollisionEnabledCommandStandardItem::ctor()
 {
-  appendRow(createStandardItemString(icons::getLinkIcon(), command->getLinkName(), (command->getEnabled()) ? "True" : "False"));
+  appendRow(createStandardItemString(
+      icons::getLinkIcon(), command->getLinkName(), (command->getEnabled()) ? "True" : "False"));
 }
-}
+}  // namespace tesseract_gui

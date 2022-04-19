@@ -38,8 +38,8 @@ class CollisionStandardItem : public QStandardItem
 {
 public:
   CollisionStandardItem(tesseract_scene_graph::Collision::Ptr collision);
-  explicit CollisionStandardItem(const QString &text, tesseract_scene_graph::Collision::Ptr collision);
-  CollisionStandardItem(const QIcon &icon, const QString &text, tesseract_scene_graph::Collision::Ptr collision);
+  explicit CollisionStandardItem(const QString& text, tesseract_scene_graph::Collision::Ptr collision);
+  CollisionStandardItem(const QIcon& icon, const QString& text, tesseract_scene_graph::Collision::Ptr collision);
   int type() const override;
 
   tesseract_scene_graph::Collision::Ptr collision;
@@ -47,6 +47,6 @@ public:
 private:
   void ctor();
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_SCENE_GRAPH_COLLISION_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_SCENE_GRAPH_COLLISION_STANDARD_ITEM_H

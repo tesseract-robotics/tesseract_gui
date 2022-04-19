@@ -28,30 +28,24 @@
 namespace tesseract_gui
 {
 RGBAStandardItem::RGBAStandardItem(const Eigen::Vector4d& rgba)
-  : QStandardItem(icons::getRGBIcon(), "Color")
-  , rgba(rgba)
+  : QStandardItem(icons::getRGBIcon(), "Color"), rgba(rgba)
 {
   ctor();
 }
 
-RGBAStandardItem::RGBAStandardItem(const QString &text, const Eigen::Vector4d& rgba)
-  : QStandardItem(icons::getRGBIcon(), text)
-  , rgba(rgba)
+RGBAStandardItem::RGBAStandardItem(const QString& text, const Eigen::Vector4d& rgba)
+  : QStandardItem(icons::getRGBIcon(), text), rgba(rgba)
 {
   ctor();
 }
 
-RGBAStandardItem::RGBAStandardItem(const QIcon &icon, const QString &text, const Eigen::Vector4d& rgba)
-  : QStandardItem(icon, text)
-  , rgba(rgba)
+RGBAStandardItem::RGBAStandardItem(const QIcon& icon, const QString& text, const Eigen::Vector4d& rgba)
+  : QStandardItem(icon, text), rgba(rgba)
 {
   ctor();
 }
 
-int RGBAStandardItem::type() const
-{
-  return static_cast<int>(StandardItemType::TRANSFORM);
-}
+int RGBAStandardItem::type() const { return static_cast<int>(StandardItemType::TRANSFORM); }
 
 void RGBAStandardItem::ctor()
 {
@@ -60,4 +54,4 @@ void RGBAStandardItem::ctor()
   appendRow(createStandardItemFloat("b", rgba(2)));
   appendRow(createStandardItemFloat("a", rgba(3)));
 }
-}
+}  // namespace tesseract_gui

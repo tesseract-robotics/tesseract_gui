@@ -3,12 +3,12 @@
 
 #include "renderer.h"
 
-int main(int argc, char ** argv)
+int main(int argc, char** argv)
 {
-    QApplication app(argc, argv);
+  QApplication app(argc, argv);
 
-    GLWidget widget;
-    widget.show();
+  GLWidget widget;
+  widget.show();
 
-    return app.exec();
+  return app.exec();
 }

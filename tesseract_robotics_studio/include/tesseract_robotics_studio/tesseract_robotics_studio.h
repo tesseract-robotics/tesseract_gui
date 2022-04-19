@@ -36,7 +36,8 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 #include <tesseract_ignition/interactive_view_control.h>
 #include <tesseract_widgets/common/entity_manager.h>
 
-namespace Ui {
+namespace Ui
+{
 class TesseractRoboticsStudio;
 }
 
@@ -62,7 +63,7 @@ class TesseractRoboticsStudio : public QMainWindow
   Q_OBJECT
 
 public:
-  explicit TesseractRoboticsStudio(QWidget *parent = nullptr);
+  explicit TesseractRoboticsStudio(QWidget* parent = nullptr);
   ~TesseractRoboticsStudio();
 
   SceneInfo::Ptr createScene(const std::string& scene_name) const;
@@ -74,6 +75,6 @@ private:
 
   friend struct TesseractRoboticsStudioPrivate;
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_GUI_APP_TESSERACT_ROBOTICS_STUDIO_H
+#endif  // TESSERACT_GUI_APP_TESSERACT_ROBOTICS_STUDIO_H

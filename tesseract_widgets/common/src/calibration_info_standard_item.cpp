@@ -27,32 +27,28 @@
 
 namespace tesseract_gui
 {
-
 CalibrationInfoStandardItem::CalibrationInfoStandardItem(tesseract_common::CalibrationInfo calibration_info)
-  : QStandardItem(icons::getCubeIcon(), "Calibration Info")
-  , calibration_info(std::move(calibration_info))
+  : QStandardItem(icons::getCubeIcon(), "Calibration Info"), calibration_info(std::move(calibration_info))
 {
   ctor();
 }
 
-CalibrationInfoStandardItem::CalibrationInfoStandardItem(const QString &text, tesseract_common::CalibrationInfo calibration_info)
-  : QStandardItem(icons::getCubeIcon(), text)
-  , calibration_info(std::move(calibration_info))
+CalibrationInfoStandardItem::CalibrationInfoStandardItem(const QString& text,
+                                                         tesseract_common::CalibrationInfo calibration_info)
+  : QStandardItem(icons::getCubeIcon(), text), calibration_info(std::move(calibration_info))
 {
   ctor();
 }
 
-CalibrationInfoStandardItem::CalibrationInfoStandardItem(const QIcon &icon, const QString &text, tesseract_common::CalibrationInfo calibration_info)
-  : QStandardItem(icon, text)
-  , calibration_info(std::move(calibration_info))
+CalibrationInfoStandardItem::CalibrationInfoStandardItem(const QIcon& icon,
+                                                         const QString& text,
+                                                         tesseract_common::CalibrationInfo calibration_info)
+  : QStandardItem(icon, text), calibration_info(std::move(calibration_info))
 {
   ctor();
 }
 
-int CalibrationInfoStandardItem::type() const
-{
-  return static_cast<int>(StandardItemType::CALIBRATION_INFO);
-}
+int CalibrationInfoStandardItem::type() const { return static_cast<int>(StandardItemType::CALIBRATION_INFO); }
 
 void CalibrationInfoStandardItem::ctor()
 {
@@ -65,5 +61,4 @@ void CalibrationInfoStandardItem::ctor()
   joints_item->sortChildren(0);
   appendRow(joints_item);
 }
-}
-
+}  // namespace tesseract_gui

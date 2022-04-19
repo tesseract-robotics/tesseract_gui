@@ -40,10 +40,7 @@ public:
 
   ~IntegralTransform() override;
 
-  const char* name() const override
-  {
-    return "Integral";
-  }
+  const char* name() const override { return "Integral"; }
 
   QWidget* optionsWidget() override;
 
@@ -60,6 +57,6 @@ private:
 
   double _accumulated_value;
 };
-}
+}  // namespace tesseract_gui
 
 #endif  // TESSERACT_WIDGETS_PLOT_TRANSFORMS_INTEGRAL_TRANSFORM_H

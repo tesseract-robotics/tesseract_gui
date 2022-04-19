@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
-*/
+ */
 
 #include <algorithm>
 #include <list>
@@ -57,57 +57,52 @@ public:
   /// \brief Processes a marker message.
   /// \param[in] _msg The message data.
   /// \return True if the marker was processed successfully.
-  bool ProcessMarkerMsg(const ignition::msgs::Marker &_msg);
+  bool ProcessMarkerMsg(const ignition::msgs::Marker& _msg);
 
   /// \brief Services callback that returns a list of markers.
   /// \param[out] _rep Service reply
   /// \return True on success.
-  bool OnList(ignition::msgs::Marker_V &_rep);
+  bool OnList(ignition::msgs::Marker_V& _rep);
 
   /// \brief Callback that receives marker messages.
   /// \param[in] _req The marker message.
-  void OnMarkerMsg(const ignition::msgs::Marker &_req);
+  void OnMarkerMsg(const ignition::msgs::Marker& _req);
 
   /// \brief Callback that receives multiple marker messages.
   /// \param[in] _req The vector of marker messages
   /// \param[in] _res Response data
   /// \return True if the request is received
-  bool OnMarkerMsgArray(const ignition::msgs::Marker_V &_req,
-              ignition::msgs::Boolean &_res);
+  bool OnMarkerMsgArray(const ignition::msgs::Marker_V& _req, ignition::msgs::Boolean& _res);
 
   /// \brief Subscriber callback when new world statistics are received
-  void OnWorldStatsMsg(const ignition::msgs::WorldStatistics &_msg);
+  void OnWorldStatsMsg(const ignition::msgs::WorldStatistics& _msg);
 
   /// \brief Sets Visual from marker message.
   /// \param[in] _msg The message data.
   /// \param[out] _visualPtr The visual pointer to set.
-  void SetVisual(const ignition::msgs::Marker &_msg,
-                         const ignition::rendering::VisualPtr &_visualPtr);
+  void SetVisual(const ignition::msgs::Marker& _msg, const ignition::rendering::VisualPtr& _visualPtr);
 
   /// \brief Sets Marker from marker message.
   /// \param[in] _msg The message data.
   /// \param[out] _markerPtr The message pointer to set.
-  void SetMarker(const ignition::msgs::Marker &_msg,
-                         const ignition::rendering::MarkerPtr &_markerPtr);
+  void SetMarker(const ignition::msgs::Marker& _msg, const ignition::rendering::MarkerPtr& _markerPtr);
 
   /// \brief Converts an ignition msg material to ignition rendering
   //         material.
   //  \param[in] _msg The message data.
   //  \return Converted rendering material, if any.
-  ignition::rendering::MaterialPtr MsgToMaterial(
-    const ignition::msgs::Marker &_msg);
+  ignition::rendering::MaterialPtr MsgToMaterial(const ignition::msgs::Marker& _msg);
 
   /// \brief Converts an ignition msg render type to ignition rendering
   /// \param[in] _msg The message data
   /// \return Converted rendering type, if any.
-  ignition::rendering::MarkerType MsgToType(
-                    const ignition::msgs::Marker &_msg);
+  ignition::rendering::MarkerType MsgToType(const ignition::msgs::Marker& _msg);
 
   /// \brief The scene name
   std::string scene_name;
 
   //// \brief Pointer to the rendering scene
-  ignition::rendering::ScenePtr scene{nullptr};
+  ignition::rendering::ScenePtr scene{ nullptr };
 
   /// \brief Mutex to protect message list.
   std::mutex mutex;
@@ -116,8 +111,7 @@ public:
   std::list<ignition::msgs::Marker> markerMsgs;
 
   /// \brief Map of visuals
-  std::map<std::string,
-      std::map<uint64_t, ignition::rendering::VisualPtr>> visuals;
+  std::map<std::string, std::map<uint64_t, ignition::rendering::VisualPtr>> visuals;
 
   /// \brief Ignition node
   ignition::transport::Node node;
@@ -136,7 +130,7 @@ public:
 
   /// \brief True to print console warnings if the user tries to perform an
   /// action with an inexistent marker.
-  bool warnOnActionFailure{true};
+  bool warnOnActionFailure{ true };
 };
 
 using namespace tesseract_gui;
@@ -152,37 +146,30 @@ void TransportMarkerManagerPrivate::Initialize()
 
   if (this->topicName.empty())
   {
-    ignerr << "Unable to advertise marker service. Topic name empty."
-           << std::endl;
+    ignerr << "Unable to advertise marker service. Topic name empty." << std::endl;
     return;
   }
 
   // Advertise the list service
-  if (!this->node.Advertise(this->topicName + "/list",
-      &TransportMarkerManagerPrivate::OnList, this))
+  if (!this->node.Advertise(this->topicName + "/list", &TransportMarkerManagerPrivate::OnList, this))
   {
-    ignerr << "Unable to advertise to the " << this->topicName
-           << "/list service.\n";
+    ignerr << "Unable to advertise to the " << this->topicName << "/list service.\n";
   }
 
   igndbg << "Advertise " << this->topicName << "/list service.\n";
 
   // Advertise to the marker service
-  if (!this->node.Advertise(this->topicName,
-        &TransportMarkerManagerPrivate::OnMarkerMsg, this))
+  if (!this->node.Advertise(this->topicName, &TransportMarkerManagerPrivate::OnMarkerMsg, this))
   {
-    ignerr << "Unable to advertise to the " << this->topicName
-           << " service.\n";
+    ignerr << "Unable to advertise to the " << this->topicName << " service.\n";
   }
 
   igndbg << "Advertise " << this->topicName << "/list.\n";
 
   // Advertise to the marker_array service
-  if (!this->node.Advertise(this->topicName + "_array",
-        &TransportMarkerManagerPrivate::OnMarkerMsgArray, this))
+  if (!this->node.Advertise(this->topicName + "_array", &TransportMarkerManagerPrivate::OnMarkerMsgArray, this))
   {
-    ignerr << "Unable to advertise to the " << this->topicName
-           << "_array service.\n";
+    ignerr << "Unable to advertise to the " << this->topicName << "_array service.\n";
   }
 
   igndbg << "Advertise " << this->topicName << "_array.\n";
@@ -202,31 +189,26 @@ void TransportMarkerManagerPrivate::OnRender()
 
   std::lock_guard<std::mutex> lock(this->mutex);
   // Process the marker messages.
-  for (auto markerIter = this->markerMsgs.begin();
-       markerIter != this->markerMsgs.end();)
+  for (auto markerIter = this->markerMsgs.begin(); markerIter != this->markerMsgs.end();)
   {
     this->ProcessMarkerMsg(*markerIter);
     this->markerMsgs.erase(markerIter++);
   }
 
   // Erase any markers that have a lifetime.
-  for (auto mit = this->visuals.begin();
-       mit != this->visuals.end();)
+  for (auto mit = this->visuals.begin(); mit != this->visuals.end();)
   {
-    for (auto it = mit->second.cbegin();
-         it != mit->second.cend(); ++it)
+    for (auto it = mit->second.cbegin(); it != mit->second.cend(); ++it)
     {
       if (it->second->GeometryCount() == 0U)
         continue;
 
       ignition::rendering::MarkerPtr markerPtr =
-            std::dynamic_pointer_cast<ignition::rendering::Marker>
-            (it->second->GeometryByIndex(0U));
+          std::dynamic_pointer_cast<ignition::rendering::Marker>(it->second->GeometryByIndex(0U));
       if (markerPtr != nullptr)
       {
         if (markerPtr->Lifetime().count() != 0 &&
-            (markerPtr->Lifetime() <= this->simTime ||
-            this->simTime < this->lastSimTime))
+            (markerPtr->Lifetime() <= this->simTime || this->simTime < this->lastSimTime))
         {
           this->scene->DestroyVisual(it->second);
           it = mit->second.erase(it);
@@ -245,7 +227,7 @@ void TransportMarkerManagerPrivate::OnRender()
 }
 
 /////////////////////////////////////////////////
-bool TransportMarkerManagerPrivate::OnList(ignition::msgs::Marker_V &_rep)
+bool TransportMarkerManagerPrivate::OnList(ignition::msgs::Marker_V& _rep)
 {
   std::lock_guard<std::mutex> lock(this->mutex);
   _rep.clear_marker();
@@ -255,7 +237,7 @@ bool TransportMarkerManagerPrivate::OnList(ignition::msgs::Marker_V &_rep)
   {
     for (const auto& iter : mIter.second)
     {
-      ignition::msgs::Marker *markerMsg = _rep.add_marker();
+      ignition::msgs::Marker* markerMsg = _rep.add_marker();
       markerMsg->set_ns(mIter.first);
       markerMsg->set_id(iter.first);
     }
@@ -265,29 +247,29 @@ bool TransportMarkerManagerPrivate::OnList(ignition::msgs::Marker_V &_rep)
 }
 
 /////////////////////////////////////////////////
-void TransportMarkerManagerPrivate::OnMarkerMsg(const ignition::msgs::Marker &_req)
+void TransportMarkerManagerPrivate::OnMarkerMsg(const ignition::msgs::Marker& _req)
 {
   std::lock_guard<std::mutex> lock(this->mutex);
   this->markerMsgs.push_back(_req);
 }
 
 /////////////////////////////////////////////////
-bool TransportMarkerManagerPrivate::OnMarkerMsgArray(
-    const ignition::msgs::Marker_V&_req, ignition::msgs::Boolean &_res)
+bool TransportMarkerManagerPrivate::OnMarkerMsgArray(const ignition::msgs::Marker_V& _req,
+                                                     ignition::msgs::Boolean& _res)
 {
   std::lock_guard<std::mutex> lock(this->mutex);
-  std::copy(_req.marker().begin(), _req.marker().end(),
-            std::back_inserter(this->markerMsgs));
+  std::copy(_req.marker().begin(), _req.marker().end(), std::back_inserter(this->markerMsgs));
   _res.set_data(true);
   return true;
 }
 
 //////////////////////////////////////////////////
-bool TransportMarkerManagerPrivate::ProcessMarkerMsg(const ignition::msgs::Marker &_msg)
+bool TransportMarkerManagerPrivate::ProcessMarkerMsg(const ignition::msgs::Marker& _msg)
 {
   // Get the namespace, if it exists. Otherwise, use the global namespace
   std::string ns;
-  if (!_msg.ns().empty()) {
+  if (!_msg.ns().empty())
+  {
     ns = _msg.ns();
   }
 
@@ -295,7 +277,7 @@ bool TransportMarkerManagerPrivate::ProcessMarkerMsg(const ignition::msgs::Marke
   auto nsIter = this->visuals.find(ns);
 
   // If an id is given
-  size_t id{0};
+  size_t id{ 0 };
   if (_msg.id() != 0)
   {
     id = _msg.id();
@@ -309,8 +291,7 @@ bool TransportMarkerManagerPrivate::ProcessMarkerMsg(const ignition::msgs::Marke
     if (nsIter != this->visuals.end())
     {
       while (nsIter->second.find(id) != nsIter->second.end())
-        id = ignition::math::Rand::IntUniform(ignition::math::MIN_UI32,
-                                              ignition::math::MAX_UI32);
+        id = ignition::math::Rand::IntUniform(ignition::math::MIN_UI32, ignition::math::MAX_UI32);
     }
   }
 
@@ -323,16 +304,14 @@ bool TransportMarkerManagerPrivate::ProcessMarkerMsg(const ignition::msgs::Marke
   if (_msg.action() == ignition::msgs::Marker::ADD_MODIFY)
   {
     // Modify an existing marker, identified by namespace and id
-    if (nsIter != this->visuals.end() &&
-        visualIter != nsIter->second.end())
+    if (nsIter != this->visuals.end() && visualIter != nsIter->second.end())
     {
       if (visualIter->second->GeometryCount() > 0U)
       {
         // TODO(anyone): Update so that multiple markers can
         //               be attached to one visual
         ignition::rendering::MarkerPtr markerPtr =
-              std::dynamic_pointer_cast<ignition::rendering::Marker>
-              (visualIter->second->GeometryByIndex(0));
+            std::dynamic_pointer_cast<ignition::rendering::Marker>(visualIter->second->GeometryByIndex(0));
 
         visualIter->second->RemoveGeometryByIndex(0);
 
@@ -349,8 +328,7 @@ bool TransportMarkerManagerPrivate::ProcessMarkerMsg(const ignition::msgs::Marke
     else
     {
       // Create the name for the marker
-      std::string name = "__IGN_MARKER_VISUAL_" + ns + "_" +
-                         std::to_string(id);
+      std::string name = "__IGN_MARKER_VISUAL_" + ns + "_" + std::to_string(id);
 
       // Create the new marker
       ignition::rendering::VisualPtr visualPtr = this->scene->CreateVisual(name);
@@ -381,8 +359,7 @@ bool TransportMarkerManagerPrivate::ProcessMarkerMsg(const ignition::msgs::Marke
   else if (_msg.action() == ignition::msgs::Marker::DELETE_MARKER)
   {
     // Remove the marker if it can be found.
-    if (nsIter != this->visuals.end() &&
-        visualIter != nsIter->second.end())
+    if (nsIter != this->visuals.end() && visualIter != nsIter->second.end())
     {
       this->scene->DestroyVisual(visualIter->second);
       this->visuals[ns].erase(visualIter);
@@ -409,8 +386,7 @@ bool TransportMarkerManagerPrivate::ProcessMarkerMsg(const ignition::msgs::Marke
     {
       if (this->warnOnActionFailure)
       {
-        ignwarn << "Unable to delete all markers in namespace[" << ns
-                << "], namespace can't be found." << std::endl;
+        ignwarn << "Unable to delete all markers in namespace[" << ns << "], namespace can't be found." << std::endl;
       }
       return false;
     }
@@ -428,8 +404,7 @@ bool TransportMarkerManagerPrivate::ProcessMarkerMsg(const ignition::msgs::Marke
     // Remove all markers in all namespaces.
     else
     {
-      for (nsIter = this->visuals.begin();
-           nsIter != this->visuals.end(); ++nsIter)
+      for (nsIter = this->visuals.begin(); nsIter != this->visuals.end(); ++nsIter)
       {
         for (const auto& it : nsIter->second)
         {
@@ -449,28 +424,26 @@ bool TransportMarkerManagerPrivate::ProcessMarkerMsg(const ignition::msgs::Marke
 }
 
 /////////////////////////////////////////////////
-void TransportMarkerManagerPrivate::SetVisual(const ignition::msgs::Marker &_msg,
-                           const ignition::rendering::VisualPtr &_visualPtr)
+void TransportMarkerManagerPrivate::SetVisual(const ignition::msgs::Marker& _msg,
+                                              const ignition::rendering::VisualPtr& _visualPtr)
 {
   // Set Visual Scale
   // The scale for points is used as the size of each point, so skip it here.
   if (_msg.has_scale() && _msg.type() != ignition::msgs::Marker::POINTS)
   {
-    _visualPtr->SetLocalScale(_msg.scale().x(),
-                              _msg.scale().y(),
-                              _msg.scale().z());
+    _visualPtr->SetLocalScale(_msg.scale().x(), _msg.scale().y(), _msg.scale().z());
   }
 
   // Set Visual Pose
   if (_msg.has_pose())
   {
     ignition::math::Pose3d pose(_msg.pose().position().x(),
-                      _msg.pose().position().y(),
-                      _msg.pose().position().z(),
-                      _msg.pose().orientation().w(),
-                      _msg.pose().orientation().x(),
-                      _msg.pose().orientation().y(),
-                      _msg.pose().orientation().z());
+                                _msg.pose().position().y(),
+                                _msg.pose().position().z(),
+                                _msg.pose().orientation().w(),
+                                _msg.pose().orientation().x(),
+                                _msg.pose().orientation().y(),
+                                _msg.pose().orientation().z());
     pose.Correct();
     _visualPtr->SetLocalPose(pose);
   }
@@ -499,15 +472,14 @@ void TransportMarkerManagerPrivate::SetVisual(const ignition::msgs::Marker &_msg
 }
 
 /////////////////////////////////////////////////
-void TransportMarkerManagerPrivate::SetMarker(const ignition::msgs::Marker &_msg,
-                           const ignition::rendering::MarkerPtr &_markerPtr)
+void TransportMarkerManagerPrivate::SetMarker(const ignition::msgs::Marker& _msg,
+                                              const ignition::rendering::MarkerPtr& _markerPtr)
 {
   _markerPtr->SetLayer(_msg.layer());
 
   // Set Marker Lifetime
   std::chrono::steady_clock::duration lifetime =
-    std::chrono::seconds(_msg.lifetime().sec()) +
-    std::chrono::nanoseconds(_msg.lifetime().nsec());
+      std::chrono::seconds(_msg.lifetime().sec()) + std::chrono::nanoseconds(_msg.lifetime().nsec());
 
   if (lifetime.count() != 0)
   {
@@ -537,19 +509,15 @@ void TransportMarkerManagerPrivate::SetMarker(const ignition::msgs::Marker &_msg
     _markerPtr->ClearPoints();
   }
 
-  ignition::math::Color color(
-      _msg.material().diffuse().r(),
-      _msg.material().diffuse().g(),
-      _msg.material().diffuse().b(),
-      _msg.material().diffuse().a());
+  ignition::math::Color color(_msg.material().diffuse().r(),
+                              _msg.material().diffuse().g(),
+                              _msg.material().diffuse().b(),
+                              _msg.material().diffuse().a());
 
   // Set Marker Points
   for (int i = 0; i < _msg.point().size(); ++i)
   {
-    ignition::math::Vector3d vector(
-        _msg.point(i).x(),
-        _msg.point(i).y(),
-        _msg.point(i).z());
+    ignition::math::Vector3d vector(_msg.point(i).x(), _msg.point(i).y(), _msg.point(i).z());
 
     _markerPtr->AddPoint(vector, color);
   }
@@ -560,33 +528,29 @@ void TransportMarkerManagerPrivate::SetMarker(const ignition::msgs::Marker &_msg
 }
 
 /////////////////////////////////////////////////
-ignition::rendering::MaterialPtr TransportMarkerManagerPrivate::MsgToMaterial(const ignition::msgs::Marker &_msg)
+ignition::rendering::MaterialPtr TransportMarkerManagerPrivate::MsgToMaterial(const ignition::msgs::Marker& _msg)
 {
   ignition::rendering::MaterialPtr material = this->scene->CreateMaterial();
 
-  material->SetAmbient(
-      _msg.material().ambient().r(),
-      _msg.material().ambient().g(),
-      _msg.material().ambient().b(),
-      _msg.material().ambient().a());
+  material->SetAmbient(_msg.material().ambient().r(),
+                       _msg.material().ambient().g(),
+                       _msg.material().ambient().b(),
+                       _msg.material().ambient().a());
 
-  material->SetDiffuse(
-      _msg.material().diffuse().r(),
-      _msg.material().diffuse().g(),
-      _msg.material().diffuse().b(),
-      _msg.material().diffuse().a());
+  material->SetDiffuse(_msg.material().diffuse().r(),
+                       _msg.material().diffuse().g(),
+                       _msg.material().diffuse().b(),
+                       _msg.material().diffuse().a());
 
-  material->SetSpecular(
-      _msg.material().specular().r(),
-      _msg.material().specular().g(),
-      _msg.material().specular().b(),
-      _msg.material().specular().a());
+  material->SetSpecular(_msg.material().specular().r(),
+                        _msg.material().specular().g(),
+                        _msg.material().specular().b(),
+                        _msg.material().specular().a());
 
-  material->SetEmissive(
-      _msg.material().emissive().r(),
-      _msg.material().emissive().g(),
-      _msg.material().emissive().b(),
-      _msg.material().emissive().a());
+  material->SetEmissive(_msg.material().emissive().r(),
+                        _msg.material().emissive().g(),
+                        _msg.material().emissive().b(),
+                        _msg.material().emissive().a());
 
   material->SetLightingEnabled(_msg.material().lighting());
 
@@ -594,8 +558,7 @@ ignition::rendering::MaterialPtr TransportMarkerManagerPrivate::MsgToMaterial(co
 }
 
 /////////////////////////////////////////////////
-ignition::rendering::MarkerType TransportMarkerManagerPrivate::MsgToType(
-                          const ignition::msgs::Marker &_msg)
+ignition::rendering::MarkerType TransportMarkerManagerPrivate::MsgToType(const ignition::msgs::Marker& _msg)
 {
   ignition::msgs::Marker_Type marker = this->msg.type();
   if (marker != _msg.type() && _msg.type() != ignition::msgs::Marker::NONE)
@@ -635,23 +598,18 @@ ignition::rendering::MarkerType TransportMarkerManagerPrivate::MsgToType(
 }
 
 /////////////////////////////////////////////////
-void TransportMarkerManagerPrivate::OnWorldStatsMsg(
-  const ignition::msgs::WorldStatistics &_msg)
+void TransportMarkerManagerPrivate::OnWorldStatsMsg(const ignition::msgs::WorldStatistics& _msg)
 {
   std::lock_guard<std::mutex> lock(this->mutex);
   std::chrono::steady_clock::duration timePoint;
   if (_msg.has_sim_time())
   {
-    timePoint = ignition::math::secNsecToDuration(
-        _msg.sim_time().sec(),
-        _msg.sim_time().nsec());
+    timePoint = ignition::math::secNsecToDuration(_msg.sim_time().sec(), _msg.sim_time().nsec());
     this->simTime = timePoint;
   }
   else if (_msg.has_real_time())
   {
-    timePoint = ignition::math::secNsecToDuration(
-        _msg.real_time().sec(),
-        _msg.real_time().nsec());
+    timePoint = ignition::math::secNsecToDuration(_msg.real_time().sec(), _msg.real_time().nsec());
     this->simTime = timePoint;
   }
 }
@@ -667,7 +625,7 @@ TransportMarkerManager::TransportMarkerManager(const std::string& scene_name)
 TransportMarkerManager::~TransportMarkerManager() = default;
 
 /////////////////////////////////////////////////
-//void TransportMarkerManager::LoadConfig(const tinyxml2::XMLElement * _pluginElem)
+// void TransportMarkerManager::LoadConfig(const tinyxml2::XMLElement * _pluginElem)
 //{
 //  if (this->title.empty())
 //    this->title = "Marker Manager";
@@ -758,7 +716,7 @@ TransportMarkerManager::~TransportMarkerManager() = default;
 //}
 
 /////////////////////////////////////////////////
-bool TransportMarkerManager::eventFilter(QObject *_obj, QEvent *_event)
+bool TransportMarkerManager::eventFilter(QObject* _obj, QEvent* _event)
 {
   if (_event->type() == events::Render::kType)
   {

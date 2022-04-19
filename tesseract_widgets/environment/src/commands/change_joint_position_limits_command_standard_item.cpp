@@ -27,24 +27,26 @@
 
 namespace tesseract_gui
 {
-
-ChangeJointPositionLimitsCommandStandardItem::ChangeJointPositionLimitsCommandStandardItem(tesseract_environment::ChangeJointPositionLimitsCommand::ConstPtr command)
-  : QStandardItem(icons::getCommandEntryIcon(), "Change Joint Position Limits")
-  , command(std::move(command))
+ChangeJointPositionLimitsCommandStandardItem::ChangeJointPositionLimitsCommandStandardItem(
+    tesseract_environment::ChangeJointPositionLimitsCommand::ConstPtr command)
+  : QStandardItem(icons::getCommandEntryIcon(), "Change Joint Position Limits"), command(std::move(command))
 {
   ctor();
 }
 
-ChangeJointPositionLimitsCommandStandardItem::ChangeJointPositionLimitsCommandStandardItem(const QString &text, tesseract_environment::ChangeJointPositionLimitsCommand::ConstPtr command)
-  : QStandardItem(icons::getCommandEntryIcon(), text)
-  , command(std::move(command))
+ChangeJointPositionLimitsCommandStandardItem::ChangeJointPositionLimitsCommandStandardItem(
+    const QString& text,
+    tesseract_environment::ChangeJointPositionLimitsCommand::ConstPtr command)
+  : QStandardItem(icons::getCommandEntryIcon(), text), command(std::move(command))
 {
   ctor();
 }
 
-ChangeJointPositionLimitsCommandStandardItem::ChangeJointPositionLimitsCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::ChangeJointPositionLimitsCommand::ConstPtr command)
-  : QStandardItem(icon, text)
-  , command(std::move(command))
+ChangeJointPositionLimitsCommandStandardItem::ChangeJointPositionLimitsCommandStandardItem(
+    const QIcon& icon,
+    const QString& text,
+    tesseract_environment::ChangeJointPositionLimitsCommand::ConstPtr command)
+  : QStandardItem(icon, text), command(std::move(command))
 {
   ctor();
 }
@@ -63,7 +65,7 @@ void ChangeJointPositionLimitsCommandStandardItem::ctor()
     item->appendRow(createStandardItemFloat("lower", joint.second.first));
     item->appendRow(createStandardItemFloat("upper", joint.second.second));
 
-    appendRow({item, new QStandardItem()});
+    appendRow({ item, new QStandardItem() });
   }
 }
-}
+}  // namespace tesseract_gui

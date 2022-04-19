@@ -41,11 +41,11 @@ class EnvironmentCommandsModel;
 /** @brief Stores the link visibility properties */
 struct LinkVisibilityProperties
 {
-  bool link {true};
-  bool visual {true};
-  bool collision {false};
-  bool wirebox {false};
-  bool axis {false};
+  bool link{ true };
+  bool visual{ true };
+  bool collision{ false };
+  bool wirebox{ false };
+  bool axis{ false };
 };
 
 using LinkVisibilityPropertiesMap = std::unordered_map<std::string, LinkVisibilityProperties>;
@@ -55,7 +55,6 @@ class EnvironmentWidgetConfig : public QObject
 {
   Q_OBJECT
 public:
-
   using Ptr = std::shared_ptr<EnvironmentWidgetConfig>;
   using ConstPtr = std::shared_ptr<const EnvironmentWidgetConfig>;
   using UPtr = std::unique_ptr<EnvironmentWidgetConfig>;
@@ -90,7 +89,7 @@ public:
   LinkVisibilityPropertiesMap& getLinkVisibilityProperties();
 
   QStandardItemModel& getSceneGraphModel();
-  SceneStateModel &getSceneStateModel();
+  SceneStateModel& getSceneStateModel();
   KinematicGroupsModel& getKinematicGroupsModel();
   GroupTCPsModel& getGroupTCPsModel();
   GroupJointStatesModel& getGroupJointStatesModel();
@@ -120,10 +119,11 @@ public Q_SLOTS:
   void onUpdateAllowedCollisionMatrixModel();
   void onUpdateKinematicsInformationModels();
   void onUpdateCommandHistoryModel();
+
 protected:
   std::unique_ptr<EnvironmentWidgetConfigImpl> data_;
 
   void tesseractEventFilter(const tesseract_environment::Event& event);
 };
-}
-#endif // TESSERACT_WIDGETS_ENVIRONMENT_ENVIRONMENT_WIDGET_CONFIG_H
+}  // namespace tesseract_gui
+#endif  // TESSERACT_WIDGETS_ENVIRONMENT_ENVIRONMENT_WIDGET_CONFIG_H

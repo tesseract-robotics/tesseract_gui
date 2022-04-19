@@ -23,7 +23,6 @@
 #ifndef TESSERACT_WIDGETS_KINEMATIC_GROUP_EDITOR_WIDGET_H
 #define TESSERACT_WIDGETS_KINEMATIC_GROUP_EDITOR_WIDGET_H
 
-
 #include <tesseract_common/macros.h>
 TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #ifndef Q_MOC_RUN
@@ -37,7 +36,8 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 #include <QStandardItemModel>
 #include <QStringListModel>
 
-namespace Ui {
+namespace Ui
+{
 class KinematicGroupsEditorWidget;
 }
 
@@ -53,11 +53,11 @@ class KinematicGroupsEditorWidget : public QWidget
 
 public:
   explicit KinematicGroupsEditorWidget(QStringList joint_names,
-                                      QStringList link_names,
-                                      ChainGroupValidator chain_group_validator = nullptr,
-                                      JointGroupValidator joint_group_validator = nullptr,
-                                      LinkGroupValidator link_group_validator = nullptr,
-                                      QWidget *parent = nullptr);
+                                       QStringList link_names,
+                                       ChainGroupValidator chain_group_validator = nullptr,
+                                       JointGroupValidator joint_group_validator = nullptr,
+                                       LinkGroupValidator link_group_validator = nullptr,
+                                       QWidget* parent = nullptr);
   ~KinematicGroupsEditorWidget();
 
   void setModel(KinematicGroupsModel* model);
@@ -79,5 +79,5 @@ private:
   JointGroupValidator joint_group_validator_;
   LinkGroupValidator link_group_validator_;
 };
-}
-#endif // TESSERACT_WIDGETS_KINEMATIC_GROUP_EDITOR_WIDGET_H
+}  // namespace tesseract_gui
+#endif  // TESSERACT_WIDGETS_KINEMATIC_GROUP_EDITOR_WIDGET_H

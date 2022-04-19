@@ -38,8 +38,8 @@ class LinkGroupStandardItem : public QStandardItem
 {
 public:
   LinkGroupStandardItem(tesseract_srdf::LinkGroup group);
-  explicit LinkGroupStandardItem(const QString &text, tesseract_srdf::LinkGroup group);
-  LinkGroupStandardItem(const QIcon &icon, const QString &text, tesseract_srdf::LinkGroup group);
+  explicit LinkGroupStandardItem(const QString& text, tesseract_srdf::LinkGroup group);
+  LinkGroupStandardItem(const QIcon& icon, const QString& text, tesseract_srdf::LinkGroup group);
   int type() const override;
 
   tesseract_srdf::LinkGroup group;
@@ -47,5 +47,5 @@ public:
 private:
   void ctor();
 };
-}
-#endif // TESSERACT_WIDGETS_KINEMATICS_GROUP_LINK_GROUP_STANDARD_ITEM_H
+}  // namespace tesseract_gui
+#endif  // TESSERACT_WIDGETS_KINEMATICS_GROUP_LINK_GROUP_STANDARD_ITEM_H

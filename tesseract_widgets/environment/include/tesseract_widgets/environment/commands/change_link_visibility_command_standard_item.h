@@ -37,17 +37,22 @@ namespace tesseract_gui
 class ChangeLinkVisibilityCommandStandardItem : public QStandardItem
 {
 public:
-  explicit ChangeLinkVisibilityCommandStandardItem(tesseract_environment::ChangeLinkVisibilityCommand::ConstPtr command);
-  explicit ChangeLinkVisibilityCommandStandardItem(const QString &text, tesseract_environment::ChangeLinkVisibilityCommand::ConstPtr command);
-  explicit ChangeLinkVisibilityCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::ChangeLinkVisibilityCommand::ConstPtr command);
+  explicit ChangeLinkVisibilityCommandStandardItem(
+      tesseract_environment::ChangeLinkVisibilityCommand::ConstPtr command);
+  explicit ChangeLinkVisibilityCommandStandardItem(
+      const QString& text,
+      tesseract_environment::ChangeLinkVisibilityCommand::ConstPtr command);
+  explicit ChangeLinkVisibilityCommandStandardItem(
+      const QIcon& icon,
+      const QString& text,
+      tesseract_environment::ChangeLinkVisibilityCommand::ConstPtr command);
   int type() const override;
-
 
   tesseract_environment::ChangeLinkVisibilityCommand::ConstPtr command;
 
 private:
   void ctor();
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_ENVIRONMENT_CHANGE_LINK_VISIBILITY_COMMAND_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_ENVIRONMENT_CHANGE_LINK_VISIBILITY_COMMAND_STANDARD_ITEM_H

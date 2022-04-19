@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
-*/
+ */
 
 #ifndef TESSERACT_IGNITION_RENDERING_INTERACTIVE_VIEW_CONTROL_H
 #define TESSERACT_IGNITION_RENDERING_INTERACTIVE_VIEW_CONTROL_H
@@ -54,16 +54,16 @@ public:
   /// \brief Destructor
   virtual ~InteractiveViewControl();
 
-//    // Documentation inherited
-//    virtual void LoadConfig(const tinyxml2::XMLElement *_pluginElem) override;
+  //    // Documentation inherited
+  //    virtual void LoadConfig(const tinyxml2::XMLElement *_pluginElem) override;
 private:
   // Documentation inherited
-  bool eventFilter(QObject *_obj, QEvent *_event) override;
+  bool eventFilter(QObject* _obj, QEvent* _event) override;
 
   /// \internal
   /// \brief Pointer to private data.
   std::unique_ptr<InteractiveViewControlPrivate> dataPtr;
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_IGNITION_RENDERING_INTERACTIVE_VIEW_CONTROL_H
+#endif  // TESSERACT_IGNITION_RENDERING_INTERACTIVE_VIEW_CONTROL_H

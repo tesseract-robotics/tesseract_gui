@@ -123,6 +123,5 @@ QIcon getHideCollisionAllLinksIcon();
 QIcon getSelectAllLinksIcon();
 QIcon getDeselectAllLinksIcon();
 
-
-}
-#endif // TESSERACT_WIDGETS_COMMON_ICON_UTILS_H
+}  // namespace tesseract_gui::icons
+#endif  // TESSERACT_WIDGETS_COMMON_ICON_UTILS_H

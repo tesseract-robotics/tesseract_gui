@@ -37,17 +37,22 @@ namespace tesseract_gui
 class ChangeJointPositionLimitsCommandStandardItem : public QStandardItem
 {
 public:
-  explicit ChangeJointPositionLimitsCommandStandardItem(tesseract_environment::ChangeJointPositionLimitsCommand::ConstPtr command);
-  explicit ChangeJointPositionLimitsCommandStandardItem(const QString &text, tesseract_environment::ChangeJointPositionLimitsCommand::ConstPtr command);
-  explicit ChangeJointPositionLimitsCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::ChangeJointPositionLimitsCommand::ConstPtr command);
+  explicit ChangeJointPositionLimitsCommandStandardItem(
+      tesseract_environment::ChangeJointPositionLimitsCommand::ConstPtr command);
+  explicit ChangeJointPositionLimitsCommandStandardItem(
+      const QString& text,
+      tesseract_environment::ChangeJointPositionLimitsCommand::ConstPtr command);
+  explicit ChangeJointPositionLimitsCommandStandardItem(
+      const QIcon& icon,
+      const QString& text,
+      tesseract_environment::ChangeJointPositionLimitsCommand::ConstPtr command);
   int type() const override;
-
 
   tesseract_environment::ChangeJointPositionLimitsCommand::ConstPtr command;
 
 private:
   void ctor();
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_ENVIRONMENT_CHANGE_JOINT_POSITION_LIMITS_COMMAND_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_ENVIRONMENT_CHANGE_JOINT_POSITION_LIMITS_COMMAND_STANDARD_ITEM_H

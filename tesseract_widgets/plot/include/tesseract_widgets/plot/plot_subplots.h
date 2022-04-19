@@ -45,9 +45,9 @@ public Q_SLOTS:
   void replot();
 
 private:
-  int rows_{0};
-  int cols_{0};
+  int rows_{ 0 };
+  int cols_{ 0 };
   std::vector<std::vector<std::unique_ptr<PlotWidget>>> subplots_;
 };
-}
-#endif // TESSERACT_WIDGETS_PLOT_PLOT_SUBPLOTS_H
+}  // namespace tesseract_gui
+#endif  // TESSERACT_WIDGETS_PLOT_PLOT_SUBPLOTS_H

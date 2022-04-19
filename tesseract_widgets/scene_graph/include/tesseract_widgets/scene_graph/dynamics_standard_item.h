@@ -38,8 +38,8 @@ class DynamicsStandardItem : public QStandardItem
 {
 public:
   DynamicsStandardItem(tesseract_scene_graph::JointDynamics::Ptr dynamics);
-  explicit DynamicsStandardItem(const QString &text, tesseract_scene_graph::JointDynamics::Ptr dynamics);
-  DynamicsStandardItem(const QIcon &icon, const QString &text, tesseract_scene_graph::JointDynamics::Ptr dynamics);
+  explicit DynamicsStandardItem(const QString& text, tesseract_scene_graph::JointDynamics::Ptr dynamics);
+  DynamicsStandardItem(const QIcon& icon, const QString& text, tesseract_scene_graph::JointDynamics::Ptr dynamics);
   int type() const override;
 
   tesseract_scene_graph::JointDynamics::Ptr dynamics;
@@ -47,6 +47,6 @@ public:
 private:
   void ctor();
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_SCENE_GRAPH_DYNAMICS_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_SCENE_GRAPH_DYNAMICS_STANDARD_ITEM_H

@@ -38,8 +38,8 @@ class LinkStandardItem : public QStandardItem
 {
 public:
   LinkStandardItem(tesseract_scene_graph::Link::Ptr link);
-  explicit LinkStandardItem(const QString &text, tesseract_scene_graph::Link::Ptr link);
-  LinkStandardItem(const QIcon &icon, const QString &text, tesseract_scene_graph::Link::Ptr link);
+  explicit LinkStandardItem(const QString& text, tesseract_scene_graph::Link::Ptr link);
+  LinkStandardItem(const QIcon& icon, const QString& text, tesseract_scene_graph::Link::Ptr link);
   int type() const override;
 
   tesseract_scene_graph::Link::Ptr link;
@@ -47,6 +47,6 @@ public:
 private:
   void ctor();
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_SCENE_GRAPH_LINK_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_SCENE_GRAPH_LINK_STANDARD_ITEM_H

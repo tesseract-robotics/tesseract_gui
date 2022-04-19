@@ -38,16 +38,18 @@ class RemoveLinkCommandStandardItem : public QStandardItem
 {
 public:
   explicit RemoveLinkCommandStandardItem(tesseract_environment::RemoveLinkCommand::ConstPtr command);
-  explicit RemoveLinkCommandStandardItem(const QString &text, tesseract_environment::RemoveLinkCommand::ConstPtr command);
-  explicit RemoveLinkCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::RemoveLinkCommand::ConstPtr command);
+  explicit RemoveLinkCommandStandardItem(const QString& text,
+                                         tesseract_environment::RemoveLinkCommand::ConstPtr command);
+  explicit RemoveLinkCommandStandardItem(const QIcon& icon,
+                                         const QString& text,
+                                         tesseract_environment::RemoveLinkCommand::ConstPtr command);
   int type() const override;
-
 
   tesseract_environment::RemoveLinkCommand::ConstPtr command;
 
 private:
   void ctor();
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_ENVIRONMENT_REMOVE_LINK_COMMAND_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_ENVIRONMENT_REMOVE_LINK_COMMAND_STANDARD_ITEM_H

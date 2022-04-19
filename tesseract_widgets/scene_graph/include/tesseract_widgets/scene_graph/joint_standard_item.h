@@ -34,13 +34,12 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 namespace tesseract_gui
 {
-
 class JointStandardItem : public QStandardItem
 {
 public:
   JointStandardItem(tesseract_scene_graph::Joint::Ptr joint);
-  explicit JointStandardItem(const QString &text, tesseract_scene_graph::Joint::Ptr joint);
-  JointStandardItem(const QIcon &icon, const QString &text, tesseract_scene_graph::Joint::Ptr joint);
+  explicit JointStandardItem(const QString& text, tesseract_scene_graph::Joint::Ptr joint);
+  JointStandardItem(const QIcon& icon, const QString& text, tesseract_scene_graph::Joint::Ptr joint);
   int type() const override;
 
   tesseract_scene_graph::Joint::Ptr joint;
@@ -49,6 +48,6 @@ private:
   void ctor();
 };
 
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_SCENE_GRAPH_JOINT_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_SCENE_GRAPH_JOINT_STANDARD_ITEM_H

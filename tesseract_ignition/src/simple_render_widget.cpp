@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
-*/
+ */
 
 #include <tesseract_ignition/simple_render_widget.h>
 #include <tesseract_ignition/gui_utils.h>
@@ -48,19 +48,18 @@
 
 namespace tesseract_gui
 {
-
 // \brief Private data class for SimpleRenderer
 class SimpleRendererImpl
 {
 public:
   /// \brief Flag to indicate if mouse event is dirty
-  bool mouseDirty{false};
+  bool mouseDirty{ false };
 
   /// \brief Flag to indicate if hover event is dirty
-  bool hoverDirty{false};
+  bool hoverDirty{ false };
 
   /// \brief Flag to indicate if drop event is dirty
-  bool dropDirty{false};
+  bool dropDirty{ false };
 
   /// \brief Mouse event
   ignition::common::MouseEvent mouseEvent;
@@ -72,34 +71,30 @@ public:
   std::mutex mutex;
 
   /// \brief User camera
-  ignition::rendering::CameraPtr camera{nullptr};
+  ignition::rendering::CameraPtr camera{ nullptr };
 
   /// \brief The currently hovered mouse position in screen coordinates
-  ignition::math::Vector2i mouseHoverPos{ignition::math::Vector2i::Zero};
+  ignition::math::Vector2i mouseHoverPos{ ignition::math::Vector2i::Zero };
 
   /// \brief The currently drop mouse position in screen coordinates
-  ignition::math::Vector2i mouseDropPos{ignition::math::Vector2i::Zero};
+  ignition::math::Vector2i mouseDropPos{ ignition::math::Vector2i::Zero };
 
   /// \brief The dropped text in the scene
   std::string dropText;
 
   /// \brief Ray query for mouse clicks
-  ignition::rendering::RayQueryPtr rayQuery{nullptr};
+  ignition::rendering::RayQueryPtr rayQuery{ nullptr };
 
   /// \brief View control focus target
   ignition::math::Vector3d target;
 };
 
 /////////////////////////////////////////////////
-SimpleRenderer::SimpleRenderer()
-  : dataPtr(std::make_unique<SimpleRendererImpl>())
-{
-}
+SimpleRenderer::SimpleRenderer() : dataPtr(std::make_unique<SimpleRendererImpl>()) {}
 
 /////////////////////////////////////////////////
 ignition::rendering::Image SimpleRenderer::Render()
 {
-
   if (!initialized)
     return ignition::rendering::Image();
 
@@ -108,7 +103,8 @@ ignition::rendering::Image SimpleRenderer::Render()
     std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
     this->dataPtr->camera->SetImageWidth(this->textureSize.width());
     this->dataPtr->camera->SetImageHeight(this->textureSize.height());
-    this->dataPtr->camera->SetAspectRatio(static_cast<double>(this->textureSize.width()) / static_cast<double>(this->textureSize.height()));
+    this->dataPtr->camera->SetAspectRatio(static_cast<double>(this->textureSize.width()) /
+                                          static_cast<double>(this->textureSize.height()));
     // setting the size should cause the render texture to be rebuilt
     this->dataPtr->camera->PreRender();
     this->textureDirty = false;
@@ -161,7 +157,7 @@ void SimpleRenderer::HandleMouseEvent()
 }
 
 ////////////////////////////////////////////////
-void SimpleRenderer::HandleKeyPress(const ignition::common::KeyEvent &_e)
+void SimpleRenderer::HandleKeyPress(const ignition::common::KeyEvent& _e)
 {
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
 
@@ -173,7 +169,7 @@ void SimpleRenderer::HandleKeyPress(const ignition::common::KeyEvent &_e)
 }
 
 ////////////////////////////////////////////////
-void SimpleRenderer::HandleKeyRelease(const ignition::common::KeyEvent &_e)
+void SimpleRenderer::HandleKeyRelease(const ignition::common::KeyEvent& _e)
 {
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
 
@@ -189,8 +185,7 @@ void SimpleRenderer::BroadcastDrop()
 {
   if (!this->dataPtr->dropDirty)
     return;
-  events::DropOnScene dropOnSceneEvent(
-    this->dataPtr->dropText, this->dataPtr->mouseDropPos, this->sceneName);
+  events::DropOnScene dropOnSceneEvent(this->dataPtr->dropText, this->dataPtr->mouseDropPos, this->sceneName);
   QApplication::sendEvent(tesseract_gui::getApp(), &dropOnSceneEvent);
   this->dataPtr->dropDirty = false;
 }
@@ -337,10 +332,10 @@ void SimpleRenderer::Initialize()
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
   std::map<std::string, std::string> params;
   params["useCurrentGLContext"] = "1";
-//  params["winID"] = std::to_string(tesseract_gui::getApp()->activeWindow()->winId());
-//  params["winID"] = std::to_string(
-//    ignition::gui::App()->findChild<ignition::gui::MainWindow *>()->
-//      QuickWindow()-winId());
+  //  params["winID"] = std::to_string(tesseract_gui::getApp()->activeWindow()->winId());
+  //  params["winID"] = std::to_string(
+  //    ignition::gui::App()->findChild<ignition::gui::MainWindow *>()->
+  //      QuickWindow()-winId());
   auto* engine = ignition::rendering::engine(this->engineName, params);
   if (engine == nullptr)
   {
@@ -377,15 +372,13 @@ void SimpleRenderer::Initialize()
       gray->SetSpecular(0.7, 0.7, 0.7);
 
       // create grid visual
-      unsigned id = 1000; //static_cast<unsigned>(this->dataPtr->entity_manager.addVisual("tesseract_grid"));
+      unsigned id = 1000;  // static_cast<unsigned>(this->dataPtr->entity_manager.addVisual("tesseract_grid"));
       ignition::rendering::VisualPtr visual = scene->CreateVisual(id, "tesseract_grid");
       ignition::rendering::GridPtr gridGeom = scene->CreateGrid();
       if (!gridGeom)
       {
-        ignwarn << "Failed to create grid for scene ["
-          << scene->Name() << "] on engine ["
-            << scene->Engine()->Name() << "]"
-              << std::endl;
+        ignwarn << "Failed to create grid for scene [" << scene->Name() << "] on engine [" << scene->Engine()->Name()
+                << "]" << std::endl;
         return;
       }
       gridGeom->SetCellCount(20);
@@ -424,11 +417,11 @@ void SimpleRenderer::Initialize()
   light0->SetSpecularColor(0.5, 0.5, 0.5);
   this->dataPtr->camera->AddChild(light0);
 
-//  ignition::rendering::AxisVisualPtr axis = scene->CreateAxisVisual("world_axis");
-//  axis->SetInheritScale(false);
-//  axis->Scale(0.5, 0.5, 0.5);
-//  axis->SetVisible(true);
-//  root->AddChild(axis);
+  //  ignition::rendering::AxisVisualPtr axis = scene->CreateAxisVisual("world_axis");
+  //  axis->SetInheritScale(false);
+  //  axis->Scale(0.5, 0.5, 0.5);
+  //  axis->SetVisible(true);
+  //  root->AddChild(axis);
 
   // Ray Query
   this->dataPtr->rayQuery = this->dataPtr->camera->Scene()->CreateRayQuery();
@@ -458,7 +451,7 @@ void SimpleRenderer::Destroy()
 }
 
 /////////////////////////////////////////////////
-void SimpleRenderer::NewHoverEvent(const ignition::math::Vector2i &_hoverPos)
+void SimpleRenderer::NewHoverEvent(const ignition::math::Vector2i& _hoverPos)
 {
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
   this->dataPtr->mouseHoverPos = _hoverPos;
@@ -466,8 +459,7 @@ void SimpleRenderer::NewHoverEvent(const ignition::math::Vector2i &_hoverPos)
 }
 
 /////////////////////////////////////////////////
-void SimpleRenderer::NewDropEvent(const std::string &_dropText,
-  const ignition::math::Vector2i &_dropPos)
+void SimpleRenderer::NewDropEvent(const std::string& _dropText, const ignition::math::Vector2i& _dropPos)
 {
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
   this->dataPtr->dropText = _dropText;
@@ -476,7 +468,7 @@ void SimpleRenderer::NewDropEvent(const std::string &_dropText,
 }
 
 /////////////////////////////////////////////////
-void SimpleRenderer::NewMouseEvent(const ignition::common::MouseEvent &_e)
+void SimpleRenderer::NewMouseEvent(const ignition::common::MouseEvent& _e)
 {
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
   this->dataPtr->mouseEvent = _e;
@@ -484,8 +476,7 @@ void SimpleRenderer::NewMouseEvent(const ignition::common::MouseEvent &_e)
 }
 
 /////////////////////////////////////////////////
-ignition::math::Vector3d SimpleRenderer::ScreenToScene(
-    const ignition::math::Vector2i &_screenPos) const
+ignition::math::Vector3d SimpleRenderer::ScreenToScene(const ignition::math::Vector2i& _screenPos) const
 {
   // TODO(ahcorde): Replace this code with function in ign-rendering
   // Require this commit
@@ -500,16 +491,14 @@ ignition::math::Vector3d SimpleRenderer::ScreenToScene(
   double ny = 1.0 - 2.0 * _screenPos.Y() / height;
 
   // Make a ray query
-  this->dataPtr->rayQuery->SetFromCamera(
-      this->dataPtr->camera, ignition::math::Vector2d(nx, ny));
+  this->dataPtr->rayQuery->SetFromCamera(this->dataPtr->camera, ignition::math::Vector2d(nx, ny));
 
   auto result = this->dataPtr->rayQuery->ClosestPoint();
   if (result)
     return result.point;
 
   // Set point to be 10m away if no intersection found
-  return this->dataPtr->rayQuery->Origin() +
-      this->dataPtr->rayQuery->Direction() * 10;
+  return this->dataPtr->rayQuery->Origin() + this->dataPtr->rayQuery->Direction() * 10;
 }
 
 /// \brief Private data class for RenderWindowItem
@@ -524,16 +513,15 @@ public:
 
   QOpenGLDebugLogger* debug_logger;
 
-  GLuint texture{2};
+  GLuint texture{ 2 };
 
   /// \brief List of our QT connections.
   QList<QMetaObject::Connection> connections;
 };
 
 /////////////////////////////////////////////////
-SimpleRenderWidget::SimpleRenderWidget(const std::string& scene_name, QWidget *_parent)
-  : QOpenGLWidget(_parent)
-  , dataPtr(std::make_unique<SimpleRenderWidgetImpl>())
+SimpleRenderWidget::SimpleRenderWidget(const std::string& scene_name, QWidget* _parent)
+  : QOpenGLWidget(_parent), dataPtr(std::make_unique<SimpleRenderWidgetImpl>())
 {
   dataPtr->renderer.sceneName = scene_name;
   connect(this, &QOpenGLWidget::resized, this, &SimpleRenderWidget::OnResized);
@@ -543,7 +531,7 @@ SimpleRenderWidget::SimpleRenderWidget(const std::string& scene_name, QWidget *_
 SimpleRenderWidget::~SimpleRenderWidget()
 {
   // Disconnect our QT connections.
-  for(const auto& conn : this->dataPtr->connections)
+  for (const auto& conn : this->dataPtr->connections)
     QObject::disconnect(conn);
 }
 
@@ -554,9 +542,12 @@ void SimpleRenderWidget::initializeGL()
   this->dataPtr->debug_logger = new QOpenGLDebugLogger(context());
   if (this->dataPtr->debug_logger->initialize())
   {
-      qDebug() << "GL_DEBUG Debug Logger" << this->dataPtr->debug_logger << "\n";
-      connect(this->dataPtr->debug_logger, SIGNAL(messageLogged(QOpenGLDebugMessage)), this, SLOT(messageLogged(QOpenGLDebugMessage)));
-      this->dataPtr->debug_logger->startLogging();
+    qDebug() << "GL_DEBUG Debug Logger" << this->dataPtr->debug_logger << "\n";
+    connect(this->dataPtr->debug_logger,
+            SIGNAL(messageLogged(QOpenGLDebugMessage)),
+            this,
+            SLOT(messageLogged(QOpenGLDebugMessage)));
+    this->dataPtr->debug_logger->startLogging();
   }
 
   // Initialize renderer
@@ -583,10 +574,10 @@ void SimpleRenderWidget::paintGL()
   ignition::rendering::Image image = this->dataPtr->renderer.Render();
   auto* data = image.Data<unsigned char>();
 
-//  ignerr << "Image, w: " << image.Width() << " h: " << image.Height() << std::endl;
-//  ignition::common::Image tmp;
-//  tmp.SetFromData(data, image.Width(), image.Height(), ignition::common::Image::RGB_INT8);
-//  tmp.SavePNG("/tmp/ign_image.png");
+  //  ignerr << "Image, w: " << image.Width() << " h: " << image.Height() << std::endl;
+  //  ignition::common::Image tmp;
+  //  tmp.SetFromData(data, image.Width(), image.Height(), ignition::common::Image::RGB_INT8);
+  //  tmp.SavePNG("/tmp/ign_image.png");
   doneCurrent();
 
   makeCurrent();
@@ -596,7 +587,7 @@ void SimpleRenderWidget::paintGL()
   auto imgh = image.Height();
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  bool use_texture{false};
+  bool use_texture{ false };
   if (use_texture)
   {
     glMatrixMode(GL_PROJECTION);
@@ -607,31 +598,31 @@ void SimpleRenderWidget::paintGL()
     glLoadIdentity();
 
     glEnable(GL_TEXTURE_RECTANGLE);
-    glViewport (0, 0, (GLsizei) imgw, (GLsizei) imgh);
+    glViewport(0, 0, (GLsizei)imgw, (GLsizei)imgh);
     glDeleteTextures(1, &(this->dataPtr->texture));
-    glGenTextures (1, &(this->dataPtr->texture));
-    glBindTexture (GL_TEXTURE_RECTANGLE, this->dataPtr->texture);
+    glGenTextures(1, &(this->dataPtr->texture));
+    glBindTexture(GL_TEXTURE_RECTANGLE, this->dataPtr->texture);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
     glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
     glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
-    glTexImage2D (GL_TEXTURE_RECTANGLE, 0, GL_RGBA8, (GLint)imgw, (GLint)imgh, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-    glBegin (GL_QUADS);
+    glTexImage2D(GL_TEXTURE_RECTANGLE, 0, GL_RGBA8, (GLint)imgw, (GLint)imgh, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+    glBegin(GL_QUADS);
     // Bottom left
-    glTexCoord2d (imgw, imgh);
+    glTexCoord2d(imgw, imgh);
     glVertex2f(-1, -1);
 
     // Top left
-    glTexCoord2d (0, imgh);
-    glVertex2f (1, -1);
+    glTexCoord2d(0, imgh);
+    glVertex2f(1, -1);
 
     // Top right
-    glTexCoord2d (0, 0);
-    glVertex2f (1, 1);
+    glTexCoord2d(0, 0);
+    glVertex2f(1, 1);
 
     // Bottom right
-    glTexCoord2d (imgw, 0);
-    glVertex2f (-1, 1);
+    glTexCoord2d(imgw, 0);
+    glVertex2f(-1, 1);
     glEnd();
     glDisable(GL_TEXTURE_RECTANGLE);
   }
@@ -658,61 +649,42 @@ void SimpleRenderWidget::paintGL()
 }
 
 /////////////////////////////////////////////////
-void SimpleRenderWidget::SetBackgroundColor(const ignition::math::Color &_color)
+void SimpleRenderWidget::SetBackgroundColor(const ignition::math::Color& _color)
 {
   this->dataPtr->renderer.backgroundColor = _color;
 }
 
 /////////////////////////////////////////////////
-void SimpleRenderWidget::SetAmbientLight(const ignition::math::Color &_ambient)
+void SimpleRenderWidget::SetAmbientLight(const ignition::math::Color& _ambient)
 {
   this->dataPtr->renderer.ambientLight = _ambient;
 }
 
 /////////////////////////////////////////////////
-void SimpleRenderWidget::SetEngineName(const std::string &_name)
-{
-  this->dataPtr->renderer.engineName = _name;
-}
+void SimpleRenderWidget::SetEngineName(const std::string& _name) { this->dataPtr->renderer.engineName = _name; }
 
 /////////////////////////////////////////////////
-void SimpleRenderWidget::SetSceneName(const std::string &_name)
-{
-  this->dataPtr->renderer.sceneName = _name;
-}
+void SimpleRenderWidget::SetSceneName(const std::string& _name) { this->dataPtr->renderer.sceneName = _name; }
 
 /////////////////////////////////////////////////
-void SimpleRenderWidget::SetCameraPose(const ignition::math::Pose3d &_pose)
+void SimpleRenderWidget::SetCameraPose(const ignition::math::Pose3d& _pose)
 {
   this->dataPtr->renderer.cameraPose = _pose;
 }
 
 /////////////////////////////////////////////////
-void SimpleRenderWidget::SetCameraNearClip(double _near)
-{
-  this->dataPtr->renderer.cameraNearClip = _near;
-}
+void SimpleRenderWidget::SetCameraNearClip(double _near) { this->dataPtr->renderer.cameraNearClip = _near; }
 
 /////////////////////////////////////////////////
-void SimpleRenderWidget::SetCameraFarClip(double _far)
-{
-  this->dataPtr->renderer.cameraFarClip = _far;
-}
+void SimpleRenderWidget::SetCameraFarClip(double _far) { this->dataPtr->renderer.cameraFarClip = _far; }
 
 /////////////////////////////////////////////////
-void SimpleRenderWidget::SetSkyEnabled(const bool &_sky)
-{
-  this->dataPtr->renderer.skyEnable = _sky;
-}
+void SimpleRenderWidget::SetSkyEnabled(const bool& _sky) { this->dataPtr->renderer.skyEnable = _sky; }
 
-void SimpleRenderWidget::SetGridEnabled(bool _grid)
-{
-  this->dataPtr->renderer.gridEnable = _grid;
-}
-
+void SimpleRenderWidget::SetGridEnabled(bool _grid) { this->dataPtr->renderer.gridEnable = _grid; }
 
 /////////////////////////////////////////////////
-//void MinimalScene::LoadConfig(const tinyxml2::XMLElement *_pluginElem)
+// void MinimalScene::LoadConfig(const tinyxml2::XMLElement *_pluginElem)
 //{
 //  RenderWindowItem *renderWindow =
 //      this->PluginItem()->findChild<RenderWindowItem *>();
@@ -835,35 +807,31 @@ void SimpleRenderWidget::SetGridEnabled(bool _grid)
 /////////////////////////////////////////////////
 void SimpleRenderWidget::OnHovered(int _mouseX, int _mouseY)
 {
-  this->dataPtr->renderer.NewHoverEvent({_mouseX, _mouseY});
+  this->dataPtr->renderer.NewHoverEvent({ _mouseX, _mouseY });
   update();
 }
 
 /////////////////////////////////////////////////
-void SimpleRenderWidget::OnDropped(const QString &_drop, int _mouseX, int _mouseY)
+void SimpleRenderWidget::OnDropped(const QString& _drop, int _mouseX, int _mouseY)
 {
-  this->dataPtr->renderer.NewDropEvent(_drop.toStdString(), {_mouseX, _mouseY});
+  this->dataPtr->renderer.NewDropEvent(_drop.toStdString(), { _mouseX, _mouseY });
   update();
 }
 
-void SimpleRenderWidget::OnResized()
-{
-  update();
-}
+void SimpleRenderWidget::OnResized() { update(); }
 
 /////////////////////////////////////////////////
-void SimpleRenderWidget::mousePressEvent(QMouseEvent *_e)
+void SimpleRenderWidget::mousePressEvent(QMouseEvent* _e)
 {
   this->dataPtr->mouseEvent = convert(*_e);
   this->dataPtr->mouseEvent.SetPressPos(this->dataPtr->mouseEvent.Pos());
 
-  this->dataPtr->renderer.NewMouseEvent(
-      this->dataPtr->mouseEvent);
+  this->dataPtr->renderer.NewMouseEvent(this->dataPtr->mouseEvent);
   update();
 }
 
 ////////////////////////////////////////////////
-void SimpleRenderWidget::keyPressEvent(QKeyEvent *_e)
+void SimpleRenderWidget::keyPressEvent(QKeyEvent* _e)
 {
   if (_e->isAutoRepeat())
     return;
@@ -874,7 +842,7 @@ void SimpleRenderWidget::keyPressEvent(QKeyEvent *_e)
 }
 
 ////////////////////////////////////////////////
-void SimpleRenderWidget::keyReleaseEvent(QKeyEvent *_e)
+void SimpleRenderWidget::keyReleaseEvent(QKeyEvent* _e)
 {
   if (_e->isAutoRepeat())
     return;
@@ -885,7 +853,7 @@ void SimpleRenderWidget::keyReleaseEvent(QKeyEvent *_e)
 }
 
 ////////////////////////////////////////////////
-void SimpleRenderWidget::mouseReleaseEvent(QMouseEvent *_e)
+void SimpleRenderWidget::mouseReleaseEvent(QMouseEvent* _e)
 {
   // Store values that depend on previous events
   auto pressPos = this->dataPtr->mouseEvent.PressPos();
@@ -895,13 +863,12 @@ void SimpleRenderWidget::mouseReleaseEvent(QMouseEvent *_e)
   this->dataPtr->mouseEvent.SetPressPos(pressPos);
   this->dataPtr->mouseEvent.SetDragging(dragging);
 
-  this->dataPtr->renderer.NewMouseEvent(
-      this->dataPtr->mouseEvent);
+  this->dataPtr->renderer.NewMouseEvent(this->dataPtr->mouseEvent);
   update();
 }
 
 ////////////////////////////////////////////////
-void SimpleRenderWidget::mouseMoveEvent(QMouseEvent *_e)
+void SimpleRenderWidget::mouseMoveEvent(QMouseEvent* _e)
 {
   // Store values that depend on previous events
   auto pressPos = this->dataPtr->mouseEvent.PressPos();
@@ -911,38 +878,33 @@ void SimpleRenderWidget::mouseMoveEvent(QMouseEvent *_e)
   if (this->dataPtr->mouseEvent.Dragging())
     this->dataPtr->mouseEvent.SetPressPos(pressPos);
 
-  this->dataPtr->renderer.NewMouseEvent(
-      this->dataPtr->mouseEvent);
+  this->dataPtr->renderer.NewMouseEvent(this->dataPtr->mouseEvent);
   update();
 }
 
 ////////////////////////////////////////////////
-void SimpleRenderWidget::wheelEvent(QWheelEvent *_e)
+void SimpleRenderWidget::wheelEvent(QWheelEvent* _e)
 {
-//  this->forceActiveFocus();
+  //  this->forceActiveFocus();
 
   this->dataPtr->mouseEvent = convert(*_e);
-  this->dataPtr->renderer.NewMouseEvent(
-    this->dataPtr->mouseEvent);
+  this->dataPtr->renderer.NewMouseEvent(this->dataPtr->mouseEvent);
   update();
 }
 
 ////////////////////////////////////////////////
-void SimpleRenderWidget::HandleKeyPress(const ignition::common::KeyEvent &_e)
+void SimpleRenderWidget::HandleKeyPress(const ignition::common::KeyEvent& _e)
 {
   this->dataPtr->renderer.HandleKeyPress(_e);
   update();
 }
 
 ////////////////////////////////////////////////
-void SimpleRenderWidget::HandleKeyRelease(const ignition::common::KeyEvent &_e)
+void SimpleRenderWidget::HandleKeyRelease(const ignition::common::KeyEvent& _e)
 {
   this->dataPtr->renderer.HandleKeyRelease(_e);
   update();
 }
 
-void SimpleRenderWidget::messageLogged(const QOpenGLDebugMessage &debug_msg)
-{
-  qDebug() << debug_msg;
-}
-}
+void SimpleRenderWidget::messageLogged(const QOpenGLDebugMessage& debug_msg) { qDebug() << debug_msg; }
+}  // namespace tesseract_gui

@@ -38,30 +38,26 @@
 namespace tesseract_gui
 {
 VisualStandardItem::VisualStandardItem(tesseract_scene_graph::Visual::Ptr visual)
-  : QStandardItem(icons::getVisualIcon(), "Visual")
-  , visual(std::move(visual))
+  : QStandardItem(icons::getVisualIcon(), "Visual"), visual(std::move(visual))
 {
   ctor();
 }
 
-VisualStandardItem::VisualStandardItem(const QString &text, tesseract_scene_graph::Visual::Ptr visual)
-  : QStandardItem(icons::getVisualIcon(), text)
-  , visual(std::move(visual))
+VisualStandardItem::VisualStandardItem(const QString& text, tesseract_scene_graph::Visual::Ptr visual)
+  : QStandardItem(icons::getVisualIcon(), text), visual(std::move(visual))
 {
   ctor();
 }
 
-VisualStandardItem::VisualStandardItem(const QIcon &icon, const QString &text, tesseract_scene_graph::Visual::Ptr visual)
-  : QStandardItem(icon, text)
-  , visual(std::move(visual))
+VisualStandardItem::VisualStandardItem(const QIcon& icon,
+                                       const QString& text,
+                                       tesseract_scene_graph::Visual::Ptr visual)
+  : QStandardItem(icon, text), visual(std::move(visual))
 {
   ctor();
 }
 
-int VisualStandardItem::type() const
-{
-  return static_cast<int>(StandardItemType::VISUAL);
-}
+int VisualStandardItem::type() const { return static_cast<int>(StandardItemType::VISUAL); }
 
 void VisualStandardItem::ctor()
 {
@@ -89,7 +85,8 @@ void VisualStandardItem::ctor()
     }
     case tesseract_geometry::GeometryType::CYLINDER:
     {
-      geometry_item = new CylinderStandardItem(std::static_pointer_cast<tesseract_geometry::Cylinder>(visual->geometry));
+      geometry_item =
+          new CylinderStandardItem(std::static_pointer_cast<tesseract_geometry::Cylinder>(visual->geometry));
       break;
     }
     case tesseract_geometry::GeometryType::PLANE:
@@ -111,11 +108,12 @@ void VisualStandardItem::ctor()
     case tesseract_geometry::GeometryType::MESH:
     case tesseract_geometry::GeometryType::SDF_MESH:
     {
-      geometry_item = new PolygonMeshStandardItem(std::static_pointer_cast<tesseract_geometry::PolygonMesh>(visual->geometry));
+      geometry_item =
+          new PolygonMeshStandardItem(std::static_pointer_cast<tesseract_geometry::PolygonMesh>(visual->geometry));
       break;
     }
   }
   setIcon(geometry_item->icon());
   appendRow(geometry_item);
 }
-}
+}  // namespace tesseract_gui

@@ -33,7 +33,6 @@
 
 namespace tesseract_gui
 {
-
 struct WorkbenchWidgetImpl
 {
   EnvironmentWidget* environment_widget;
@@ -46,32 +45,42 @@ struct WorkbenchWidgetImpl
 
 WorkbenchWidget::WorkbenchWidget(EnvironmentWidget* environment_widget,
                                  JointTrajectoryWidget* joint_trajectory_widget,
-                                 QWidget *parent)
-  : QWidget(parent)
-  , ui(std::make_unique<Ui::WorkbenchWidget>())
-  , data_(std::make_unique<WorkbenchWidgetImpl>())
+                                 QWidget* parent)
+  : QWidget(parent), ui(std::make_unique<Ui::WorkbenchWidget>()), data_(std::make_unique<WorkbenchWidgetImpl>())
 {
   ui->setupUi(this);
   data_->environment_widget = environment_widget;
   data_->joint_trajectory_environment_widget = environment_widget->clone();
   data_->joint_trajectory_widget = joint_trajectory_widget;
-  data_->joint_trajectory_model = new JointTrajectoryModel(); // NOLINT
+  data_->joint_trajectory_model = new JointTrajectoryModel();  // NOLINT
   data_->joint_trajectory_widget->setModel(data_->joint_trajectory_model);
 
-  connect(data_->environment_widget, SIGNAL(environmentSet(std::shared_ptr<tesseract_environment::Environment>)), this , SLOT(onEnvironmentSet(std::shared_ptr<tesseract_environment::Environment>)));
-  connect(data_->joint_trajectory_widget, SIGNAL(configureJointTrajectorySet(QString,tesseract_common::JointTrajectorySet)), this, SLOT(onConfigureJointTrajectorySet(QString,tesseract_common::JointTrajectorySet)));
-  connect(data_->joint_trajectory_widget, SIGNAL(jointTrajectorySetRemoved(QString)), this, SLOT(onJointTrajectorySetRemoved(QString)));
-  connect(data_->joint_trajectory_widget, SIGNAL(showJointState(tesseract_common::JointState)), this, SLOT(onJointTrajectorySetState(tesseract_common::JointState)));
+  connect(data_->environment_widget,
+          SIGNAL(environmentSet(std::shared_ptr<tesseract_environment::Environment>)),
+          this,
+          SLOT(onEnvironmentSet(std::shared_ptr<tesseract_environment::Environment>)));
+  connect(data_->joint_trajectory_widget,
+          SIGNAL(configureJointTrajectorySet(QString, tesseract_common::JointTrajectorySet)),
+          this,
+          SLOT(onConfigureJointTrajectorySet(QString, tesseract_common::JointTrajectorySet)));
+  connect(data_->joint_trajectory_widget,
+          SIGNAL(jointTrajectorySetRemoved(QString)),
+          this,
+          SLOT(onJointTrajectorySetRemoved(QString)));
+  connect(data_->joint_trajectory_widget,
+          SIGNAL(showJointState(tesseract_common::JointState)),
+          this,
+          SLOT(onJointTrajectorySetState(tesseract_common::JointState)));
 
-  { // Add environment widget
-    auto* layout = new QVBoxLayout(); // NOLINT
+  {                                    // Add environment widget
+    auto* layout = new QVBoxLayout();  // NOLINT
     layout->setMargin(0);
     layout->addWidget(environment_widget);
     ui->environment_tab->setLayout(layout);
   }
 
-  { // Add joint trajectory widget
-    auto* layout = new QHBoxLayout(); // NOLINT
+  {                                    // Add joint trajectory widget
+    auto* layout = new QHBoxLayout();  // NOLINT
     layout->setMargin(0);
     layout->addWidget(data_->joint_trajectory_environment_widget);
     layout->addWidget(data_->joint_trajectory_widget);
@@ -85,7 +94,10 @@ EnvironmentWidget& WorkbenchWidget::getEnvironmentWidget() { return *data_->envi
 const EnvironmentWidget& WorkbenchWidget::getEnvironmentWidget() const { return *data_->environment_widget; }
 
 JointTrajectoryWidget& WorkbenchWidget::getJointTrajectoryWidget() { return *data_->joint_trajectory_widget; }
-const JointTrajectoryWidget& WorkbenchWidget::getJointTrajectoryWidget() const { return *data_->joint_trajectory_widget; }
+const JointTrajectoryWidget& WorkbenchWidget::getJointTrajectoryWidget() const
+{
+  return *data_->joint_trajectory_widget;
+}
 
 void WorkbenchWidget::onRender()
 {
@@ -105,7 +117,8 @@ void WorkbenchWidget::onEnvironmentSet(const std::shared_ptr<tesseract_environme
   data_->joint_trajectory_widget->setDefaultEnvironment(env);
 }
 
-void WorkbenchWidget::onConfigureJointTrajectorySet(const QString& uuid, const tesseract_common::JointTrajectorySet& joint_trajectory_set)
+void WorkbenchWidget::onConfigureJointTrajectorySet(const QString& uuid,
+                                                    const tesseract_common::JointTrajectorySet& joint_trajectory_set)
 {
   auto it = data_->joint_trajectory_environment_configs.find(uuid.toStdString());
   if (it != data_->joint_trajectory_environment_configs.end())
@@ -134,4 +147,4 @@ void WorkbenchWidget::onJointTrajectorySetRemoved(const QString& uuid)
   data_->joint_trajectory_environment_configs.erase(uuid.toStdString());
 }
 
-}
+}  // namespace tesseract_gui

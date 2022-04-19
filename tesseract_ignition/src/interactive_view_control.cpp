@@ -46,7 +46,7 @@ public:
   /// \param[in] _msg Request message to set the camera view controller
   /// \param[in] _res Response data
   /// \return True if the request is received
-  bool OnViewControl(const ignition::msgs::StringMsg &_msg, ignition::msgs::Boolean &_res);
+  bool OnViewControl(const ignition::msgs::StringMsg& _msg, ignition::msgs::Boolean& _res);
 
   /// \brief The scene key the control is associated with
   std::string scene_name;
@@ -64,7 +64,7 @@ public:
   ignition::math::Vector2d drag;
 
   /// \brief User camera
-  ignition::rendering::CameraPtr camera{nullptr};
+  ignition::rendering::CameraPtr camera{ nullptr };
 
   /// \brief View control focus target
   ignition::math::Vector3d target;
@@ -76,22 +76,22 @@ public:
   ignition::rendering::OrthoViewController orthoViewControl;
 
   /// \brief Camera view controller
-  ignition::rendering::ViewController *viewControl{nullptr};
+  ignition::rendering::ViewController* viewControl{ nullptr };
 
   /// \brief Mutex to protect View Controllers
   std::mutex mutex;
 
   /// \brief View controller
-  std::string viewController{"orbit"};
+  std::string viewController{ "orbit" };
 
   /// \brief Camera view control service
   std::string cameraViewControlService;
 
   /// \brief Ray query for mouse clicks
-  ignition::rendering::RayQueryPtr rayQuery{nullptr};
+  ignition::rendering::RayQueryPtr rayQuery{ nullptr };
 
   //// \brief Pointer to the rendering scene
-  ignition::rendering::ScenePtr scene{nullptr};
+  ignition::rendering::ScenePtr scene{ nullptr };
 
   /// \brief Transport node for making transform control requests
   ignition::transport::Node node;
@@ -118,15 +118,14 @@ void InteractiveViewControlPrivate::OnRender()
         {
           isUserCamera = std::get<bool>(cam->UserData("user-camera"));
         }
-        catch (std::bad_variant_access &)
+        catch (std::bad_variant_access&)
         {
           continue;
         }
         if (isUserCamera)
         {
           this->camera = cam;
-          igndbg << "InteractiveViewControl plugin is moving camera ["
-                 << this->camera->Name() << "]" << std::endl;
+          igndbg << "InteractiveViewControl plugin is moving camera [" << this->camera->Name() << "]" << std::endl;
           break;
         }
       }
@@ -142,7 +141,7 @@ void InteractiveViewControlPrivate::OnRender()
 
   if (this->blockOrbit)
   {
-    this->drag = {0, 0};
+    this->drag = { 0, 0 };
     return;
   }
 
@@ -164,8 +163,8 @@ void InteractiveViewControlPrivate::OnRender()
   }
   else
   {
-    ignerr << "Unknown view controller: " << this->viewController
-           << ". Defaulting to orbit view controller" << std::endl;
+    ignerr << "Unknown view controller: " << this->viewController << ". Defaulting to orbit view controller"
+           << std::endl;
     this->viewController = "orbit";
     this->viewControl = &this->orbitViewControl;
   }
@@ -206,7 +205,8 @@ void InteractiveViewControlPrivate::OnRender()
       double hfov = this->camera->HFOV().Radian();
       double vfov = 2.0f * atan(tan(hfov / 2.0F) / this->camera->AspectRatio());
       double distance = this->camera->WorldPosition().Distance(this->target);
-      double amount = ((-this->drag.Y() / static_cast<double>(this->camera->ImageHeight())) * distance * tan(vfov/2.0) * 6.0);
+      double amount =
+          ((-this->drag.Y() / static_cast<double>(this->camera->ImageHeight())) * distance * tan(vfov / 2.0) * 6.0);
       this->viewControl->Zoom(amount);
     }
   }
@@ -215,14 +215,13 @@ void InteractiveViewControlPrivate::OnRender()
 }
 
 /////////////////////////////////////////////////
-bool InteractiveViewControlPrivate::OnViewControl(const ignition::msgs::StringMsg &_msg, ignition::msgs::Boolean &_res)
+bool InteractiveViewControlPrivate::OnViewControl(const ignition::msgs::StringMsg& _msg, ignition::msgs::Boolean& _res)
 {
   std::lock_guard<std::mutex> lock(this->mutex);
 
   if (_msg.data() != "orbit" && _msg.data() != "ortho")
   {
-    ignwarn << "View controller type not supported [" << _msg.data() << "]"
-            << std::endl;
+    ignwarn << "View controller type not supported [" << _msg.data() << "]" << std::endl;
     _res.set_data(false);
     return true;
   }
@@ -238,7 +237,7 @@ bool InteractiveViewControlPrivate::OnViewControl(const ignition::msgs::StringMs
 }
 
 /////////////////////////////////////////////////
-InteractiveViewControl::InteractiveViewControl(const std::string &scene_name)
+InteractiveViewControl::InteractiveViewControl(const std::string& scene_name)
   : dataPtr(std::make_unique<InteractiveViewControlPrivate>())
 {
   dataPtr->scene_name = scene_name;
@@ -248,7 +247,7 @@ InteractiveViewControl::InteractiveViewControl(const std::string &scene_name)
 InteractiveViewControl::~InteractiveViewControl() = default;
 
 /////////////////////////////////////////////////
-//void InteractiveViewControl::LoadConfig(
+// void InteractiveViewControl::LoadConfig(
 //  const tinyxml2::XMLElement * /*_pluginElem*/)
 //{
 //  // camera view control mode
@@ -263,12 +262,12 @@ InteractiveViewControl::~InteractiveViewControl() = default;
 //}
 
 /////////////////////////////////////////////////
-bool InteractiveViewControl::eventFilter(QObject *_obj, QEvent *_event)
+bool InteractiveViewControl::eventFilter(QObject* _obj, QEvent* _event)
 {
   if (_event->type() == events::Render::kType)
   {
-    assert(dynamic_cast<events::Render *>(_event) != nullptr);
-    auto* event = static_cast<events::Render *>(_event);
+    assert(dynamic_cast<events::Render*>(_event) != nullptr);
+    auto* event = static_cast<events::Render*>(_event);
     if (event->getSceneName() == this->dataPtr->scene_name)
     {
       this->dataPtr->OnRender();
@@ -276,8 +275,8 @@ bool InteractiveViewControl::eventFilter(QObject *_obj, QEvent *_event)
   }
   else if (_event->type() == events::LeftClickOnScene::kType)
   {
-    assert(dynamic_cast<events::LeftClickOnScene *>(_event) != nullptr);
-    auto* event = static_cast<events::LeftClickOnScene *>(_event);
+    assert(dynamic_cast<events::LeftClickOnScene*>(_event) != nullptr);
+    auto* event = static_cast<events::LeftClickOnScene*>(_event);
     if (event->getSceneName() == this->dataPtr->scene_name)
     {
       this->dataPtr->mouseDirty = true;
@@ -287,8 +286,8 @@ bool InteractiveViewControl::eventFilter(QObject *_obj, QEvent *_event)
   }
   else if (_event->type() == events::MousePressOnScene::kType)
   {
-    assert(dynamic_cast<events::MousePressOnScene *>(_event) != nullptr);
-    auto* event =  static_cast<events::MousePressOnScene *>(_event);
+    assert(dynamic_cast<events::MousePressOnScene*>(_event) != nullptr);
+    auto* event = static_cast<events::MousePressOnScene*>(_event);
     if (event->getSceneName() == this->dataPtr->scene_name)
     {
       this->dataPtr->mouseDirty = true;
@@ -298,8 +297,8 @@ bool InteractiveViewControl::eventFilter(QObject *_obj, QEvent *_event)
   }
   else if (_event->type() == events::DragOnScene::kType)
   {
-    assert(dynamic_cast<events::DragOnScene *>(_event) != nullptr);
-    auto* event = reinterpret_cast<events::DragOnScene *>(_event);
+    assert(dynamic_cast<events::DragOnScene*>(_event) != nullptr);
+    auto* event = reinterpret_cast<events::DragOnScene*>(_event);
     if (event->getSceneName() == this->dataPtr->scene_name)
     {
       this->dataPtr->mouseDirty = true;
@@ -315,8 +314,8 @@ bool InteractiveViewControl::eventFilter(QObject *_obj, QEvent *_event)
   }
   else if (_event->type() == events::ScrollOnScene::kType)
   {
-    assert(dynamic_cast<events::ScrollOnScene *>(_event) != nullptr);
-    auto* event = static_cast<events::ScrollOnScene *>(_event);
+    assert(dynamic_cast<events::ScrollOnScene*>(_event) != nullptr);
+    auto* event = static_cast<events::ScrollOnScene*>(_event);
     if (event->getSceneName() == this->dataPtr->scene_name)
     {
       this->dataPtr->mouseDirty = true;
@@ -326,8 +325,8 @@ bool InteractiveViewControl::eventFilter(QObject *_obj, QEvent *_event)
   }
   else if (_event->type() == events::BlockOrbit::kType)
   {
-    assert(dynamic_cast<events::BlockOrbit *>(_event) != nullptr);
-    auto* event = static_cast<events::BlockOrbit *>(_event);
+    assert(dynamic_cast<events::BlockOrbit*>(_event) != nullptr);
+    auto* event = static_cast<events::BlockOrbit*>(_event);
     if (event->getSceneName() == this->dataPtr->scene_name)
     {
       this->dataPtr->blockOrbit = event->Block();

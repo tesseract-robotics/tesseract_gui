@@ -36,18 +36,18 @@ namespace tesseract_gui
 {
 class AllowedCollisionMatrixModel : public QStandardItemModel
 {
-    Q_OBJECT
+  Q_OBJECT
 public:
-  AllowedCollisionMatrixModel(QObject *parent = nullptr);
-  AllowedCollisionMatrixModel(const AllowedCollisionMatrixModel &other);
-  AllowedCollisionMatrixModel &operator=(const AllowedCollisionMatrixModel &other);
+  AllowedCollisionMatrixModel(QObject* parent = nullptr);
+  AllowedCollisionMatrixModel(const AllowedCollisionMatrixModel& other);
+  AllowedCollisionMatrixModel& operator=(const AllowedCollisionMatrixModel& other);
   ~AllowedCollisionMatrixModel() override = default;
 
   Q_INVOKABLE void setAllowedCollisionMatrix(const tesseract_common::AllowedCollisionMatrix& acm);
   Q_INVOKABLE void add(const QString& link1_name, const QString& link2_name, const QString& reason);
   Q_INVOKABLE void clear();
 
-  bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
+  bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
 
   tesseract_common::AllowedCollisionMatrix getAllowedCollisionMatrix() const;
 
@@ -60,7 +60,7 @@ Q_SIGNALS:
 private:
   tesseract_common::AllowedCollisionMatrix acm_;
 };
-}
+}  // namespace tesseract_gui
 Q_DECLARE_METATYPE(tesseract_gui::AllowedCollisionMatrixModel)
 
-#endif // TESSERACT_WIDGETS_ACM_ALLOWED_COLLISION_MATRIX_MODEL_H
+#endif  // TESSERACT_WIDGETS_ACM_ALLOWED_COLLISION_MATRIX_MODEL_H

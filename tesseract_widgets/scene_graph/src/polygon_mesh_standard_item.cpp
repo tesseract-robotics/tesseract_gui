@@ -29,30 +29,26 @@
 namespace tesseract_gui
 {
 PolygonMeshStandardItem::PolygonMeshStandardItem(tesseract_geometry::PolygonMesh::Ptr mesh)
-  : QStandardItem(icons::getConvexMeshIcon(), "PolygonMesh")
-  , mesh(std::move(mesh))
+  : QStandardItem(icons::getConvexMeshIcon(), "PolygonMesh"), mesh(std::move(mesh))
 {
   ctor();
 }
 
-PolygonMeshStandardItem::PolygonMeshStandardItem(const QString &text, tesseract_geometry::PolygonMesh::Ptr mesh)
-  : QStandardItem(icons::getConvexMeshIcon(), text)
-  , mesh(std::move(mesh))
+PolygonMeshStandardItem::PolygonMeshStandardItem(const QString& text, tesseract_geometry::PolygonMesh::Ptr mesh)
+  : QStandardItem(icons::getConvexMeshIcon(), text), mesh(std::move(mesh))
 {
   ctor();
 }
 
-PolygonMeshStandardItem::PolygonMeshStandardItem(const QIcon &icon, const QString &text, tesseract_geometry::PolygonMesh::Ptr mesh)
-  : QStandardItem(icon, text)
-  , mesh(std::move(mesh))
+PolygonMeshStandardItem::PolygonMeshStandardItem(const QIcon& icon,
+                                                 const QString& text,
+                                                 tesseract_geometry::PolygonMesh::Ptr mesh)
+  : QStandardItem(icon, text), mesh(std::move(mesh))
 {
   ctor();
 }
 
-int PolygonMeshStandardItem::type() const
-{
-  return static_cast<int>(StandardItemType::POLYGON_MESH);
-}
+int PolygonMeshStandardItem::type() const { return static_cast<int>(StandardItemType::POLYGON_MESH); }
 
 void PolygonMeshStandardItem::ctor()
 {
@@ -61,7 +57,7 @@ void PolygonMeshStandardItem::ctor()
     setIcon(icons::getConvexMeshIcon());
     setText("Convex Mesh");
 
-    std::string method {"Default"};
+    std::string method{ "Default" };
     auto convex_mesh = std::static_pointer_cast<tesseract_geometry::ConvexMesh>(mesh);
     if (convex_mesh->getCreationMethod() == tesseract_geometry::ConvexMesh::MESH)
       method = "Mesh";
@@ -89,5 +85,4 @@ void PolygonMeshStandardItem::ctor()
   appendRow(createStandardItemInt("vertex count", mesh->getVertexCount()));
   appendRow(createStandardItemInt("face count", mesh->getFaceCount()));
 }
-}
-
+}  // namespace tesseract_gui

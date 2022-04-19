@@ -34,15 +34,11 @@
 
 struct compareX
 {
-  inline bool operator()(const double x, const QPointF& pos) const
-  {
-    return (x < pos.x());
-  }
+  inline bool operator()(const double x, const QPointF& pos) const { return (x < pos.x()); }
 };
 
 namespace tesseract_gui
 {
-
 CurveTracker::CurveTracker(QwtPlot* plot) : QObject(plot), _plot(plot), _param(VALUE)
 {
   _line_marker = new QwtPlotMarker();
@@ -58,14 +54,9 @@ CurveTracker::CurveTracker(QwtPlot* plot) : QObject(plot), _plot(plot), _param(V
   _visible = true;
 }
 
-CurveTracker::~CurveTracker()
-{
-}
+CurveTracker::~CurveTracker() {}
 
-QPointF CurveTracker::actualPosition() const
-{
-  return _prev_trackerpoint;
-}
+QPointF CurveTracker::actualPosition() const { return _prev_trackerpoint; }
 
 void CurveTracker::setParameter(Parameter par)
 {
@@ -90,10 +81,7 @@ void CurveTracker::setEnabled(bool enable)
   }
 }
 
-bool CurveTracker::isEnabled() const
-{
-  return _visible;
-}
+bool CurveTracker::isEnabled() const { return _visible; }
 
 void CurveTracker::setPosition(const QPointF& position)
 {
@@ -142,8 +130,7 @@ void CurveTracker::setPosition(const QPointF& position)
 
     if (!_marker[i]->symbol() || _marker[i]->symbol()->brush().color() != color)
     {
-      QwtSymbol* sym =
-          new QwtSymbol(QwtSymbol::Ellipse, color, QPen(Qt::black), QSize(5, 5));
+      QwtSymbol* sym = new QwtSymbol(QwtSymbol::Ellipse, color, QPen(Qt::black), QSize(5, 5));
       _marker[i]->setSymbol(sym);
     }
 
@@ -185,10 +172,7 @@ void CurveTracker::setPosition(const QPointF& position)
         while (whitespaces-- > 0)
           value.prepend("&nbsp;");
 
-        line = QString("<font color=%1>%2 : %3</font>")
-                   .arg(color.name())
-                   .arg(value)
-                   .arg(curve->title().text());
+        line = QString("<font color=%1>%2 : %3</font>").arg(color.name()).arg(value).arg(curve->title().text());
       }
 
       text_lines.insert(std::make_pair(val, line));
@@ -267,4 +251,4 @@ QLineF CurveTracker::curveLineAt(const QwtPlotCurve* curve, double x) const
   }
   return line;
 }
-}
+}  // namespace tesseract_gui

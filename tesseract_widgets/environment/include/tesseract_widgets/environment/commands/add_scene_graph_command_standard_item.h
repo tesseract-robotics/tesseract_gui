@@ -38,16 +38,18 @@ class AddSceneGraphCommandStandardItem : public QStandardItem
 {
 public:
   explicit AddSceneGraphCommandStandardItem(tesseract_environment::AddSceneGraphCommand::ConstPtr command);
-  explicit AddSceneGraphCommandStandardItem(const QString &text, tesseract_environment::AddSceneGraphCommand::ConstPtr command);
-  explicit AddSceneGraphCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::AddSceneGraphCommand::ConstPtr command);
+  explicit AddSceneGraphCommandStandardItem(const QString& text,
+                                            tesseract_environment::AddSceneGraphCommand::ConstPtr command);
+  explicit AddSceneGraphCommandStandardItem(const QIcon& icon,
+                                            const QString& text,
+                                            tesseract_environment::AddSceneGraphCommand::ConstPtr command);
   int type() const override;
-
 
   tesseract_environment::AddSceneGraphCommand::ConstPtr command;
 
 private:
   void ctor();
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_ENVIRONMENT_ADD_SCENE_GRAPH_COMMAND_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_ENVIRONMENT_ADD_SCENE_GRAPH_COMMAND_STANDARD_ITEM_H

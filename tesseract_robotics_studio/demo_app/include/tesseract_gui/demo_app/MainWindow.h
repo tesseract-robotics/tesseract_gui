@@ -18,7 +18,6 @@
 ** License along with this library; If not, see <http://www.gnu.org/licenses/>.
 ******************************************************************************/
 
-
 //============================================================================
 /// \file   MainWindow.h
 /// \author Uwe Kindler
@@ -26,16 +25,12 @@
 /// \brief  Declaration of CMainWindow class
 //============================================================================
 
-
 //============================================================================
 //                                   INCLUDES
 //============================================================================
 #include <QMainWindow>
 
-
-
 struct MainWindowPrivate;
-
 
 /**
  * Simple main window for demo
@@ -44,14 +39,14 @@ class CMainWindow : public QMainWindow
 {
   Q_OBJECT
 private:
-  MainWindowPrivate* d;///< private data - pimpl
+  MainWindowPrivate* d;  ///< private data - pimpl
   friend struct MainWindowPrivate;
 
 protected:
   virtual void closeEvent(QCloseEvent* event) override;
 
 public:
-  explicit CMainWindow(QWidget *parent = 0);
+  explicit CMainWindow(QWidget* parent = 0);
   virtual ~CMainWindow();
 
 private slots:
@@ -67,4 +62,4 @@ private slots:
   void toggleDockWidgetWindowTitle();
 };
 
-#endif // MAINWINDOW_H
+#endif  // MAINWINDOW_H

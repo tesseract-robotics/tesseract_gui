@@ -38,8 +38,8 @@ class ChainGroupStandardItem : public QStandardItem
 {
 public:
   ChainGroupStandardItem(tesseract_srdf::ChainGroup group);
-  explicit ChainGroupStandardItem(const QString &text, tesseract_srdf::ChainGroup group);
-  ChainGroupStandardItem(const QIcon &icon, const QString &text, tesseract_srdf::ChainGroup group);
+  explicit ChainGroupStandardItem(const QString& text, tesseract_srdf::ChainGroup group);
+  ChainGroupStandardItem(const QIcon& icon, const QString& text, tesseract_srdf::ChainGroup group);
   int type() const override;
 
   tesseract_srdf::ChainGroup group;
@@ -47,6 +47,6 @@ public:
 private:
   void ctor();
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_KINEMATICS_GROUP_CHAIN_GROUP_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_KINEMATICS_GROUP_CHAIN_GROUP_STANDARD_ITEM_H

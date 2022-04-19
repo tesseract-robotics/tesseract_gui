@@ -29,24 +29,26 @@
 
 namespace tesseract_gui
 {
-
-AddSceneGraphCommandStandardItem::AddSceneGraphCommandStandardItem(tesseract_environment::AddSceneGraphCommand::ConstPtr command)
-  : QStandardItem(icons::getCommandEntryIcon(), "Add Scene Graph")
-  , command(std::move(command))
+AddSceneGraphCommandStandardItem::AddSceneGraphCommandStandardItem(
+    tesseract_environment::AddSceneGraphCommand::ConstPtr command)
+  : QStandardItem(icons::getCommandEntryIcon(), "Add Scene Graph"), command(std::move(command))
 {
   ctor();
 }
 
-AddSceneGraphCommandStandardItem::AddSceneGraphCommandStandardItem(const QString &text, tesseract_environment::AddSceneGraphCommand::ConstPtr command)
-  : QStandardItem(icons::getCommandEntryIcon(), text)
-  , command(std::move(command))
+AddSceneGraphCommandStandardItem::AddSceneGraphCommandStandardItem(
+    const QString& text,
+    tesseract_environment::AddSceneGraphCommand::ConstPtr command)
+  : QStandardItem(icons::getCommandEntryIcon(), text), command(std::move(command))
 {
   ctor();
 }
 
-AddSceneGraphCommandStandardItem::AddSceneGraphCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::AddSceneGraphCommand::ConstPtr command)
-  : QStandardItem(icon, text)
-  , command(std::move(command))
+AddSceneGraphCommandStandardItem::AddSceneGraphCommandStandardItem(
+    const QIcon& icon,
+    const QString& text,
+    tesseract_environment::AddSceneGraphCommand::ConstPtr command)
+  : QStandardItem(icon, text), command(std::move(command))
 {
   ctor();
 }
@@ -67,4 +69,4 @@ void AddSceneGraphCommandStandardItem::ctor()
 
   appendRow(new SceneGraphStandardItem(command->getSceneGraph()->clone()));
 }
-}
+}  // namespace tesseract_gui

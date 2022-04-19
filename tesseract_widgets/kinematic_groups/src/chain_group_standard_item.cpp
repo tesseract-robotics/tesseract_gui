@@ -27,37 +27,29 @@
 
 namespace tesseract_gui
 {
-
 ChainGroupStandardItem::ChainGroupStandardItem(tesseract_srdf::ChainGroup group)
-  : QStandardItem(icons::getRobotArmIcon(), "Chain Group")
-  , group(std::move(group))
+  : QStandardItem(icons::getRobotArmIcon(), "Chain Group"), group(std::move(group))
 {
   ctor();
 }
 
-ChainGroupStandardItem::ChainGroupStandardItem(const QString &text, tesseract_srdf::ChainGroup group)
-  : QStandardItem(icons::getRobotArmIcon(), text)
-  , group(std::move(group))
+ChainGroupStandardItem::ChainGroupStandardItem(const QString& text, tesseract_srdf::ChainGroup group)
+  : QStandardItem(icons::getRobotArmIcon(), text), group(std::move(group))
 {
   ctor();
 }
 
-ChainGroupStandardItem::ChainGroupStandardItem(const QIcon &icon, const QString &text, tesseract_srdf::ChainGroup group)
-  : QStandardItem(icon, text)
-  , group(std::move(group))
+ChainGroupStandardItem::ChainGroupStandardItem(const QIcon& icon, const QString& text, tesseract_srdf::ChainGroup group)
+  : QStandardItem(icon, text), group(std::move(group))
 {
   ctor();
 }
 
-int ChainGroupStandardItem::type() const
-{
-  return static_cast<int>(StandardItemType::CHAIN_GROUP);
-}
+int ChainGroupStandardItem::type() const { return static_cast<int>(StandardItemType::CHAIN_GROUP); }
 
 void ChainGroupStandardItem::ctor()
 {
   appendRow(createStandardItemString("base link", group.front().first));
   appendRow(createStandardItemString("tip link", group.front().second));
 }
-}
-
+}  // namespace tesseract_gui

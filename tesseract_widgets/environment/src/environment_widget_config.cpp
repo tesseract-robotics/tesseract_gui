@@ -36,7 +36,6 @@
 
 namespace tesseract_gui
 {
-
 struct EnvironmentWidgetConfigImpl
 {
   std::size_t hash;
@@ -54,8 +53,7 @@ struct EnvironmentWidgetConfigImpl
   EnvironmentCommandsModel commands_model;
 };
 
-EnvironmentWidgetConfig::EnvironmentWidgetConfig()
-  : data_(std::make_unique<EnvironmentWidgetConfigImpl>())
+EnvironmentWidgetConfig::EnvironmentWidgetConfig() : data_(std::make_unique<EnvironmentWidgetConfigImpl>())
 {
   data_->hash = std::hash<EnvironmentWidgetConfig*>{}(this);
 }
@@ -74,7 +72,8 @@ void EnvironmentWidgetConfig::setEnvironment(tesseract_environment::Environment:
     data_->environment->removeEventCallback(data_->hash);
 
   data_->environment = std::move(env);
-  data_->environment->addEventCallback(data_->hash, [this](const tesseract_environment::Event& event){this->tesseractEventFilter(event);});
+  data_->environment->addEventCallback(
+      data_->hash, [this](const tesseract_environment::Event& event) { this->tesseractEventFilter(event); });
 
   clear();
 
@@ -83,25 +82,16 @@ void EnvironmentWidgetConfig::setEnvironment(tesseract_environment::Environment:
   emit environmentSet(data_->environment);
 }
 
-const tesseract_environment::Environment& EnvironmentWidgetConfig::environment() const
-{
-  return *(data_->environment);
-}
+const tesseract_environment::Environment& EnvironmentWidgetConfig::environment() const { return *(data_->environment); }
 
-tesseract_environment::Environment& EnvironmentWidgetConfig::environment()
-{
-  return *(data_->environment);
-}
+tesseract_environment::Environment& EnvironmentWidgetConfig::environment() { return *(data_->environment); }
 
 tesseract_environment::Environment::ConstPtr EnvironmentWidgetConfig::getEnvironment() const
 {
   return data_->environment;
 }
 
-tesseract_environment::Environment::Ptr EnvironmentWidgetConfig::getEnvironment()
-{
-  return data_->environment;
-}
+tesseract_environment::Environment::Ptr EnvironmentWidgetConfig::getEnvironment() { return data_->environment; }
 
 const LinkVisibilityPropertiesMap& EnvironmentWidgetConfig::getLinkVisibilityProperties() const
 {
@@ -113,13 +103,13 @@ LinkVisibilityPropertiesMap& EnvironmentWidgetConfig::getLinkVisibilityPropertie
   return data_->link_visibility_properties;
 }
 
-QStandardItemModel& EnvironmentWidgetConfig::getSceneGraphModel() {return data_->scene_model;}
-SceneStateModel& EnvironmentWidgetConfig::getSceneStateModel() {return data_->scene_state_model;}
-KinematicGroupsModel& EnvironmentWidgetConfig::getKinematicGroupsModel() {return data_->group_model;}
-GroupTCPsModel& EnvironmentWidgetConfig::getGroupTCPsModel() {return data_->group_tcps_model;}
-GroupJointStatesModel& EnvironmentWidgetConfig::getGroupJointStatesModel() {return data_->group_states_model;}
-AllowedCollisionMatrixModel& EnvironmentWidgetConfig::getAllowedCollisionMatrixModel() {return data_->acm_model;}
-EnvironmentCommandsModel& EnvironmentWidgetConfig::getEnvironmentCommandsModel() {return data_->commands_model;}
+QStandardItemModel& EnvironmentWidgetConfig::getSceneGraphModel() { return data_->scene_model; }
+SceneStateModel& EnvironmentWidgetConfig::getSceneStateModel() { return data_->scene_state_model; }
+KinematicGroupsModel& EnvironmentWidgetConfig::getKinematicGroupsModel() { return data_->group_model; }
+GroupTCPsModel& EnvironmentWidgetConfig::getGroupTCPsModel() { return data_->group_tcps_model; }
+GroupJointStatesModel& EnvironmentWidgetConfig::getGroupJointStatesModel() { return data_->group_states_model; }
+AllowedCollisionMatrixModel& EnvironmentWidgetConfig::getAllowedCollisionMatrixModel() { return data_->acm_model; }
+EnvironmentCommandsModel& EnvironmentWidgetConfig::getEnvironmentCommandsModel() { return data_->commands_model; }
 
 void EnvironmentWidgetConfig::clear()
 {
@@ -156,7 +146,7 @@ void EnvironmentWidgetConfig::onUpdateSceneGraphModel()
 
   data_->scene_model.clear();
   data_->scene_model.setColumnCount(2);
-  data_->scene_model.setHorizontalHeaderLabels({"Name", "Values"});
+  data_->scene_model.setHorizontalHeaderLabels({ "Name", "Values" });
   auto* scene_item = new tesseract_gui::SceneGraphStandardItem(data_->environment->getSceneGraph()->clone());
   data_->scene_model.appendRow(scene_item);
 
@@ -240,4 +230,4 @@ EnvironmentWidgetConfig::UPtr EnvironmentWidgetConfig::clone() const
   return c;
 }
 
-}
+}  // namespace tesseract_gui

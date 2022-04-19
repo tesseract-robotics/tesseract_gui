@@ -27,6 +27,7 @@
 
 namespace tesseract_gui
 {
+// clang-format off
 enum class StandardItemType : int
 {
   // Common Types
@@ -111,6 +112,7 @@ enum class StandardItemType : int
   ENV_COMMAND_COMMANDS                              = SCENE_GRAPH_TYPES_END + 24,
   ENV_COMMAND_TYPES_END                             = SCENE_GRAPH_TYPES_END + 25,
 };
-}
+// clang-format on
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_GUI_COMMON_STANDARD_ITEMS_TYPES_H
+#endif  // TESSERACT_GUI_COMMON_STANDARD_ITEMS_TYPES_H

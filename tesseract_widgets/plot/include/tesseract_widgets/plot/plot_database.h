@@ -93,29 +93,15 @@ class PlotGroup
 public:
   using Ptr = std::shared_ptr<PlotGroup>;
 
-  PlotGroup(const std::string& name) : _name(name)
-  {
-  }
+  PlotGroup(const std::string& name) : _name(name) {}
 
-  const std::string& name() const
-  {
-    return _name;
-  }
+  const std::string& name() const { return _name; }
 
-  void setAttribute(const std::string& name, const QVariant& value)
-  {
-    _attributes[name] = value;
-  }
+  void setAttribute(const std::string& name, const QVariant& value) { _attributes[name] = value; }
 
-  const Attributes& attributes() const
-  {
-    return _attributes;
-  }
+  const Attributes& attributes() const { return _attributes; }
 
-  Attributes& attributes()
-  {
-    return _attributes;
-  }
+  Attributes& attributes() { return _attributes; }
 
   QVariant attribute(const std::string& name) const
   {
@@ -131,15 +117,9 @@ public:
     }
   }
 
-  void setAttribute(const PlotAttribute& id, const QVariant& value)
-  {
-    _attributes[ToStr(id)] = value;
-  }
+  void setAttribute(const PlotAttribute& id, const QVariant& value) { _attributes[ToStr(id)] = value; }
 
-  QVariant attribute(const PlotAttribute& id) const
-  {
-    return attribute(ToStr(id));
-  }
+  QVariant attribute(const PlotAttribute& id) const { return attribute(ToStr(id)); }
 
 private:
   const std::string _name;
@@ -156,9 +136,7 @@ public:
   public:
     TypeX x;
     Value y;
-    Point(TypeX _x, Value _y) : x(_x), y(_y)
-    {
-    }
+    Point(TypeX _x, Value _y) : x(_x), y(_y) {}
     Point() = default;
   };
 
@@ -184,45 +162,21 @@ public:
 
   virtual ~PlotDataBase() = default;
 
-  const std::string& plotName() const
-  {
-    return _name;
-  }
+  const std::string& plotName() const { return _name; }
 
-  const PlotGroup::Ptr& group() const
-  {
-    return _group;
-  }
+  const PlotGroup::Ptr& group() const { return _group; }
 
-  void changeGroup(PlotGroup::Ptr group)
-  {
-    _group = group;
-  }
+  void changeGroup(PlotGroup::Ptr group) { _group = group; }
 
-  virtual size_t size() const
-  {
-    return _points.size();
-  }
+  virtual size_t size() const { return _points.size(); }
 
-  const Point& at(size_t index) const
-  {
-    return _points[index];
-  }
+  const Point& at(size_t index) const { return _points[index]; }
 
-  Point& at(size_t index)
-  {
-    return _points[index];
-  }
+  Point& at(size_t index) { return _points[index]; }
 
-  const Point& operator[](size_t index) const
-  {
-    return at(index);
-  }
+  const Point& operator[](size_t index) const { return at(index); }
 
-  Point& operator[](size_t index)
-  {
-    return at(index);
-  }
+  Point& operator[](size_t index) { return at(index); }
 
   virtual void clear()
   {
@@ -231,20 +185,11 @@ public:
     _range_y_dirty = true;
   }
 
-  void setAttribute(const std::string& name, const QVariant& value)
-  {
-    _attributes[name] = value;
-  }
+  void setAttribute(const std::string& name, const QVariant& value) { _attributes[name] = value; }
 
-  const Attributes& attributes() const
-  {
-    return _attributes;
-  }
+  const Attributes& attributes() const { return _attributes; }
 
-  Attributes& attributes()
-  {
-    return _attributes;
-  }
+  Attributes& attributes() { return _attributes; }
 
   QVariant attribute(const std::string& name) const
   {
@@ -260,45 +205,21 @@ public:
     }
   }
 
-  void setAttribute(const PlotAttribute& id, const QVariant& value)
-  {
-    _attributes[ToStr(id)] = value;
-  }
+  void setAttribute(const PlotAttribute& id, const QVariant& value) { _attributes[ToStr(id)] = value; }
 
-  QVariant attribute(const PlotAttribute& id) const
-  {
-    return attribute(ToStr(id));
-  }
+  QVariant attribute(const PlotAttribute& id) const { return attribute(ToStr(id)); }
 
-  const Point& front() const
-  {
-    return _points.front();
-  }
+  const Point& front() const { return _points.front(); }
 
-  const Point& back() const
-  {
-    return _points.back();
-  }
+  const Point& back() const { return _points.back(); }
 
-  ConstIterator begin() const
-  {
-    return _points.begin();
-  }
+  ConstIterator begin() const { return _points.begin(); }
 
-  ConstIterator end() const
-  {
-    return _points.end();
-  }
+  ConstIterator end() const { return _points.end(); }
 
-  Iterator begin()
-  {
-    return _points.begin();
-  }
+  Iterator begin() { return _points.begin(); }
 
-  Iterator end()
-  {
-    return _points.end();
-  }
+  Iterator end() { return _points.end(); }
 
   // template specialization for types that support compare operator
   virtual RangeOpt rangeX() const
@@ -488,4 +409,4 @@ protected:
 
 }  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_PLOT_PLOTDATA_BASE_H
+#endif  // TESSERACT_WIDGETS_PLOT_PLOTDATA_BASE_H

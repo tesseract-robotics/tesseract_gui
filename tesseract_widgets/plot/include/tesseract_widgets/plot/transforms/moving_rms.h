@@ -44,10 +44,7 @@ public:
 
   void reset() override;
 
-  const char* name() const override
-  {
-    return "Moving Root Mean Squared";
-  }
+  const char* name() const override { return "Moving Root Mean Squared"; }
 
   QWidget* optionsWidget() override;
 
@@ -60,6 +57,6 @@ private:
   std::optional<PlotData::Point> calculateNextPoint(size_t index) override;
 };
 
-}
+}  // namespace tesseract_gui
 
 #endif  // TESSERACT_WIDGETS_PLOT_TRANSFORMS_MOVING_RMS_H

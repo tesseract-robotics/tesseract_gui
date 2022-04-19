@@ -27,9 +27,9 @@
 #include <QtQuickWidgets/QQuickWidget>
 namespace tesseract_gui
 {
-GroupsJointStatesEditorWidget::GroupsJointStatesEditorWidget(QStringListModel *group_names_model,
+GroupsJointStatesEditorWidget::GroupsJointStatesEditorWidget(QStringListModel* group_names_model,
                                                              GroupJointsRetriever group_joints_retriever,
-                                                             QWidget *parent)
+                                                             QWidget* parent)
   : QWidget(parent)
   , ui_(std::make_unique<Ui::GroupsJointStatesEditorWidget>())
   , group_joints_retriever_(group_joints_retriever)
@@ -46,14 +46,17 @@ GroupsJointStatesEditorWidget::GroupsJointStatesEditorWidget(QStringListModel *g
   connect(ui_->groupNamesComboBox, SIGNAL(currentTextChanged(QString)), this, SLOT(onGroupNameChanged()));
   connect(ui_->addPushButton, SIGNAL(clicked()), this, SLOT(onAddJointState()));
   connect(ui_->removePushButton, SIGNAL(clicked()), this, SLOT(onRemoveJointState()));
-  connect(ui_->jointSliderWidget, &tesseract_gui::JointStateSliderWidget::jointStateChanged, this, &tesseract_gui::GroupsJointStatesEditorWidget::jointStateChanged);
+  connect(ui_->jointSliderWidget,
+          &tesseract_gui::JointStateSliderWidget::jointStateChanged,
+          this,
+          &tesseract_gui::GroupsJointStatesEditorWidget::jointStateChanged);
 
   onGroupNameChanged();
 }
 
 GroupsJointStatesEditorWidget::~GroupsJointStatesEditorWidget() = default;
 
-void GroupsJointStatesEditorWidget::setModel(tesseract_gui::GroupJointStatesModel *model)
+void GroupsJointStatesEditorWidget::setModel(tesseract_gui::GroupJointStatesModel* model)
 {
   model_ = model;
   ui_->treeView->setModel(model_);
@@ -79,12 +82,12 @@ void GroupsJointStatesEditorWidget::onRemoveJointState()
 {
   QModelIndexList selection = ui_->treeView->selectionModel()->selectedIndexes();
   int row_cnt = selection.count();
-  for( int i = row_cnt; i > 0; i--)
+  for (int i = row_cnt; i > 0; i--)
   {
-    QStandardItem* item = model_->itemFromIndex(selection.at(i-1));
+    QStandardItem* item = model_->itemFromIndex(selection.at(i - 1));
     if (item->type() == static_cast<int>(StandardItemType::JOINT_STATE))
       model_->removeGroupJointState(item->parent()->text(), item->text());
   }
 }
 
-}
+}  // namespace tesseract_gui

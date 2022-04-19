@@ -27,37 +27,29 @@
 
 namespace tesseract_gui
 {
-
 JointGroupStandardItem::JointGroupStandardItem(tesseract_srdf::JointGroup group)
-  : QStandardItem(icons::getRobotArmIcon(), "Joint Group")
-  , group(std::move(group))
+  : QStandardItem(icons::getRobotArmIcon(), "Joint Group"), group(std::move(group))
 {
   ctor();
 }
 
-JointGroupStandardItem::JointGroupStandardItem(const QString &text, tesseract_srdf::JointGroup group)
-  : QStandardItem(icons::getRobotArmIcon(), text)
-  , group(std::move(group))
+JointGroupStandardItem::JointGroupStandardItem(const QString& text, tesseract_srdf::JointGroup group)
+  : QStandardItem(icons::getRobotArmIcon(), text), group(std::move(group))
 {
   ctor();
 }
 
-JointGroupStandardItem::JointGroupStandardItem(const QIcon &icon, const QString &text, tesseract_srdf::JointGroup group)
-  : QStandardItem(icon, text)
-  , group(std::move(group))
+JointGroupStandardItem::JointGroupStandardItem(const QIcon& icon, const QString& text, tesseract_srdf::JointGroup group)
+  : QStandardItem(icon, text), group(std::move(group))
 {
   ctor();
 }
 
-int JointGroupStandardItem::type() const
-{
-  return static_cast<int>(StandardItemType::JOINT_GROUP);
-}
+int JointGroupStandardItem::type() const { return static_cast<int>(StandardItemType::JOINT_GROUP); }
 
 void JointGroupStandardItem::ctor()
 {
   for (const auto& joint : group)
     appendRow(createStandardItemString("joint", joint));
 }
-}
-
+}  // namespace tesseract_gui

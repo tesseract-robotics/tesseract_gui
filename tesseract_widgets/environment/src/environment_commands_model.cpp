@@ -25,18 +25,13 @@
 
 namespace tesseract_gui
 {
-
-EnvironmentCommandsModel::EnvironmentCommandsModel(QObject *parent)
-  : QStandardItemModel(parent)
-{
-  clear();
-}
-EnvironmentCommandsModel::EnvironmentCommandsModel(const EnvironmentCommandsModel &other)
-: QStandardItemModel(other.d_ptr->parent)
+EnvironmentCommandsModel::EnvironmentCommandsModel(QObject* parent) : QStandardItemModel(parent) { clear(); }
+EnvironmentCommandsModel::EnvironmentCommandsModel(const EnvironmentCommandsModel& other)
+  : QStandardItemModel(other.d_ptr->parent)
 {
 }
 
-EnvironmentCommandsModel &EnvironmentCommandsModel::operator=(const EnvironmentCommandsModel &/*other*/)
+EnvironmentCommandsModel& EnvironmentCommandsModel::operator=(const EnvironmentCommandsModel& /*other*/)
 {
   return *this;
 }
@@ -45,7 +40,7 @@ void EnvironmentCommandsModel::clear()
 {
   QStandardItemModel::clear();
   setColumnCount(2);
-  setHorizontalHeaderLabels({"Name", "Values"});
+  setHorizontalHeaderLabels({ "Name", "Values" });
   appendRow(new EnvironmentCommandsStandardItem());
 }
 
@@ -53,7 +48,7 @@ void EnvironmentCommandsModel::set(const tesseract_environment::Commands& comman
 {
   QStandardItemModel::clear();
   setColumnCount(2);
-  setHorizontalHeaderLabels({"Name", "Values"});
+  setHorizontalHeaderLabels({ "Name", "Values" });
   appendRow(new EnvironmentCommandsStandardItem(commands));
 }
 
@@ -77,4 +72,4 @@ const EnvironmentCommandsStandardItem* EnvironmentCommandsModel::getRoot() const
   return dynamic_cast<const EnvironmentCommandsStandardItem*>(item(0));
 }
 
-}
+}  // namespace tesseract_gui

@@ -28,30 +28,26 @@
 namespace tesseract_gui
 {
 LimitsStandardItem::LimitsStandardItem(tesseract_scene_graph::JointLimits::Ptr limits)
-  : QStandardItem(icons::getLimitsIcon(), "Limits")
-  , limits(std::move(limits))
+  : QStandardItem(icons::getLimitsIcon(), "Limits"), limits(std::move(limits))
 {
   ctor();
 }
 
-LimitsStandardItem::LimitsStandardItem(const QString &text, tesseract_scene_graph::JointLimits::Ptr limits)
-  : QStandardItem(icons::getLimitsIcon(), text)
-  , limits(std::move(limits))
+LimitsStandardItem::LimitsStandardItem(const QString& text, tesseract_scene_graph::JointLimits::Ptr limits)
+  : QStandardItem(icons::getLimitsIcon(), text), limits(std::move(limits))
 {
   ctor();
 }
 
-LimitsStandardItem::LimitsStandardItem(const QIcon &icon, const QString &text, tesseract_scene_graph::JointLimits::Ptr limits)
-  : QStandardItem(icon, text)
-  , limits(std::move(limits))
+LimitsStandardItem::LimitsStandardItem(const QIcon& icon,
+                                       const QString& text,
+                                       tesseract_scene_graph::JointLimits::Ptr limits)
+  : QStandardItem(icon, text), limits(std::move(limits))
 {
   ctor();
 }
 
-int LimitsStandardItem::type() const
-{
-  return static_cast<int>(StandardItemType::LIMITS);
-}
+int LimitsStandardItem::type() const { return static_cast<int>(StandardItemType::LIMITS); }
 
 void LimitsStandardItem::ctor()
 {
@@ -61,4 +57,4 @@ void LimitsStandardItem::ctor()
   appendRow(createStandardItemFloat("velocity", limits->velocity));
   appendRow(createStandardItemFloat("acceleration", limits->acceleration));
 }
-}
+}  // namespace tesseract_gui

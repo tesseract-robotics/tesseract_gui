@@ -38,8 +38,8 @@ class OctreeStandardItem : public QStandardItem
 {
 public:
   OctreeStandardItem(tesseract_geometry::Octree::Ptr octree);
-  explicit OctreeStandardItem(const QString &text, tesseract_geometry::Octree::Ptr octree);
-  OctreeStandardItem(const QIcon &icon, const QString &text, tesseract_geometry::Octree::Ptr octree);
+  explicit OctreeStandardItem(const QString& text, tesseract_geometry::Octree::Ptr octree);
+  OctreeStandardItem(const QIcon& icon, const QString& text, tesseract_geometry::Octree::Ptr octree);
   int type() const override;
 
   tesseract_geometry::Octree::Ptr octree;
@@ -47,6 +47,6 @@ public:
 private:
   void ctor();
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_SCENE_GRAPH_OCTREE_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_SCENE_GRAPH_OCTREE_STANDARD_ITEM_H

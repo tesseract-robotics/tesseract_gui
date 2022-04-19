@@ -38,8 +38,10 @@ class KinematicsInfoStandardItem : public QStandardItem
 {
 public:
   KinematicsInfoStandardItem(tesseract_srdf::KinematicsInformation kinematics_info);
-  explicit KinematicsInfoStandardItem(const QString &text, tesseract_srdf::KinematicsInformation kinematics_info);
-  KinematicsInfoStandardItem(const QIcon &icon, const QString &text, tesseract_srdf::KinematicsInformation kinematics_info);
+  explicit KinematicsInfoStandardItem(const QString& text, tesseract_srdf::KinematicsInformation kinematics_info);
+  KinematicsInfoStandardItem(const QIcon& icon,
+                             const QString& text,
+                             tesseract_srdf::KinematicsInformation kinematics_info);
   int type() const override;
 
   tesseract_srdf::KinematicsInformation kinematics_info;
@@ -47,7 +49,6 @@ public:
 private:
   void ctor();
 };
-}
+}  // namespace tesseract_gui
 
-
-#endif // TESSERACT_WIDGETS_KINEMATICS_GROUP_KINEMATICS_INFO_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_KINEMATICS_GROUP_KINEMATICS_INFO_STANDARD_ITEM_H

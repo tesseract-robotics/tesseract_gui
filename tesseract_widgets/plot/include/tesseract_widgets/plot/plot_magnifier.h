@@ -30,7 +30,6 @@
 
 namespace tesseract_gui
 {
-
 class PlotMagnifier : public QwtPlotMagnifier
 {
   Q_OBJECT
@@ -49,15 +48,9 @@ public:
     BOTH_AXES
   };
 
-  virtual void rescale(double factor) override
-  {
-    rescale(factor, _default_mode);
-  }
+  virtual void rescale(double factor) override { rescale(factor, _default_mode); }
 
-  void setDefaultMode(AxisMode mode)
-  {
-    _default_mode = mode;
-  }
+  void setDefaultMode(AxisMode mode) { _default_mode = mode; }
 
   void rescale(double factor, AxisMode axis);
 
@@ -77,5 +70,5 @@ private:
   QTimer _future_emit;
   AxisMode _default_mode;
 };
-}
+}  // namespace tesseract_gui
 #endif  // TESSERACT_WIDGETS_PLOT_PLOT_MAGNIFIER_H

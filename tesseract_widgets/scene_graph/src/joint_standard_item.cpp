@@ -34,30 +34,24 @@
 namespace tesseract_gui
 {
 JointStandardItem::JointStandardItem(tesseract_scene_graph::Joint::Ptr joint)
-  : QStandardItem(icons::getJointIcon(), "Joint")
-  , joint(std::move(joint))
+  : QStandardItem(icons::getJointIcon(), "Joint"), joint(std::move(joint))
 {
   ctor();
 }
 
-JointStandardItem::JointStandardItem(const QString &text, tesseract_scene_graph::Joint::Ptr joint)
-  : QStandardItem(icons::getJointIcon(), text)
-  , joint(std::move(joint))
+JointStandardItem::JointStandardItem(const QString& text, tesseract_scene_graph::Joint::Ptr joint)
+  : QStandardItem(icons::getJointIcon(), text), joint(std::move(joint))
 {
   ctor();
 }
 
-JointStandardItem::JointStandardItem(const QIcon &icon, const QString &text, tesseract_scene_graph::Joint::Ptr joint)
-  : QStandardItem(icon, text)
-  , joint(std::move(joint))
+JointStandardItem::JointStandardItem(const QIcon& icon, const QString& text, tesseract_scene_graph::Joint::Ptr joint)
+  : QStandardItem(icon, text), joint(std::move(joint))
 {
   ctor();
 }
 
-int JointStandardItem::type() const
-{
-  return static_cast<int>(StandardItemType::JOINT);
-}
+int JointStandardItem::type() const { return static_cast<int>(StandardItemType::JOINT); }
 
 void JointStandardItem::ctor()
 {
@@ -94,7 +88,7 @@ void JointStandardItem::ctor()
     std::stringstream ss;
     ss << joint->type;
     auto* value = new QStandardItem(QString::fromStdString(ss.str()));
-    appendRow({item, value});
+    appendRow({ item, value });
   }
 
   if (joint->type == tesseract_scene_graph::JointType::REVOLUTE ||
@@ -129,6 +123,5 @@ void JointStandardItem::ctor()
 
   if (joint->mimic != nullptr)
     appendRow(new MimicStandardItem(joint->mimic));
-
 }
-}
+}  // namespace tesseract_gui

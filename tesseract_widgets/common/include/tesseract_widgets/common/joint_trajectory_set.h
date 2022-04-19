@@ -67,8 +67,7 @@ public:
    * @param initial_state The initial state of the environment
    * @param description (Optional) A description of the trajectory set
    */
-  JointTrajectorySet(const std::unordered_map<std::string, double>& initial_state,
-                     std::string description = "");
+  JointTrajectorySet(const std::unordered_map<std::string, double>& initial_state, std::string description = "");
 
   /**
    * @brief Create a trajectory set with initial state
@@ -107,7 +106,8 @@ public:
 
   /**
    * @brief Get the environment for the joint trajectory set
-   * @details This can be a nullptr. If nullptr then check for commands which should be applied to the existing environment.
+   * @details This can be a nullptr. If nullptr then check for commands which should be applied to the existing
+   * environment.
    * @return The environment
    */
   tesseract_environment::Environment::Ptr getEnvironment() const;
@@ -172,7 +172,7 @@ private:
   std::vector<JointTrajectoryInfo> joint_trajectory_;
 
   /** @brief (Optional) Override the existing Tesseract Environment */
-  tesseract_environment::Environment::Ptr environment_{nullptr};
+  tesseract_environment::Environment::Ptr environment_{ nullptr };
 
   /** @brief (Optional) Additional Commands to be applied to environment prior to trajectory visualization */
   tesseract_environment::Commands commands_;
@@ -181,7 +181,7 @@ private:
   std::string description_;
 
   /** @brief The namespace associated with the trajectory set */
-  std::string ns_{"general"};
+  std::string ns_{ "general" };
 
   /**
    * @brief Append a joint state to the end

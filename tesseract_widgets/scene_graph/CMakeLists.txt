@@ -5,11 +5,10 @@ find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
 # Load variable for clang tidy args, compiler options and cxx version
 tesseract_variables()
 
-QT5_WRAP_CPP(SCENE_GRAPH_WIDGET_headers_MOC
-  include/tesseract_widgets/scene_graph/scene_state_model.h
-)
+qt5_wrap_cpp(SCENE_GRAPH_WIDGET_headers_MOC include/tesseract_widgets/scene_graph/scene_state_model.h)
 
-add_library(${PROJECT_NAME}_scene_graph SHARED
+add_library(
+  ${PROJECT_NAME}_scene_graph SHARED
   ${SCENE_GRAPH_WIDGET_headers_MOC}
   src/calibration_standard_item.cpp
   src/collision_standard_item.cpp
@@ -31,17 +30,18 @@ add_library(${PROJECT_NAME}_scene_graph SHARED
   src/sphere_standard_item.cpp
   src/polygon_mesh_standard_item.cpp
   src/octree_standard_item.cpp
-  src/scene_state_model.cpp
-)
+  src/scene_state_model.cpp)
 
-target_link_libraries(${PROJECT_NAME}_scene_graph PUBLIC
-  tesseract::tesseract_scene_graph
-  tesseract::tesseract_common
-  Qt5::Core Qt5::Gui Qt5::Widgets
-  ${PROJECT_NAME}_common)
-target_include_directories(${PROJECT_NAME}_scene_graph PUBLIC
-    "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
-    "$<INSTALL_INTERFACE:include>")
+target_link_libraries(
+  ${PROJECT_NAME}_scene_graph
+  PUBLIC tesseract::tesseract_scene_graph
+         tesseract::tesseract_common
+         Qt5::Core
+         Qt5::Gui
+         Qt5::Widgets
+         ${PROJECT_NAME}_common)
+target_include_directories(${PROJECT_NAME}_scene_graph PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
+                                                              "$<INSTALL_INTERFACE:include>")
 add_dependencies(${PROJECT_NAME}_scene_graph ${PROJECT_NAME}_common)
 
 add_subdirectory(demo)

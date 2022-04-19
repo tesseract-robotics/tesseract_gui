@@ -38,16 +38,18 @@ class ChangeJointOriginCommandStandardItem : public QStandardItem
 {
 public:
   explicit ChangeJointOriginCommandStandardItem(tesseract_environment::ChangeJointOriginCommand::ConstPtr command);
-  explicit ChangeJointOriginCommandStandardItem(const QString &text, tesseract_environment::ChangeJointOriginCommand::ConstPtr command);
-  explicit ChangeJointOriginCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::ChangeJointOriginCommand::ConstPtr command);
+  explicit ChangeJointOriginCommandStandardItem(const QString& text,
+                                                tesseract_environment::ChangeJointOriginCommand::ConstPtr command);
+  explicit ChangeJointOriginCommandStandardItem(const QIcon& icon,
+                                                const QString& text,
+                                                tesseract_environment::ChangeJointOriginCommand::ConstPtr command);
   int type() const override;
-
 
   tesseract_environment::ChangeJointOriginCommand::ConstPtr command;
 
 private:
   void ctor();
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_ENVIRONMENT_CHANGE_JOINT_ORIGIN_COMMAND_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_ENVIRONMENT_CHANGE_JOINT_ORIGIN_COMMAND_STANDARD_ITEM_H

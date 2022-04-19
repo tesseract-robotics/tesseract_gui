@@ -19,90 +19,134 @@
 #include <ignition/common/Console.hh>
 #include <ignition/common/Image.hh>
 
-inline GLenum glCheckError_(const char *file, int line)
+inline GLenum glCheckError_(const char* file, int line)
 {
-    GLenum errorCode;
-    while ((errorCode = QOpenGLContext::currentContext()->functions()->glGetError()) != GL_NO_ERROR)
+  GLenum errorCode;
+  while ((errorCode = QOpenGLContext::currentContext()->functions()->glGetError()) != GL_NO_ERROR)
+  {
+    const char* error;
+    switch (errorCode)
     {
-        const char *error;
-        switch (errorCode)
-        {
-            case GL_INVALID_ENUM:                  error = "INVALID_ENUM"; break;
-            case GL_INVALID_VALUE:                 error = "INVALID_VALUE"; break;
-            case GL_INVALID_OPERATION:             error = "INVALID_OPERATION"; break;
-            case GL_STACK_OVERFLOW:                error = "STACK_OVERFLOW"; break;
-            case GL_STACK_UNDERFLOW:               error = "STACK_UNDERFLOW"; break;
-            case GL_OUT_OF_MEMORY:                 error = "OUT_OF_MEMORY"; break;
-            case GL_INVALID_FRAMEBUFFER_OPERATION: error = "INVALID_FRAMEBUFFER_OPERATION"; break;
-        }
-        qDebug() << error << " | " << file << " (" << line << ")";
+      case GL_INVALID_ENUM:
+        error = "INVALID_ENUM";
+        break;
+      case GL_INVALID_VALUE:
+        error = "INVALID_VALUE";
+        break;
+      case GL_INVALID_OPERATION:
+        error = "INVALID_OPERATION";
+        break;
+      case GL_STACK_OVERFLOW:
+        error = "STACK_OVERFLOW";
+        break;
+      case GL_STACK_UNDERFLOW:
+        error = "STACK_UNDERFLOW";
+        break;
+      case GL_OUT_OF_MEMORY:
+        error = "OUT_OF_MEMORY";
+        break;
+      case GL_INVALID_FRAMEBUFFER_OPERATION:
+        error = "INVALID_FRAMEBUFFER_OPERATION";
+        break;
     }
-    return errorCode;
+    qDebug() << error << " | " << file << " (" << line << ")";
+  }
+  return errorCode;
 }
 #define glCheckError() glCheckError_(__FILE__, __LINE__)
 
-inline void APIENTRY glDebugOutput(GLenum source,
-                            GLenum type,
-                            GLuint id,
-                            GLenum severity,
-                            GLsizei,
-                            const GLchar *message,
-                            const void *)
+inline void APIENTRY
+glDebugOutput(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei, const GLchar* message, const void*)
 {
-    // ignore non-significant error/warning codes
-    // if(id == 131169 || id == 131185 || id == 131218 || id == 131204) return;
+  // ignore non-significant error/warning codes
+  // if(id == 131169 || id == 131185 || id == 131218 || id == 131204) return;
 
-    qDebug() << "---------------";
-    qDebug() << "Debug message (" << id << "):" <<  message;
+  qDebug() << "---------------";
+  qDebug() << "Debug message (" << id << "):" << message;
 
-    switch (source)
-    {
-        case GL_DEBUG_SOURCE_API:             qDebug() << "Source: API"; break;
-        case GL_DEBUG_SOURCE_WINDOW_SYSTEM:   qDebug() << "Source: Window System"; break;
-        case GL_DEBUG_SOURCE_SHADER_COMPILER: qDebug() << "Source: Shader Compiler"; break;
-        case GL_DEBUG_SOURCE_THIRD_PARTY:     qDebug() << "Source: Third Party"; break;
-        case GL_DEBUG_SOURCE_APPLICATION:     qDebug() << "Source: Application"; break;
-        case GL_DEBUG_SOURCE_OTHER:           qDebug() << "Source: Other"; break;
-    }
+  switch (source)
+  {
+    case GL_DEBUG_SOURCE_API:
+      qDebug() << "Source: API";
+      break;
+    case GL_DEBUG_SOURCE_WINDOW_SYSTEM:
+      qDebug() << "Source: Window System";
+      break;
+    case GL_DEBUG_SOURCE_SHADER_COMPILER:
+      qDebug() << "Source: Shader Compiler";
+      break;
+    case GL_DEBUG_SOURCE_THIRD_PARTY:
+      qDebug() << "Source: Third Party";
+      break;
+    case GL_DEBUG_SOURCE_APPLICATION:
+      qDebug() << "Source: Application";
+      break;
+    case GL_DEBUG_SOURCE_OTHER:
+      qDebug() << "Source: Other";
+      break;
+  }
 
-    switch (type)
-    {
-        case GL_DEBUG_TYPE_ERROR:               qDebug() << "Type: Error"; break;
-        case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR: qDebug() << "Type: Deprecated Behaviour"; break;
-        case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:  qDebug() << "Type: Undefined Behaviour"; break;
-        case GL_DEBUG_TYPE_PORTABILITY:         qDebug() << "Type: Portability"; break;
-        case GL_DEBUG_TYPE_PERFORMANCE:         qDebug() << "Type: Performance"; break;
-        case GL_DEBUG_TYPE_MARKER:              qDebug() << "Type: Marker"; break;
-        case GL_DEBUG_TYPE_PUSH_GROUP:          qDebug() << "Type: Push Group"; break;
-        case GL_DEBUG_TYPE_POP_GROUP:           qDebug() << "Type: Pop Group"; break;
-        case GL_DEBUG_TYPE_OTHER:               qDebug() << "Type: Other"; break;
-    }
+  switch (type)
+  {
+    case GL_DEBUG_TYPE_ERROR:
+      qDebug() << "Type: Error";
+      break;
+    case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
+      qDebug() << "Type: Deprecated Behaviour";
+      break;
+    case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
+      qDebug() << "Type: Undefined Behaviour";
+      break;
+    case GL_DEBUG_TYPE_PORTABILITY:
+      qDebug() << "Type: Portability";
+      break;
+    case GL_DEBUG_TYPE_PERFORMANCE:
+      qDebug() << "Type: Performance";
+      break;
+    case GL_DEBUG_TYPE_MARKER:
+      qDebug() << "Type: Marker";
+      break;
+    case GL_DEBUG_TYPE_PUSH_GROUP:
+      qDebug() << "Type: Push Group";
+      break;
+    case GL_DEBUG_TYPE_POP_GROUP:
+      qDebug() << "Type: Pop Group";
+      break;
+    case GL_DEBUG_TYPE_OTHER:
+      qDebug() << "Type: Other";
+      break;
+  }
 
-    switch (severity)
-    {
-        case GL_DEBUG_SEVERITY_HIGH:         qDebug() << "Severity: high"; break;
-        case GL_DEBUG_SEVERITY_MEDIUM:       qDebug() << "Severity: medium"; break;
-        case GL_DEBUG_SEVERITY_LOW:          qDebug() << "Severity: low"; break;
-        case GL_DEBUG_SEVERITY_NOTIFICATION: qDebug() << "Severity: notification"; break;
-    }
+  switch (severity)
+  {
+    case GL_DEBUG_SEVERITY_HIGH:
+      qDebug() << "Severity: high";
+      break;
+    case GL_DEBUG_SEVERITY_MEDIUM:
+      qDebug() << "Severity: medium";
+      break;
+    case GL_DEBUG_SEVERITY_LOW:
+      qDebug() << "Severity: low";
+      break;
+    case GL_DEBUG_SEVERITY_NOTIFICATION:
+      qDebug() << "Severity: notification";
+      break;
+  }
 }
 
 class IssueRenderWidget : public QOpenGLWidget, protected QOpenGLFunctions
 {
   Q_OBJECT
 public:
-
-  IssueRenderWidget()
-  {
-  }
+  IssueRenderWidget() {}
   void initialize()
   {
     std::map<std::string, std::string> params;
     params["useCurrentGLContext"] = "1";
     params["winID"] = std::to_string(this->winId());
-  //  params["winID"] = std::to_string(
-  //    ignition::gui::App()->findChild<ignition::gui::MainWindow *>()->
-  //      QuickWindow()-winId());
+    //  params["winID"] = std::to_string(
+    //    ignition::gui::App()->findChild<ignition::gui::MainWindow *>()->
+    //      QuickWindow()-winId());
     auto* engine = ignition::rendering::engine(engine_name_, params);
     if (engine == nullptr)
     {
@@ -134,15 +178,13 @@ public:
       gray->SetSpecular(0.7, 0.7, 0.7);
 
       // create grid visual
-      unsigned id = 1000; //static_cast<unsigned>(this->dataPtr->entity_manager.addVisual("tesseract_grid"));
+      unsigned id = 1000;  // static_cast<unsigned>(this->dataPtr->entity_manager.addVisual("tesseract_grid"));
       ignition::rendering::VisualPtr visual = scene_->CreateVisual(id, "tesseract_grid");
       ignition::rendering::GridPtr gridGeom = scene_->CreateGrid();
       if (!gridGeom)
       {
-        ignwarn << "Failed to create grid for scene ["
-          << scene_->Name() << "] on engine ["
-            << scene_->Engine()->Name() << "]"
-              << std::endl;
+        ignwarn << "Failed to create grid for scene [" << scene_->Name() << "] on engine [" << scene_->Engine()->Name()
+                << "]" << std::endl;
         return;
       }
       gridGeom->SetCellCount(20);
@@ -181,13 +223,11 @@ public:
     camera_->AddChild(light0);
 
     initialized_ = true;
-
   }
-
 
   void resizeGL(int w, int h)
   {
-    glViewport( 0, 0, w, h );
+    glViewport(0, 0, w, h);
     // Resizing camera causes issues, but not sure why
     texture_size_ = QSize(w, h);
     texture_dirty_ = true;
@@ -236,13 +276,13 @@ public:
     GLuint texture_id = camera_->RenderTextureGLId();
     image_ = camera_->CreateImage();
     camera_->Capture(image_);
-//    {
-//      ignition::common::Image tmp;
-//      tmp.SetFromData(data, image.Width(), image.Height(), ignition::common::Image::RGB_INT8);
-//      tmp.SavePNG("/tmp/ign_image.png");
-//    }
+    //    {
+    //      ignition::common::Image tmp;
+    //      tmp.SetFromData(data, image.Width(), image.Height(), ignition::common::Image::RGB_INT8);
+    //      tmp.SavePNG("/tmp/ign_image.png");
+    //    }
 
-//    ignition::rendering::Image image(image_);
+    //    ignition::rendering::Image image(image_);
     auto* data = image_.Data<unsigned char>();
     makeCurrent();
 
@@ -250,7 +290,7 @@ public:
     auto imgh = image_.Height();
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    bool use_texture{false};
+    bool use_texture{ false };
     if (use_texture)
     {
       glMatrixMode(GL_PROJECTION);
@@ -261,31 +301,31 @@ public:
       glLoadIdentity();
 
       glEnable(GL_TEXTURE_RECTANGLE);
-      glViewport (0, 0, (GLsizei) imgw, (GLsizei) imgh);
+      glViewport(0, 0, (GLsizei)imgw, (GLsizei)imgh);
       glDeleteTextures(1, &texture_);
-      glGenTextures (1, &texture_);
-      glBindTexture (GL_TEXTURE_RECTANGLE, texture_);
+      glGenTextures(1, &texture_);
+      glBindTexture(GL_TEXTURE_RECTANGLE, texture_);
       glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
       glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
       glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
       glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
-      glTexImage2D (GL_TEXTURE_RECTANGLE, 0, GL_RGBA8, (GLint)imgw, (GLint)imgh, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-      glBegin (GL_QUADS);
+      glTexImage2D(GL_TEXTURE_RECTANGLE, 0, GL_RGBA8, (GLint)imgw, (GLint)imgh, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+      glBegin(GL_QUADS);
       // Bottom left
-      glTexCoord2d (imgw, imgh);
+      glTexCoord2d(imgw, imgh);
       glVertex2f(-1, -1);
 
       // Top left
-      glTexCoord2d (0, imgh);
-      glVertex2f (1, -1);
+      glTexCoord2d(0, imgh);
+      glVertex2f(1, -1);
 
       // Top right
-      glTexCoord2d (0, 0);
-      glVertex2f (1, 1);
+      glTexCoord2d(0, 0);
+      glVertex2f(1, 1);
 
       // Bottom right
-      glTexCoord2d (imgw, 0);
-      glVertex2f (-1, 1);
+      glTexCoord2d(imgw, 0);
+      glVertex2f(-1, 1);
       glEnd();
       glDisable(GL_TEXTURE_RECTANGLE);
     }
@@ -311,21 +351,20 @@ public:
   }
 
 protected:
-  bool initialized_{false};
-  std::string engine_name_{"ogre"};
-  std::string scene_name_{"IssueScene"};
-  ignition::rendering::ScenePtr scene_{nullptr};
-  ignition::rendering::CameraPtr camera_{nullptr};
-  ignition::math::Color background_color_{ignition::math::Color::Black};
-  ignition::math::Color ambient_light_{ignition::math::Color(0.3f, 0.3f, 0.3f, 1.0f)};
-  ignition::math::Pose3d camera_pose_ {ignition::math::Pose3d(0, 0, 2, 0, 0.4, 0)};
-  double camera_near_clip_ {0.01};
-  double camera_far_clip_ {1000.0};
-  QSize texture_size_ {QSize(1920, 1200)};
-  bool texture_dirty_{true};
-  GLuint texture_{2};
+  bool initialized_{ false };
+  std::string engine_name_{ "ogre" };
+  std::string scene_name_{ "IssueScene" };
+  ignition::rendering::ScenePtr scene_{ nullptr };
+  ignition::rendering::CameraPtr camera_{ nullptr };
+  ignition::math::Color background_color_{ ignition::math::Color::Black };
+  ignition::math::Color ambient_light_{ ignition::math::Color(0.3f, 0.3f, 0.3f, 1.0f) };
+  ignition::math::Pose3d camera_pose_{ ignition::math::Pose3d(0, 0, 2, 0, 0.4, 0) };
+  double camera_near_clip_{ 0.01 };
+  double camera_far_clip_{ 1000.0 };
+  QSize texture_size_{ QSize(1920, 1200) };
+  bool texture_dirty_{ true };
+  GLuint texture_{ 2 };
   ignition::rendering::Image image_;
 };
 
-
-#endif // MINIMAL_EXAMPLE_H
+#endif  // MINIMAL_EXAMPLE_H

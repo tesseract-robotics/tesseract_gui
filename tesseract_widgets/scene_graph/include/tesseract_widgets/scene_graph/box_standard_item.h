@@ -38,8 +38,8 @@ class BoxStandardItem : public QStandardItem
 {
 public:
   BoxStandardItem(tesseract_geometry::Box::Ptr box);
-  explicit BoxStandardItem(const QString &text, tesseract_geometry::Box::Ptr box);
-  BoxStandardItem(const QIcon &icon, const QString &text, tesseract_geometry::Box::Ptr box);
+  explicit BoxStandardItem(const QString& text, tesseract_geometry::Box::Ptr box);
+  BoxStandardItem(const QIcon& icon, const QString& text, tesseract_geometry::Box::Ptr box);
   int type() const override;
 
   tesseract_geometry::Box::Ptr box;
@@ -47,6 +47,6 @@ public:
 private:
   void ctor();
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_SCENE_GRAPH_BOX_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_SCENE_GRAPH_BOX_STANDARD_ITEM_H

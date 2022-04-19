@@ -65,8 +65,7 @@ QRectF PlotLegend::hideButtonRect() const
   return QRectF(geometry(canvas_rect).topLeft() + QPoint(-s, -s), QSize(s * 2, s * 2));
 }
 
-void PlotLegend::draw(QPainter* painter, const QwtScaleMap& xMap, const QwtScaleMap& yMap,
-                      const QRectF& rect) const
+void PlotLegend::draw(QPainter* painter, const QwtScaleMap& xMap, const QwtScaleMap& yMap, const QRectF& rect) const
 {
   if (!_collapsed)
   {
@@ -95,8 +94,10 @@ void PlotLegend::draw(QPainter* painter, const QwtScaleMap& xMap, const QwtScale
   }
 }
 
-void PlotLegend::drawLegendData(QPainter* painter, const QwtPlotItem* plotItem,
-                                const QwtLegendData& data, const QRectF& rect) const
+void PlotLegend::drawLegendData(QPainter* painter,
+                                const QwtPlotItem* plotItem,
+                                const QwtLegendData& data,
+                                const QRectF& rect) const
 {
   Q_UNUSED(plotItem);
 
@@ -185,4 +186,4 @@ const QwtPlotItem* PlotLegend::processMousePressEvent(QMouseEvent* mouse_event)
   }
   return nullptr;
 }
-}
+}  // namespace tesseract_gui

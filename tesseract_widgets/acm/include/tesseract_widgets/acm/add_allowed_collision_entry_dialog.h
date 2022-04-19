@@ -32,7 +32,8 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <QDialog>
 
-namespace Ui {
+namespace Ui
+{
 class AddAllowedCollisionEntryDialog;
 }
 
@@ -43,7 +44,7 @@ class AddAllowedCollisionEntryDialog : public QDialog
   Q_OBJECT
 
 public:
-  explicit AddAllowedCollisionEntryDialog(QWidget *parent = nullptr);
+  explicit AddAllowedCollisionEntryDialog(QWidget* parent = nullptr);
   ~AddAllowedCollisionEntryDialog();
 
   QString getLinkName1() const;
@@ -53,6 +54,6 @@ public:
 private:
   std::unique_ptr<Ui::AddAllowedCollisionEntryDialog> ui_;
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_ACM_ADD_ALLOWED_COLLISION_ENTRY_DIALOG_H
+#endif  // TESSERACT_WIDGETS_ACM_ADD_ALLOWED_COLLISION_ENTRY_DIALOG_H

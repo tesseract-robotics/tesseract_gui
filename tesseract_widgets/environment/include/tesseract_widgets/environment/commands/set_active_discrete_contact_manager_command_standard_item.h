@@ -37,17 +37,22 @@ namespace tesseract_gui
 class SetActiveDiscreteContactManagerCommandStandardItem : public QStandardItem
 {
 public:
-  explicit SetActiveDiscreteContactManagerCommandStandardItem(tesseract_environment::SetActiveDiscreteContactManagerCommand::ConstPtr command);
-  explicit SetActiveDiscreteContactManagerCommandStandardItem(const QString &text, tesseract_environment::SetActiveDiscreteContactManagerCommand::ConstPtr command);
-  explicit SetActiveDiscreteContactManagerCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::SetActiveDiscreteContactManagerCommand::ConstPtr command);
+  explicit SetActiveDiscreteContactManagerCommandStandardItem(
+      tesseract_environment::SetActiveDiscreteContactManagerCommand::ConstPtr command);
+  explicit SetActiveDiscreteContactManagerCommandStandardItem(
+      const QString& text,
+      tesseract_environment::SetActiveDiscreteContactManagerCommand::ConstPtr command);
+  explicit SetActiveDiscreteContactManagerCommandStandardItem(
+      const QIcon& icon,
+      const QString& text,
+      tesseract_environment::SetActiveDiscreteContactManagerCommand::ConstPtr command);
   int type() const override;
-
 
   tesseract_environment::SetActiveDiscreteContactManagerCommand::ConstPtr command;
 
 private:
   void ctor();
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_ENVIRONMENT_SET_ACTIVE_DISCRETE_CONTACT_MANAGER_COMMAND_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_ENVIRONMENT_SET_ACTIVE_DISCRETE_CONTACT_MANAGER_COMMAND_STANDARD_ITEM_H

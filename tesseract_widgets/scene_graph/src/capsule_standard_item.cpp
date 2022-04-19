@@ -28,35 +28,30 @@
 namespace tesseract_gui
 {
 CapsuleStandardItem::CapsuleStandardItem(tesseract_geometry::Capsule::Ptr capsule)
-  : QStandardItem(icons::getCapsuleIcon(), "Capsule")
-  , capsule(std::move(capsule))
+  : QStandardItem(icons::getCapsuleIcon(), "Capsule"), capsule(std::move(capsule))
 {
   ctor();
 }
 
-CapsuleStandardItem::CapsuleStandardItem(const QString &text, tesseract_geometry::Capsule::Ptr capsule)
-  : QStandardItem(icons::getCapsuleIcon(), text)
-  , capsule(std::move(capsule))
+CapsuleStandardItem::CapsuleStandardItem(const QString& text, tesseract_geometry::Capsule::Ptr capsule)
+  : QStandardItem(icons::getCapsuleIcon(), text), capsule(std::move(capsule))
 {
   ctor();
 }
 
-CapsuleStandardItem::CapsuleStandardItem(const QIcon &icon, const QString &text, tesseract_geometry::Capsule::Ptr capsule)
-  : QStandardItem(icon, text)
-  , capsule(std::move(capsule))
+CapsuleStandardItem::CapsuleStandardItem(const QIcon& icon,
+                                         const QString& text,
+                                         tesseract_geometry::Capsule::Ptr capsule)
+  : QStandardItem(icon, text), capsule(std::move(capsule))
 {
   ctor();
 }
 
-int CapsuleStandardItem::type() const
-{
-  return static_cast<int>(StandardItemType::CAPSULE);
-}
+int CapsuleStandardItem::type() const { return static_cast<int>(StandardItemType::CAPSULE); }
 
 void CapsuleStandardItem::ctor()
 {
   appendRow(createStandardItemFloat("radius", capsule->getRadius()));
   appendRow(createStandardItemFloat("length", capsule->getLength()));
 }
-}
-
+}  // namespace tesseract_gui

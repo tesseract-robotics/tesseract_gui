@@ -30,12 +30,12 @@ QList<QStandardItem*> createStandardItemFloat(const std::string& text, double da
   return createStandardItemFloat(icons::getNumericIcon(), text, data);
 }
 
-QList<QStandardItem*> createStandardItemFloat(const QIcon &icon, const std::string& text, double data)
+QList<QStandardItem*> createStandardItemFloat(const QIcon& icon, const std::string& text, double data)
 {
   auto* name = new QStandardItem(icon, QString::fromStdString(text));
-  auto* value = new QStandardItem(); // NOLINT
+  auto* value = new QStandardItem();  // NOLINT
   value->setData(data, Qt::DisplayRole);
-  return {name, value};
+  return { name, value };
 }
 
 QList<QStandardItem*> createStandardItemInt(const std::string& text, int data)
@@ -43,12 +43,12 @@ QList<QStandardItem*> createStandardItemInt(const std::string& text, int data)
   return createStandardItemInt(icons::getNumericIcon(), text, data);
 }
 
-QList<QStandardItem*> createStandardItemInt(const QIcon &icon, const std::string& text, int data)
+QList<QStandardItem*> createStandardItemInt(const QIcon& icon, const std::string& text, int data)
 {
   auto* name = new QStandardItem(icon, QString::fromStdString(text));
-  auto* value = new QStandardItem(); // NOLINT
+  auto* value = new QStandardItem();  // NOLINT
   value->setData(data, Qt::DisplayRole);
-  return {name, value};
+  return { name, value };
 }
 
 QList<QStandardItem*> createStandardItemString(const std::string& text, const std::string& data)
@@ -56,19 +56,19 @@ QList<QStandardItem*> createStandardItemString(const std::string& text, const st
   return createStandardItemString(icons::getTextIcon(), text, data);
 }
 
-QList<QStandardItem*> createStandardItemString(const QIcon &icon, const std::string& text, const std::string& data)
+QList<QStandardItem*> createStandardItemString(const QIcon& icon, const std::string& text, const std::string& data)
 {
   auto* name = new QStandardItem(icon, QString::fromStdString(text));
-  auto* value = new QStandardItem(); // NOLINT
+  auto* value = new QStandardItem();  // NOLINT
   value->setData(QString::fromStdString(data), Qt::DisplayRole);
-  return {name, value};
+  return { name, value };
 }
 
 QList<QStandardItem*> createStandardItemURL(const std::string& text, const std::string& data)
 {
   auto* name = new QStandardItem(icons::getURLIcon(), QString::fromStdString(text));
-  auto* value = new QStandardItem(); // NOLINT
+  auto* value = new QStandardItem();  // NOLINT
   value->setData(QString::fromStdString(data), Qt::DisplayRole);
-  return {name, value};
+  return { name, value };
 }
-}
+}  // namespace tesseract_gui

@@ -65,31 +65,21 @@ public:
   virtual int numOutputs() const = 0;
 
   /** Clear the cache, state and any stored data */
-  virtual void reset()
-  {
-  }
+  virtual void reset() {}
 
-  PlotDataMapRef* plotData()
-  {
-    return _data;
-  }
+  PlotDataMapRef* plotData() { return _data; }
 
   std::vector<const PlotData*>& dataSources();
 
-  virtual void setData(PlotDataMapRef* data, const std::vector<const PlotData*>& src_vect,
+  virtual void setData(PlotDataMapRef* data,
+                       const std::vector<const PlotData*>& src_vect,
                        std::vector<PlotData*>& dst_vect);
 
   virtual void calculate() = 0;
 
-  unsigned order() const
-  {
-    return _order;
-  }
+  unsigned order() const { return _order; }
 
-  virtual QWidget* optionsWidget()
-  {
-    return nullptr;
-  }
+  virtual QWidget* optionsWidget() { return nullptr; }
 
 Q_SIGNALS:
   void parametersChanged();
@@ -113,15 +103,9 @@ public:
 
   void reset() override;
 
-  int numInputs() const override
-  {
-    return 1;
-  }
+  int numInputs() const override { return 1; }
 
-  int numOutputs() const override
-  {
-    return 1;
-  }
+  int numOutputs() const override { return 1; }
 
   void calculate() override;
 
@@ -138,9 +122,7 @@ protected:
 class TransformFactory : public QObject
 {
 public:
-  TransformFactory()
-  {
-  }
+  TransformFactory() {}
 
 private:
   TransformFactory(const TransformFactory&) = delete;
@@ -172,4 +154,4 @@ Q_DECLARE_OPAQUE_POINTER(tesseract_gui::TransformFactory*)
 Q_DECLARE_METATYPE(tesseract_gui::TransformFactory*)
 Q_GLOBAL_STATIC(tesseract_gui::TransformFactory, transform_factory_ptr_from_macro_)
 
-#endif // TESSERACT_WIDGETS_PLOT_TRANSFORM_FUNCTION_H
+#endif  // TESSERACT_WIDGETS_PLOT_TRANSFORM_FUNCTION_H

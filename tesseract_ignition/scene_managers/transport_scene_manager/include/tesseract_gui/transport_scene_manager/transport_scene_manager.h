@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
-*/
+ */
 #ifndef TESSERACT_GUI_TRANSPORT_SCENE_MANAGER_H
 #define TESSERACT_GUI_TRANSPORT_SCENE_MANAGER_H
 
@@ -23,44 +23,44 @@
 
 namespace tesseract_gui
 {
-  class TransportSceneManagerPrivate;
+class TransportSceneManagerPrivate;
 
-  /// \brief Provides an Ignition Transport interface to tesseract_gui::MinimalScene`.
-  ///
-  /// ## Configuration
-  ///
-  /// * \<service\> : Name of service where this system will request a scene message.
-  /// * \<pose_topic\> : Name of topic to subscribe to receive pose updates.
-  /// * \<deletion_topic\> : Name of topic to request entity deletions.
-  /// * \<scene_topic\> : Name of topic to receive scene updates.
-  class TransportSceneManager : public QObject
-  {
-    Q_OBJECT
-  public:
-    /// \brief Constructor
-    TransportSceneManager(const std::string& scene_name);
+/// \brief Provides an Ignition Transport interface to tesseract_gui::MinimalScene`.
+///
+/// ## Configuration
+///
+/// * \<service\> : Name of service where this system will request a scene message.
+/// * \<pose_topic\> : Name of topic to subscribe to receive pose updates.
+/// * \<deletion_topic\> : Name of topic to request entity deletions.
+/// * \<scene_topic\> : Name of topic to receive scene updates.
+class TransportSceneManager : public QObject
+{
+  Q_OBJECT
+public:
+  /// \brief Constructor
+  TransportSceneManager(const std::string& scene_name);
 
-    /// \brief Destructor
-    virtual ~TransportSceneManager();
+  /// \brief Destructor
+  virtual ~TransportSceneManager();
 
-    TransportSceneManager(const std::string& scene_name,
-                          const std::string& scene_topic,
-                          const std::string& pose_topic,
-                          const std::string& deletion_topic,
-                          const std::string& service);
+  TransportSceneManager(const std::string& scene_name,
+                        const std::string& scene_topic,
+                        const std::string& pose_topic,
+                        const std::string& deletion_topic,
+                        const std::string& service);
 
-//    // Documentation inherited
-//    public: virtual void LoadConfig(const tinyxml2::XMLElement *_pluginElem)
-//        override;
+  //    // Documentation inherited
+  //    public: virtual void LoadConfig(const tinyxml2::XMLElement *_pluginElem)
+  //        override;
 
-  private:
-    // Documentation inherited
-    bool eventFilter(QObject *_obj, QEvent *_event) override;
+private:
+  // Documentation inherited
+  bool eventFilter(QObject* _obj, QEvent* _event) override;
 
-    /// \internal
-    /// \brief Pointer to private data.
-    std::unique_ptr<TransportSceneManagerPrivate> dataPtr;
-  };
-}
+  /// \internal
+  /// \brief Pointer to private data.
+  std::unique_ptr<TransportSceneManagerPrivate> dataPtr;
+};
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_GUI_TRANSPORT_SCENE_MANAGER_H
+#endif  // TESSERACT_GUI_TRANSPORT_SCENE_MANAGER_H

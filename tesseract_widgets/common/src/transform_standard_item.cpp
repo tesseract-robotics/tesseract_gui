@@ -33,22 +33,19 @@ TransformStandardItem::TransformStandardItem(const Eigen::Isometry3d& transform)
   ctor(transform);
 }
 
-TransformStandardItem::TransformStandardItem(const QString &text, const Eigen::Isometry3d& transform)
+TransformStandardItem::TransformStandardItem(const QString& text, const Eigen::Isometry3d& transform)
   : QStandardItem(icons::getOriginIcon(), text)
 {
   ctor(transform);
 }
 
-TransformStandardItem::TransformStandardItem(const QIcon &icon, const QString &text, const Eigen::Isometry3d& transform)
+TransformStandardItem::TransformStandardItem(const QIcon& icon, const QString& text, const Eigen::Isometry3d& transform)
   : QStandardItem(icon, text)
 {
   ctor(transform);
 }
 
-int TransformStandardItem::type() const
-{
-  return static_cast<int>(StandardItemType::TRANSFORM);
-}
+int TransformStandardItem::type() const { return static_cast<int>(StandardItemType::TRANSFORM); }
 
 void TransformStandardItem::setTransform(const Eigen::Isometry3d& transform)
 {
@@ -79,12 +76,11 @@ void TransformStandardItem::ctor(const Eigen::Isometry3d& transform)
 
   Eigen::Quaterniond q(transform.rotation());
 
-  orientation_->appendRow(createStandardItemFloat( "x", q.x()));
-  orientation_->appendRow(createStandardItemFloat( "y", q.y()));
-  orientation_->appendRow(createStandardItemFloat( "z", q.z()));
-  orientation_->appendRow(createStandardItemFloat( "w", q.w()));
+  orientation_->appendRow(createStandardItemFloat("x", q.x()));
+  orientation_->appendRow(createStandardItemFloat("y", q.y()));
+  orientation_->appendRow(createStandardItemFloat("z", q.z()));
+  orientation_->appendRow(createStandardItemFloat("w", q.w()));
 
   appendRow(orientation_);
-
 }
-}
+}  // namespace tesseract_gui

@@ -50,6 +50,6 @@ private:
 
   std::optional<PlotData::Point> calculateNextPoint(size_t index) override;
 };
-}
+}  // namespace tesseract_gui
 
 #endif  // TESSERACT_WIDGETS_PLOT_TRANSFORMS_SCALE_TRANSFORM_H

@@ -38,8 +38,8 @@ class ConeStandardItem : public QStandardItem
 {
 public:
   ConeStandardItem(tesseract_geometry::Cone::Ptr cone);
-  explicit ConeStandardItem(const QString &text, tesseract_geometry::Cone::Ptr cone);
-  ConeStandardItem(const QIcon &icon, const QString &text, tesseract_geometry::Cone::Ptr cone);
+  explicit ConeStandardItem(const QString& text, tesseract_geometry::Cone::Ptr cone);
+  ConeStandardItem(const QIcon& icon, const QString& text, tesseract_geometry::Cone::Ptr cone);
   int type() const override;
 
   tesseract_geometry::Cone::Ptr cone;
@@ -47,7 +47,6 @@ public:
 private:
   void ctor();
 };
-}
+}  // namespace tesseract_gui
 
-
-#endif // TESSERACT_WIDGETS_SCENE_GRAPH_CONE_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_SCENE_GRAPH_CONE_STANDARD_ITEM_H

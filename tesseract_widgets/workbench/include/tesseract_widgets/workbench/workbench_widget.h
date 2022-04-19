@@ -26,7 +26,8 @@
 #include <QWidget>
 #include <memory>
 
-namespace Ui {
+namespace Ui
+{
 class WorkbenchWidget;
 }
 
@@ -39,7 +40,7 @@ namespace tesseract_common
 {
 class JointTrajectorySet;
 class JointState;
-}
+}  // namespace tesseract_common
 
 namespace tesseract_gui
 {
@@ -55,7 +56,7 @@ class WorkbenchWidget : public QWidget
 public:
   explicit WorkbenchWidget(EnvironmentWidget* environment_widget,
                            JointTrajectoryWidget* joint_trajectory_widget,
-                           QWidget *parent = nullptr);
+                           QWidget* parent = nullptr);
   ~WorkbenchWidget();
 
   EnvironmentWidget& getEnvironmentWidget();
@@ -70,7 +71,8 @@ public Q_SLOTS:
 
 private Q_SLOTS:
   void onEnvironmentSet(const std::shared_ptr<tesseract_environment::Environment>& env);
-  void onConfigureJointTrajectorySet(const QString& uuid, const tesseract_common::JointTrajectorySet& joint_trajectory_set);
+  void onConfigureJointTrajectorySet(const QString& uuid,
+                                     const tesseract_common::JointTrajectorySet& joint_trajectory_set);
   void onJointTrajectorySetRemoved(const QString& uuid);
   void onJointTrajectorySetState(const tesseract_common::JointState& state);
 
@@ -78,5 +80,5 @@ private:
   std::unique_ptr<Ui::WorkbenchWidget> ui;
   std::unique_ptr<WorkbenchWidgetImpl> data_;
 };
-}
-#endif // TESSERACT_WIDGETS_WORKBENCH_WORKBENCH_WIDGET_H
+}  // namespace tesseract_gui
+#endif  // TESSERACT_WIDGETS_WORKBENCH_WORKBENCH_WIDGET_H

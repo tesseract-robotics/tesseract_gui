@@ -38,8 +38,8 @@ class PolygonMeshStandardItem : public QStandardItem
 {
 public:
   PolygonMeshStandardItem(tesseract_geometry::PolygonMesh::Ptr mesh);
-  explicit PolygonMeshStandardItem(const QString &text, tesseract_geometry::PolygonMesh::Ptr mesh);
-  PolygonMeshStandardItem(const QIcon &icon, const QString &text, tesseract_geometry::PolygonMesh::Ptr mesh);
+  explicit PolygonMeshStandardItem(const QString& text, tesseract_geometry::PolygonMesh::Ptr mesh);
+  PolygonMeshStandardItem(const QIcon& icon, const QString& text, tesseract_geometry::PolygonMesh::Ptr mesh);
   int type() const override;
 
   tesseract_geometry::PolygonMesh::Ptr mesh;
@@ -47,6 +47,6 @@ public:
 private:
   void ctor();
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_SCENE_GRAPH_POLYGON_MESH_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_SCENE_GRAPH_POLYGON_MESH_STANDARD_ITEM_H

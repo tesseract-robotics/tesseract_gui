@@ -28,29 +28,25 @@
 namespace tesseract_gui
 {
 InertialStandardItem::InertialStandardItem(tesseract_scene_graph::Inertial::Ptr inertial)
-  : QStandardItem("Inertial")
-  , inertial(std::move(inertial))
+  : QStandardItem("Inertial"), inertial(std::move(inertial))
 {
   ctor();
 }
 
-InertialStandardItem::InertialStandardItem(const QString &text, tesseract_scene_graph::Inertial::Ptr inertial)
-  : QStandardItem(text)
-  , inertial(std::move(inertial))
+InertialStandardItem::InertialStandardItem(const QString& text, tesseract_scene_graph::Inertial::Ptr inertial)
+  : QStandardItem(text), inertial(std::move(inertial))
 {
   ctor();
 }
-InertialStandardItem::InertialStandardItem(const QIcon &icon, const QString &text, tesseract_scene_graph::Inertial::Ptr inertial)
-  : QStandardItem(icon, text)
-  , inertial(std::move(inertial))
+InertialStandardItem::InertialStandardItem(const QIcon& icon,
+                                           const QString& text,
+                                           tesseract_scene_graph::Inertial::Ptr inertial)
+  : QStandardItem(icon, text), inertial(std::move(inertial))
 {
   ctor();
 }
 
-int InertialStandardItem::type() const
-{
-  return static_cast<int>(StandardItemType::INERTIAL);
-}
+int InertialStandardItem::type() const { return static_cast<int>(StandardItemType::INERTIAL); }
 
 void InertialStandardItem::ctor()
 {
@@ -65,4 +61,4 @@ void InertialStandardItem::ctor()
   appendRow(createStandardItemFloat("iyz", inertial->iyz));
   appendRow(createStandardItemFloat("izz", inertial->izz));
 }
-}
+}  // namespace tesseract_gui

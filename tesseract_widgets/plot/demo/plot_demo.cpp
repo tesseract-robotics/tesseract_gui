@@ -31,48 +31,48 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <tesseract_widgets/plot/plot_widget.h>
 
-int main(int argc, char ** argv)
+int main(int argc, char** argv)
 {
-    QApplication app(argc, argv);
-    { //open qss file
-      QFile file(":/tesseract_widgets/themes/Takezo/Takezo.qss");
-      file.open(QFile::ReadOnly);
+  QApplication app(argc, argv);
+  {  // open qss file
+    QFile file(":/tesseract_widgets/themes/Takezo/Takezo.qss");
+    file.open(QFile::ReadOnly);
 
-      QString styleSheet { QLatin1String(file.readAll()) };
+    QString styleSheet{ QLatin1String(file.readAll()) };
 
-      //setup stylesheet
-      app.setStyleSheet(styleSheet);
-    }
+    // setup stylesheet
+    app.setStyleSheet(styleSheet);
+  }
 
-    QWidget window;
-    window.resize(320, 240);
-    window.setWindowTitle(QApplication::translate("childwidget", "Child widget"));
+  QWidget window;
+  window.resize(320, 240);
+  window.setWindowTitle(QApplication::translate("childwidget", "Child widget"));
 
-    QHBoxLayout *layout = new QHBoxLayout(&window);
+  QHBoxLayout* layout = new QHBoxLayout(&window);
 
-    tesseract_gui::PlotDataMapRef plot_data_map;
-    tesseract_gui::PlotData& cosine_data = plot_data_map.getOrCreateNumeric("cosine");
-    tesseract_gui::PlotData& sine_data = plot_data_map.getOrCreateNumeric("sine");
-    for (int i = 0; i < int((2 * M_PI)/0.01); ++i)
-    {
-      cosine_data.pushBack(tesseract_gui::PlotDataXY::Point(i * 0.01, std::cos(i*0.01)));
-      sine_data.pushBack(tesseract_gui::PlotDataXY::Point(i * 0.01, std::sin(i*0.01)));
-    }
+  tesseract_gui::PlotDataMapRef plot_data_map;
+  tesseract_gui::PlotData& cosine_data = plot_data_map.getOrCreateNumeric("cosine");
+  tesseract_gui::PlotData& sine_data = plot_data_map.getOrCreateNumeric("sine");
+  for (int i = 0; i < int((2 * M_PI) / 0.01); ++i)
+  {
+    cosine_data.pushBack(tesseract_gui::PlotDataXY::Point(i * 0.01, std::cos(i * 0.01)));
+    sine_data.pushBack(tesseract_gui::PlotDataXY::Point(i * 0.01, std::sin(i * 0.01)));
+  }
 
-    auto widget =  std::make_unique<tesseract_gui::PlotWidget>(plot_data_map);
-    widget->addCurve("cosine");
-    widget->addCurve("sine");
-    widget->enableTracker(true);
+  auto widget = std::make_unique<tesseract_gui::PlotWidget>(plot_data_map);
+  widget->addCurve("cosine");
+  widget->addCurve("sine");
+  widget->enableTracker(true);
+  widget->replot();
+
+  QObject::connect(widget.get(), &tesseract_gui::PlotWidget::trackerMoved, [&](QPointF pos) {
+    widget->setTrackerPosition(pos.x());
     widget->replot();
+  });
 
-    QObject::connect(widget.get(), &tesseract_gui::PlotWidget::trackerMoved, [&](QPointF pos){
-      widget->setTrackerPosition(pos.x());
-      widget->replot();
-    });
+  layout->addWidget(widget->widget(), 0, 0);
 
-    layout->addWidget(widget->widget(), 0, 0);
+  window.show();
 
-    window.show();
-
-    return app.exec();
+  return app.exec();
 }

@@ -27,24 +27,26 @@
 
 namespace tesseract_gui
 {
-
-AddContactManagersPluginInfoCommandStandardItem::AddContactManagersPluginInfoCommandStandardItem(tesseract_environment::AddContactManagersPluginInfoCommand::ConstPtr command)
-  : QStandardItem(icons::getCommandEntryIcon(), "Add Contact Managers Plugin Info")
-  , command(std::move(command))
+AddContactManagersPluginInfoCommandStandardItem::AddContactManagersPluginInfoCommandStandardItem(
+    tesseract_environment::AddContactManagersPluginInfoCommand::ConstPtr command)
+  : QStandardItem(icons::getCommandEntryIcon(), "Add Contact Managers Plugin Info"), command(std::move(command))
 {
   ctor();
 }
 
-AddContactManagersPluginInfoCommandStandardItem::AddContactManagersPluginInfoCommandStandardItem(const QString &text, tesseract_environment::AddContactManagersPluginInfoCommand::ConstPtr command)
-  : QStandardItem(icons::getCommandEntryIcon(), text)
-  , command(std::move(command))
+AddContactManagersPluginInfoCommandStandardItem::AddContactManagersPluginInfoCommandStandardItem(
+    const QString& text,
+    tesseract_environment::AddContactManagersPluginInfoCommand::ConstPtr command)
+  : QStandardItem(icons::getCommandEntryIcon(), text), command(std::move(command))
 {
   ctor();
 }
 
-AddContactManagersPluginInfoCommandStandardItem::AddContactManagersPluginInfoCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::AddContactManagersPluginInfoCommand::ConstPtr command)
-  : QStandardItem(icon, text)
-  , command(std::move(command))
+AddContactManagersPluginInfoCommandStandardItem::AddContactManagersPluginInfoCommandStandardItem(
+    const QIcon& icon,
+    const QString& text,
+    tesseract_environment::AddContactManagersPluginInfoCommand::ConstPtr command)
+  : QStandardItem(icon, text), command(std::move(command))
 {
   ctor();
 }
@@ -58,4 +60,4 @@ void AddContactManagersPluginInfoCommandStandardItem::ctor()
 {
   appendRow(new ContactManagersPluginInfoStandardItem(command->getContactManagersPluginInfo()));
 }
-}
+}  // namespace tesseract_gui

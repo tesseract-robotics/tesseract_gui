@@ -27,18 +27,12 @@
 namespace tesseract_gui
 {
 PointSeriesXY::PointSeriesXY(const PlotData* x_axis, const PlotData* y_axis)
-  : QwtSeriesWrapper(&_cached_curve)
-  , _x_axis(x_axis)
-  , _y_axis(y_axis)
-  , _cached_curve("", x_axis->group())
+  : QwtSeriesWrapper(&_cached_curve), _x_axis(x_axis), _y_axis(y_axis), _cached_curve("", x_axis->group())
 {
   updateCache(true);
 }
 
-size_t PointSeriesXY::size() const
-{
-  return _cached_curve.size();
-}
+size_t PointSeriesXY::size() const { return _cached_curve.size(); }
 
 std::optional<QPointF> PointSeriesXY::sampleFromTime(double t)
 {
@@ -56,10 +50,7 @@ std::optional<QPointF> PointSeriesXY::sampleFromTime(double t)
   return QPointF(p.x, p.y);
 }
 
-RangeOpt PointSeriesXY::getVisualizationRangeY(Range)
-{
-  return _cached_curve.rangeY();
-}
+RangeOpt PointSeriesXY::getVisualizationRangeY(Range) { return _cached_curve.rangeY(); }
 
 bool PointSeriesXY::updateCache(bool reset_old_data)
 {
@@ -94,8 +85,5 @@ bool PointSeriesXY::updateCache(bool reset_old_data)
   return true;
 }
 
-RangeOpt PointSeriesXY::getVisualizationRangeX()
-{
-  return _cached_curve.rangeX();
-}
-}
+RangeOpt PointSeriesXY::getVisualizationRangeX() { return _cached_curve.rangeX(); }
+}  // namespace tesseract_gui

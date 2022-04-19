@@ -29,8 +29,6 @@
 
 namespace tesseract_gui
 {
-
-
 RangeOpt QwtTimeseries::getVisualizationRangeY(Range range_X)
 {
   int first_index = _ts_data->getIndexFromX(range_X.min);
@@ -70,16 +68,11 @@ std::optional<QPointF> QwtTimeseries::sampleFromTime(double t)
 }
 
 TransformedTimeseries::TransformedTimeseries(const PlotData* source_data)
-  : QwtTimeseries(&_dst_data)
-  , _dst_data(source_data->plotName(), {})
-  , _src_data(source_data)
+  : QwtTimeseries(&_dst_data), _dst_data(source_data->plotName(), {}), _src_data(source_data)
 {
 }
 
-TransformFunction::Ptr TransformedTimeseries::transform()
-{
-  return _transform;
-}
+TransformFunction::Ptr TransformedTimeseries::transform() { return _transform; }
 
 void TransformedTimeseries::setTransform(QString transform_ID)
 {
@@ -124,20 +117,11 @@ bool TransformedTimeseries::updateCache(bool reset_old_data)
   return true;
 }
 
-QString TransformedTimeseries::transformName()
-{
-  return (!_transform) ? QString() : _transform->name();
-}
+QString TransformedTimeseries::transformName() { return (!_transform) ? QString() : _transform->name(); }
 
-QString TransformedTimeseries::alias() const
-{
-  return _alias;
-}
+QString TransformedTimeseries::alias() const { return _alias; }
 
-void TransformedTimeseries::setAlias(QString alias)
-{
-  _alias = alias;
-}
+void TransformedTimeseries::setAlias(QString alias) { _alias = alias; }
 
 QRectF QwtSeriesWrapper::boundingRect() const
 {
@@ -162,15 +146,9 @@ QPointF QwtSeriesWrapper::sample(size_t i) const
   return QPointF(p.x - _time_offset, p.y);
 }
 
-size_t QwtSeriesWrapper::size() const
-{
-  return _data->size();
-}
+size_t QwtSeriesWrapper::size() const { return _data->size(); }
 
-void QwtSeriesWrapper::setTimeOffset(double offset)
-{
-  _time_offset = offset;
-}
+void QwtSeriesWrapper::setTimeOffset(double offset) { _time_offset = offset; }
 
 RangeOpt QwtSeriesWrapper::getVisualizationRangeX()
 {
@@ -185,8 +163,5 @@ RangeOpt QwtSeriesWrapper::getVisualizationRangeX()
   }
 }
 
-const PlotDataBase<double, double>* QwtSeriesWrapper::plotData() const
-{
-  return _data;
-}
-}
+const PlotDataBase<double, double>* QwtSeriesWrapper::plotData() const { return _data; }
+}  // namespace tesseract_gui

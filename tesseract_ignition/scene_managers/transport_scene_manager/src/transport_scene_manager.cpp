@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
-*/
+ */
 
 #include <algorithm>
 #include <map>
@@ -64,50 +64,50 @@ public:
 
   /// \brief Callback function for the pose topic
   /// \param[in] _msg Pose vector msg
-  void OnPoseVMsg(const ignition::msgs::Pose_V &_msg);
+  void OnPoseVMsg(const ignition::msgs::Pose_V& _msg);
 
   /// \brief Load the scene from a scene msg
   /// \param[in] _msg Scene msg
-  void LoadScene(const ignition::msgs::Scene &_msg);
+  void LoadScene(const ignition::msgs::Scene& _msg);
 
   /// \brief Callback function for the request topic
   /// \param[in] _msg Deletion message
-  void OnDeletionMsg(const ignition::msgs::UInt32_V &_msg);
+  void OnDeletionMsg(const ignition::msgs::UInt32_V& _msg);
 
   /// \brief Load the scene from a scene msg
   /// \param[in] _msg Scene msg
-  void OnSceneSrvMsg(const ignition::msgs::Scene &_msg, bool result);
+  void OnSceneSrvMsg(const ignition::msgs::Scene& _msg, bool result);
 
   /// \brief Called when there's an entity is added to the scene
   /// \param[in] _msg Scene msg
-  void OnSceneMsg(const ignition::msgs::Scene &_msg);
+  void OnSceneMsg(const ignition::msgs::Scene& _msg);
 
   /// \brief Load the model from a model msg
   /// \param[in] _msg Model msg
   /// \return Model visual created from the msg
-  ignition::rendering::VisualPtr LoadModel(const ignition::msgs::Model &_msg);
+  ignition::rendering::VisualPtr LoadModel(const ignition::msgs::Model& _msg);
 
   /// \brief Load a link from a link msg
   /// \param[in] _msg Link msg
   /// \return Link visual created from the msg
-  ignition::rendering::VisualPtr LoadLink(const ignition::msgs::Link &_msg);
+  ignition::rendering::VisualPtr LoadLink(const ignition::msgs::Link& _msg);
 
   /// \brief Load a visual from a visual msg
   /// \param[in] _msg Visual msg
   /// \return Visual visual created from the msg
-  ignition::rendering::VisualPtr LoadVisual(const ignition::msgs::Visual &_msg);
+  ignition::rendering::VisualPtr LoadVisual(const ignition::msgs::Visual& _msg);
 
   /// \brief Load a light from a light msg
   /// \param[in] _msg Light msg
   /// \return Light object created from the msg
-  ignition::rendering::LightPtr LoadLight(const ignition::msgs::Light &_msg);
+  ignition::rendering::LightPtr LoadLight(const ignition::msgs::Light& _msg);
 
   /// \brief Delete an entity
   /// \param[in] _entity Entity to delete
   void DeleteEntity(unsigned int _entity);
 
   //// \brief Indicate is request to service should be made
-  bool request{false};
+  bool request{ false };
 
   //// \brief Ign-transport scene service name
   std::string service;
@@ -125,7 +125,7 @@ public:
   std::string scene_name;
 
   //// \brief Pointer to the rendering scene
-  ignition::rendering::ScenePtr scene{nullptr};
+  ignition::rendering::ScenePtr scene{ nullptr };
 
   //// \brief Mutex to protect the msgs
   std::mutex msgMutex;
@@ -159,8 +159,7 @@ public:
 using namespace tesseract_gui;
 
 /////////////////////////////////////////////////
-TransportSceneManager::TransportSceneManager(const std::string &scene_name)
-  : dataPtr(new TransportSceneManagerPrivate)
+TransportSceneManager::TransportSceneManager(const std::string& scene_name) : dataPtr(new TransportSceneManagerPrivate)
 {
   this->dataPtr->scene_name = scene_name;
 }
@@ -194,7 +193,7 @@ TransportSceneManager::TransportSceneManager(const std::string& scene_name,
 }
 
 ///////////////////////////////////////////////////
-//void TransportSceneManager::LoadConfig(const tinyxml2::XMLElement *_pluginElem)
+// void TransportSceneManager::LoadConfig(const tinyxml2::XMLElement *_pluginElem)
 //{
 //  if (this->title.empty())
 //    this->title = "Transport Scene Manager";
@@ -236,47 +235,38 @@ void TransportSceneManagerPrivate::InitializeTransport()
   if (request)
     this->Request();
 
-  if (!this->node.Subscribe(this->poseTopic,
-      &TransportSceneManagerPrivate::OnPoseVMsg, this))
+  if (!this->node.Subscribe(this->poseTopic, &TransportSceneManagerPrivate::OnPoseVMsg, this))
   {
-    ignerr << "Error subscribing to pose topic: " << this->poseTopic
-      << std::endl;
+    ignerr << "Error subscribing to pose topic: " << this->poseTopic << std::endl;
   }
   else
   {
-    ignmsg << "Listening to pose messages on [" << this->poseTopic << "]"
-           << std::endl;
+    ignmsg << "Listening to pose messages on [" << this->poseTopic << "]" << std::endl;
   }
 
-  if (!this->node.Subscribe(this->deletionTopic,
-      &TransportSceneManagerPrivate::OnDeletionMsg, this))
+  if (!this->node.Subscribe(this->deletionTopic, &TransportSceneManagerPrivate::OnDeletionMsg, this))
   {
-    ignerr << "Error subscribing to deletion topic: " << this->deletionTopic
-      << std::endl;
+    ignerr << "Error subscribing to deletion topic: " << this->deletionTopic << std::endl;
   }
   else
   {
-    ignmsg << "Listening to deletion messages on [" << this->deletionTopic
-           << "]" << std::endl;
+    ignmsg << "Listening to deletion messages on [" << this->deletionTopic << "]" << std::endl;
   }
 
-  if (!this->node.Subscribe(this->sceneTopic,
-      &TransportSceneManagerPrivate::OnSceneMsg, this))
+  if (!this->node.Subscribe(this->sceneTopic, &TransportSceneManagerPrivate::OnSceneMsg, this))
   {
-    ignerr << "Error subscribing to scene topic: " << this->sceneTopic
-           << std::endl;
+    ignerr << "Error subscribing to scene topic: " << this->sceneTopic << std::endl;
   }
   else
   {
-    ignmsg << "Listening to scene messages on [" << this->sceneTopic << "]"
-           << std::endl;
+    ignmsg << "Listening to scene messages on [" << this->sceneTopic << "]" << std::endl;
   }
 
   ignmsg << "Transport initialized." << std::endl;
 }
 
 /////////////////////////////////////////////////
-bool TransportSceneManager::eventFilter(QObject *_obj, QEvent *_event)
+bool TransportSceneManager::eventFilter(QObject* _obj, QEvent* _event)
 {
   if (_event->type() == events::Render::kType)
   {
@@ -292,7 +282,7 @@ void TransportSceneManagerPrivate::Request()
 {
   // wait for the service to be advertised
   std::vector<ignition::transport::ServicePublisher> publishers;
-  const std::chrono::duration<double> sleepDuration{1.0};
+  const std::chrono::duration<double> sleepDuration{ 1.0 };
   const std::size_t tries = 30;
   for (std::size_t i = 0; i < tries; ++i)
   {
@@ -303,15 +293,14 @@ void TransportSceneManagerPrivate::Request()
     igndbg << "Waiting for service " << this->service << "\n";
   }
 
-  if (publishers.empty() || !this->node.Request(this->service,
-      &TransportSceneManagerPrivate::OnSceneSrvMsg, this))
+  if (publishers.empty() || !this->node.Request(this->service, &TransportSceneManagerPrivate::OnSceneSrvMsg, this))
   {
     ignerr << "Error making service request to " << this->service << std::endl;
   }
 }
 
 /////////////////////////////////////////////////
-void TransportSceneManagerPrivate::OnPoseVMsg(const ignition::msgs::Pose_V &_msg)
+void TransportSceneManagerPrivate::OnPoseVMsg(const ignition::msgs::Pose_V& _msg)
 {
   std::lock_guard<std::mutex> lock(this->msgMutex);
   for (int i = 0; i < _msg.pose_size(); ++i)
@@ -330,11 +319,10 @@ void TransportSceneManagerPrivate::OnPoseVMsg(const ignition::msgs::Pose_V &_msg
 }
 
 /////////////////////////////////////////////////
-void TransportSceneManagerPrivate::OnDeletionMsg(const ignition::msgs::UInt32_V &_msg)
+void TransportSceneManagerPrivate::OnDeletionMsg(const ignition::msgs::UInt32_V& _msg)
 {
   std::lock_guard<std::mutex> lock(this->msgMutex);
-  std::copy(_msg.data().begin(), _msg.data().end(),
-            std::back_inserter(this->toDeleteEntities));
+  std::copy(_msg.data().begin(), _msg.data().end(), std::back_inserter(this->toDeleteEntities));
 }
 
 /////////////////////////////////////////////////
@@ -351,13 +339,13 @@ void TransportSceneManagerPrivate::OnRender()
 
   std::lock_guard<std::mutex> lock(this->msgMutex);
 
-  for (const auto &msg : this->sceneMsgs)
+  for (const auto& msg : this->sceneMsgs)
   {
     this->LoadScene(msg);
   }
   this->sceneMsgs.clear();
 
-  for (const auto &entity : this->toDeleteEntities)
+  for (const auto& entity : this->toDeleteEntities)
   {
     this->DeleteEntity(entity);
   }
@@ -408,19 +396,18 @@ void TransportSceneManagerPrivate::OnRender()
 }
 
 /////////////////////////////////////////////////
-void TransportSceneManagerPrivate::OnSceneMsg(const ignition::msgs::Scene &_msg)
+void TransportSceneManagerPrivate::OnSceneMsg(const ignition::msgs::Scene& _msg)
 {
   std::lock_guard<std::mutex> lock(this->msgMutex);
   this->sceneMsgs.push_back(_msg);
 }
 
 /////////////////////////////////////////////////
-void TransportSceneManagerPrivate::OnSceneSrvMsg(const ignition::msgs::Scene &_msg, bool result)
+void TransportSceneManagerPrivate::OnSceneSrvMsg(const ignition::msgs::Scene& _msg, bool result)
 {
   if (!result)
   {
-    ignerr << "Error making service request to " << this->service
-           << std::endl;
+    ignerr << "Error making service request to " << this->service << std::endl;
     return;
   }
 
@@ -431,7 +418,7 @@ void TransportSceneManagerPrivate::OnSceneSrvMsg(const ignition::msgs::Scene &_m
 }
 
 /////////////////////////////////////////////////
-void TransportSceneManagerPrivate::LoadScene(const ignition::msgs::Scene &_msg)
+void TransportSceneManagerPrivate::LoadScene(const ignition::msgs::Scene& _msg)
 {
   ignition::rendering::VisualPtr rootVis = this->scene->RootVisual();
 
@@ -464,8 +451,7 @@ void TransportSceneManagerPrivate::LoadScene(const ignition::msgs::Scene &_msg)
 }
 
 /////////////////////////////////////////////////
-ignition::rendering::VisualPtr TransportSceneManagerPrivate::LoadModel(
-    const ignition::msgs::Model &_msg)
+ignition::rendering::VisualPtr TransportSceneManagerPrivate::LoadModel(const ignition::msgs::Model& _msg)
 {
   ignition::rendering::VisualPtr modelVis = loadModel(*(this->scene), _msg);
   this->visuals[_msg.id()] = modelVis;
@@ -473,7 +459,7 @@ ignition::rendering::VisualPtr TransportSceneManagerPrivate::LoadModel(
 }
 
 /////////////////////////////////////////////////
-ignition::rendering::VisualPtr TransportSceneManagerPrivate::LoadLink(const ignition::msgs::Link &_msg)
+ignition::rendering::VisualPtr TransportSceneManagerPrivate::LoadLink(const ignition::msgs::Link& _msg)
 {
   ignition::rendering::VisualPtr linkVis = loadLink(*(this->scene), _msg);
   this->visuals[_msg.id()] = linkVis;
@@ -481,7 +467,7 @@ ignition::rendering::VisualPtr TransportSceneManagerPrivate::LoadLink(const igni
 }
 
 /////////////////////////////////////////////////
-ignition::rendering::VisualPtr TransportSceneManagerPrivate::LoadVisual(const ignition::msgs::Visual &_msg)
+ignition::rendering::VisualPtr TransportSceneManagerPrivate::LoadVisual(const ignition::msgs::Visual& _msg)
 {
   ignition::rendering::VisualPtr visualVis = loadVisual(*(this->scene), _msg);
   this->visuals[_msg.id()] = visualVis;
@@ -490,7 +476,7 @@ ignition::rendering::VisualPtr TransportSceneManagerPrivate::LoadVisual(const ig
 }
 
 /////////////////////////////////////////////////
-ignition::rendering::LightPtr TransportSceneManagerPrivate::LoadLight(const ignition::msgs::Light &_msg)
+ignition::rendering::LightPtr TransportSceneManagerPrivate::LoadLight(const ignition::msgs::Light& _msg)
 {
   ignition::rendering::LightPtr light = loadLight(*(this->scene), _msg);
   this->lights[_msg.id()] = light;

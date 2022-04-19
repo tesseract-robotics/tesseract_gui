@@ -28,30 +28,24 @@
 namespace tesseract_gui
 {
 PlaneStandardItem::PlaneStandardItem(tesseract_geometry::Plane::Ptr plane)
-  : QStandardItem(icons::getPlaneIcon(), "Plane")
-  , plane(std::move(plane))
+  : QStandardItem(icons::getPlaneIcon(), "Plane"), plane(std::move(plane))
 {
   ctor();
 }
 
-PlaneStandardItem::PlaneStandardItem(const QString &text, tesseract_geometry::Plane::Ptr plane)
-  : QStandardItem(icons::getPlaneIcon(), text)
-  , plane(std::move(plane))
+PlaneStandardItem::PlaneStandardItem(const QString& text, tesseract_geometry::Plane::Ptr plane)
+  : QStandardItem(icons::getPlaneIcon(), text), plane(std::move(plane))
 {
   ctor();
 }
 
-PlaneStandardItem::PlaneStandardItem(const QIcon &icon, const QString &text, tesseract_geometry::Plane::Ptr plane)
-  : QStandardItem(icon, text)
-  , plane(std::move(plane))
+PlaneStandardItem::PlaneStandardItem(const QIcon& icon, const QString& text, tesseract_geometry::Plane::Ptr plane)
+  : QStandardItem(icon, text), plane(std::move(plane))
 {
   ctor();
 }
 
-int PlaneStandardItem::type() const
-{
-  return static_cast<int>(StandardItemType::PLANE);
-}
+int PlaneStandardItem::type() const { return static_cast<int>(StandardItemType::PLANE); }
 
 void PlaneStandardItem::ctor()
 {
@@ -60,5 +54,4 @@ void PlaneStandardItem::ctor()
   appendRow(createStandardItemFloat("c", plane->getC()));
   appendRow(createStandardItemFloat("d", plane->getD()));
 }
-}
-
+}  // namespace tesseract_gui

@@ -27,24 +27,26 @@
 
 namespace tesseract_gui
 {
-
-ChangeJointVelocityLimitsCommandStandardItem::ChangeJointVelocityLimitsCommandStandardItem(tesseract_environment::ChangeJointVelocityLimitsCommand::ConstPtr command)
-  : QStandardItem(icons::getCommandEntryIcon(), "Change Joint Velocity Limits")
-  , command(std::move(command))
+ChangeJointVelocityLimitsCommandStandardItem::ChangeJointVelocityLimitsCommandStandardItem(
+    tesseract_environment::ChangeJointVelocityLimitsCommand::ConstPtr command)
+  : QStandardItem(icons::getCommandEntryIcon(), "Change Joint Velocity Limits"), command(std::move(command))
 {
   ctor();
 }
 
-ChangeJointVelocityLimitsCommandStandardItem::ChangeJointVelocityLimitsCommandStandardItem(const QString &text, tesseract_environment::ChangeJointVelocityLimitsCommand::ConstPtr command)
-  : QStandardItem(icons::getCommandEntryIcon(), text)
-  , command(std::move(command))
+ChangeJointVelocityLimitsCommandStandardItem::ChangeJointVelocityLimitsCommandStandardItem(
+    const QString& text,
+    tesseract_environment::ChangeJointVelocityLimitsCommand::ConstPtr command)
+  : QStandardItem(icons::getCommandEntryIcon(), text), command(std::move(command))
 {
   ctor();
 }
 
-ChangeJointVelocityLimitsCommandStandardItem::ChangeJointVelocityLimitsCommandStandardItem(const QIcon &icon, const QString &text, tesseract_environment::ChangeJointVelocityLimitsCommand::ConstPtr command)
-  : QStandardItem(icon, text)
-  , command(std::move(command))
+ChangeJointVelocityLimitsCommandStandardItem::ChangeJointVelocityLimitsCommandStandardItem(
+    const QIcon& icon,
+    const QString& text,
+    tesseract_environment::ChangeJointVelocityLimitsCommand::ConstPtr command)
+  : QStandardItem(icon, text), command(std::move(command))
 {
   ctor();
 }
@@ -61,4 +63,4 @@ void ChangeJointVelocityLimitsCommandStandardItem::ctor()
 
   sortChildren(0);
 }
-}
+}  // namespace tesseract_gui

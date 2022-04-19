@@ -5,10 +5,7 @@
 
 namespace tesseract_gui
 {
-QApplication* getApp()
-{
-  return qobject_cast<QApplication *>(qGuiApp);
-}
+QApplication* getApp() { return qobject_cast<QApplication*>(qGuiApp); }
 
 ignition::rendering::ScenePtr sceneFromFirstRenderEngine(const std::string& scene_name)
 {
@@ -23,14 +20,13 @@ ignition::rendering::ScenePtr sceneFromFirstRenderEngine(const std::string& scen
   if (loadedEngNames.size() > 1)
   {
     ignwarn << "More than one engine is available. "
-      << "Using engine [" << engineName << "]" << std::endl;
+            << "Using engine [" << engineName << "]" << std::endl;
   }
 
   auto* engine = ignition::rendering::engine(engineName);
   if (!engine)
   {
-    ignerr << "Internal error: failed to load engine [" << engineName
-      << "]." << std::endl;
+    ignerr << "Internal error: failed to load engine [" << engineName << "]." << std::endl;
     return nullptr;
   }
 
@@ -74,4 +70,4 @@ ignition::rendering::ScenePtr sceneFromFirstRenderEngine(const std::string& engi
 
   return scene;
 }
-}
+}  // namespace tesseract_gui

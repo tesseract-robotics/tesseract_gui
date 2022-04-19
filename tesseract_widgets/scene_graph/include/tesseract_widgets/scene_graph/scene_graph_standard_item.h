@@ -38,8 +38,8 @@ class SceneGraphStandardItem : public QStandardItem
 {
 public:
   SceneGraphStandardItem(tesseract_scene_graph::SceneGraph::UPtr scene_graph);
-  explicit SceneGraphStandardItem(const QString &text, tesseract_scene_graph::SceneGraph::UPtr scene_graph);
-  SceneGraphStandardItem(const QIcon &icon, const QString &text, tesseract_scene_graph::SceneGraph::UPtr scene_graph);
+  explicit SceneGraphStandardItem(const QString& text, tesseract_scene_graph::SceneGraph::UPtr scene_graph);
+  SceneGraphStandardItem(const QIcon& icon, const QString& text, tesseract_scene_graph::SceneGraph::UPtr scene_graph);
   int type() const override;
 
   tesseract_scene_graph::SceneGraph::UPtr scene_graph;
@@ -47,6 +47,6 @@ public:
 private:
   void ctor();
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_SCENE_GRAPH_SCENE_GRAPH_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_SCENE_GRAPH_SCENE_GRAPH_STANDARD_ITEM_H

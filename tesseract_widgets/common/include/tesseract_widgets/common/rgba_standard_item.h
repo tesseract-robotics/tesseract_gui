@@ -38,8 +38,8 @@ class RGBAStandardItem : public QStandardItem
 {
 public:
   explicit RGBAStandardItem(const Eigen::Vector4d& rgba);
-  explicit RGBAStandardItem(const QString &text, const Eigen::Vector4d& rgba);
-  explicit RGBAStandardItem(const QIcon &icon, const QString &text, const Eigen::Vector4d& rgba);
+  explicit RGBAStandardItem(const QString& text, const Eigen::Vector4d& rgba);
+  explicit RGBAStandardItem(const QIcon& icon, const QString& text, const Eigen::Vector4d& rgba);
   int type() const override;
 
   Eigen::Vector4d rgba;
@@ -47,6 +47,6 @@ public:
 private:
   void ctor();
 };
-}
+}  // namespace tesseract_gui
 
-#endif // TESSERACT_WIDGETS_COMMON_RGBA_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_COMMON_RGBA_STANDARD_ITEM_H

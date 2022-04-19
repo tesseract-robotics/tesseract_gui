@@ -23,7 +23,7 @@
 
 #include <tesseract_widgets/environment/environment_widget_config.h>
 #include <tesseract_widgets/environment/environment_commands_model.h>
-#include <tesseract_widgets/scene_graph/scene_graph_standard_item.h>
+#include <tesseract_widgets/scene_graph/scene_graph_model.h>
 #include <tesseract_widgets/scene_graph/scene_state_model.h>
 #include <tesseract_widgets/kinematic_groups/kinematic_groups_model.h>
 #include <tesseract_widgets/kinematic_groups/group_tcps_model.h>
@@ -44,7 +44,7 @@ struct EnvironmentWidgetConfigImpl
   // Store link visibility properties
   LinkVisibilityPropertiesMap link_visibility_properties;
 
-  QStandardItemModel scene_model;
+  SceneGraphModel scene_model;
   SceneStateModel scene_state_model;
   KinematicGroupsModel group_model;
   GroupTCPsModel group_tcps_model;
@@ -103,7 +103,7 @@ LinkVisibilityPropertiesMap& EnvironmentWidgetConfig::getLinkVisibilityPropertie
   return data_->link_visibility_properties;
 }
 
-QStandardItemModel& EnvironmentWidgetConfig::getSceneGraphModel() { return data_->scene_model; }
+SceneGraphModel& EnvironmentWidgetConfig::getSceneGraphModel() { return data_->scene_model; }
 SceneStateModel& EnvironmentWidgetConfig::getSceneStateModel() { return data_->scene_state_model; }
 KinematicGroupsModel& EnvironmentWidgetConfig::getKinematicGroupsModel() { return data_->group_model; }
 GroupTCPsModel& EnvironmentWidgetConfig::getGroupTCPsModel() { return data_->group_tcps_model; }
@@ -144,11 +144,7 @@ void EnvironmentWidgetConfig::onUpdateSceneGraphModel()
   if (!data_->environment->isInitialized())
     return;
 
-  data_->scene_model.clear();
-  data_->scene_model.setColumnCount(2);
-  data_->scene_model.setHorizontalHeaderLabels({ "Name", "Values" });
-  auto* scene_item = new tesseract_gui::SceneGraphStandardItem(data_->environment->getSceneGraph()->clone());
-  data_->scene_model.appendRow(scene_item);
+  data_->scene_model.setSceneGraph(data_->environment->getSceneGraph()->clone());
 
   // Update link visibility properties
   std::vector<std::string> link_names = data_->environment->getLinkNames();

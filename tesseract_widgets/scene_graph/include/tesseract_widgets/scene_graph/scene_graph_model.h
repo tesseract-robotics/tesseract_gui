@@ -20,36 +20,46 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_WIDGETS_SCENE_GRAPH_LINK_STANDARD_ITEM_H
-#define TESSERACT_WIDGETS_SCENE_GRAPH_LINK_STANDARD_ITEM_H
+#ifndef TESSERACT_WIDGETS_SCENE_GRAPH_SCENE_GRAPH_MODEL_H
+#define TESSERACT_WIDGETS_SCENE_GRAPH_SCENE_GRAPH_MODEL_H
 
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
-#ifndef Q_MOC_RUN
-#include <tesseract_scene_graph/link.h>
-#endif
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
+#include <memory>
+#include <QStandardItemModel>
+#include <QObject>
 
-#include <QStandardItem>
+namespace tesseract_scene_graph
+{
+class SceneGraph;
+}
+
+class QModelIndex;
 
 namespace tesseract_gui
 {
-class LinkStandardItem : public QStandardItem
+class SceneGraphModelImpl;
+class SceneGraphModel : public QStandardItemModel
 {
-public:
-  LinkStandardItem(tesseract_scene_graph::Link::Ptr link, bool checkable = true);
-  explicit LinkStandardItem(const QString& text, tesseract_scene_graph::Link::Ptr link, bool checkable = true);
-  LinkStandardItem(const QIcon& icon,
-                   const QString& text,
-                   tesseract_scene_graph::Link::Ptr link,
-                   bool checkable = true);
-  int type() const override;
+  Q_OBJECT
 
-  tesseract_scene_graph::Link::Ptr link;
+public:
+  explicit SceneGraphModel(QObject* parent = nullptr);
+  ~SceneGraphModel() override;
+  SceneGraphModel(const SceneGraphModel& other);
+  SceneGraphModel& operator=(const SceneGraphModel& other);
+
+  void setSceneGraph(std::unique_ptr<tesseract_scene_graph::SceneGraph> scene_graph);
+
+  void clear();
+
+public Q_SLOTS:
+  virtual void onLinkCheckedStateChanged(const QString& link_name, bool checked);
+  virtual void onLinkVisualsCheckedStateChanged(const QString& link_name, bool checked);
+  virtual void onLinkCollisionsCheckedStateChanged(const QString& link_name, bool checked);
 
 private:
-  void ctor(bool checkable);
+  std::unique_ptr<SceneGraphModelImpl> data_;
 };
+
 }  // namespace tesseract_gui
 
-#endif  // TESSERACT_WIDGETS_SCENE_GRAPH_LINK_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_SCENE_GRAPH_SCENE_GRAPH_MODEL_H

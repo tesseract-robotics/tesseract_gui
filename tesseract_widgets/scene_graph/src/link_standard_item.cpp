@@ -26,32 +26,42 @@
 #include <tesseract_widgets/scene_graph/collision_standard_item.h>
 #include <tesseract_widgets/common/standard_item_utils.h>
 #include <tesseract_widgets/common/standard_item_type.h>
+#include <tesseract_widgets/common/type_standard_item.h>
 #include <tesseract_widgets/common/icon_utils.h>
 
 namespace tesseract_gui
 {
-LinkStandardItem::LinkStandardItem(tesseract_scene_graph::Link::Ptr link)
+LinkStandardItem::LinkStandardItem(tesseract_scene_graph::Link::Ptr link, bool checkable)
   : QStandardItem(icons::getLinkIcon(), "Link"), link(std::move(link))
 {
-  ctor();
+  ctor(checkable);
 }
 
-LinkStandardItem::LinkStandardItem(const QString& text, tesseract_scene_graph::Link::Ptr link)
+LinkStandardItem::LinkStandardItem(const QString& text, tesseract_scene_graph::Link::Ptr link, bool checkable)
   : QStandardItem(icons::getLinkIcon(), text), link(std::move(link))
 {
-  ctor();
+  ctor(checkable);
 }
 
-LinkStandardItem::LinkStandardItem(const QIcon& icon, const QString& text, tesseract_scene_graph::Link::Ptr link)
+LinkStandardItem::LinkStandardItem(const QIcon& icon,
+                                   const QString& text,
+                                   tesseract_scene_graph::Link::Ptr link,
+                                   bool checkable)
   : QStandardItem(icon, text), link(std::move(link))
 {
-  ctor();
+  ctor(checkable);
 }
 
 int LinkStandardItem::type() const { return static_cast<int>(StandardItemType::LINK); }
 
-void LinkStandardItem::ctor()
+void LinkStandardItem::ctor(bool checkable)
 {
+  if (checkable)
+  {
+    setCheckable(true);
+    setCheckState(Qt::CheckState::Checked);
+  }
+
   appendRow(createStandardItemString("name", link->getName()));
 
   if (link->inertial != nullptr)
@@ -59,18 +69,32 @@ void LinkStandardItem::ctor()
 
   if (!link->visual.empty())
   {
-    auto* visuals_item = new QStandardItem(icons::getVisualVectorIcon(), "Visual");
+    auto* visuals_item =
+        new TypeStandardItem(icons::getVisualVectorIcon(), "Visual", static_cast<int>(StandardItemType::VISUALS));
     for (std::size_t i = 0; i < link->visual.size(); ++i)
       visuals_item->appendRow(new VisualStandardItem(QString("[%1]").arg(i), link->visual.at(i)));
+
+    if (checkable)
+    {
+      visuals_item->setCheckable(true);
+      visuals_item->setCheckState(Qt::CheckState::Checked);
+    }
 
     appendRow(visuals_item);
   }
 
   if (!link->collision.empty())
   {
-    auto* collisions_item = new QStandardItem(icons::getCollisionVectorIcon(), "Collision");
+    auto* collisions_item = new TypeStandardItem(
+        icons::getCollisionVectorIcon(), "Collision", static_cast<int>(StandardItemType::COLLISIONS));
     for (std::size_t i = 0; i < link->collision.size(); ++i)
       collisions_item->appendRow(new CollisionStandardItem(QString("[%1]").arg(i), link->collision.at(i)));
+
+    if (checkable)
+    {
+      collisions_item->setCheckable(true);
+      collisions_item->setCheckState(Qt::CheckState::Unchecked);
+    }
 
     appendRow(collisions_item);
   }

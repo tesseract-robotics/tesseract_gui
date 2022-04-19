@@ -25,30 +25,21 @@
 
 #include <memory>
 #include <QObject>
+
+#include <tesseract_widgets/common/link_visibility_properties.h>
 #include <tesseract_environment/environment.h>
 
 class QStandardItemModel;
 
 namespace tesseract_gui
 {
+class SceneGraphModel;
 class SceneStateModel;
 class KinematicGroupsModel;
 class GroupTCPsModel;
 class GroupJointStatesModel;
 class AllowedCollisionMatrixModel;
 class EnvironmentCommandsModel;
-
-/** @brief Stores the link visibility properties */
-struct LinkVisibilityProperties
-{
-  bool link{ true };
-  bool visual{ true };
-  bool collision{ false };
-  bool wirebox{ false };
-  bool axis{ false };
-};
-
-using LinkVisibilityPropertiesMap = std::unordered_map<std::string, LinkVisibilityProperties>;
 
 struct EnvironmentWidgetConfigImpl;
 class EnvironmentWidgetConfig : public QObject
@@ -88,7 +79,7 @@ public:
   const LinkVisibilityPropertiesMap& getLinkVisibilityProperties() const;
   LinkVisibilityPropertiesMap& getLinkVisibilityProperties();
 
-  QStandardItemModel& getSceneGraphModel();
+  SceneGraphModel& getSceneGraphModel();
   SceneStateModel& getSceneStateModel();
   KinematicGroupsModel& getKinematicGroupsModel();
   GroupTCPsModel& getGroupTCPsModel();

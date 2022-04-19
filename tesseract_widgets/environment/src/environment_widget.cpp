@@ -23,9 +23,10 @@
 #include <tesseract_widgets/environment/environment_widget.h>
 #include "ui_environment_widget.h"
 
+#include <tesseract_widgets/common/standard_item_type.h>
 #include <tesseract_widgets/environment/environment_widget_config.h>
 #include <tesseract_widgets/environment/environment_commands_model.h>
-#include <tesseract_widgets/scene_graph/scene_graph_standard_item.h>
+#include <tesseract_widgets/scene_graph/scene_graph_model.h>
 #include <tesseract_widgets/scene_graph/scene_state_model.h>
 #include <tesseract_widgets/kinematic_groups/kinematic_groups_model.h>
 #include <tesseract_widgets/kinematic_groups/group_tcps_model.h>
@@ -151,6 +152,14 @@ void EnvironmentWidget::setConfiguration(std::shared_ptr<EnvironmentWidgetConfig
           SIGNAL(environmentCurrentStateChanged(tesseract_environment::Environment)),
           this,
           SIGNAL(environmentCurrentStateChanged(tesseract_environment::Environment)));
+  connect(&data_->config->getSceneGraphModel(),
+          SIGNAL(itemChanged(QStandardItem*)),
+          this,
+          SLOT(onSceneGraphModelItemChanged(QStandardItem*)));
+  connect(this,
+          SIGNAL(linkVisibilityChanged(std::vector<std::string>)),
+          this,
+          SLOT(onLinkVisibilityChanged(std::vector<std::string>)));
 
   emit configurationSet(*data_->config);
   emit environmentSet(data_->config->getEnvironment());
@@ -399,6 +408,67 @@ void EnvironmentWidget::onACMSelectedLinks(const std::vector<std::string>& link_
   }
 
   emit linkVisibilityChanged(changed_link_names);
+}
+
+QStandardItem* findLinkStandardItem(QStandardItem* item)
+{
+  if (item->type() == static_cast<int>(StandardItemType::LINK))
+    return item;
+
+  return findLinkStandardItem(item->parent());
+}
+
+void EnvironmentWidget::onSceneGraphModelItemChanged(QStandardItem* item)
+{
+  LinkVisibilityPropertiesMap& link_visibility_properties = data_->config->getLinkVisibilityProperties();
+
+  if (item->type() == static_cast<int>(StandardItemType::LINK))
+  {
+    auto it = link_visibility_properties.find(item->text().toStdString());
+    if (it != link_visibility_properties.end())
+    {
+      it->second.link = (item->checkState() == Qt::CheckState::Checked);
+      emit linkVisibilityChanged({ it->first });
+    }
+  }
+  else if (item->type() == static_cast<int>(StandardItemType::VISUALS))
+  {
+    QStandardItem* link_item = findLinkStandardItem(item);
+    auto it = link_visibility_properties.find(link_item->text().toStdString());
+    if (it != link_visibility_properties.end())
+    {
+      it->second.visual = (item->checkState() == Qt::CheckState::Checked);
+      emit linkVisibilityChanged({ it->first });
+    }
+  }
+  else if (item->type() == static_cast<int>(StandardItemType::COLLISIONS))
+  {
+    QStandardItem* link_item = findLinkStandardItem(item);
+    auto it = link_visibility_properties.find(link_item->text().toStdString());
+    if (it != link_visibility_properties.end())
+    {
+      it->second.collision = (item->checkState() == Qt::CheckState::Checked);
+      emit linkVisibilityChanged({ it->first });
+    }
+  }
+}
+
+void EnvironmentWidget::onLinkVisibilityChanged(const std::vector<std::string>& links)
+{
+  const LinkVisibilityPropertiesMap& link_visibility_properties = data_->config->getLinkVisibilityProperties();
+  data_->config->getSceneGraphModel().blockSignals(true);
+  for (const auto& link : links)
+  {
+    QString link_name = QString::fromStdString(link);
+    auto it = link_visibility_properties.find(link);
+    if (it != link_visibility_properties.end())
+    {
+      data_->config->getSceneGraphModel().onLinkCheckedStateChanged(link_name, it->second.link);
+      data_->config->getSceneGraphModel().onLinkVisualsCheckedStateChanged(link_name, it->second.visual);
+      data_->config->getSceneGraphModel().onLinkCollisionsCheckedStateChanged(link_name, it->second.collision);
+    }
+  }
+  data_->config->getSceneGraphModel().blockSignals(false);
 }
 
 void EnvironmentWidget::createToolBar()

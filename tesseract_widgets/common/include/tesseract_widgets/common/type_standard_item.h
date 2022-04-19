@@ -20,36 +20,23 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_WIDGETS_SCENE_GRAPH_LINK_STANDARD_ITEM_H
-#define TESSERACT_WIDGETS_SCENE_GRAPH_LINK_STANDARD_ITEM_H
-
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
-#ifndef Q_MOC_RUN
-#include <tesseract_scene_graph/link.h>
-#endif
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
+#ifndef TESSERACT_WIDGETS_COMMON_TYPE_STANDARD_ITEM_H
+#define TESSERACT_WIDGETS_COMMON_TYPE_STANDARD_ITEM_H
 
 #include <QStandardItem>
 
 namespace tesseract_gui
 {
-class LinkStandardItem : public QStandardItem
+class TypeStandardItem : public QStandardItem
 {
 public:
-  LinkStandardItem(tesseract_scene_graph::Link::Ptr link, bool checkable = true);
-  explicit LinkStandardItem(const QString& text, tesseract_scene_graph::Link::Ptr link, bool checkable = true);
-  LinkStandardItem(const QIcon& icon,
-                   const QString& text,
-                   tesseract_scene_graph::Link::Ptr link,
-                   bool checkable = true);
+  explicit TypeStandardItem(int type);
+  TypeStandardItem(const QString& text, int type);
+  TypeStandardItem(const QIcon& icon, const QString& text, int type);
   int type() const override;
 
-  tesseract_scene_graph::Link::Ptr link;
-
 private:
-  void ctor(bool checkable);
+  int type_{ -1 };
 };
 }  // namespace tesseract_gui
-
-#endif  // TESSERACT_WIDGETS_SCENE_GRAPH_LINK_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_COMMON_TYPE_STANDARD_ITEM_H

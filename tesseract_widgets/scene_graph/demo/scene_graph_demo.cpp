@@ -47,7 +47,7 @@ int main(int argc, char** argv)
   model->setColumnCount(2);
   model->setHorizontalHeaderLabels({ "Name", "Values" });
 
-  auto* item = new tesseract_gui::SceneGraphStandardItem(std::move(scene_graph));
+  auto* item = new tesseract_gui::SceneGraphStandardItem(*scene_graph);
   model->appendRow(item);
 
   QTreeView widget;

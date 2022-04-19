@@ -23,29 +23,35 @@
 #ifndef TESSERACT_WIDGETS_SCENE_GRAPH_SCENE_GRAPH_STANDARD_ITEM_H
 #define TESSERACT_WIDGETS_SCENE_GRAPH_SCENE_GRAPH_STANDARD_ITEM_H
 
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
-#ifndef Q_MOC_RUN
-#include <tesseract_scene_graph/graph.h>
-#endif
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
-
 #include <QStandardItem>
+
+namespace tesseract_scene_graph
+{
+class SceneGraph;
+}
 
 namespace tesseract_gui
 {
 class SceneGraphStandardItem : public QStandardItem
 {
 public:
-  SceneGraphStandardItem(tesseract_scene_graph::SceneGraph::UPtr scene_graph);
-  explicit SceneGraphStandardItem(const QString& text, tesseract_scene_graph::SceneGraph::UPtr scene_graph);
-  SceneGraphStandardItem(const QIcon& icon, const QString& text, tesseract_scene_graph::SceneGraph::UPtr scene_graph);
+  SceneGraphStandardItem();
+  explicit SceneGraphStandardItem(const QString& text);
+  SceneGraphStandardItem(const QIcon& icon, const QString& text);
+
+  explicit SceneGraphStandardItem(const tesseract_scene_graph::SceneGraph& scene_graph, bool checkable = true);
+  SceneGraphStandardItem(const QString& text,
+                         const tesseract_scene_graph::SceneGraph& scene_graph,
+                         bool checkable = true);
+  SceneGraphStandardItem(const QIcon& icon,
+                         const QString& text,
+                         const tesseract_scene_graph::SceneGraph& scene_graph,
+                         bool checkable = true);
+
   int type() const override;
 
-  tesseract_scene_graph::SceneGraph::UPtr scene_graph;
-
-private:
-  void ctor();
+protected:
+  void ctor(const tesseract_scene_graph::SceneGraph& scene_graph, bool checkable);
 };
 }  // namespace tesseract_gui
 

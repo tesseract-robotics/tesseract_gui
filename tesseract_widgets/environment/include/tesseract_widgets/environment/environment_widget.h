@@ -32,6 +32,8 @@ namespace Ui
 class EnvironmentWidget;
 }
 
+class QStandardItem;
+
 namespace tesseract_gui
 {
 class EnvironmentWidgetConfig;
@@ -98,8 +100,11 @@ public Q_SLOTS:
   virtual void onDeselectAllLinks();
   virtual void onEnable();
 
-public Q_SLOTS:
   void onACMSelectedLinks(const std::vector<std::string>& link_names);
+
+private Q_SLOTS:
+  void onSceneGraphModelItemChanged(QStandardItem* item);
+  void onLinkVisibilityChanged(const std::vector<std::string>& links);
 
 protected:
   std::unique_ptr<Ui::EnvironmentWidget> ui;

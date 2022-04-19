@@ -35,7 +35,8 @@ add_library(
   src/entity_container.cpp
   src/joint_trajectory_set.cpp
   src/svg_util.cpp
-  src/icon_utils.cpp)
+  src/icon_utils.cpp
+  src/type_standard_item.cpp)
 target_link_libraries(
   ${PROJECT_NAME}_common
   PUBLIC tesseract::tesseract_common

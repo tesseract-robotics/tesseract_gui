@@ -125,5 +125,7 @@ QIcon getHideAxisAllLinksIcon();
 QIcon getSelectAllLinksIcon();
 QIcon getDeselectAllLinksIcon();
 
+QIcon getTesseractIcon();
+
 }  // namespace tesseract_gui::icons
 #endif  // TESSERACT_WIDGETS_COMMON_ICON_UTILS_H

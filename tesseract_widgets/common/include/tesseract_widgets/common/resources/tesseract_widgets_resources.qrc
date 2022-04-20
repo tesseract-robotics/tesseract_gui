@@ -89,5 +89,6 @@
         <file>ignition/hide-collision.png</file>
         <file>png/hide-origin.png</file>
         <file>png/show-origin.png</file>
+        <file>png/tesseract_logo.png</file>
     </qresource>
 </RCC>

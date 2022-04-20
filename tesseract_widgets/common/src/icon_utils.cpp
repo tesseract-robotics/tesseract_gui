@@ -377,4 +377,10 @@ QIcon getDeselectAllLinksIcon()
   static QIcon icon = QIcon(":/tesseract_widgets/ignition/deselect-link.png");
   return icon;
 }
+
+QIcon getTesseractIcon()
+{
+  static QIcon icon = QIcon(":/tesseract_widgets/png/tesseract_logo.png");
+  return icon;
+}
 }  // namespace tesseract_gui::icons

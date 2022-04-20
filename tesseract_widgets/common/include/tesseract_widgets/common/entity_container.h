@@ -110,6 +110,26 @@ public:
    */
   std::unordered_map<std::string, EntityVector> getUntrackedEntities() const;
 
+  /**
+   * @brief Add unmanaged object under the provided namespace
+   * @details This allows for storing object that must be manually deleted and not owned by the render engine
+   * @param ns The namespace to store it under
+   */
+  void addUnmanagedObject(const std::string& ns, std::shared_ptr<const void> object);
+
+  /**
+   * @brief Get the unmanaged objects under the provided namespace
+   * @param ns The namespace to return
+   * @return Unmanaged objects for the provided namespace
+   */
+  std::vector<std::shared_ptr<const void>> getUnmanagedObjects(const std::string& ns) const;
+
+  /**
+   * @brief Get all unmanaged objects
+   * @return All unmanaged objects
+   */
+  std::unordered_map<std::string, std::vector<std::shared_ptr<const void>>> getUnmanagedObjects() const;
+
   /** @brief Check if empty */
   bool empty() const;
 
@@ -125,6 +145,7 @@ private:
   std::string name_;
   std::unordered_map<std::string, EntityMap> tracked_entity_map_;
   std::unordered_map<std::string, EntityVector> untracked_entity_map_;
+  std::unordered_map<std::string, std::vector<std::shared_ptr<const void>>> unmanaged_objects_map_;
 
   mutable std::shared_mutex mutex_;
 };

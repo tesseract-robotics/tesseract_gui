@@ -354,6 +354,18 @@ QIcon getHideCollisionAllLinksIcon()
   return icon;
 }
 
+QIcon getShowAxisAllLinksIcon()
+{
+  static QIcon icon = QIcon(":/tesseract_widgets/png/show-origin.png");
+  return icon;
+}
+
+QIcon getHideAxisAllLinksIcon()
+{
+  static QIcon icon = QIcon(":/tesseract_widgets/png/hide-origin.png");
+  return icon;
+}
+
 QIcon getSelectAllLinksIcon()
 {
   static QIcon icon = QIcon(":/tesseract_widgets/ignition/select-link.png");

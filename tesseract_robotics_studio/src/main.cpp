@@ -1,4 +1,5 @@
 #include <tesseract_robotics_studio/tesseract_robotics_studio.h>
+#include <tesseract_widgets/common/theme_utils.h>
 #include <QString>
 #include <QFile>
 #include <QApplication>
@@ -23,27 +24,11 @@ int main(int argc, char* argv[])
   Q_INIT_RESOURCE(qdarkstyle_dark);
   Q_INIT_RESOURCE(qdarkstyle_light);
 
-  {  // open qss file
-    //    QFile file(":/tesseract_widgets/themes/VisualScript/VisualScript.qss");
-    //    QFile file(":/tesseract_widgets/themes/Combinear/Combinear.qss");
-    QFile file(":/qdarkstyle/dark/qdarkstyle_dark.qss");
-    //    QFile file(":/qdarkstyle/light/qdarkstyle_light.qss");
-    file.open(QFile::ReadOnly);
-
-    QString styleSheet{ QLatin1String(file.readAll()) };
-
-    // setup stylesheet
-    app.setStyleSheet(styleSheet);
-  }
-
-  //  QFile StyleSheetFile(":/adsdemo/app.css");
-  //  StyleSheetFile.open(QIODevice::ReadOnly);
-  //  QTextStream StyleSheetStream(&StyleSheetFile);
-  //  app.setStyleSheet(StyleSheetStream.readAll());
-  //  StyleSheetFile.close();
+  // setup stylesheet
+  app.setStyleSheet(tesseract_gui::themes::getDarkTheme());
 
   tesseract_gui::TesseractRoboticsStudio widget;
   widget.show();
 
-  return app.exec();
+  return QApplication::exec();
 }

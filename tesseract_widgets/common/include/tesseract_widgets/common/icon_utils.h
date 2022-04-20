@@ -120,6 +120,8 @@ QIcon getShowVisualAllLinksIcon();
 QIcon getHideVisualAllLinksIcon();
 QIcon getShowCollisionAllLinksIcon();
 QIcon getHideCollisionAllLinksIcon();
+QIcon getShowAxisAllLinksIcon();
+QIcon getHideAxisAllLinksIcon();
 QIcon getSelectAllLinksIcon();
 QIcon getDeselectAllLinksIcon();
 

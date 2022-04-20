@@ -108,6 +108,28 @@ std::unordered_map<std::string, EntityVector> EntityContainer::getUntrackedEntit
   return untracked_entity_map_;
 }
 
+void EntityContainer::addUnmanagedObject(const std::string& ns, std::shared_ptr<const void> object)
+{
+  std::unique_lock<std::shared_mutex> lock(mutex_);
+  unmanaged_objects_map_[ns].push_back(object);
+}
+
+std::vector<std::shared_ptr<const void>> EntityContainer::getUnmanagedObjects(const std::string& ns) const
+{
+  std::shared_lock<std::shared_mutex> lock(mutex_);
+  auto ns_it = unmanaged_objects_map_.find(ns);
+  if (ns_it == unmanaged_objects_map_.end())
+    return std::vector<std::shared_ptr<const void>>();
+
+  return ns_it->second;
+}
+
+std::unordered_map<std::string, std::vector<std::shared_ptr<const void>>> EntityContainer::getUnmanagedObjects() const
+{
+  std::shared_lock<std::shared_mutex> lock(mutex_);
+  return unmanaged_objects_map_;
+}
+
 bool EntityContainer::empty() const
 {
   std::shared_lock<std::shared_mutex> lock(mutex_);
@@ -126,6 +148,12 @@ bool EntityContainer::empty() const
       return false;
   }
 
+  for (const auto& ns : unmanaged_objects_map_)
+  {
+    if (!ns.second.empty())
+      return false;
+  }
+
   return true;
 }
 
@@ -134,6 +162,7 @@ void EntityContainer::clear()
   std::unique_lock<std::shared_mutex> lock(mutex_);
   tracked_entity_map_.clear();
   untracked_entity_map_.clear();
+  unmanaged_objects_map_.clear();
 }
 
 EntityManager& EntityContainer::getEntityManager() { return *manager_; }

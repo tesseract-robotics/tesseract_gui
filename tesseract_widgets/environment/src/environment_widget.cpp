@@ -58,6 +58,9 @@ struct EnvironmentWidgetImpl
 
   QAction* select_all_links_action{ nullptr };
   QAction* deselect_all_links_action{ nullptr };
+
+  QAction* show_axis_all_links_action{ nullptr };
+  QAction* hide_axis_all_links_action{ nullptr };
 };
 
 EnvironmentWidget::EnvironmentWidget(QWidget* parent, bool add_toolbar)
@@ -159,7 +162,7 @@ void EnvironmentWidget::setConfiguration(std::shared_ptr<EnvironmentWidgetConfig
   connect(this,
           SIGNAL(linkVisibilityChanged(std::vector<std::string>)),
           this,
-          SLOT(onLinkVisibilityChanged(std::vector<std::string>)));
+          SLOT(updateVisibilityCheckedStates(std::vector<std::string>)));
 
   emit configurationSet(*data_->config);
   emit environmentSet(data_->config->getEnvironment());
@@ -453,7 +456,7 @@ void EnvironmentWidget::onSceneGraphModelItemChanged(QStandardItem* item)
   }
 }
 
-void EnvironmentWidget::onLinkVisibilityChanged(const std::vector<std::string>& links)
+void EnvironmentWidget::updateVisibilityCheckedStates(const std::vector<std::string>& links)
 {
   const LinkVisibilityPropertiesMap& link_visibility_properties = data_->config->getLinkVisibilityProperties();
   data_->config->getSceneGraphModel().blockSignals(true);
@@ -493,5 +496,10 @@ void EnvironmentWidget::createToolBar()
       data_->toolbar->addAction(icons::getSelectAllLinksIcon(), "Select All Links", this, SLOT(onSelectAllLinks()));
   data_->deselect_all_links_action = data_->toolbar->addAction(
       icons::getDeselectAllLinksIcon(), "Deselect All Links", this, SLOT(onDeselectAllLinks()));
+  data_->toolbar->addSeparator();
+  data_->show_axis_all_links_action = data_->toolbar->addAction(
+      icons::getShowAxisAllLinksIcon(), "Show Axis All Links", this, SLOT(onShowAxisAllLinks()));
+  data_->hide_axis_all_links_action = data_->toolbar->addAction(
+      icons::getHideAxisAllLinksIcon(), "Hide Axis All Links", this, SLOT(onHideAxisAllLinks()));
 }
 }  // namespace tesseract_gui

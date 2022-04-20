@@ -30,25 +30,20 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <tesseract_widgets/plot/plot_widget.h>
+#include <tesseract_widgets/common/theme_utils.h>
 
 int main(int argc, char** argv)
 {
   QApplication app(argc, argv);
-  {  // open qss file
-    QFile file(":/tesseract_widgets/themes/Takezo/Takezo.qss");
-    file.open(QFile::ReadOnly);
 
-    QString styleSheet{ QLatin1String(file.readAll()) };
-
-    // setup stylesheet
-    app.setStyleSheet(styleSheet);
-  }
+  // setup stylesheet
+  app.setStyleSheet(tesseract_gui::themes::getDarkTheme());
 
   QWidget window;
   window.resize(320, 240);
   window.setWindowTitle(QApplication::translate("childwidget", "Child widget"));
 
-  QHBoxLayout* layout = new QHBoxLayout(&window);
+  QHBoxLayout* layout = new QHBoxLayout(&window);  // NOLINT
 
   tesseract_gui::PlotDataMapRef plot_data_map;
   tesseract_gui::PlotData& cosine_data = plot_data_map.getOrCreateNumeric("cosine");

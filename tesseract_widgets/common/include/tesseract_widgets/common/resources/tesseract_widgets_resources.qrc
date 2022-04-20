@@ -87,5 +87,7 @@
         <file>ignition/show-collision.png</file>
         <file>ignition/hide-visual.png</file>
         <file>ignition/hide-collision.png</file>
+        <file>png/hide-origin.png</file>
+        <file>png/show-origin.png</file>
     </qresource>
 </RCC>

@@ -49,6 +49,7 @@ WorkbenchWidget::WorkbenchWidget(EnvironmentWidget* environment_widget,
   : QWidget(parent), ui(std::make_unique<Ui::WorkbenchWidget>()), data_(std::make_unique<WorkbenchWidgetImpl>())
 {
   ui->setupUi(this);
+  ui->tabWidget->setCurrentIndex(0);
   data_->environment_widget = environment_widget;
   data_->joint_trajectory_environment_widget = environment_widget->clone();
   data_->joint_trajectory_widget = joint_trajectory_widget;

@@ -48,6 +48,9 @@ public:
 
   void clear();
 
+public Q_SLOTS:
+  virtual void onLinkAxisCheckedStateChanged(const QString& link_name, bool checked);
+
 private:
   std::unique_ptr<SceneStateModelPrivate> data_;
 };

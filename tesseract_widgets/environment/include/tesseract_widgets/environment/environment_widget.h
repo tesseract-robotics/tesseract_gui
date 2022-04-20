@@ -104,6 +104,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
   void onSceneGraphModelItemChanged(QStandardItem* item);
+  void onSceneStateModelItemChanged(QStandardItem* item);
   void updateVisibilityCheckedStates(const std::vector<std::string>& links);
 
 protected:

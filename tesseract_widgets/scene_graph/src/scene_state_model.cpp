@@ -99,9 +99,12 @@ void SceneStateModel::setState(const tesseract_scene_graph::SceneState& scene_st
     else
     {
       auto* item = new TransformStandardItem(QString::fromStdString(link.first), link.second);
+      item->setCheckable(true);
+      item->setCheckState(Qt::CheckState::Unchecked);
       data_->links_item->appendRow(item);
       data_->links[link.first] = item;
       data_->link_names.push_back(link.first);
+
       sort_required = true;
     }
     link_names.push_back(link.first);
@@ -183,4 +186,10 @@ void SceneStateModel::clear()
   appendRow(data_->joints_item);
 }
 
+void SceneStateModel::onLinkAxisCheckedStateChanged(const QString& link_name, bool checked)
+{
+  auto it = data_->links.find(link_name.toStdString());
+  if (it != data_->links.end())
+    it->second->setCheckState((checked) ? Qt::CheckState::Checked : Qt::CheckState::Unchecked);
+}
 }  // namespace tesseract_gui

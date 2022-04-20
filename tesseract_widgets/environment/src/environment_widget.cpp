@@ -159,6 +159,10 @@ void EnvironmentWidget::setConfiguration(std::shared_ptr<EnvironmentWidgetConfig
           SIGNAL(itemChanged(QStandardItem*)),
           this,
           SLOT(onSceneGraphModelItemChanged(QStandardItem*)));
+  connect(&data_->config->getSceneStateModel(),
+          SIGNAL(itemChanged(QStandardItem*)),
+          this,
+          SLOT(onSceneStateModelItemChanged(QStandardItem*)));
   connect(this,
           SIGNAL(linkVisibilityChanged(std::vector<std::string>)),
           this,
@@ -456,10 +460,26 @@ void EnvironmentWidget::onSceneGraphModelItemChanged(QStandardItem* item)
   }
 }
 
+void EnvironmentWidget::onSceneStateModelItemChanged(QStandardItem* item)
+{
+  LinkVisibilityPropertiesMap& link_visibility_properties = data_->config->getLinkVisibilityProperties();
+
+  if (item->type() == static_cast<int>(StandardItemType::TRANSFORM))
+  {
+    auto it = link_visibility_properties.find(item->text().toStdString());
+    if (it != link_visibility_properties.end())
+    {
+      it->second.axis = (item->checkState() == Qt::CheckState::Checked);
+      emit linkVisibilityChanged({ it->first });
+    }
+  }
+}
+
 void EnvironmentWidget::updateVisibilityCheckedStates(const std::vector<std::string>& links)
 {
   const LinkVisibilityPropertiesMap& link_visibility_properties = data_->config->getLinkVisibilityProperties();
   data_->config->getSceneGraphModel().blockSignals(true);
+  data_->config->getSceneStateModel().blockSignals(true);
   for (const auto& link : links)
   {
     QString link_name = QString::fromStdString(link);
@@ -469,9 +489,12 @@ void EnvironmentWidget::updateVisibilityCheckedStates(const std::vector<std::str
       data_->config->getSceneGraphModel().onLinkCheckedStateChanged(link_name, it->second.link);
       data_->config->getSceneGraphModel().onLinkVisualsCheckedStateChanged(link_name, it->second.visual);
       data_->config->getSceneGraphModel().onLinkCollisionsCheckedStateChanged(link_name, it->second.collision);
+
+      data_->config->getSceneStateModel().onLinkAxisCheckedStateChanged(link_name, it->second.axis);
     }
   }
   data_->config->getSceneGraphModel().blockSignals(false);
+  data_->config->getSceneStateModel().blockSignals(false);
 }
 
 void EnvironmentWidget::createToolBar()

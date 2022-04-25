@@ -130,7 +130,7 @@ void JointTrajectoryWidget::onOpen()
   dialog.setAcceptMode(QFileDialog::AcceptOpen);
   dialog.setNameFilters(filters);
   if (dialog.exec() == 1)
-    openJointTrajectorySet(dialog.selectedFiles()[0], (dialog.selectedNameFilter() == filters[0]) ? ".jtsx" : ".jtsb");
+    openJointTrajectorySet(dialog.selectedFiles()[0], (dialog.selectedNameFilter() == filters[0]) ? "jtsx" : "jtsb");
 }
 
 void JointTrajectoryWidget::onSave()
@@ -146,8 +146,7 @@ void JointTrajectoryWidget::onSave()
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.setNameFilters(filters);
     if (dialog.exec() == 1)
-      saveJointTrajectorySet(dialog.selectedFiles()[0],
-                             (dialog.selectedNameFilter() == filters[0]) ? ".jtsx" : ".jtsb");
+      saveJointTrajectorySet(dialog.selectedFiles()[0], (dialog.selectedNameFilter() == filters[0]) ? "jtsx" : "jtsb");
   }
 }
 
@@ -155,9 +154,9 @@ bool JointTrajectoryWidget::saveJointTrajectorySet(QString filename, const QStri
 {
   auto* item = dynamic_cast<JointTrajectorySetItem*>(data_->selected_item);
   QFileInfo file_info(filename);
-  if (suffix == ".jtsx")
+  if (suffix == "jtsx")
   {
-    if (file_info.suffix() != ".jtsx")
+    if (file_info.suffix() != "jtsx")
       filename = file_info.absolutePath() + QDir::separator() + file_info.baseName() + ".jtsx";
 
     tesseract_common::Serialization::toArchiveFileXML<tesseract_common::JointTrajectorySet>(item->trajectory_set,
@@ -165,9 +164,9 @@ bool JointTrajectoryWidget::saveJointTrajectorySet(QString filename, const QStri
     return true;
   }
 
-  if (suffix == ".jtsb")
+  if (suffix == "jtsb")
   {
-    if (file_info.suffix() != ".jtsb")
+    if (file_info.suffix() != "jtsb")
       filename = file_info.absolutePath() + QDir::separator() + file_info.baseName() + ".jtsb";
 
     tesseract_common::Serialization::toArchiveFileBinary<tesseract_common::JointTrajectorySet>(item->trajectory_set,
@@ -182,14 +181,14 @@ bool JointTrajectoryWidget::openJointTrajectorySet(const QString& filename, cons
 {
   QFileInfo file_info(filename);
   tesseract_common::JointTrajectorySet joint_trajectory_set;
-  if (suffix == ".jtsx" && file_info.suffix() == ".jtsx")
+  if (suffix == "jtsx" && file_info.suffix() == "jtsx")
   {
     addJointTrajectorySet(tesseract_common::Serialization::fromArchiveFileXML<tesseract_common::JointTrajectorySet>(
         filename.toStdString()));
     return true;
   }
 
-  if (suffix == ".jtsb" && file_info.suffix() == ".jtsb")
+  if (suffix == "jtsb" && file_info.suffix() == "jtsb")
   {
     addJointTrajectorySet(tesseract_common::Serialization::fromArchiveFileBinary<tesseract_common::JointTrajectorySet>(
         filename.toStdString()));

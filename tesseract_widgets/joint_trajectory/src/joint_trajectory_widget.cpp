@@ -42,6 +42,7 @@
 #include <QToolBar>
 #include <QFileDialog>
 #include <QFileInfo>
+#include <QSettings>
 #include <set>
 
 const double SLIDER_RESOLUTION = 0.001;
@@ -57,6 +58,8 @@ struct JointTrajectoryWidgetPrivate
   std::unique_ptr<JointTrajectoryPlotDialog> plot_dialog;
   double current_duration{ 0 };
   tesseract_common::JointTrajectoryInfo current_trajectory;
+
+  QString default_directory;
 
   // Store the selected item
   QStandardItem* selected_item;
@@ -82,6 +85,12 @@ JointTrajectoryWidget::JointTrajectoryWidget(QWidget* parent, bool add_toolbar)
     ui_->verticalLayout->insertWidget(0, data_->toolbar);
   }
 
+  QSettings ms;
+  ms.beginGroup("JointTrajectoryWidget");
+  data_->default_directory =
+      ms.value("default_directory", QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation)[0]).toString();
+  ms.endGroup();
+
   data_->player = std::make_unique<tesseract_visualization::TrajectoryPlayer>();
   data_->player_timer = std::make_unique<QTimer>(this);
   data_->player_timer->start(10);
@@ -99,7 +108,13 @@ JointTrajectoryWidget::JointTrajectoryWidget(QWidget* parent, bool add_toolbar)
   TransformFactory::registerTransform<ScaleTransform>();
 }
 
-JointTrajectoryWidget::~JointTrajectoryWidget() = default;
+JointTrajectoryWidget::~JointTrajectoryWidget()
+{
+  QSettings ms;
+  ms.beginGroup("JointTrajectoryWidget");
+  ms.setValue("default_directory", data_->default_directory);
+  ms.endGroup();
+}
 
 void JointTrajectoryWidget::createToolBar()
 {
@@ -130,12 +145,14 @@ void JointTrajectoryWidget::onOpen()
   QList<QString> filters;
   filters.append("Joint Trajectory Set XML (*.jtsx)");
   filters.append("Joint Trajectory Set Binary (*.jtsb)");
-  QFileDialog dialog(
-      this, "Open Joint Trajectory Set", QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation)[0]);
+  QFileDialog dialog(this, "Open Joint Trajectory Set", data_->default_directory);
   dialog.setAcceptMode(QFileDialog::AcceptOpen);
   dialog.setNameFilters(filters);
   if (dialog.exec() == 1)
+  {
+    data_->default_directory = QFileInfo(dialog.selectedFiles()[0]).absoluteDir().path();
     openJointTrajectorySet(dialog.selectedFiles()[0], (dialog.selectedNameFilter() == filters[0]) ? "jtsx" : "jtsb");
+  }
 }
 
 void JointTrajectoryWidget::onSave()
@@ -146,12 +163,14 @@ void JointTrajectoryWidget::onSave()
     QList<QString> filters;
     filters.append("Joint Trajectory Set XML (*.jtsx)");
     filters.append("Joint Trajectory Set Binary (*.jtsb)");
-    QFileDialog dialog(
-        this, "Save Joint Trajectory Set", QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation)[0]);
+    QFileDialog dialog(this, "Save Joint Trajectory Set", data_->default_directory);
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.setNameFilters(filters);
     if (dialog.exec() == 1)
+    {
+      data_->default_directory = QFileInfo(dialog.selectedFiles()[0]).absoluteDir().path();
       saveJointTrajectorySet(dialog.selectedFiles()[0], (dialog.selectedNameFilter() == filters[0]) ? "jtsx" : "jtsb");
+    }
   }
 }
 
@@ -380,5 +399,11 @@ void JointTrajectoryWidget::onDisablePlayer() { ui_->trajectoryPlayerFrame->setE
 void JointTrajectoryWidget::onEnable() {}
 
 void JointTrajectoryWidget::onRender() {}
+
+const QString& JointTrajectoryWidget::getDefaultDirectory() const { return data_->default_directory; }
+void JointTrajectoryWidget::setDefaultDirectory(const QString& default_directory)
+{
+  data_->default_directory = default_directory;
+}
 
 }  // namespace tesseract_gui

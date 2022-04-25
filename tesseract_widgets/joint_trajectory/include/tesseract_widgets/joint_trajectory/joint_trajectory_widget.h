@@ -131,6 +131,9 @@ protected:
   std::unique_ptr<JointTrajectoryWidgetPrivate> data_;
   void createToolBar();
 
+  const QString& getDefaultDirectory() const;
+  void setDefaultDirectory(const QString& default_directory);
+
   bool saveJointTrajectorySet(QString filename, const QString& suffix);
   bool openJointTrajectorySet(const QString& filename, const QString& suffix);
 };

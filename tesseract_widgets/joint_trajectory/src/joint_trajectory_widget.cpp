@@ -209,7 +209,7 @@ void JointTrajectoryWidget::onRemove()
       data_->selected_item->type() == static_cast<int>(StandardItemType::JOINT_TRAJECTORY_SET))
   {
     QString uuid = dynamic_cast<JointTrajectorySetItem*>(data_->selected_item)->uuid;
-    data_->model->removeJointTrajectorySet(uuid);
+    removeJointTrajectorySet(uuid);
     data_->selected_item = nullptr;
     onDisablePlayer();
   }

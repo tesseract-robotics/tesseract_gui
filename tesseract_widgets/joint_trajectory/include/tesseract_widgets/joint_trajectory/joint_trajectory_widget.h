@@ -78,6 +78,12 @@ public:
   void setDefaultEnvironment(std::shared_ptr<const tesseract_environment::Environment> env);
 
   /**
+   * @brief Get the default environment
+   * @return The default environment
+   */
+  std::shared_ptr<const tesseract_environment::Environment> getDefaultEnvironment() const;
+
+  /**
    * @brief Add joint trajectory set
    * @param trajectory_set The trajectory set associated with the key
    * @return The key associated with added trajectory for removal

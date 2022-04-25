@@ -120,6 +120,11 @@ void JointTrajectoryWidget::setDefaultEnvironment(std::shared_ptr<const tesserac
   data_->default_env = std::move(env);
 }
 
+std::shared_ptr<const tesseract_environment::Environment> JointTrajectoryWidget::getDefaultEnvironment() const
+{
+  return data_->default_env;
+}
+
 void JointTrajectoryWidget::onOpen()
 {
   QList<QString> filters;

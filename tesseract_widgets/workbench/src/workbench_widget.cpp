@@ -40,6 +40,7 @@ struct WorkbenchWidgetImpl
   JointTrajectoryWidget* joint_trajectory_widget;
   JointTrajectoryModel* joint_trajectory_model;
 
+  QString current_uuid;
   std::unordered_map<std::string, tesseract_gui::EnvironmentWidgetConfig::Ptr> joint_trajectory_environment_configs;
 };
 
@@ -132,6 +133,7 @@ void WorkbenchWidget::onConfigureJointTrajectorySet(const QString& uuid,
     config->setEnvironment(joint_trajectory_set.getEnvironment());
     data_->joint_trajectory_environment_widget->setConfiguration(config);
     data_->joint_trajectory_environment_configs[uuid.toStdString()] = config;
+    data_->current_uuid = uuid;
   }
 
   auto initial_state = joint_trajectory_set.getInitialState();
@@ -146,6 +148,12 @@ void WorkbenchWidget::onJointTrajectorySetState(const tesseract_common::JointSta
 void WorkbenchWidget::onJointTrajectorySetRemoved(const QString& uuid)
 {
   data_->joint_trajectory_environment_configs.erase(uuid.toStdString());
+  if (uuid == data_->current_uuid)
+  {
+    data_->joint_trajectory_environment_widget->setConfiguration(
+        std::make_shared<tesseract_gui::EnvironmentWidgetConfig>());
+    data_->current_uuid.clear();
+  }
 }
 
 }  // namespace tesseract_gui

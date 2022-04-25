@@ -56,6 +56,7 @@ struct EnvironmentWidgetConfigImpl
 EnvironmentWidgetConfig::EnvironmentWidgetConfig() : data_(std::make_unique<EnvironmentWidgetConfigImpl>())
 {
   data_->hash = std::hash<EnvironmentWidgetConfig*>{}(this);
+  data_->environment = std::make_shared<tesseract_environment::Environment>();
 }
 
 EnvironmentWidgetConfig::~EnvironmentWidgetConfig()

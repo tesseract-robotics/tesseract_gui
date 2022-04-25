@@ -54,7 +54,7 @@ int AddLinkCommandStandardItem::type() const { return static_cast<int>(StandardI
 
 void AddLinkCommandStandardItem::ctor()
 {
-  appendRow(new LinkStandardItem(std::make_shared<tesseract_scene_graph::Link>(command->getLink()->clone())));
+  appendRow(new LinkStandardItem(std::make_shared<tesseract_scene_graph::Link>(command->getLink()->clone()), false));
 
   if (command->getJoint() != nullptr)
     appendRow(new JointStandardItem(std::make_shared<tesseract_scene_graph::Joint>(command->getJoint()->clone())));

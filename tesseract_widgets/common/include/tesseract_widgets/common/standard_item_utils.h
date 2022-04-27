@@ -36,6 +36,8 @@ QList<QStandardItem*> createStandardItemInt(const QIcon& icon, const std::string
 QList<QStandardItem*> createStandardItemString(const std::string& text, const std::string& data);
 QList<QStandardItem*> createStandardItemString(const QIcon& icon, const std::string& text, const std::string& data);
 QList<QStandardItem*> createStandardItemURL(const std::string& text, const std::string& data);
+QList<QStandardItem*> createStandardItemBool(const std::string& text, bool data);
+QList<QStandardItem*> createStandardItemBool(const QIcon& icon, const std::string& text, bool data);
 }  // namespace tesseract_gui
 
 #endif  // TESSERACT_WIDGETS_COMMON_STANDARD_ITEM_UTILS_H

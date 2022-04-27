@@ -20,8 +20,6 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#include <tesseract_widgets/common/transform_standard_item.h>
-#include <tesseract_widgets/common/position_standard_item.h>
 #include <tesseract_widgets/common/quaternion_standard_item.h>
 #include <tesseract_widgets/common/standard_item_utils.h>
 #include <tesseract_widgets/common/standard_item_type.h>
@@ -29,41 +27,41 @@
 
 namespace tesseract_gui
 {
-TransformStandardItem::TransformStandardItem(const Eigen::Isometry3d& transform)
-  : QStandardItem(icons::getOriginIcon(), "Transform")
+QuaternionStandardItem::QuaternionStandardItem(const Eigen::Quaterniond& q)
+  : QStandardItem(icons::getOrientationIcon(), "orientation")
 {
-  ctor(transform);
+  ctor(q);
 }
 
-TransformStandardItem::TransformStandardItem(const QString& text, const Eigen::Isometry3d& transform)
-  : QStandardItem(icons::getOriginIcon(), text)
+QuaternionStandardItem::QuaternionStandardItem(const QString& text, const Eigen::Quaterniond& q)
+  : QStandardItem(icons::getOrientationIcon(), text)
 {
-  ctor(transform);
+  ctor(q);
 }
 
-TransformStandardItem::TransformStandardItem(const QIcon& icon, const QString& text, const Eigen::Isometry3d& transform)
+QuaternionStandardItem::QuaternionStandardItem(const QIcon& icon, const QString& text, const Eigen::Quaterniond& q)
   : QStandardItem(icon, text)
 {
-  ctor(transform);
+  ctor(q);
 }
 
-int TransformStandardItem::type() const { return static_cast<int>(StandardItemType::TRANSFORM); }
+int QuaternionStandardItem::type() const { return static_cast<int>(StandardItemType::TRANSFORM_QUATERNION); }
 
-void TransformStandardItem::setTransform(const Eigen::Isometry3d& transform)
+void QuaternionStandardItem::setQuaternion(const Eigen::Quaterniond& q)
 {
-  position_->setPosition(transform.translation());
-
-  Eigen::Quaterniond q(transform.rotation());
-  orientation_->setQuaternion(q);
+  child(0, 1)->setData(q.x(), Qt::DisplayRole);
+  child(1, 1)->setData(q.y(), Qt::DisplayRole);
+  child(2, 1)->setData(q.z(), Qt::DisplayRole);
+  child(3, 1)->setData(q.w(), Qt::DisplayRole);
 }
 
-void TransformStandardItem::ctor(const Eigen::Isometry3d& transform)
+void QuaternionStandardItem::ctor(const Eigen::Quaterniond& q)
 {
-  position_ = new PositionStandardItem(transform.translation());
-  appendRow(position_);
+  setColumnCount(2);
 
-  Eigen::Quaterniond q(transform.rotation());
-  orientation_ = new QuaternionStandardItem(q);
-  appendRow(orientation_);
+  appendRow(createStandardItemFloat("x", q.x()));
+  appendRow(createStandardItemFloat("y", q.y()));
+  appendRow(createStandardItemFloat("z", q.z()));
+  appendRow(createStandardItemFloat("w", q.w()));
 }
 }  // namespace tesseract_gui

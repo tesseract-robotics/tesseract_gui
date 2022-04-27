@@ -20,8 +20,8 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_WIDGETS_COMMON_TRANSFORM_STANDARD_ITEM_H
-#define TESSERACT_WIDGETS_COMMON_TRANSFORM_STANDARD_ITEM_H
+#ifndef TESSERACT_WIDGETS_COMMON_POSITION_STANDARD_ITEM_H
+#define TESSERACT_WIDGETS_COMMON_POSITION_STANDARD_ITEM_H
 
 #include <tesseract_common/macros.h>
 TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
@@ -34,23 +34,19 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 namespace tesseract_gui
 {
-class PositionStandardItem;
-class QuaternionStandardItem;
-class TransformStandardItem : public QStandardItem
+class PositionStandardItem : public QStandardItem
 {
 public:
-  explicit TransformStandardItem(const Eigen::Isometry3d& transform);
-  explicit TransformStandardItem(const QString& text, const Eigen::Isometry3d& transform);
-  explicit TransformStandardItem(const QIcon& icon, const QString& text, const Eigen::Isometry3d& transform);
+  explicit PositionStandardItem(const Eigen::Vector3d& position);
+  explicit PositionStandardItem(const QString& text, const Eigen::Vector3d& position);
+  explicit PositionStandardItem(const QIcon& icon, const QString& text, const Eigen::Vector3d& position);
   int type() const override;
 
-  void setTransform(const Eigen::Isometry3d& transform);
+  void setPosition(const Eigen::Vector3d& position);
 
 private:
-  void ctor(const Eigen::Isometry3d& transform);
-  PositionStandardItem* position_;
-  QuaternionStandardItem* orientation_;
+  void ctor(const Eigen::Vector3d& position);
 };
 }  // namespace tesseract_gui
 
-#endif  // TESSERACT_WIDGETS_COMMON_TRANSFORM_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_COMMON_POSITION_STANDARD_ITEM_H

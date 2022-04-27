@@ -20,37 +20,41 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_WIDGETS_COMMON_TRANSFORM_STANDARD_ITEM_H
-#define TESSERACT_WIDGETS_COMMON_TRANSFORM_STANDARD_ITEM_H
+#ifndef TESSERACT_WIDGETS_COLLISION_CONTACT_RESULTS_MODEL_H
+#define TESSERACT_WIDGETS_COLLISION_CONTACT_RESULTS_MODEL_H
 
 #include <tesseract_common/macros.h>
 TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #ifndef Q_MOC_RUN
-#include <Eigen/Geometry>
+#include <QStandardItemModel>
+#include <QMetaType>
+#include <memory>
+
+#include <tesseract_collision/core/types.h>
 #endif
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
-#include <QStandardItem>
-
 namespace tesseract_gui
 {
-class PositionStandardItem;
-class QuaternionStandardItem;
-class TransformStandardItem : public QStandardItem
+struct ContactResultsModelImpl;
+class ContactResultsModel : public QStandardItemModel
 {
+  Q_OBJECT
 public:
-  explicit TransformStandardItem(const Eigen::Isometry3d& transform);
-  explicit TransformStandardItem(const QString& text, const Eigen::Isometry3d& transform);
-  explicit TransformStandardItem(const QIcon& icon, const QString& text, const Eigen::Isometry3d& transform);
-  int type() const override;
+  ContactResultsModel(QObject* parent = nullptr);
+  ~ContactResultsModel() override;
 
-  void setTransform(const Eigen::Isometry3d& transform);
+  void setContactResults(const QString& ns, const tesseract_collision::ContactResultVector& contact_results);
+  void setContactResults(const QString& ns, const tesseract_collision::ContactResultMap& contact_results);
+  void removeNamespace(const QString& ns);
 
-private:
-  void ctor(const Eigen::Isometry3d& transform);
-  PositionStandardItem* position_;
-  QuaternionStandardItem* orientation_;
+  tesseract_collision::ContactResultVector getContactResults(const QModelIndex& row) const;
+
+  void clear();
+
+protected:
+  std::unique_ptr<ContactResultsModelImpl> data_;
 };
 }  // namespace tesseract_gui
 
-#endif  // TESSERACT_WIDGETS_COMMON_TRANSFORM_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_COLLISION_CONTACT_RESULTS_MODEL_H

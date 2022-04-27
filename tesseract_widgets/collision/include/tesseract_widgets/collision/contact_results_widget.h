@@ -20,37 +20,46 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_WIDGETS_COMMON_TRANSFORM_STANDARD_ITEM_H
-#define TESSERACT_WIDGETS_COMMON_TRANSFORM_STANDARD_ITEM_H
+#ifndef TESSERACT_WIDGETS_COLLISION_CONTACT_RESULTS_WIDGET_H
+#define TESSERACT_WIDGETS_COLLISION_CONTACT_RESULTS_WIDGET_H
 
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
-#ifndef Q_MOC_RUN
-#include <Eigen/Geometry>
-#endif
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
+#include <QWidget>
+#include <memory>
+#include <functional>
+#include <tesseract_collision/core/types.h>
 
-#include <QStandardItem>
+namespace Ui
+{
+class ContactResultsWidget;
+}
 
 namespace tesseract_gui
 {
-class PositionStandardItem;
-class QuaternionStandardItem;
-class TransformStandardItem : public QStandardItem
-{
-public:
-  explicit TransformStandardItem(const Eigen::Isometry3d& transform);
-  explicit TransformStandardItem(const QString& text, const Eigen::Isometry3d& transform);
-  explicit TransformStandardItem(const QIcon& icon, const QString& text, const Eigen::Isometry3d& transform);
-  int type() const override;
+using ContactTestFn =
+    std::function<tesseract_collision::ContactResultMap(const tesseract_collision::ContactManagerConfig& config,
+                                                        const tesseract_collision::ContactRequest& request)>;
 
-  void setTransform(const Eigen::Isometry3d& transform);
+class ContactResultsModel;
+struct ContactResultsWidgetImpl;
+
+class ContactResultsWidget : public QWidget
+{
+  Q_OBJECT
+
+public:
+  explicit ContactResultsWidget(QWidget* parent = nullptr);
+  ~ContactResultsWidget();
+
+  void setModel(ContactResultsModel* model);
+  void setContactTestFn(ContactTestFn contact_test_fn);
+
+protected Q_SLOTS:
+  void onComputeClicked();
 
 private:
-  void ctor(const Eigen::Isometry3d& transform);
-  PositionStandardItem* position_;
-  QuaternionStandardItem* orientation_;
+  std::unique_ptr<Ui::ContactResultsWidget> ui;
+  std::unique_ptr<ContactResultsWidgetImpl> data_;
 };
 }  // namespace tesseract_gui
 
-#endif  // TESSERACT_WIDGETS_COMMON_TRANSFORM_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_COLLISION_CONTACT_RESULTS_WIDGET_H

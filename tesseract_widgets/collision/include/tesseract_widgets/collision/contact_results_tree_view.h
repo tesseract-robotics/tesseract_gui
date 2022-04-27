@@ -20,37 +20,34 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_WIDGETS_COMMON_TRANSFORM_STANDARD_ITEM_H
-#define TESSERACT_WIDGETS_COMMON_TRANSFORM_STANDARD_ITEM_H
+#ifndef TESSERACT_WIDGETS_COLLISION_CONTACT_RESULTS_TREE_VIEW_H
+#define TESSERACT_WIDGETS_COLLISION_CONTACT_RESULTS_TREE_VIEW_H
 
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
-#ifndef Q_MOC_RUN
-#include <Eigen/Geometry>
-#endif
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
-
-#include <QStandardItem>
+#include <QTreeView>
+#include <memory>
+#include <tesseract_collision/core/types.h>
 
 namespace tesseract_gui
 {
-class PositionStandardItem;
-class QuaternionStandardItem;
-class TransformStandardItem : public QStandardItem
+struct ContactResultsTreeViewImpl;
+class ContactResultsTreeView : public QTreeView
 {
+  Q_OBJECT
 public:
-  explicit TransformStandardItem(const Eigen::Isometry3d& transform);
-  explicit TransformStandardItem(const QString& text, const Eigen::Isometry3d& transform);
-  explicit TransformStandardItem(const QIcon& icon, const QString& text, const Eigen::Isometry3d& transform);
-  int type() const override;
+  explicit ContactResultsTreeView(QWidget* parent = nullptr);
+  ~ContactResultsTreeView();
 
-  void setTransform(const Eigen::Isometry3d& transform);
+  void setModel(QAbstractItemModel* model) override;
+
+Q_SIGNALS:
+  void showContactResults(const tesseract_collision::ContactResultVector& contact_results);
+
+public Q_SLOTS:
+  void onCurrentRowChanged(const QModelIndex& current, const QModelIndex& previous);
 
 private:
-  void ctor(const Eigen::Isometry3d& transform);
-  PositionStandardItem* position_;
-  QuaternionStandardItem* orientation_;
+  std::unique_ptr<ContactResultsTreeViewImpl> data_;
 };
 }  // namespace tesseract_gui
 
-#endif  // TESSERACT_WIDGETS_COMMON_TRANSFORM_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_COLLISION_CONTACT_RESULTS_TREE_VIEW_H

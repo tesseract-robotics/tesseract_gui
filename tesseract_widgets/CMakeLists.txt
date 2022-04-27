@@ -13,6 +13,7 @@ endif()
 
 add_subdirectory(acm)
 add_subdirectory(common)
+add_subdirectory(collision)
 add_subdirectory(environment)
 add_subdirectory(joint_state_slider)
 add_subdirectory(joint_trajectory)

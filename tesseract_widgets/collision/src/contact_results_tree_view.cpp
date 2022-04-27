@@ -20,32 +20,33 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#include <tesseract_widgets/kinematic_groups/group_joint_states_tree_view.h>
-#include <tesseract_widgets/kinematic_groups/group_joint_states_model.h>
+#include <tesseract_widgets/collision/contact_results_tree_view.h>
+#include <tesseract_widgets/collision/contact_results_model.h>
+#include <tesseract_widgets/collision/contact_result_standard_item.h>
 #include <tesseract_widgets/common/standard_item_type.h>
 
 namespace tesseract_gui
 {
-struct GroupJointStatesTreeViewImpl
+struct ContactResultsTreeViewImpl
 {
-  GroupJointStatesModel* model;
+  ContactResultsModel* model;
 
   // Store the selected item
   QStandardItem* selected_item;
 };
 
-GroupJointStatesTreeView::GroupJointStatesTreeView(QWidget* parent)
-  : QTreeView(parent), data_(std::make_unique<GroupJointStatesTreeViewImpl>())
+ContactResultsTreeView::ContactResultsTreeView(QWidget* parent)
+  : QTreeView(parent), data_(std::make_unique<ContactResultsTreeViewImpl>())
 {
   connect(this, &QTreeView::collapsed, [this]() { resizeColumnToContents(0); });
   connect(this, &QTreeView::expanded, [this]() { resizeColumnToContents(0); });
 }
 
-GroupJointStatesTreeView::~GroupJointStatesTreeView() = default;
+ContactResultsTreeView::~ContactResultsTreeView() = default;
 
-void GroupJointStatesTreeView::setModel(QAbstractItemModel* model)
+void ContactResultsTreeView::setModel(QAbstractItemModel* model)
 {
-  data_->model = qobject_cast<GroupJointStatesModel*>(model);
+  data_->model = qobject_cast<ContactResultsModel*>(model);
   QTreeView::setModel(model);
 
   connect(selectionModel(),
@@ -54,14 +55,14 @@ void GroupJointStatesTreeView::setModel(QAbstractItemModel* model)
           SLOT(onCurrentRowChanged(QModelIndex, QModelIndex)));
 }
 
-void GroupJointStatesTreeView::onCurrentRowChanged(const QModelIndex& current, const QModelIndex& previous)
+void ContactResultsTreeView::onCurrentRowChanged(const QModelIndex& current, const QModelIndex& previous)
 {
   data_->selected_item = data_->model->itemFromIndex(current);
 
-  if (data_->selected_item->type() != static_cast<int>(StandardItemType::NAMESPACE))
+  if (data_->selected_item != nullptr)
   {
-    const tesseract_srdf::GroupsJointState& state = data_->model->getGroupsJointState(current);
-    Q_EMIT showGroupsJointState(state);
+    tesseract_collision::ContactResultVector contact_results = data_->model->getContactResults(current);
+    Q_EMIT showContactResults(contact_results);
   }
 }
 

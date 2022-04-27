@@ -71,4 +71,17 @@ QList<QStandardItem*> createStandardItemURL(const std::string& text, const std::
   value->setData(QString::fromStdString(data), Qt::DisplayRole);
   return { name, value };
 }
+
+QList<QStandardItem*> createStandardItemBool(const std::string& text, bool data)
+{
+  return createStandardItemBool(icons::getTextIcon(), text, data);
+}
+
+QList<QStandardItem*> createStandardItemBool(const QIcon& icon, const std::string& text, bool data)
+{
+  auto* name = new QStandardItem(icon, QString::fromStdString(text));
+  auto* value = new QStandardItem();  // NOLINT
+  value->setData(data, Qt::DisplayRole);
+  return { name, value };
+}
 }  // namespace tesseract_gui

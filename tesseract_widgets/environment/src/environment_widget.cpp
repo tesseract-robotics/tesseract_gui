@@ -32,7 +32,11 @@
 #include <tesseract_widgets/kinematic_groups/group_tcps_model.h>
 #include <tesseract_widgets/kinematic_groups/group_joint_states_model.h>
 #include <tesseract_widgets/acm/allowed_collision_matrix_model.h>
+#include <tesseract_widgets/collision/contact_results_widget.h>
+#include <tesseract_widgets/collision/contact_results_model.h>
 #include <tesseract_widgets/common/icon_utils.h>
+
+#include <tesseract_collision/core/types.h>
 
 #include <QStandardItemModel>
 #include <QToolBar>
@@ -44,6 +48,9 @@ struct EnvironmentWidgetImpl
   EnvironmentWidgetImpl() : config(std::make_shared<EnvironmentWidgetConfig>()) {}
 
   EnvironmentWidgetConfig::Ptr config{ nullptr };
+
+  ContactResultsModel* contact_results_model;
+  ContactTestFn contact_test_fn;
 
   // Toolbar
   QToolBar* toolbar{ nullptr };
@@ -75,6 +82,10 @@ EnvironmentWidget::EnvironmentWidget(QWidget* parent, bool add_toolbar)
     createToolBar();
     ui->verticalLayout->insertWidget(0, data_->toolbar);
   }
+
+  // Setup Contacts tab
+  data_->contact_results_model = new ContactResultsModel();
+  ui->contacts_widget->setModel(data_->contact_results_model);
 
   connect(ui->scene_tree_view, &QTreeView::collapsed, [this]() { ui->scene_tree_view->resizeColumnToContents(0); });
   connect(ui->scene_tree_view, &QTreeView::expanded, [this]() { ui->scene_tree_view->resizeColumnToContents(0); });
@@ -167,6 +178,20 @@ void EnvironmentWidget::setConfiguration(std::shared_ptr<EnvironmentWidgetConfig
           SIGNAL(linkVisibilityChanged(std::vector<std::string>)),
           this,
           SLOT(updateVisibilityCheckedStates(std::vector<std::string>)));
+
+  data_->contact_test_fn = [this](const tesseract_collision::ContactManagerConfig& config,
+                                  const tesseract_collision::ContactRequest& request) {
+    tesseract_collision::ContactResultMap collisions;
+    if (!this->data_->config->environment().isInitialized())
+      return collisions;
+
+    auto discrete_contact_manager = this->environment().getDiscreteContactManager();
+    discrete_contact_manager->applyContactManagerConfig(config);
+    discrete_contact_manager->contactTest(collisions, request);
+    return collisions;
+  };
+
+  ui->contacts_widget->setContactTestFn(data_->contact_test_fn);
 
   emit configurationSet(*data_->config);
   emit environmentSet(data_->config->getEnvironment());

@@ -32,14 +32,9 @@ namespace tesseract_gui
 class JointStateStandardItem : public QStandardItem
 {
 public:
-  explicit JointStateStandardItem(QString name, const std::unordered_map<std::string, double>& state);
-  explicit JointStateStandardItem(const QString& text,
-                                  QString name,
-                                  const std::unordered_map<std::string, double>& state);
-  explicit JointStateStandardItem(const QIcon& icon,
-                                  const QString& text,
-                                  QString name,
-                                  const std::unordered_map<std::string, double>& state);
+  explicit JointStateStandardItem(const std::unordered_map<std::string, double>& state);
+  JointStateStandardItem(const QString& text, const std::unordered_map<std::string, double>& state);
+  JointStateStandardItem(const QIcon& icon, const QString& text, const std::unordered_map<std::string, double>& state);
   int type() const override;
 
 private:

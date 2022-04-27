@@ -85,7 +85,7 @@ void GroupsJointStatesEditorWidget::onRemoveJointState()
   for (int i = row_cnt; i > 0; i--)
   {
     QStandardItem* item = model_->itemFromIndex(selection.at(i - 1));
-    if (item->type() == static_cast<int>(StandardItemType::JOINT_STATE))
+    if (item->type() == static_cast<int>(StandardItemType::GROUP_JOINT_STATE))
       model_->removeGroupJointState(item->parent()->text(), item->text());
   }
 }

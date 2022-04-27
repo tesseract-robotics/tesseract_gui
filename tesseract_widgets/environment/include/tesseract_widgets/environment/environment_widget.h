@@ -101,6 +101,7 @@ public Q_SLOTS:
   virtual void onEnable();
 
   void onACMSelectedLinks(const std::vector<std::string>& link_names);
+  void onShowGroupsJointState(const std::unordered_map<std::string, double>& groups_joint_state);
 
 private Q_SLOTS:
   void onSceneGraphModelItemChanged(QStandardItem* item);

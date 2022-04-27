@@ -83,7 +83,7 @@ enum class StandardItemType : int
   JOINT_GROUP             = SCENE_GRAPH_TYPES_END + 5,
   LINK_GROUP              = SCENE_GRAPH_TYPES_END + 6,
   GROUP_JOINT_STATES      = SCENE_GRAPH_TYPES_END + 7,
-  JOINT_STATE             = SCENE_GRAPH_TYPES_END + 8,
+  GROUP_JOINT_STATE       = SCENE_GRAPH_TYPES_END + 8,
   KINEMATICS_INFO         = SCENE_GRAPH_TYPES_END + 9,
   SRDF_TYPES_END          = SCENE_GRAPH_TYPES_END + 10,
 
@@ -113,6 +113,10 @@ enum class StandardItemType : int
   ENV_COMMAND_SET_ACTIVE_CONTINUOUS_CONTACT_MANAGER = SCENE_GRAPH_TYPES_END + 23,
   ENV_COMMAND_COMMANDS                              = SCENE_GRAPH_TYPES_END + 24,
   ENV_COMMAND_TYPES_END                             = SCENE_GRAPH_TYPES_END + 25,
+
+  // Collision Types
+  COLLISION_CONTACT_RESULT                          = ENV_COMMAND_TYPES_END + 1,
+  COLLISION_END                                     = ENV_COMMAND_TYPES_END + 2,
 };
 // clang-format on
 }  // namespace tesseract_gui

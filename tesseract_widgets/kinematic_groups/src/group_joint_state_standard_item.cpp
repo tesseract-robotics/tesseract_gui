@@ -20,37 +20,37 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#include <tesseract_widgets/kinematic_groups/joint_state_standard_item.h>
+#include <tesseract_widgets/kinematic_groups/group_joint_state_standard_item.h>
 #include <tesseract_widgets/common/standard_item_utils.h>
 #include <tesseract_widgets/common/standard_item_type.h>
 #include <tesseract_widgets/common/icon_utils.h>
 
 namespace tesseract_gui
 {
-JointStateStandardItem::JointStateStandardItem(const std::unordered_map<std::string, double>& state)
+GroupJointStateStandardItem::GroupJointStateStandardItem(const std::unordered_map<std::string, double>& state)
   : QStandardItem(icons::getCubeIcon(), "Joint State")
 {
   ctor(state);
 }
 
-JointStateStandardItem::JointStateStandardItem(const QString& text,
-                                               const std::unordered_map<std::string, double>& state)
+GroupJointStateStandardItem::GroupJointStateStandardItem(const QString& text,
+                                                         const std::unordered_map<std::string, double>& state)
   : QStandardItem(icons::getCubeIcon(), text)
 {
   ctor(state);
 }
 
-JointStateStandardItem::JointStateStandardItem(const QIcon& icon,
-                                               const QString& text,
-                                               const std::unordered_map<std::string, double>& state)
+GroupJointStateStandardItem::GroupJointStateStandardItem(const QIcon& icon,
+                                                         const QString& text,
+                                                         const std::unordered_map<std::string, double>& state)
   : QStandardItem(icon, text)
 {
   ctor(state);
 }
 
-int JointStateStandardItem::type() const { return static_cast<int>(StandardItemType::JOINT_STATE); }
+int GroupJointStateStandardItem::type() const { return static_cast<int>(StandardItemType::GROUP_JOINT_STATE); }
 
-void JointStateStandardItem::ctor(const std::unordered_map<std::string, double>& state)
+void GroupJointStateStandardItem::ctor(const std::unordered_map<std::string, double>& state)
 {
   for (const auto& s : state)
     appendRow(createStandardItemFloat(s.first, s.second));

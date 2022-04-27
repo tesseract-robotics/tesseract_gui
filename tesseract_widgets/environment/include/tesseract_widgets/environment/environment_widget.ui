@@ -29,7 +29,7 @@
    <item>
     <widget class="QTabWidget" name="tab_widget">
      <property name="currentIndex">
-      <number>6</number>
+      <number>4</number>
      </property>
      <widget class="QWidget" name="scene_tab">
       <attribute name="title">
@@ -153,7 +153,7 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="QTreeView" name="group_states_tree_view">
+        <widget class="tesseract_gui::GroupJointStatesTreeView" name="group_states_tree_view">
          <property name="editTriggers">
           <set>QAbstractItemView::NoEditTriggers</set>
          </property>
@@ -222,6 +222,11 @@
    <class>tesseract_gui::AllowedCollisionMatrixTreeView</class>
    <extends>QTreeView</extends>
    <header>tesseract_widgets/acm/allowed_collision_matrix_tree_view.h</header>
+  </customwidget>
+  <customwidget>
+   <class>tesseract_gui::GroupJointStatesTreeView</class>
+   <extends>QTreeView</extends>
+   <header>tesseract_widgets/kinematic_groups/group_joint_states_tree_view.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

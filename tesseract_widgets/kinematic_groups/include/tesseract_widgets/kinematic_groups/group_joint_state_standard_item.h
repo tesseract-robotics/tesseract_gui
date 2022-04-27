@@ -20,8 +20,8 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_WIDGETS_KINEMATIC_GROUP_JOINT_STATE_STANDARD_ITEM_H
-#define TESSERACT_WIDGETS_KINEMATIC_GROUP_JOINT_STATE_STANDARD_ITEM_H
+#ifndef TESSERACT_WIDGETS_KINEMATIC_GROUP_GROUP_JOINT_STATE_STANDARD_ITEM_H
+#define TESSERACT_WIDGETS_KINEMATIC_GROUP_GROUP_JOINT_STATE_STANDARD_ITEM_H
 
 #include <tesseract_srdf/kinematics_information.h>
 
@@ -29,12 +29,14 @@
 
 namespace tesseract_gui
 {
-class JointStateStandardItem : public QStandardItem
+class GroupJointStateStandardItem : public QStandardItem
 {
 public:
-  explicit JointStateStandardItem(const std::unordered_map<std::string, double>& state);
-  JointStateStandardItem(const QString& text, const std::unordered_map<std::string, double>& state);
-  JointStateStandardItem(const QIcon& icon, const QString& text, const std::unordered_map<std::string, double>& state);
+  explicit GroupJointStateStandardItem(const std::unordered_map<std::string, double>& state);
+  GroupJointStateStandardItem(const QString& text, const std::unordered_map<std::string, double>& state);
+  GroupJointStateStandardItem(const QIcon& icon,
+                              const QString& text,
+                              const std::unordered_map<std::string, double>& state);
   int type() const override;
 
 private:
@@ -42,4 +44,4 @@ private:
 };
 }  // namespace tesseract_gui
 
-#endif  // TESSERACT_WIDGETS_KINEMATIC_GROUP_JOINT_STATE_STANDARD_ITEM_H
+#endif  // TESSERACT_WIDGETS_KINEMATIC_GROUP_GROUP_JOINT_STATE_STANDARD_ITEM_H

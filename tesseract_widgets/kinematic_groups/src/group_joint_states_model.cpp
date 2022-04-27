@@ -21,7 +21,11 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 #include <tesseract_widgets/kinematic_groups/group_joint_states_model.h>
+#include <tesseract_widgets/kinematic_groups/group_joint_state_standard_item.h>
+#include <tesseract_widgets/common/namespace_standard_item.h>
 #include <tesseract_widgets/common/standard_item_type.h>
+
+#include <tesseract_common/joint_state.h>
 
 namespace tesseract_gui
 {
@@ -65,6 +69,37 @@ void GroupJointStatesModel::removeGroupJointState(QString group_name, QString st
 const tesseract_srdf::GroupJointStates& GroupJointStatesModel::getGroupsJointStates() const
 {
   return getRoot()->getGroupJointStates();
+}
+
+GroupJointStateStandardItem* findGroupJointStateItem(QStandardItem* item)
+{
+  if (item->type() == static_cast<int>(StandardItemType::GROUP_JOINT_STATE))
+    return dynamic_cast<GroupJointStateStandardItem*>(item);
+
+  return findGroupJointStateItem(item->parent());
+}
+
+NamespaceStandardItem* findJointStateGroupItem(QStandardItem* item)
+{
+  if (item->type() == static_cast<int>(StandardItemType::NAMESPACE))
+    return dynamic_cast<NamespaceStandardItem*>(item);
+
+  return findJointStateGroupItem(item->parent());
+}
+
+const tesseract_srdf::GroupsJointState& GroupJointStatesModel::getGroupsJointState(const QModelIndex& row) const
+{
+  QStandardItem* item = itemFromIndex(row);
+
+  if (item->type() == static_cast<int>(StandardItemType::NAMESPACE))
+    throw std::runtime_error("Cannot get joint state from selected group standard item");
+
+  GroupJointStateStandardItem* joint_state_item = findGroupJointStateItem(item);
+  NamespaceStandardItem* group_item = findJointStateGroupItem(joint_state_item);
+
+  QString state_name = joint_state_item->text();
+  QString group_name = group_item->text();
+  return getRoot()->getGroupJointStates().at(group_name.toStdString()).at(state_name.toStdString());
 }
 
 GroupJointStatesStandardItem* GroupJointStatesModel::getRoot()

@@ -9,7 +9,8 @@ qt5_wrap_cpp(
   KINEMATIC_GROUP_headers_MOC
   include/tesseract_widgets/kinematic_groups/kinematic_groups_model.h
   include/tesseract_widgets/kinematic_groups/group_joint_states_model.h
-  include/tesseract_widgets/kinematic_groups/group_tcps_model.h)
+  include/tesseract_widgets/kinematic_groups/group_tcps_model.h
+  include/tesseract_widgets/kinematic_groups/group_joint_states_tree_view.h)
 
 add_library(
   ${PROJECT_NAME}_kinematic_groups SHARED
@@ -18,11 +19,12 @@ add_library(
   src/link_group_standard_item.cpp
   src/opw_params_standard_item.cpp
   src/joint_group_standard_item.cpp
-  src/joint_state_standard_item.cpp
   src/kinematic_groups_model.cpp
   src/kinematics_info_standard_item.cpp
+  src/group_joint_state_standard_item.cpp
   src/group_joint_states_standard_item.cpp
   src/group_joint_states_model.cpp
+  src/group_joint_states_tree_view.cpp
   src/group_tcps_standard_item.cpp
   src/group_tcps_model.cpp)
 target_link_libraries(

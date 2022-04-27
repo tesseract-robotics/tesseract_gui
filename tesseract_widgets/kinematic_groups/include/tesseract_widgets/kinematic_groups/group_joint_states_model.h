@@ -33,6 +33,8 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 #include <QStandardItemModel>
 #include <tesseract_widgets/kinematic_groups/group_joint_states_standard_item.h>
 
+class QModelIndex;
+
 namespace tesseract_gui
 {
 class GroupJointStatesModel : public QStandardItemModel
@@ -50,6 +52,8 @@ public:
   void clear();
 
   const tesseract_srdf::GroupJointStates& getGroupsJointStates() const;
+
+  const tesseract_srdf::GroupsJointState& getGroupsJointState(const QModelIndex& row) const;
 
 private:
   GroupJointStatesStandardItem* getRoot();

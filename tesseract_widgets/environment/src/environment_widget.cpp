@@ -88,12 +88,7 @@ EnvironmentWidget::EnvironmentWidget(QWidget* parent, bool add_toolbar)
   connect(ui->group_tcps_tree_view, &QTreeView::expanded, [this]() {
     ui->group_tcps_tree_view->resizeColumnToContents(0);
   });
-  connect(ui->group_states_tree_view, &QTreeView::collapsed, [this]() {
-    ui->group_states_tree_view->resizeColumnToContents(0);
-  });
-  connect(ui->group_states_tree_view, &QTreeView::expanded, [this]() {
-    ui->group_states_tree_view->resizeColumnToContents(0);
-  });
+
   connect(ui->acm_tree_view, &QTreeView::collapsed, [this]() { ui->acm_tree_view->resizeColumnToContents(0); });
   connect(ui->acm_tree_view, &QTreeView::expanded, [this]() { ui->acm_tree_view->resizeColumnToContents(0); });
   connect(ui->cmd_history_tree_view, &QTreeView::collapsed, [this]() {
@@ -108,6 +103,11 @@ EnvironmentWidget::EnvironmentWidget(QWidget* parent, bool add_toolbar)
           SIGNAL(selectedLinksChanged(std::vector<std::string>)),
           this,
           SLOT(onACMSelectedLinks(std::vector<std::string>)));
+
+  connect(ui->group_states_tree_view,
+          SIGNAL(showGroupsJointState(std::unordered_map<std::string, double>)),
+          this,
+          SLOT(onShowGroupsJointState(std::unordered_map<std::string, double>)));
 }
 
 EnvironmentWidget::~EnvironmentWidget() = default;
@@ -415,6 +415,11 @@ void EnvironmentWidget::onACMSelectedLinks(const std::vector<std::string>& link_
   }
 
   emit linkVisibilityChanged(changed_link_names);
+}
+
+void EnvironmentWidget::onShowGroupsJointState(const std::unordered_map<std::string, double>& groups_joint_state)
+{
+  data_->config->environment().setState(groups_joint_state);
 }
 
 QStandardItem* findLinkStandardItem(QStandardItem* item)

@@ -72,6 +72,7 @@ void GroupJointStatesStandardItem::addGroupJointStateItem(const QString& group_n
   }
 
   group_item->appendRow(new GroupJointStateStandardItem(state_name, state));
+  sortChildren(0);
 }
 
 void GroupJointStatesStandardItem::addGroupJointState(const QString& group_name,

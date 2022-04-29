@@ -50,7 +50,6 @@ struct EnvironmentWidgetImpl
   EnvironmentWidgetConfig::Ptr config{ nullptr };
 
   ContactResultsModel* contact_results_model;
-  ContactTestFn contact_test_fn;
 
   // Toolbar
   QToolBar* toolbar{ nullptr };
@@ -151,6 +150,8 @@ void EnvironmentWidget::setConfiguration(std::shared_ptr<EnvironmentWidgetConfig
   ui->acm_tree_view->setModel(&data_->config->getAllowedCollisionMatrixModel());
   ui->cmd_history_tree_view->setModel(&data_->config->getEnvironmentCommandsModel());
 
+  ui->contacts_widget->setEnvironment(data_->config->getEnvironment());
+
   onModelsUpdated();
 
   connect(data_->config.get(), SIGNAL(modelsUpdated()), this, SLOT(onModelsUpdated()));
@@ -178,20 +179,6 @@ void EnvironmentWidget::setConfiguration(std::shared_ptr<EnvironmentWidgetConfig
           SIGNAL(linkVisibilityChanged(std::vector<std::string>)),
           this,
           SLOT(updateVisibilityCheckedStates(std::vector<std::string>)));
-
-  data_->contact_test_fn = [this](const tesseract_collision::ContactManagerConfig& config,
-                                  const tesseract_collision::ContactRequest& request) {
-    tesseract_collision::ContactResultMap collisions;
-    if (!this->data_->config->environment().isInitialized())
-      return collisions;
-
-    auto discrete_contact_manager = this->environment().getDiscreteContactManager();
-    discrete_contact_manager->applyContactManagerConfig(config);
-    discrete_contact_manager->contactTest(collisions, request);
-    return collisions;
-  };
-
-  ui->contacts_widget->setContactTestFn(data_->contact_test_fn);
 
   emit configurationSet(*data_->config);
   emit environmentSet(data_->config->getEnvironment());

@@ -1,12 +1,13 @@
 #include <tesseract_widgets/collision/contact_results_widget.h>
 #include <tesseract_widgets/collision/contact_results_model.h>
+#include <tesseract_environment/environment.h>
 #include "ui_contact_results_widget.h"
 
 namespace tesseract_gui
 {
 struct ContactResultsWidgetImpl
 {
-  tesseract_gui::ContactTestFn contact_test_fn;
+  std::shared_ptr<const tesseract_environment::Environment> env;
   ContactResultsModel* model;
 };
 
@@ -16,9 +17,6 @@ ContactResultsWidget::ContactResultsWidget(QWidget* parent)
   , data_(std::make_unique<ContactResultsWidgetImpl>())
 {
   ui->setupUi(this);
-
-  ui->contact_request_group_box->hide();
-  ui->compute_frame->hide();
 
   connect(ui->compute_push_button, SIGNAL(clicked()), this, SLOT(onComputeClicked()));
 }
@@ -31,24 +29,14 @@ void ContactResultsWidget::setModel(ContactResultsModel* model)
   data_->model = model;
 }
 
-void ContactResultsWidget::setContactTestFn(ContactTestFn contact_test_fn)
+void ContactResultsWidget::setEnvironment(std::shared_ptr<const tesseract_environment::Environment> env)
 {
-  data_->contact_test_fn = contact_test_fn;
-  if (data_->contact_test_fn == nullptr)
-  {
-    ui->contact_request_group_box->hide();
-    ui->compute_frame->hide();
-  }
-  else
-  {
-    ui->contact_request_group_box->show();
-    ui->compute_frame->show();
-  }
+  data_->env = std::move(env);
 }
 
 void ContactResultsWidget::onComputeClicked()
 {
-  if (data_->contact_test_fn == nullptr)
+  if (data_->env == nullptr || !data_->env->isInitialized())
     return;
 
   tesseract_collision::ContactManagerConfig config(ui->contact_threshold->value());
@@ -57,9 +45,13 @@ void ContactResultsWidget::onComputeClicked()
   request.calculate_distance = ui->calculate_distance->isChecked();
   request.calculate_penetration = ui->calculate_penetration->isChecked();
   request.type = static_cast<tesseract_collision::ContactTestType>(ui->contact_test_type->currentIndex());
-  tesseract_collision::ContactResultMap results = data_->contact_test_fn(config, request);
 
-  data_->model->setContactResults("Computed", results);
+  tesseract_collision::ContactResultMap contacts;
+  auto contact_manager = data_->env->getDiscreteContactManager();
+  contact_manager->applyContactManagerConfig(config);
+  contact_manager->contactTest(contacts, request);
+
+  data_->model->setContactResults("Computed", contacts);
   ui->tree_view->expandToDepth(1);
 }
 

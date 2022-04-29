@@ -26,19 +26,19 @@
 #include <QWidget>
 #include <memory>
 #include <functional>
-#include <tesseract_collision/core/types.h>
 
 namespace Ui
 {
 class ContactResultsWidget;
 }
 
+namespace tesseract_environment
+{
+class Environment;
+}
+
 namespace tesseract_gui
 {
-using ContactTestFn =
-    std::function<tesseract_collision::ContactResultMap(const tesseract_collision::ContactManagerConfig& config,
-                                                        const tesseract_collision::ContactRequest& request)>;
-
 class ContactResultsModel;
 struct ContactResultsWidgetImpl;
 
@@ -51,7 +51,12 @@ public:
   ~ContactResultsWidget();
 
   void setModel(ContactResultsModel* model);
-  void setContactTestFn(ContactTestFn contact_test_fn);
+
+  /**
+   * @brief Set the environment to use for computing contacts
+   * @param env The environment to use for computing contacts
+   */
+  void setEnvironment(std::shared_ptr<const tesseract_environment::Environment> env);
 
 protected Q_SLOTS:
   void onComputeClicked();

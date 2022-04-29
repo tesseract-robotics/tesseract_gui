@@ -68,7 +68,11 @@ void ContactResultsModel::setContactResults(const QString& ns,
     QStandardItem* link_pair_item = new NamespaceStandardItem(
         QString("%1::%2").arg(QString::fromStdString(pair.first.first), QString::fromStdString(pair.first.second)));
     for (std::size_t i = 0; i < pair.second.size(); ++i)
-      link_pair_item->appendRow(new ContactResultStandardItem(QString("[%1]").arg(i), pair.second[i]));
+    {
+      auto* cr_item = new ContactResultStandardItem(QString("[%1]").arg(i), pair.second[i]);
+      auto* cr_value_item = new QStandardItem(QString("{ distance: %1 }").arg(pair.second[i].distance));
+      link_pair_item->appendRow({ cr_item, cr_value_item });
+    }
 
     ns_item->appendRow(link_pair_item);
   }

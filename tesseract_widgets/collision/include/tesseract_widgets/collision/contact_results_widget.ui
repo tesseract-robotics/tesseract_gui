@@ -131,6 +131,13 @@
        <number>0</number>
       </property>
       <item>
+       <widget class="QPushButton" name="check_state_push_button">
+        <property name="text">
+         <string>Check State</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <spacer name="horizontalSpacer">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>

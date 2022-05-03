@@ -74,9 +74,7 @@ public:
    * @param initial_state The initial state of the environment
    * @param environment The environment to use for planning
    */
-  JointTrajectorySet(const std::unordered_map<std::string, double>& initial_state,
-                     tesseract_environment::Environment::UPtr environment,
-                     std::string description = "");
+  JointTrajectorySet(tesseract_environment::Environment::UPtr environment, std::string description = "");
 
   /**
    * @brief Create a trajectory set with initial state and environment commands

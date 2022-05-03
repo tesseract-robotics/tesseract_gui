@@ -77,10 +77,8 @@ JointTrajectorySet::JointTrajectorySet(const std::unordered_map<std::string, dou
   commands_ = std::move(commands);
 }
 
-JointTrajectorySet::JointTrajectorySet(const std::unordered_map<std::string, double>& initial_state,
-                                       tesseract_environment::Environment::UPtr environment,
-                                       std::string description)
-  : JointTrajectorySet(initial_state, description)
+JointTrajectorySet::JointTrajectorySet(tesseract_environment::Environment::UPtr environment, std::string description)
+  : JointTrajectorySet(environment->getState().joints, std::move(description))
 {
   environment_ = std::move(environment);
 }

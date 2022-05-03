@@ -67,7 +67,7 @@ int main(int argc, char** argv)
     trajectory_set.appendJointTrajectory(trajectory);
   }
 
-  auto* model = new tesseract_gui::JointTrajectoryModel();
+  auto* model = new tesseract_gui::JointTrajectoryModel();  // NOLINT
   QString set1_key = model->addJointTrajectorySet(trajectory_set);
   QString set2_key = model->addJointTrajectorySet(trajectory_set);
   QString set3_key = model->addJointTrajectorySet(trajectory_set);
@@ -78,5 +78,5 @@ int main(int argc, char** argv)
   widget.setModel(model);
   widget.show();
 
-  return app.exec();
+  return QApplication::exec();
 }

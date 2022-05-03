@@ -64,6 +64,8 @@ std::string toString(tesseract_collision::ContinuousCollisionType cc_type)
       return "CCType_Time1";
     case tesseract_collision::ContinuousCollisionType::CCType_Between:
       return "CCType_Between";
+    default:
+      throw std::runtime_error("Unhandled tesseract_collision::ContinuousCollisionType");
   }
 }
 void ContactResultStandardItem::ctor()

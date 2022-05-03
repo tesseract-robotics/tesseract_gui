@@ -38,6 +38,9 @@
 #include <tesseract_common/joint_state.h>
 #include <tesseract_common/serialization.h>
 #include <tesseract_visualization/trajectory_player.h>
+#include <tesseract_command_language/composite_instruction.h>
+#include <tesseract_command_language/core/instruction.h>
+#include <tesseract_command_language/utils/utils.h>
 #include <QTimer>
 #include <QToolBar>
 #include <QFileDialog>
@@ -142,16 +145,26 @@ std::shared_ptr<const tesseract_environment::Environment> JointTrajectoryWidget:
 
 void JointTrajectoryWidget::onOpen()
 {
-  QList<QString> filters;
+  QStringList filters;
   filters.append("Joint Trajectory Set XML (*.jtsx)");
   filters.append("Joint Trajectory Set Binary (*.jtsb)");
+  filters.append("Composite Instruction XML (*.cpix)");
+  filters.append("Composite Instruction Binary (*.cpib)");
+
+  QStringList ext;
+  ext.append("jtsx");
+  ext.append("jtsb");
+  ext.append("cpix");
+  ext.append("cpib");
+
   QFileDialog dialog(this, "Open Joint Trajectory Set", data_->default_directory);
   dialog.setAcceptMode(QFileDialog::AcceptOpen);
   dialog.setNameFilters(filters);
   if (dialog.exec() == 1)
   {
+    int idx = filters.indexOf(dialog.selectedNameFilter());
     data_->default_directory = QFileInfo(dialog.selectedFiles()[0]).absoluteDir().path();
-    openJointTrajectorySet(dialog.selectedFiles()[0], (dialog.selectedNameFilter() == filters[0]) ? "jtsx" : "jtsb");
+    openJointTrajectorySet(dialog.selectedFiles()[0], ext[idx]);
   }
 }
 
@@ -219,6 +232,43 @@ bool JointTrajectoryWidget::openJointTrajectorySet(const QString& filename, cons
     return true;
   }
 
+  if (suffix == "cpix" && file_info.suffix() == "cpix")
+  {
+    auto cpi =
+        tesseract_common::Serialization::fromArchiveFileXML<tesseract_planning::Instruction>(filename.toStdString())
+            .as<tesseract_planning::CompositeInstruction>();
+    tesseract_common::JointTrajectory jt = tesseract_planning::toJointTrajectory(cpi);
+    if (jt.empty())
+      return false;
+
+    std::unordered_map<std::string, double> initial_state;
+    for (std::size_t i = 0; i < jt.states.front().joint_names.size(); ++i)
+      initial_state[jt.states.front().joint_names[i]] = jt.states.front().position[i];
+
+    tesseract_common::JointTrajectorySet jts(initial_state, jt.description);
+    jts.appendJointTrajectory(jt);
+    addJointTrajectorySet(jts);
+    return true;
+  }
+
+  if (suffix == "cpib" && file_info.suffix() == "cpib")
+  {
+    auto cpi =
+        tesseract_common::Serialization::fromArchiveFileBinary<tesseract_planning::Instruction>(filename.toStdString())
+            .as<tesseract_planning::CompositeInstruction>();
+    tesseract_common::JointTrajectory jt = tesseract_planning::toJointTrajectory(cpi);
+    if (jt.empty())
+      return false;
+
+    std::unordered_map<std::string, double> initial_state;
+    for (std::size_t i = 0; i < jt.states.front().joint_names.size(); ++i)
+      initial_state[jt.states.front().joint_names[i]] = jt.states.front().position[i];
+
+    tesseract_common::JointTrajectorySet jts(initial_state, jt.description);
+    addJointTrajectorySet(jts);
+    return true;
+  }
+
   return false;
 }
 
@@ -262,11 +312,9 @@ QString JointTrajectoryWidget::addJointTrajectorySet(tesseract_common::JointTraj
   if (trajectory_set.getEnvironment() != nullptr)
     return data_->model->addJointTrajectorySet(trajectory_set);
 
-  if (data_->default_env == nullptr)
-    throw std::runtime_error("JointTrajectoryWidget: Must set default environment prior to adding trajectories that do "
-                             "not contain an environment");
+  if (data_->default_env != nullptr)
+    trajectory_set.applyEnvironment(data_->default_env->clone());
 
-  trajectory_set.applyEnvironment(data_->default_env->clone());
   return data_->model->addJointTrajectorySet(trajectory_set);
 }
 

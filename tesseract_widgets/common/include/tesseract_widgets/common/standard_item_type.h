@@ -42,7 +42,11 @@ enum class StandardItemType : int
   TRANSFORM_POSITION           = QStandardItem::UserType + 9,
   TRANSFORM_QUATERNION         = QStandardItem::UserType + 10,
   NAMESPACE                    = QStandardItem::UserType + 11,
-  COMMON_TYPES_END             = QStandardItem::UserType + 12,
+  VECTOR_DOUBLE                = QStandardItem::UserType + 12,
+  VECTOR_STRING                = QStandardItem::UserType + 13,
+  JOINT_STATE                  = QStandardItem::UserType + 14,
+  MANIPULATOR_INFO             = QStandardItem::UserType + 15,
+  COMMON_TYPES_END             = QStandardItem::UserType + 16,
 
   // Joint Trajectory Set Types
   JOINT_TRAJECTORY_SET            = COMMON_TYPES_END + 1,
@@ -118,7 +122,24 @@ enum class StandardItemType : int
 
   // Collision Types
   COLLISION_CONTACT_RESULT                          = ENV_COMMAND_TYPES_END + 1,
-  COLLISION_END                                     = ENV_COMMAND_TYPES_END + 2,
+  COLLISION_TYPES_END                               = ENV_COMMAND_TYPES_END + 2,
+
+  // COMMAND_LANGUAGE Types
+  CL_CARTESIAN_WAYPOINT                             = COLLISION_TYPES_END + 1,
+  CL_JOINT_WAYPOINT                                 = COLLISION_TYPES_END + 2,
+  CL_STATE_WAYPOINT                                 = COLLISION_TYPES_END + 3,
+  CL_NULL_WAYPOINT                                  = COLLISION_TYPES_END + 4,
+  CL_MOVE_INSTRUCTION                               = COLLISION_TYPES_END + 5,
+  CL_SET_ANALOG_INSTRUCTION                         = COLLISION_TYPES_END + 6,
+  CL_SET_TOOL_INSTRUCTION                           = COLLISION_TYPES_END + 7,
+  CL_TIMER_INSTRUCTION                              = COLLISION_TYPES_END + 8,
+  CL_WAIT_INSTRUCTION                               = COLLISION_TYPES_END + 9,
+  CL_COMPOSITE_INSTRUCTION                          = COLLISION_TYPES_END + 10,
+  CL_VECTOR_INSTRUCTION                             = COLLISION_TYPES_END + 11,
+  CL_NULL_INSTRUCTION                               = COLLISION_TYPES_END + 12,
+  CL_INSTRUCTION                                    = COLLISION_TYPES_END + 13,
+  CL_PLAN_INSTRUCTION                               = COLLISION_TYPES_END + 14,
+  CL_TYPES_END                                      = COLLISION_TYPES_END + 15,
 };
 // clang-format on
 }  // namespace tesseract_gui

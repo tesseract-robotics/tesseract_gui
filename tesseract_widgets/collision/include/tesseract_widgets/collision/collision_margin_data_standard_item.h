@@ -20,36 +20,34 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_WIDGETS_COLLISION_CONTACT_RESULTS_TREE_VIEW_H
-#define TESSERACT_WIDGETS_COLLISION_CONTACT_RESULTS_TREE_VIEW_H
+#ifndef TESSERACT_WIDGETS_COLLISION_COLLISION_MARGIN_DATA_STANDARD_ITEM_H
+#define TESSERACT_WIDGETS_COLLISION_COLLISION_MARGIN_DATA_STANDARD_ITEM_H
 
-#include <QTreeView>
-#include <memory>
+#include <tesseract_common/macros.h>
+TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
+#ifndef Q_MOC_RUN
 #include <tesseract_collision/core/types.h>
+#endif
+TESSERACT_COMMON_IGNORE_WARNINGS_POP
+
+#include <QStandardItem>
 
 namespace tesseract_gui
 {
-struct ContactResultsTreeViewImpl;
-class ContactResultsTreeView : public QTreeView
+class CollisionMarginDataStandardItem : public QStandardItem
 {
-  Q_OBJECT
 public:
-  explicit ContactResultsTreeView(QWidget* parent = nullptr);
-  ~ContactResultsTreeView();
-
-  void setModel(QAbstractItemModel* model) override;
-
-Q_SIGNALS:
-  void showContactResults(const tesseract_collision::ContactResultVector& contact_results);
-
-public Q_SLOTS:
-  void onCurrentRowChanged(const QModelIndex& current, const QModelIndex& previous);
-  void onSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
-  void mousePressEvent(QMouseEvent* event) override;
+  CollisionMarginDataStandardItem(const tesseract_collision::CollisionMarginData& collision_margin_data);
+  explicit CollisionMarginDataStandardItem(const QString& text,
+                                           const tesseract_collision::CollisionMarginData& collision_margin_data);
+  CollisionMarginDataStandardItem(const QIcon& icon,
+                                  const QString& text,
+                                  const tesseract_collision::CollisionMarginData& collision_margin_data);
+  int type() const override;
 
 private:
-  std::unique_ptr<ContactResultsTreeViewImpl> data_;
+  void ctor(const tesseract_collision::CollisionMarginData& collision_margin_data);
 };
 }  // namespace tesseract_gui
 
-#endif  // TESSERACT_WIDGETS_COLLISION_CONTACT_RESULTS_TREE_VIEW_H
+#endif  // TESSERACT_WIDGETS_COLLISION_COLLISION_MARGIN_DATA_STANDARD_ITEM_H

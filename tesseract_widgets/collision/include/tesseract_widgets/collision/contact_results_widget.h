@@ -25,7 +25,7 @@
 
 #include <QWidget>
 #include <memory>
-#include <functional>
+#include <tesseract_collision/core/types.h>
 
 namespace Ui
 {
@@ -57,6 +57,9 @@ public:
    * @param env The environment to use for computing contacts
    */
   void setEnvironment(std::shared_ptr<const tesseract_environment::Environment> env);
+
+Q_SIGNALS:
+  void showContactResults(const tesseract_collision::ContactResultVector& contact_results);
 
 protected Q_SLOTS:
   void onComputeClicked();

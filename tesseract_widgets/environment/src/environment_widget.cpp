@@ -118,6 +118,10 @@ EnvironmentWidget::EnvironmentWidget(QWidget* parent, bool add_toolbar)
           SIGNAL(showGroupsJointState(std::unordered_map<std::string, double>)),
           this,
           SLOT(onShowGroupsJointState(std::unordered_map<std::string, double>)));
+  connect(ui->contacts_widget,
+          SIGNAL(showContactResults(tesseract_collision::ContactResultVector)),
+          this,
+          SIGNAL(showContactResults(tesseract_collision::ContactResultVector)));
 }
 
 EnvironmentWidget::~EnvironmentWidget() = default;

@@ -73,7 +73,7 @@ const tesseract_srdf::GroupJointStates& GroupJointStatesModel::getGroupsJointSta
 
 GroupJointStateStandardItem* findGroupJointStateItem(QStandardItem* item)
 {
-  if (item->type() == static_cast<int>(StandardItemType::GROUP_JOINT_STATE))
+  if (item->type() == static_cast<int>(StandardItemType::SRDF_GROUP_JOINT_STATE))
     return dynamic_cast<GroupJointStateStandardItem*>(item);
 
   return findGroupJointStateItem(item->parent());
@@ -81,7 +81,7 @@ GroupJointStateStandardItem* findGroupJointStateItem(QStandardItem* item)
 
 NamespaceStandardItem* findJointStateGroupItem(QStandardItem* item)
 {
-  if (item->type() == static_cast<int>(StandardItemType::NAMESPACE))
+  if (item->type() == static_cast<int>(StandardItemType::COMMON_NAMESPACE))
     return dynamic_cast<NamespaceStandardItem*>(item);
 
   return findJointStateGroupItem(item->parent());
@@ -91,7 +91,7 @@ const tesseract_srdf::GroupsJointState& GroupJointStatesModel::getGroupsJointSta
 {
   QStandardItem* item = itemFromIndex(row);
 
-  if (item->type() == static_cast<int>(StandardItemType::NAMESPACE))
+  if (item->type() == static_cast<int>(StandardItemType::COMMON_NAMESPACE))
     throw std::runtime_error("Cannot get joint state from selected group standard item");
 
   GroupJointStateStandardItem* joint_state_item = findGroupJointStateItem(item);

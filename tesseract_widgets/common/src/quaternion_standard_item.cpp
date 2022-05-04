@@ -45,7 +45,7 @@ QuaternionStandardItem::QuaternionStandardItem(const QIcon& icon, const QString&
   ctor(q);
 }
 
-int QuaternionStandardItem::type() const { return static_cast<int>(StandardItemType::TRANSFORM_QUATERNION); }
+int QuaternionStandardItem::type() const { return static_cast<int>(StandardItemType::COMMON_TRANSFORM_QUATERNION); }
 
 void QuaternionStandardItem::setQuaternion(const Eigen::Quaterniond& q)
 {

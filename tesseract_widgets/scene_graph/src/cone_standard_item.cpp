@@ -45,7 +45,7 @@ ConeStandardItem::ConeStandardItem(const QIcon& icon, const QString& text, tesse
   ctor();
 }
 
-int ConeStandardItem::type() const { return static_cast<int>(StandardItemType::CONE); }
+int ConeStandardItem::type() const { return static_cast<int>(StandardItemType::SG_CONE); }
 
 void ConeStandardItem::ctor()
 {

@@ -47,7 +47,7 @@ TransformStandardItem::TransformStandardItem(const QIcon& icon, const QString& t
   ctor(transform);
 }
 
-int TransformStandardItem::type() const { return static_cast<int>(StandardItemType::TRANSFORM); }
+int TransformStandardItem::type() const { return static_cast<int>(StandardItemType::COMMON_TRANSFORM); }
 
 void TransformStandardItem::setTransform(const Eigen::Isometry3d& transform)
 {

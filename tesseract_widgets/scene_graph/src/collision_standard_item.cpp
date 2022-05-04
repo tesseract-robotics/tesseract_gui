@@ -55,7 +55,7 @@ CollisionStandardItem::CollisionStandardItem(const QIcon& icon,
   ctor();
 }
 
-int CollisionStandardItem::type() const { return static_cast<int>(StandardItemType::COLLISION); }
+int CollisionStandardItem::type() const { return static_cast<int>(StandardItemType::SG_COLLISION); }
 
 void CollisionStandardItem::ctor()
 {

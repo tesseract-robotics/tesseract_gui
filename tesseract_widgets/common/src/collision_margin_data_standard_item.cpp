@@ -53,7 +53,10 @@ CollisionMarginDataStandardItem::CollisionMarginDataStandardItem(
   ctor();
 }
 
-int CollisionMarginDataStandardItem::type() const { return static_cast<int>(StandardItemType::COLLISION_MARGIN_DATA); }
+int CollisionMarginDataStandardItem::type() const
+{
+  return static_cast<int>(StandardItemType::COMMON_COLLISION_MARGIN_DATA);
+}
 
 void CollisionMarginDataStandardItem::ctor()
 {

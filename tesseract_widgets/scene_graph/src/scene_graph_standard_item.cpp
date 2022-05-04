@@ -59,7 +59,7 @@ SceneGraphStandardItem::SceneGraphStandardItem(const QIcon& icon,
   ctor(scene_graph, checkable);
 }
 
-int SceneGraphStandardItem::type() const { return static_cast<int>(StandardItemType::SCENE_GRAPH); }
+int SceneGraphStandardItem::type() const { return static_cast<int>(StandardItemType::SG_SCENE_GRAPH); }
 
 void SceneGraphStandardItem::ctor(const tesseract_scene_graph::SceneGraph& scene_graph, bool checkable)
 {

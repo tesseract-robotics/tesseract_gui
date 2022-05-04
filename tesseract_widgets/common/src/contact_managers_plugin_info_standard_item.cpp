@@ -54,7 +54,7 @@ ContactManagersPluginInfoStandardItem::ContactManagersPluginInfoStandardItem(
 
 int ContactManagersPluginInfoStandardItem::type() const
 {
-  return static_cast<int>(StandardItemType::KINEMATICS_PLUGIN_INFO);
+  return static_cast<int>(StandardItemType::COMMON_KINEMATICS_PLUGIN_INFO);
 }
 
 void ContactManagersPluginInfoStandardItem::ctor()

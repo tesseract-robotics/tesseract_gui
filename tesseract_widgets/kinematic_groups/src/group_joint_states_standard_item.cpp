@@ -51,7 +51,7 @@ GroupJointStatesStandardItem::GroupJointStatesStandardItem(const QIcon& icon,
   ctor();
 }
 
-int GroupJointStatesStandardItem::type() const { return static_cast<int>(StandardItemType::GROUP_JOINT_STATES); }
+int GroupJointStatesStandardItem::type() const { return static_cast<int>(StandardItemType::SRDF_GROUP_JOINT_STATES); }
 
 void GroupJointStatesStandardItem::addGroupJointStateItem(const QString& group_name,
                                                           const QString& state_name,

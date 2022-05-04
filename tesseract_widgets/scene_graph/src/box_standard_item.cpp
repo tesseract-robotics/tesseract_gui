@@ -45,7 +45,7 @@ BoxStandardItem::BoxStandardItem(const QIcon& icon, const QString& text, tessera
   ctor();
 }
 
-int BoxStandardItem::type() const { return static_cast<int>(StandardItemType::BOX); }
+int BoxStandardItem::type() const { return static_cast<int>(StandardItemType::SG_BOX); }
 
 void BoxStandardItem::ctor()
 {

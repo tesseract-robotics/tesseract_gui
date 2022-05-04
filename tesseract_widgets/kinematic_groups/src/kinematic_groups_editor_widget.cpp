@@ -134,9 +134,9 @@ void KinematicGroupsEditorWidget::onRemoveGroup()
   for (int i = row_cnt; i > 0; i--)
   {
     QStandardItem* item = group_model_->itemFromIndex(selection.at(i - 1));
-    if (item->type() == static_cast<int>(StandardItemType::CHAIN_GROUP) ||
-        item->type() == static_cast<int>(StandardItemType::JOINT_GROUP) ||
-        item->type() == static_cast<int>(StandardItemType::LINK_GROUP))
+    if (item->type() == static_cast<int>(StandardItemType::SRDF_CHAIN_GROUP) ||
+        item->type() == static_cast<int>(StandardItemType::SRDF_JOINT_GROUP) ||
+        item->type() == static_cast<int>(StandardItemType::SRDF_LINK_GROUP))
     {
       group_model_->removeGroup(item->text());
     }

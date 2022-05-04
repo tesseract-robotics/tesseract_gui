@@ -48,7 +48,7 @@ JointStateStandardItem::JointStateStandardItem(const QIcon& icon,
   ctor(state);
 }
 
-int JointStateStandardItem::type() const { return static_cast<int>(StandardItemType::JOINT_STATE); }
+int JointStateStandardItem::type() const { return static_cast<int>(StandardItemType::COMMON_JOINT_STATE); }
 
 void JointStateStandardItem::ctor(const tesseract_common::JointState& state)
 {

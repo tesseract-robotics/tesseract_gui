@@ -47,7 +47,7 @@ LimitsStandardItem::LimitsStandardItem(const QIcon& icon,
   ctor();
 }
 
-int LimitsStandardItem::type() const { return static_cast<int>(StandardItemType::LIMITS); }
+int LimitsStandardItem::type() const { return static_cast<int>(StandardItemType::SG_LIMITS); }
 
 void LimitsStandardItem::ctor()
 {

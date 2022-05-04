@@ -45,7 +45,7 @@ ChainGroupStandardItem::ChainGroupStandardItem(const QIcon& icon, const QString&
   ctor();
 }
 
-int ChainGroupStandardItem::type() const { return static_cast<int>(StandardItemType::CHAIN_GROUP); }
+int ChainGroupStandardItem::type() const { return static_cast<int>(StandardItemType::SRDF_CHAIN_GROUP); }
 
 void ChainGroupStandardItem::ctor()
 {

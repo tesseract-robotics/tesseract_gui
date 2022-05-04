@@ -47,7 +47,7 @@ VectorStringStandardItem::VectorStringStandardItem(const QIcon& icon,
   ctor(vector_string);
 }
 
-int VectorStringStandardItem::type() const { return static_cast<int>(StandardItemType::VECTOR_STRING); }
+int VectorStringStandardItem::type() const { return static_cast<int>(StandardItemType::COMMON_VECTOR_STRING); }
 
 void VectorStringStandardItem::ctor(const std::vector<std::string>& vector_string)
 {

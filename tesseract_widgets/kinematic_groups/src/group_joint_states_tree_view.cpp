@@ -58,7 +58,7 @@ void GroupJointStatesTreeView::onCurrentRowChanged(const QModelIndex& current, c
 {
   data_->selected_item = data_->model->itemFromIndex(current);
 
-  if (data_->selected_item->type() != static_cast<int>(StandardItemType::NAMESPACE))
+  if (data_->selected_item->type() != static_cast<int>(StandardItemType::COMMON_NAMESPACE))
   {
     const tesseract_srdf::GroupsJointState& state = data_->model->getGroupsJointState(current);
     Q_EMIT showGroupsJointState(state);

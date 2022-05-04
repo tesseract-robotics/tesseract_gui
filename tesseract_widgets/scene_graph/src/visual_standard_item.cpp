@@ -57,7 +57,7 @@ VisualStandardItem::VisualStandardItem(const QIcon& icon,
   ctor();
 }
 
-int VisualStandardItem::type() const { return static_cast<int>(StandardItemType::VISUAL); }
+int VisualStandardItem::type() const { return static_cast<int>(StandardItemType::SG_VISUAL); }
 
 void VisualStandardItem::ctor()
 {

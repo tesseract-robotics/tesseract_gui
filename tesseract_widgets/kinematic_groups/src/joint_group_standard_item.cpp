@@ -45,7 +45,7 @@ JointGroupStandardItem::JointGroupStandardItem(const QIcon& icon, const QString&
   ctor();
 }
 
-int JointGroupStandardItem::type() const { return static_cast<int>(StandardItemType::JOINT_GROUP); }
+int JointGroupStandardItem::type() const { return static_cast<int>(StandardItemType::SRDF_JOINT_GROUP); }
 
 void JointGroupStandardItem::ctor()
 {

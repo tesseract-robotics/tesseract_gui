@@ -45,7 +45,7 @@ SphereStandardItem::SphereStandardItem(const QIcon& icon, const QString& text, t
   ctor();
 }
 
-int SphereStandardItem::type() const { return static_cast<int>(StandardItemType::SPHERE); }
+int SphereStandardItem::type() const { return static_cast<int>(StandardItemType::SG_SPHERE); }
 
 void SphereStandardItem::ctor() { appendRow(createStandardItemFloat("radius", sphere->getRadius())); }
 }  // namespace tesseract_gui

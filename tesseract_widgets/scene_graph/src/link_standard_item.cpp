@@ -52,7 +52,7 @@ LinkStandardItem::LinkStandardItem(const QIcon& icon,
   ctor(checkable);
 }
 
-int LinkStandardItem::type() const { return static_cast<int>(StandardItemType::LINK); }
+int LinkStandardItem::type() const { return static_cast<int>(StandardItemType::SG_LINK); }
 
 void LinkStandardItem::ctor(bool checkable)
 {
@@ -70,7 +70,7 @@ void LinkStandardItem::ctor(bool checkable)
   if (!link->visual.empty())
   {
     auto* visuals_item =
-        new TypeStandardItem(icons::getVisualVectorIcon(), "Visual", static_cast<int>(StandardItemType::VISUALS));
+        new TypeStandardItem(icons::getVisualVectorIcon(), "Visual", static_cast<int>(StandardItemType::SG_VISUALS));
     for (std::size_t i = 0; i < link->visual.size(); ++i)
       visuals_item->appendRow(new VisualStandardItem(QString("[%1]").arg(i), link->visual.at(i)));
 
@@ -86,7 +86,7 @@ void LinkStandardItem::ctor(bool checkable)
   if (!link->collision.empty())
   {
     auto* collisions_item = new TypeStandardItem(
-        icons::getCollisionVectorIcon(), "Collision", static_cast<int>(StandardItemType::COLLISIONS));
+        icons::getCollisionVectorIcon(), "Collision", static_cast<int>(StandardItemType::SG_COLLISIONS));
     for (std::size_t i = 0; i < link->collision.size(); ++i)
       collisions_item->appendRow(new CollisionStandardItem(QString("[%1]").arg(i), link->collision.at(i)));
 

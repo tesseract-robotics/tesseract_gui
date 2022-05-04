@@ -47,7 +47,7 @@ SafetyStandardItem::SafetyStandardItem(const QIcon& icon,
   ctor();
 }
 
-int SafetyStandardItem::type() const { return static_cast<int>(StandardItemType::SAFETY); }
+int SafetyStandardItem::type() const { return static_cast<int>(StandardItemType::SG_SAFETY); }
 
 void SafetyStandardItem::ctor()
 {

@@ -45,7 +45,7 @@ LinkGroupStandardItem::LinkGroupStandardItem(const QIcon& icon, const QString& t
   ctor();
 }
 
-int LinkGroupStandardItem::type() const { return static_cast<int>(StandardItemType::LINK_GROUP); }
+int LinkGroupStandardItem::type() const { return static_cast<int>(StandardItemType::SRDF_LINK_GROUP); }
 
 void LinkGroupStandardItem::ctor()
 {

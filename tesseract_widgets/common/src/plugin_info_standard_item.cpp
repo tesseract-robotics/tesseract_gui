@@ -47,7 +47,7 @@ PluginInfoStandardItem::PluginInfoStandardItem(const QIcon& icon,
   ctor();
 }
 
-int PluginInfoStandardItem::type() const { return static_cast<int>(StandardItemType::PLUGIN_INFO); }
+int PluginInfoStandardItem::type() const { return static_cast<int>(StandardItemType::COMMON_PLUGIN_INFO); }
 
 void PluginInfoStandardItem::ctor()
 {

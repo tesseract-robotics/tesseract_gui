@@ -46,7 +46,7 @@ InertialStandardItem::InertialStandardItem(const QIcon& icon,
   ctor();
 }
 
-int InertialStandardItem::type() const { return static_cast<int>(StandardItemType::INERTIAL); }
+int InertialStandardItem::type() const { return static_cast<int>(StandardItemType::SG_INERTIAL); }
 
 void InertialStandardItem::ctor()
 {

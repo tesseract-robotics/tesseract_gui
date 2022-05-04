@@ -46,7 +46,7 @@ DynamicsStandardItem::DynamicsStandardItem(const QIcon& icon,
   ctor();
 }
 
-int DynamicsStandardItem::type() const { return static_cast<int>(StandardItemType::DYNAMICS); }
+int DynamicsStandardItem::type() const { return static_cast<int>(StandardItemType::SG_DYNAMICS); }
 
 void DynamicsStandardItem::ctor()
 {

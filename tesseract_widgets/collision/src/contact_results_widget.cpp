@@ -19,6 +19,10 @@ ContactResultsWidget::ContactResultsWidget(QWidget* parent)
   ui->setupUi(this);
 
   connect(ui->compute_push_button, SIGNAL(clicked()), this, SLOT(onComputeClicked()));
+  connect(ui->tree_view,
+          SIGNAL(showContactResults(tesseract_collision::ContactResultVector)),
+          this,
+          SIGNAL(showContactResults(tesseract_collision::ContactResultVector)));
 }
 
 ContactResultsWidget::~ContactResultsWidget() = default;

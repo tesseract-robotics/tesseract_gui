@@ -38,6 +38,7 @@ configure_package(
             tesseract_urdf
             tesseract_srdf
             tesseract_visualization
+            tesseract_command_language
             qtadvanceddocking
             CFG_EXTRAS
             tesseract_widgets-extras.cmake)

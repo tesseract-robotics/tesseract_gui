@@ -16,6 +16,8 @@ add_library(
   ${PROJECT_NAME}_collision SHARED
   ${COLLISION_headers_MOC}
   ${COLLISION_headers_UI}
+  src/collision_margin_data_standard_item.cpp
+  src/contact_request_standard_item.cpp
   src/contact_result_standard_item.cpp
   src/contact_results_model.cpp
   src/contact_results_tree_view.cpp

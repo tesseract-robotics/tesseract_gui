@@ -83,6 +83,7 @@ Q_SIGNALS:
   void environmentChanged(const tesseract_environment::Environment& env);
   void environmentCurrentStateChanged(const tesseract_environment::Environment& env);
   void linkVisibilityChanged(const std::vector<std::string>& links);
+  void showContactResults(const tesseract_collision::ContactResultVector& contact_results);
   void triggerRender();
 
 public Q_SLOTS:

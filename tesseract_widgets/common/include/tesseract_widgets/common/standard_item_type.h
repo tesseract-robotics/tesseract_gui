@@ -122,7 +122,10 @@ enum class StandardItemType : int
 
   // Collision Types
   COLLISION_CONTACT_RESULT                          = ENV_COMMAND_TYPES_END + 1,
-  COLLISION_TYPES_END                               = ENV_COMMAND_TYPES_END + 2,
+  COLLISION_CONTACT_REQUEST                         = ENV_COMMAND_TYPES_END + 2,
+  COLLISION_CONTACT_DETAILS                         = ENV_COMMAND_TYPES_END + 3,
+  COLLISION_COLLISION_MARGIN_DATA                   = ENV_COMMAND_TYPES_END + 4,
+  COLLISION_TYPES_END                               = ENV_COMMAND_TYPES_END + 5,
 
   // COMMAND_LANGUAGE Types
   CL_CARTESIAN_WAYPOINT                             = COLLISION_TYPES_END + 1,

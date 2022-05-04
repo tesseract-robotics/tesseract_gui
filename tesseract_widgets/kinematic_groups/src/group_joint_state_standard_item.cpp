@@ -48,7 +48,7 @@ GroupJointStateStandardItem::GroupJointStateStandardItem(const QIcon& icon,
   ctor(state);
 }
 
-int GroupJointStateStandardItem::type() const { return static_cast<int>(StandardItemType::GROUP_JOINT_STATE); }
+int GroupJointStateStandardItem::type() const { return static_cast<int>(StandardItemType::SRDF_GROUP_JOINT_STATE); }
 
 void GroupJointStateStandardItem::ctor(const std::unordered_map<std::string, double>& state)
 {

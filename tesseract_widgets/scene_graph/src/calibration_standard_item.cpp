@@ -48,7 +48,7 @@ CalibrationStandardItem::CalibrationStandardItem(const QIcon& icon,
   ctor();
 }
 
-int CalibrationStandardItem::type() const { return static_cast<int>(StandardItemType::CALIBRATION); }
+int CalibrationStandardItem::type() const { return static_cast<int>(StandardItemType::SG_CALIBRATION); }
 
 void CalibrationStandardItem::ctor()
 {

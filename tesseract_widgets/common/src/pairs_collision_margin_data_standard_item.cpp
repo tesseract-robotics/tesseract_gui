@@ -53,7 +53,7 @@ PairsCollisionMarginDataStandardItem::PairsCollisionMarginDataStandardItem(
 
 int PairsCollisionMarginDataStandardItem::type() const
 {
-  return static_cast<int>(StandardItemType::PAIRS_COLLISION_MARGIN_DATA);
+  return static_cast<int>(StandardItemType::COMMON_PAIRS_COLLISION_MARGIN_DATA);
 }
 
 void PairsCollisionMarginDataStandardItem::ctor()

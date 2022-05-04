@@ -48,7 +48,7 @@ PolygonMeshStandardItem::PolygonMeshStandardItem(const QIcon& icon,
   ctor();
 }
 
-int PolygonMeshStandardItem::type() const { return static_cast<int>(StandardItemType::POLYGON_MESH); }
+int PolygonMeshStandardItem::type() const { return static_cast<int>(StandardItemType::SG_POLYGON_MESH); }
 
 void PolygonMeshStandardItem::ctor()
 {

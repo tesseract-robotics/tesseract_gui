@@ -49,7 +49,7 @@ GroupTCPsStandardItem::GroupTCPsStandardItem(const QIcon& icon,
   ctor();
 }
 
-int GroupTCPsStandardItem::type() const { return static_cast<int>(StandardItemType::GROUP_TCPS); }
+int GroupTCPsStandardItem::type() const { return static_cast<int>(StandardItemType::SRDF_GROUP_TCPS); }
 
 void GroupTCPsStandardItem::addGroupTCPItem(const QString& group_name,
                                             const QString& tcp_name,

@@ -107,7 +107,7 @@ void ContactResultsModel::removeNamespace(const QString& ns)
 
 NamespaceStandardItem* findContactResultsItem(QStandardItem* item)
 {
-  if (item->type() == static_cast<int>(StandardItemType::NAMESPACE))
+  if (item->type() == static_cast<int>(StandardItemType::COMMON_NAMESPACE))
     return dynamic_cast<NamespaceStandardItem*>(item);
 
   return findContactResultsItem(item->parent());
@@ -133,7 +133,7 @@ tesseract_collision::ContactResultVector ContactResultsModel::getContactResults(
     }
   }
 
-  if (ns_item->parent() != nullptr && ns_item->parent()->type() == static_cast<int>(StandardItemType::NAMESPACE))
+  if (ns_item->parent() != nullptr && ns_item->parent()->type() == static_cast<int>(StandardItemType::COMMON_NAMESPACE))
   {
     std::string ns = ns_item->parent()->text().toStdString();
 

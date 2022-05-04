@@ -334,7 +334,7 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
   data_->selected_item = data_->model->itemFromIndex(current);
   switch (data_->selected_item->type())
   {
-    case static_cast<int>(StandardItemType::NAMESPACE):
+    case static_cast<int>(StandardItemType::COMMON_NAMESPACE):
     {
       onDisablePlayer();
       data_->save_action->setDisabled(true);

@@ -47,7 +47,7 @@ CylinderStandardItem::CylinderStandardItem(const QIcon& icon,
   ctor();
 }
 
-int CylinderStandardItem::type() const { return static_cast<int>(StandardItemType::CYLINDER); }
+int CylinderStandardItem::type() const { return static_cast<int>(StandardItemType::SG_CYLINDER); }
 
 void CylinderStandardItem::ctor()
 {

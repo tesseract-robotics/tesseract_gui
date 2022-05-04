@@ -440,7 +440,7 @@ void EnvironmentWidget::onShowGroupsJointState(const std::unordered_map<std::str
 
 QStandardItem* findLinkStandardItem(QStandardItem* item)
 {
-  if (item->type() == static_cast<int>(StandardItemType::LINK))
+  if (item->type() == static_cast<int>(StandardItemType::SG_LINK))
     return item;
 
   return findLinkStandardItem(item->parent());
@@ -450,7 +450,7 @@ void EnvironmentWidget::onSceneGraphModelItemChanged(QStandardItem* item)
 {
   LinkVisibilityPropertiesMap& link_visibility_properties = data_->config->getLinkVisibilityProperties();
 
-  if (item->type() == static_cast<int>(StandardItemType::LINK))
+  if (item->type() == static_cast<int>(StandardItemType::SG_LINK))
   {
     auto it = link_visibility_properties.find(item->text().toStdString());
     if (it != link_visibility_properties.end())
@@ -459,7 +459,7 @@ void EnvironmentWidget::onSceneGraphModelItemChanged(QStandardItem* item)
       emit linkVisibilityChanged({ it->first });
     }
   }
-  else if (item->type() == static_cast<int>(StandardItemType::VISUALS))
+  else if (item->type() == static_cast<int>(StandardItemType::SG_VISUALS))
   {
     QStandardItem* link_item = findLinkStandardItem(item);
     auto it = link_visibility_properties.find(link_item->text().toStdString());
@@ -469,7 +469,7 @@ void EnvironmentWidget::onSceneGraphModelItemChanged(QStandardItem* item)
       emit linkVisibilityChanged({ it->first });
     }
   }
-  else if (item->type() == static_cast<int>(StandardItemType::COLLISIONS))
+  else if (item->type() == static_cast<int>(StandardItemType::SG_COLLISIONS))
   {
     QStandardItem* link_item = findLinkStandardItem(item);
     auto it = link_visibility_properties.find(link_item->text().toStdString());
@@ -485,7 +485,7 @@ void EnvironmentWidget::onSceneStateModelItemChanged(QStandardItem* item)
 {
   LinkVisibilityPropertiesMap& link_visibility_properties = data_->config->getLinkVisibilityProperties();
 
-  if (item->type() == static_cast<int>(StandardItemType::TRANSFORM))
+  if (item->type() == static_cast<int>(StandardItemType::COMMON_TRANSFORM))
   {
     auto it = link_visibility_properties.find(item->text().toStdString());
     if (it != link_visibility_properties.end())

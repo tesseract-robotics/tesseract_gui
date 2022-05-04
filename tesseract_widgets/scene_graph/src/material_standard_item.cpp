@@ -48,7 +48,7 @@ MaterialStandardItem::MaterialStandardItem(const QIcon& icon,
   ctor();
 }
 
-int MaterialStandardItem::type() const { return static_cast<int>(StandardItemType::MATERIAL); }
+int MaterialStandardItem::type() const { return static_cast<int>(StandardItemType::SG_MATERIAL); }
 
 void MaterialStandardItem::ctor()
 {

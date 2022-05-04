@@ -47,7 +47,7 @@ CapsuleStandardItem::CapsuleStandardItem(const QIcon& icon,
   ctor();
 }
 
-int CapsuleStandardItem::type() const { return static_cast<int>(StandardItemType::CAPSULE); }
+int CapsuleStandardItem::type() const { return static_cast<int>(StandardItemType::SG_CAPSULE); }
 
 void CapsuleStandardItem::ctor()
 {

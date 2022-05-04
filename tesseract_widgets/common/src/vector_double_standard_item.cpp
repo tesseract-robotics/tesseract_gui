@@ -68,7 +68,7 @@ VectorDoubleStandardItem::VectorDoubleStandardItem(const QIcon& icon,
   ctor(Eigen::Map<const Eigen::VectorXd>(vector_double.data(), vector_double.size()));
 }
 
-int VectorDoubleStandardItem::type() const { return static_cast<int>(StandardItemType::VECTOR_DOUBLE); }
+int VectorDoubleStandardItem::type() const { return static_cast<int>(StandardItemType::COMMON_VECTOR_DOUBLE); }
 
 void VectorDoubleStandardItem::ctor(const Eigen::Ref<const Eigen::VectorXd>& vector_double)
 {

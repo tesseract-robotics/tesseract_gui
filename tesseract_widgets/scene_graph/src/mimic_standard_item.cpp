@@ -46,7 +46,7 @@ MimicStandardItem::MimicStandardItem(const QIcon& icon,
   ctor();
 }
 
-int MimicStandardItem::type() const { return static_cast<int>(StandardItemType::MIMIC); }
+int MimicStandardItem::type() const { return static_cast<int>(StandardItemType::SG_MIMIC); }
 
 void MimicStandardItem::ctor()
 {

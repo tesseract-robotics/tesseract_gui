@@ -51,7 +51,7 @@ ManipulatorInfoStandardItem::ManipulatorInfoStandardItem(const QIcon& icon,
   ctor(manip_info);
 }
 
-int ManipulatorInfoStandardItem::type() const { return static_cast<int>(StandardItemType::MANIPULATOR_INFO); }
+int ManipulatorInfoStandardItem::type() const { return static_cast<int>(StandardItemType::COMMON_MANIPULATOR_INFO); }
 
 void ManipulatorInfoStandardItem::ctor(const tesseract_common::ManipulatorInfo& manip_info)
 {

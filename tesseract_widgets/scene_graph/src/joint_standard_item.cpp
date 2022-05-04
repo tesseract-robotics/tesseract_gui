@@ -51,7 +51,7 @@ JointStandardItem::JointStandardItem(const QIcon& icon, const QString& text, tes
   ctor();
 }
 
-int JointStandardItem::type() const { return static_cast<int>(StandardItemType::JOINT); }
+int JointStandardItem::type() const { return static_cast<int>(StandardItemType::SG_JOINT); }
 
 void JointStandardItem::ctor()
 {

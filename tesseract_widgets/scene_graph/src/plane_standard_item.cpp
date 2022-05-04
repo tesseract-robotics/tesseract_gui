@@ -45,7 +45,7 @@ PlaneStandardItem::PlaneStandardItem(const QIcon& icon, const QString& text, tes
   ctor();
 }
 
-int PlaneStandardItem::type() const { return static_cast<int>(StandardItemType::PLANE); }
+int PlaneStandardItem::type() const { return static_cast<int>(StandardItemType::SG_PLANE); }
 
 void PlaneStandardItem::ctor()
 {

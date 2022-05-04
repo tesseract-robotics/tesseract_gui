@@ -45,7 +45,7 @@ OctreeStandardItem::OctreeStandardItem(const QIcon& icon, const QString& text, t
   ctor();
 }
 
-int OctreeStandardItem::type() const { return static_cast<int>(StandardItemType::OCTREE); }
+int OctreeStandardItem::type() const { return static_cast<int>(StandardItemType::SG_OCTREE); }
 
 void OctreeStandardItem::ctor()
 {

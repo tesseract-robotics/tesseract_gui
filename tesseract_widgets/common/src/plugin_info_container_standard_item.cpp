@@ -53,7 +53,10 @@ PluginInfoContainerStandardItem::PluginInfoContainerStandardItem(
   ctor();
 }
 
-int PluginInfoContainerStandardItem::type() const { return static_cast<int>(StandardItemType::PLUGIN_INFO_CONTAINER); }
+int PluginInfoContainerStandardItem::type() const
+{
+  return static_cast<int>(StandardItemType::COMMON_PLUGIN_INFO_CONTAINER);
+}
 
 void PluginInfoContainerStandardItem::ctor()
 {

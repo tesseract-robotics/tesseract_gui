@@ -119,7 +119,7 @@ void SceneGraphModel::onLinkVisualsCheckedStateChanged(const QString& link_name,
     for (int i = 0; i < it->second->rowCount(); ++i)
     {
       QStandardItem* child = it->second->child(i);
-      if (child->type() == static_cast<int>(StandardItemType::VISUALS))
+      if (child->type() == static_cast<int>(StandardItemType::SG_VISUALS))
         child->setCheckState((checked) ? Qt::CheckState::Checked : Qt::CheckState::Unchecked);
     }
   }
@@ -133,7 +133,7 @@ void SceneGraphModel::onLinkCollisionsCheckedStateChanged(const QString& link_na
     for (int i = 0; i < it->second->rowCount(); ++i)
     {
       QStandardItem* child = it->second->child(i);
-      if (child->type() == static_cast<int>(StandardItemType::COLLISIONS))
+      if (child->type() == static_cast<int>(StandardItemType::SG_COLLISIONS))
         child->setCheckState((checked) ? Qt::CheckState::Checked : Qt::CheckState::Unchecked);
     }
   }

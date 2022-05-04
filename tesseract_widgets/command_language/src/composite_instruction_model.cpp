@@ -77,7 +77,7 @@ void CompositeInstructionModel::removeNamespace(const QString& ns)
 
 NamespaceStandardItem* findCompositeInstructionItem(QStandardItem* item)
 {
-  if (item->type() == static_cast<int>(StandardItemType::NAMESPACE))
+  if (item->type() == static_cast<int>(StandardItemType::COMMON_NAMESPACE))
     return dynamic_cast<NamespaceStandardItem*>(item);
 
   return findCompositeInstructionItem(item->parent());

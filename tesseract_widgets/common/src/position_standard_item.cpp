@@ -45,7 +45,7 @@ PositionStandardItem::PositionStandardItem(const QIcon& icon, const QString& tex
   ctor(position);
 }
 
-int PositionStandardItem::type() const { return static_cast<int>(StandardItemType::TRANSFORM_POSITION); }
+int PositionStandardItem::type() const { return static_cast<int>(StandardItemType::COMMON_TRANSFORM_POSITION); }
 
 void PositionStandardItem::setPosition(const Eigen::Vector3d& position)
 {

@@ -45,7 +45,7 @@ RGBAStandardItem::RGBAStandardItem(const QIcon& icon, const QString& text, const
   ctor();
 }
 
-int RGBAStandardItem::type() const { return static_cast<int>(StandardItemType::TRANSFORM); }
+int RGBAStandardItem::type() const { return static_cast<int>(StandardItemType::COMMON_TRANSFORM); }
 
 void RGBAStandardItem::ctor()
 {

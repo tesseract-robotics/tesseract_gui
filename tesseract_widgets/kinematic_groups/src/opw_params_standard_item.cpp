@@ -47,7 +47,7 @@ OPWParamsStandardItem::OPWParamsStandardItem(const QIcon& icon,
   ctor();
 }
 
-int OPWParamsStandardItem::type() const { return static_cast<int>(StandardItemType::OPW_PARAMS); }
+int OPWParamsStandardItem::type() const { return static_cast<int>(StandardItemType::SRDF_OPW_PARAMS); }
 
 void OPWParamsStandardItem::ctor()
 {

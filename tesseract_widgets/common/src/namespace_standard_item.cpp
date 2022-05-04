@@ -31,6 +31,6 @@ NamespaceStandardItem::NamespaceStandardItem(const QString& text) : QStandardIte
 
 NamespaceStandardItem::NamespaceStandardItem(const QIcon& icon, const QString& text) : QStandardItem(icon, text) {}
 
-int NamespaceStandardItem::type() const { return static_cast<int>(StandardItemType::NAMESPACE); }
+int NamespaceStandardItem::type() const { return static_cast<int>(StandardItemType::COMMON_NAMESPACE); }
 
 }  // namespace tesseract_gui

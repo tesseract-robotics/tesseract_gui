@@ -54,7 +54,7 @@ KinematicsInfoStandardItem::KinematicsInfoStandardItem(const QIcon& icon,
   ctor();
 }
 
-int KinematicsInfoStandardItem::type() const { return static_cast<int>(StandardItemType::KINEMATICS_INFO); }
+int KinematicsInfoStandardItem::type() const { return static_cast<int>(StandardItemType::SRDF_KINEMATICS_INFO); }
 
 void KinematicsInfoStandardItem::ctor()
 {

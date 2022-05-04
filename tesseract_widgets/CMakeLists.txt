@@ -21,6 +21,7 @@ add_subdirectory(joint_trajectory)
 add_subdirectory(kinematic_groups)
 add_subdirectory(plot)
 add_subdirectory(scene_graph)
+add_subdirectory(planning)
 add_subdirectory(workbench)
 
 install(FILES "${CMAKE_CURRENT_LIST_DIR}/cmake/FindQwt.cmake" DESTINATION lib/cmake/${PROJECT_NAME})
@@ -39,6 +40,8 @@ configure_package(
             tesseract_srdf
             tesseract_visualization
             tesseract_command_language
+            tesseract_motion_planners
+            tesseract_process_managers
             qtadvanceddocking
             CFG_EXTRAS
             tesseract_widgets-extras.cmake)

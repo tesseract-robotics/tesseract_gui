@@ -79,7 +79,8 @@ enum class StandardItemType : int
   SG_OCTREE       = JOINT_TRAJECTORY_SET_END + 23,
   SG_VISUALS      = JOINT_TRAJECTORY_SET_END + 24,
   SG_COLLISIONS   = JOINT_TRAJECTORY_SET_END + 25,
-  SG_TYPES_END    = JOINT_TRAJECTORY_SET_END + 26,
+  SG_SCENE_STATE  = JOINT_TRAJECTORY_SET_END + 26,
+  SG_TYPES_END    = JOINT_TRAJECTORY_SET_END + 27,
 
   // SRDF Types
   SRDF_OPW_PARAMS         = SG_TYPES_END + 1,
@@ -143,6 +144,13 @@ enum class StandardItemType : int
   CL_INSTRUCTION            = COLLISION_TYPES_END + 13,
   CL_PLAN_INSTRUCTION       = COLLISION_TYPES_END + 14,
   CL_TYPES_END              = COLLISION_TYPES_END + 15,
+
+  // Motion planning types
+  MP_PLANNING_PROFILE_REMAPPING = CL_TYPES_END + 1,
+  MP_PROCESS_PLANNING_REQUEST   = CL_TYPES_END + 2,
+  MP_PROCESS_PLANNING_PROBLEM   = CL_TYPES_END + 3,
+  MP_TYPES_END                  = CL_TYPES_END + 4,
+
 };
 // clang-format on
 }  // namespace tesseract_gui

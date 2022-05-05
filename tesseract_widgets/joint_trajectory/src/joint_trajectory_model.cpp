@@ -230,9 +230,7 @@ void JointTrajectoryItem::ctor()
 }
 
 JointTrajectorySetItem::JointTrajectorySetItem(QString uuid, const tesseract_common::JointTrajectorySet& trajectory_set)
-  : QStandardItem(icons::getJointTrajectorySetIcon(), "Trajectory Set")
-  , uuid(std::move(uuid))
-  , trajectory_set(trajectory_set)
+  : QStandardItem(icons::getSetIcon(), "Trajectory Set"), uuid(std::move(uuid)), trajectory_set(trajectory_set)
 {
   ctor();
 }
@@ -240,7 +238,7 @@ JointTrajectorySetItem::JointTrajectorySetItem(QString uuid, const tesseract_com
 JointTrajectorySetItem::JointTrajectorySetItem(const QString& text,
                                                QString uuid,
                                                const tesseract_common::JointTrajectorySet& trajectory_set)
-  : QStandardItem(icons::getJointTrajectorySetIcon(), text), uuid(std::move(uuid)), trajectory_set(trajectory_set)
+  : QStandardItem(icons::getSetIcon(), text), uuid(std::move(uuid)), trajectory_set(trajectory_set)
 {
   ctor();
 }

@@ -28,14 +28,14 @@
 namespace tesseract_gui
 {
 VectorDoubleStandardItem::VectorDoubleStandardItem(const Eigen::Ref<const Eigen::VectorXd>& vector_double)
-  : QStandardItem(icons::getJointTrajectorySetIcon(), "VectorXd")
+  : QStandardItem(icons::getSetIcon(), "VectorXd")
 {
   ctor(vector_double);
 }
 
 VectorDoubleStandardItem::VectorDoubleStandardItem(const QString& text,
                                                    const Eigen::Ref<const Eigen::VectorXd>& vector_double)
-  : QStandardItem(icons::getJointTrajectorySetIcon(), text)
+  : QStandardItem(icons::getSetIcon(), text)
 {
   ctor(vector_double);
 }
@@ -49,13 +49,13 @@ VectorDoubleStandardItem::VectorDoubleStandardItem(const QIcon& icon,
 }
 
 VectorDoubleStandardItem::VectorDoubleStandardItem(const std::vector<double>& vector_double)
-  : QStandardItem(icons::getJointTrajectorySetIcon(), "VectorXd")
+  : QStandardItem(icons::getSetIcon(), "VectorXd")
 {
   ctor(Eigen::Map<const Eigen::VectorXd>(vector_double.data(), vector_double.size()));
 }
 
 VectorDoubleStandardItem::VectorDoubleStandardItem(const QString& text, const std::vector<double>& vector_double)
-  : QStandardItem(icons::getJointTrajectorySetIcon(), text)
+  : QStandardItem(icons::getSetIcon(), text)
 {
   ctor(Eigen::Map<const Eigen::VectorXd>(vector_double.data(), vector_double.size()));
 }

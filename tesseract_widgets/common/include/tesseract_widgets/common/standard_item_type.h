@@ -45,8 +45,9 @@ enum class StandardItemType : int
   COMMON_VECTOR_DOUBLE                = QStandardItem::UserType + 12,
   COMMON_VECTOR_STRING                = QStandardItem::UserType + 13,
   COMMON_JOINT_STATE                  = QStandardItem::UserType + 14,
-  COMMON_MANIPULATOR_INFO             = QStandardItem::UserType + 15,
-  COMMON_TYPES_END                    = QStandardItem::UserType + 16,
+  COMMON_JOINT_TRAJECTORY             = QStandardItem::UserType + 15,
+  COMMON_MANIPULATOR_INFO             = QStandardItem::UserType + 16,
+  COMMON_TYPES_END                    = QStandardItem::UserType + 17,
 
   // Joint Trajectory Set Types
   JOINT_TRAJECTORY_SET            = COMMON_TYPES_END + 1,
@@ -149,7 +150,11 @@ enum class StandardItemType : int
   MP_PLANNING_PROFILE_REMAPPING = CL_TYPES_END + 1,
   MP_PROCESS_PLANNING_REQUEST   = CL_TYPES_END + 2,
   MP_PROCESS_PLANNING_PROBLEM   = CL_TYPES_END + 3,
-  MP_TYPES_END                  = CL_TYPES_END + 4,
+  MP_PROCESS_PLANNING_FUTURE    = CL_TYPES_END + 4,
+  MP_TASK_INFO                  = CL_TYPES_END + 5,
+  MP_TASK_INFO_MAP              = CL_TYPES_END + 6,
+  MP_TASKFLOW_INTERFACE         = CL_TYPES_END + 7,
+  MP_TYPES_END                  = CL_TYPES_END + 8,
 
 };
 // clang-format on

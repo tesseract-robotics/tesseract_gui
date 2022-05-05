@@ -157,7 +157,7 @@ QIcon getPrismaticIcon()
   return icon;
 }
 
-QIcon getJointTrajectorySetIcon()
+QIcon getSetIcon()
 {
   static QIcon icon = QIcon(":/tesseract_widgets/png/programming.png");
   return icon;
@@ -214,6 +214,12 @@ QIcon getTextIcon()
 QIcon getURLIcon()
 {
   static QIcon icon = QIcon(":/tesseract_widgets/png/url.png");
+  return icon;
+}
+
+QIcon getLogIcon()
+{
+  static QIcon icon = QIcon(":/tesseract_widgets/png/log.png");
   return icon;
 }
 

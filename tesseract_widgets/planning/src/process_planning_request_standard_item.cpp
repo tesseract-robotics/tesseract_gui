@@ -36,6 +36,9 @@
 #include <tesseract_widgets/common/icon_utils.h>
 
 #include <tesseract_process_managers/core/process_planning_request.h>
+#include <tesseract_command_language/composite_instruction.h>
+#include <tesseract_command_language/null_instruction.h>
+#include <tesseract_command_language/core/instruction.h>
 #include <tesseract_command_language/instruction_type.h>
 
 namespace tesseract_gui

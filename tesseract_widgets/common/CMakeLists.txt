@@ -43,6 +43,7 @@ add_library(
   src/vector_double_standard_item.cpp
   src/vector_string_standard_item.cpp
   src/joint_state_standard_item.cpp
+  src/joint_trajectory_standard_item.cpp
   src/manipulator_info_standard_item.cpp)
 target_link_libraries(
   ${PROJECT_NAME}_common

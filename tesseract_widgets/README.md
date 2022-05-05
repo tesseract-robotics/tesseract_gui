@@ -10,6 +10,7 @@ Tesseract Qt UI Components
 repo: https://github.com/google/material-design-icons
 search: https://fonts.google.com/icons
 
+
 ## Icons Provided by Freepik
 <div>Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
   - trajectory.png
@@ -33,6 +34,9 @@ search: https://fonts.google.com/icons
   - save.png
   - restore.png
   - layout.png
+
+<div>Icons made by <a href="https://www.flaticon.com/free-icons/log" title="log icons">Log icons created by Smartline - Flaticon</a></div>
+- log.png
 
 <div>Icons made by <a href="https://www.flaticon.com/free-icons/selection-tool" title="selection tool icons">Selection tool icons created by berkahicon - Flaticon</a></div>
 - select-box.png

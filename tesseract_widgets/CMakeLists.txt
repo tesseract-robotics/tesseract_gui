@@ -42,6 +42,5 @@ configure_package(
             tesseract_command_language
             tesseract_motion_planners
             tesseract_process_managers
-            qtadvanceddocking
             CFG_EXTRAS
             tesseract_widgets-extras.cmake)

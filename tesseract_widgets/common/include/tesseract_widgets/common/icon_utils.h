@@ -72,7 +72,7 @@ QIcon getPositionIcon();
 
 QIcon getPrismaticIcon();
 
-QIcon getJointTrajectorySetIcon();
+QIcon getSetIcon();
 
 QIcon getRevoluteIcon();
 
@@ -91,6 +91,8 @@ QIcon getMeshIcon();
 QIcon getTextIcon();
 
 QIcon getURLIcon();
+
+QIcon getLogIcon();
 
 QIcon getTrashIcon();
 QIcon getPlotIcon();

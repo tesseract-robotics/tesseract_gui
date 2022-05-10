@@ -63,7 +63,14 @@ int ProcessPlanningFutureStandardItem::type() const
 
 void ProcessPlanningFutureStandardItem::ctor(const tesseract_planning::ProcessPlanningFuture& process_future)
 {
-  appendRow(new TaskflowInterfaceStandardItem("interface", *process_future.interface));
-  appendRow(new ProcessPlanningProblemStandardItem("problem", *process_future.problem));
+  if (process_future.interface != nullptr)
+    appendRow(new TaskflowInterfaceStandardItem("interface", *process_future.interface));
+  else
+    appendRow({ new QStandardItem("interface"), new QStandardItem("NULL") });
+
+  if (process_future.problem != nullptr && process_future.problem->input != nullptr)
+    appendRow(new ProcessPlanningProblemStandardItem("problem", *process_future.problem));
+  else
+    appendRow({ new QStandardItem("problem"), new QStandardItem("NULL") });
 }
 }  // namespace tesseract_gui

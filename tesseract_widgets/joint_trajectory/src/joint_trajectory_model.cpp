@@ -222,9 +222,9 @@ int JointTrajectoryItem::type() const { return static_cast<int>(StandardItemType
 
 void JointTrajectoryItem::ctor()
 {
-  for (std::size_t j = 0; j < trajectory_info.trajectory.size(); ++j)
+  for (std::size_t j = 0; j < trajectory_info.second.size(); ++j)
   {
-    QStandardItem* trajectory_state = new JointStateItem(QString("state[%1]").arg(j), trajectory_info.trajectory[j]);
+    QStandardItem* trajectory_state = new JointStateItem(QString("state[%1]").arg(j), trajectory_info.second[j]);
     appendRow(trajectory_state);
   }
 }

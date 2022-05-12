@@ -40,14 +40,14 @@
 namespace tesseract_gui
 {
 VectorInstructionStandardItem::VectorInstructionStandardItem(const std::vector<tesseract_planning::Instruction>& vi)
-  : QStandardItem(icons::getJointTrajectorySetIcon(), "Instructions")
+  : QStandardItem(icons::getSetIcon(), "Instructions")
 {
   ctor(vi);
 }
 
 VectorInstructionStandardItem::VectorInstructionStandardItem(const QString& text,
                                                              const std::vector<tesseract_planning::Instruction>& vi)
-  : QStandardItem(icons::getJointTrajectorySetIcon(), text)
+  : QStandardItem(icons::getSetIcon(), text)
 {
   ctor(vi);
 }

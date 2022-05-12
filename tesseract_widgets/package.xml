@@ -22,6 +22,8 @@
   <depend>tesseract_urdf</depend>
   <depend>tesseract_visualization</depend>
   <depend>tesseract_command_language</depend>
+  <depend>tesseract_motion_planners</depend>
+  <depend>tesseract_process_managers</depend>
   <depend>qt_advanced_docking</depend>
 
   <export>

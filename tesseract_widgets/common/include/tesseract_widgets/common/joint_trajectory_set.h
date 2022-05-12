@@ -32,6 +32,7 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <vector>
 #include <string>
 #include <boost/serialization/base_object.hpp>
+#include <boost/serialization/map.hpp>
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <tesseract_environment/environment.h>
@@ -40,21 +41,7 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 namespace tesseract_common
 {
-struct JointTrajectoryInfo
-{
-  JointTrajectoryInfo() = default;
-
-  /** @brief The initial state of the environment */
-  JointState initial_state;
-
-  /** @brief The joint trajectory */
-  JointTrajectory trajectory;
-
-private:
-  friend class boost::serialization::access;
-  template <class Archive>
-  void serialize(Archive& ar, const unsigned int version);  // NOLINT
-};
+using JointTrajectoryInfo = std::pair<JointState, JointTrajectory>;
 
 class JointTrajectorySet
 {

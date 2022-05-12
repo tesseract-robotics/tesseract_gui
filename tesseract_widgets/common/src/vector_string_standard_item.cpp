@@ -28,13 +28,13 @@
 namespace tesseract_gui
 {
 VectorStringStandardItem::VectorStringStandardItem(const std::vector<std::string>& vector_string)
-  : QStandardItem(icons::getJointTrajectorySetIcon(), "Vector String")
+  : QStandardItem(icons::getSetIcon(), "Vector String")
 {
   ctor(vector_string);
 }
 
 VectorStringStandardItem::VectorStringStandardItem(const QString& text, const std::vector<std::string>& vector_string)
-  : QStandardItem(icons::getJointTrajectorySetIcon(), text)
+  : QStandardItem(icons::getSetIcon(), text)
 {
   ctor(vector_string);
 }

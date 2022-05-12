@@ -222,17 +222,15 @@ int JointTrajectoryItem::type() const { return static_cast<int>(StandardItemType
 
 void JointTrajectoryItem::ctor()
 {
-  for (std::size_t j = 0; j < trajectory_info.trajectory.size(); ++j)
+  for (std::size_t j = 0; j < trajectory_info.second.size(); ++j)
   {
-    QStandardItem* trajectory_state = new JointStateItem(QString("state[%1]").arg(j), trajectory_info.trajectory[j]);
+    QStandardItem* trajectory_state = new JointStateItem(QString("state[%1]").arg(j), trajectory_info.second[j]);
     appendRow(trajectory_state);
   }
 }
 
 JointTrajectorySetItem::JointTrajectorySetItem(QString uuid, const tesseract_common::JointTrajectorySet& trajectory_set)
-  : QStandardItem(icons::getJointTrajectorySetIcon(), "Trajectory Set")
-  , uuid(std::move(uuid))
-  , trajectory_set(trajectory_set)
+  : QStandardItem(icons::getSetIcon(), "Trajectory Set"), uuid(std::move(uuid)), trajectory_set(trajectory_set)
 {
   ctor();
 }
@@ -240,7 +238,7 @@ JointTrajectorySetItem::JointTrajectorySetItem(QString uuid, const tesseract_com
 JointTrajectorySetItem::JointTrajectorySetItem(const QString& text,
                                                QString uuid,
                                                const tesseract_common::JointTrajectorySet& trajectory_set)
-  : QStandardItem(icons::getJointTrajectorySetIcon(), text), uuid(std::move(uuid)), trajectory_set(trajectory_set)
+  : QStandardItem(icons::getSetIcon(), text), uuid(std::move(uuid)), trajectory_set(trajectory_set)
 {
   ctor();
 }

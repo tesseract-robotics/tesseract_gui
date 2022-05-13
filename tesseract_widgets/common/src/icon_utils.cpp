@@ -395,4 +395,10 @@ QIcon getRestoreIcon()
   static QIcon icon = QIcon(":/tesseract_widgets/png/restore.png");
   return icon;
 }
+
+QIcon getDateTimeIcon()
+{
+  static QIcon icon = QIcon(":/tesseract_widgets/png/datetime.png");
+  return icon;
+}
 }  // namespace tesseract_gui::icons

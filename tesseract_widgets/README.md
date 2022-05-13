@@ -1,4 +1,4 @@
-# tesseract_gui
+# tesseract_widgets
 Tesseract Qt UI Components
 
 ## Themes

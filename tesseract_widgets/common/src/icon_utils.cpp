@@ -389,4 +389,10 @@ QIcon getTesseractIcon()
   static QIcon icon = QIcon(":/tesseract_widgets/png/tesseract_logo.png");
   return icon;
 }
+
+QIcon getRestoreIcon()
+{
+  static QIcon icon = QIcon(":/tesseract_widgets/png/restore.png");
+  return icon;
+}
 }  // namespace tesseract_gui::icons

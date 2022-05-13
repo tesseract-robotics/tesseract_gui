@@ -33,7 +33,8 @@ namespace tesseract_gui
 struct SceneStateModelPrivate
 {
   std::vector<std::string> link_names;
-  std::vector<std::string> joint_names;
+  std::vector<std::string> joint_names_tf;
+  std::vector<std::string> joint_names_value;
 
   QStandardItem* values_item;
   QStandardItem* links_item;
@@ -46,7 +47,8 @@ struct SceneStateModelPrivate
   void clear()
   {
     link_names.clear();
-    joint_names.clear();
+    joint_names_tf.clear();
+    joint_names_value.clear();
     values_item = nullptr;
     links_item = nullptr;
     joints_item = nullptr;
@@ -71,6 +73,9 @@ SceneStateModel& SceneStateModel::operator=(const SceneStateModel& other) { retu
 void SceneStateModel::setState(const tesseract_scene_graph::SceneState& scene_state)
 {
   bool sort_required{ false };
+
+  std::vector<std::string> joint_names_value;
+  joint_names_value.reserve(scene_state.joints.size());
   for (const auto& joint : scene_state.joints)
   {
     auto it = data_->values.find(joint.first);
@@ -83,8 +88,10 @@ void SceneStateModel::setState(const tesseract_scene_graph::SceneState& scene_st
       auto row = createStandardItemFloat(joint.first, joint.second);
       data_->values[joint.first] = row[1];
       data_->values_item->appendRow(row);
+      data_->joint_names_value.push_back(joint.first);
       sort_required = true;
     }
+    joint_names_value.push_back(joint.first);
   }
 
   std::vector<std::string> link_names;
@@ -110,8 +117,8 @@ void SceneStateModel::setState(const tesseract_scene_graph::SceneState& scene_st
     link_names.push_back(link.first);
   }
 
-  std::vector<std::string> joint_names;
-  joint_names.reserve(scene_state.joint_transforms.size());
+  std::vector<std::string> joint_names_tf;
+  joint_names_tf.reserve(scene_state.joint_transforms.size());
   for (const auto& joint : scene_state.joint_transforms)
   {
     auto it = data_->joints.find(joint.first);
@@ -124,10 +131,10 @@ void SceneStateModel::setState(const tesseract_scene_graph::SceneState& scene_st
       auto* item = new TransformStandardItem(QString::fromStdString(joint.first), joint.second);
       data_->joints_item->appendRow(item);
       data_->joints[joint.first] = item;
-      data_->joint_names.push_back(joint.first);
+      data_->joint_names_tf.push_back(joint.first);
       sort_required = true;
     }
-    joint_names.push_back(joint.first);
+    joint_names_tf.push_back(joint.first);
   }
 
   for (const auto& link_name : data_->link_names)
@@ -135,31 +142,51 @@ void SceneStateModel::setState(const tesseract_scene_graph::SceneState& scene_st
     auto it = scene_state.link_transforms.find(link_name);
     if (it == scene_state.link_transforms.end())
     {
-      QModelIndex idx = indexFromItem(data_->links[link_name]);
-      removeRow(idx.row());
-      data_->links.erase(link_name);
-      sort_required = true;
+      auto it = data_->links.find(link_name);
+      if (it != data_->links.end())
+      {
+        QModelIndex idx = indexFromItem(data_->links[link_name]);
+        removeRow(idx.row());
+        data_->links.erase(link_name);
+        sort_required = true;
+      }
     }
   }
   data_->link_names = link_names;
 
-  for (const auto& joint_name : data_->joint_names)
+  for (const auto& joint_name : data_->joint_names_tf)
   {
-    auto it = scene_state.joint_transforms.find(joint_name);
-    if (it == scene_state.joint_transforms.end())
+    auto jt_it = scene_state.joint_transforms.find(joint_name);
+    if (jt_it == scene_state.joint_transforms.end())
     {
-      QModelIndex joint_idx = indexFromItem(data_->joints[joint_name]);
-      removeRow(joint_idx.row());
-
-      QModelIndex value_idx = indexFromItem(data_->values[joint_name]);
-      removeRow(value_idx.row());
-
-      data_->joints.erase(joint_name);
-      data_->values.erase(joint_name);
-      sort_required = true;
+      auto it = data_->joints.find(joint_name);
+      if (it != data_->joints.end())
+      {
+        QModelIndex joint_idx = indexFromItem(it->second);
+        removeRow(joint_idx.row());
+        data_->joints.erase(joint_name);
+        sort_required = true;
+      }
     }
   }
-  data_->link_names = joint_names;
+  data_->joint_names_tf = joint_names_tf;
+
+  for (const auto& joint_name : data_->joint_names_value)
+  {
+    auto jt_it = scene_state.joints.find(joint_name);
+    if (jt_it == scene_state.joints.end())
+    {
+      auto it = data_->values.find(joint_name);
+      if (it != data_->values.end())
+      {
+        QModelIndex joint_idx = indexFromItem(it->second);
+        removeRow(joint_idx.row());
+        data_->values.erase(joint_name);
+        sort_required = true;
+      }
+    }
+  }
+  data_->joint_names_value = joint_names_value;
 
   if (sort_required)
   {
@@ -177,9 +204,9 @@ void SceneStateModel::clear()
   setColumnCount(2);
   setHorizontalHeaderLabels({ "Name", "Values" });
 
-  data_->values_item = new QStandardItem(icons::getJointVectorIcon(), "Values");
-  data_->links_item = new QStandardItem(icons::getLinkVectorIcon(), "Links");
-  data_->joints_item = new QStandardItem(icons::getJointVectorIcon(), "Joints");
+  data_->values_item = new QStandardItem(icons::getJointVectorIcon(), "Values"); // NOLINT
+  data_->links_item = new QStandardItem(icons::getLinkVectorIcon(), "Links"); // NOLINT
+  data_->joints_item = new QStandardItem(icons::getJointVectorIcon(), "Joints"); // NOLINT
 
   appendRow(data_->values_item);
   appendRow(data_->links_item);

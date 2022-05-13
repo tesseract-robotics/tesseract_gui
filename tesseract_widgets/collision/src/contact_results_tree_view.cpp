@@ -88,11 +88,12 @@ void ContactResultsTreeView::onSelectionChanged(const QItemSelection& /*selected
 
 void ContactResultsTreeView::onCurrentRowChanged(const QModelIndex& current, const QModelIndex& previous)
 {
-  data_->selected_item = data_->model->itemFromIndex(current);
+  QModelIndex current_index = current;  // This appears to be changing so copy
+  data_->selected_item = data_->model->itemFromIndex(current_index);
 
   if (data_->selected_item != nullptr)
   {
-    tesseract_collision::ContactResultVector contact_results = data_->model->getContactResults(current);
+    tesseract_collision::ContactResultVector contact_results = data_->model->getContactResults(current_index);
     Q_EMIT showContactResults(contact_results);
   }
 }

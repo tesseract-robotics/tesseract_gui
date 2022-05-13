@@ -333,7 +333,8 @@ bool JointTrajectoryWidget::hasJointTrajectorySet(const QString& key)
 
 void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, const QModelIndex& /*previous*/)
 {
-  data_->selected_item = data_->model->itemFromIndex(current);
+  QModelIndex current_index = current;  // This appears to be changing so copy
+  data_->selected_item = data_->model->itemFromIndex(current_index);
   switch (data_->selected_item->type())
   {
     case static_cast<int>(StandardItemType::COMMON_NAMESPACE):
@@ -350,9 +351,9 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
       data_->remove_action->setDisabled(true);
       data_->plot_action->setDisabled(false);
 
-      data_->current_trajectory = data_->model->getJointTrajectory(current);
+      data_->current_trajectory = data_->model->getJointTrajectory(current_index);
 
-      auto details = data_->model->getJointTrajectorySetDetails(current);
+      auto details = data_->model->getJointTrajectorySetDetails(current_index);
       emit configureJointTrajectorySet(details.first, details.second);
 
       data_->player->setTrajectory(data_->current_trajectory.second);
@@ -367,7 +368,7 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
       data_->remove_action->setDisabled(false);
       data_->plot_action->setDisabled(false);
 
-      auto details = data_->model->getJointTrajectorySetDetails(current);
+      auto details = data_->model->getJointTrajectorySetDetails(current_index);
       const tesseract_common::JointTrajectorySet& traj_set = details.second;
 
       emit configureJointTrajectorySet(details.first, details.second);
@@ -389,8 +390,8 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
       data_->plot_action->setDisabled(true);
 
       onDisablePlayer();
-      const tesseract_common::JointState& state = data_->model->getJointState(current);
-      auto details = data_->model->getJointTrajectorySetDetails(current);
+      const tesseract_common::JointState& state = data_->model->getJointState(current_index);
+      auto details = data_->model->getJointTrajectorySetDetails(current_index);
       emit configureJointTrajectorySet(details.first, details.second);
       emit showJointState(state);
       break;

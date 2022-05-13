@@ -56,11 +56,12 @@ void GroupJointStatesTreeView::setModel(QAbstractItemModel* model)
 
 void GroupJointStatesTreeView::onCurrentRowChanged(const QModelIndex& current, const QModelIndex& previous)
 {
-  data_->selected_item = data_->model->itemFromIndex(current);
+  QModelIndex current_index = current;  // This appears to be changing so copy
+  data_->selected_item = data_->model->itemFromIndex(current_index);
 
   if (data_->selected_item->type() != static_cast<int>(StandardItemType::COMMON_NAMESPACE))
   {
-    const tesseract_srdf::GroupsJointState& state = data_->model->getGroupsJointState(current);
+    const tesseract_srdf::GroupsJointState& state = data_->model->getGroupsJointState(current_index);
     Q_EMIT showGroupsJointState(state);
   }
 }

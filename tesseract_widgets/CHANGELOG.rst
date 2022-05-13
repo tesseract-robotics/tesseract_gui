@@ -2,8 +2,8 @@
 Changelog for package tesseract_widgets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.1.2 (2022-05-13)
+------------------
 * Fix possible issue with onCurrentRowChanged slots
 * Add utility creating date time standard item
 * Contributors: Levi Armstrong

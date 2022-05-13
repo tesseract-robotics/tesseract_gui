@@ -2,6 +2,12 @@
 Changelog for package tesseract_widgets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Fix possible issue with onCurrentRowChanged slots
+* Add utility creating date time standard item
+* Contributors: Levi Armstrong
+
 0.1.1 (2022-05-13)
 ------------------
 * Allow manual dispatch of workflows (`#21 <https://github.com/tesseract-robotics/tesseract_gui/issues/21>`_)

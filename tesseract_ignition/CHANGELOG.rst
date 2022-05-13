@@ -2,6 +2,9 @@
 Changelog for package tesseract_ignition
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 0.1.1 (2022-05-13)
 ------------------
 * Allow manual dispatch of workflows (`#21 <https://github.com/tesseract-robotics/tesseract_gui/issues/21>`_)

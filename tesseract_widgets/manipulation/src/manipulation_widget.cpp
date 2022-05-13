@@ -13,7 +13,6 @@
 
 namespace tesseract_gui
 {
-
 struct ManipulationWidgetImpl
 {
   ManipulationWidgetImpl(bool single_state) : single_state(single_state) {}
@@ -52,7 +51,7 @@ struct ManipulationWidgetImpl
   QAction* reset_action{ nullptr };
 };
 
-ManipulationWidget::ManipulationWidget(bool single_state, QWidget *parent)
+ManipulationWidget::ManipulationWidget(bool single_state, QWidget* parent)
   : QWidget(parent)
   , ui(std::make_unique<Ui::ManipulationWidget>())
   , data_(std::make_unique<ManipulationWidgetImpl>(single_state))
@@ -63,10 +62,11 @@ ManipulationWidget::ManipulationWidget(bool single_state, QWidget *parent)
   ui->tcp_combo_box->setModel(&data_->tcp_names_model);
   ui->start_state_tree_view->setModel(&data_->state_models[0]);
 
-
   addToolBar();
 
-  connect(ui->start_state_tree_view, &QTreeView::expanded, [this]() { ui->start_state_tree_view->resizeColumnToContents(0); });
+  connect(ui->start_state_tree_view, &QTreeView::expanded, [this]() {
+    ui->start_state_tree_view->resizeColumnToContents(0);
+  });
 
   connect(ui->group_combo_box, SIGNAL(currentTextChanged(QString)), this, SLOT(onGroupNameChanged()));
   connect(ui->tcp_combo_box, SIGNAL(currentTextChanged(QString)), this, SLOT(onTCPNameChanged()));
@@ -93,7 +93,9 @@ ManipulationWidget::ManipulationWidget(bool single_state, QWidget *parent)
 
     data_->end_state_tree_view = new QTreeView();
     data_->end_state_tree_view->setModel(&data_->state_models[1]);
-    connect(data_->end_state_tree_view, &QTreeView::expanded, [this]() { data_->end_state_tree_view->resizeColumnToContents(0); });
+    connect(data_->end_state_tree_view, &QTreeView::expanded, [this]() {
+      data_->end_state_tree_view->resizeColumnToContents(0);
+    });
 
     end_state_layout->addWidget(data_->end_state_tree_view);
     end_state_page->setLayout(end_state_layout);
@@ -107,10 +109,7 @@ ManipulationWidget::ManipulationWidget(bool single_state, QWidget *parent)
 
 ManipulationWidget::~ManipulationWidget() = default;
 
-int ManipulationWidget::getStateCount() const
-{
-  return (data_->single_state) ? 1 : 2;
-}
+int ManipulationWidget::getStateCount() const { return (data_->single_state) ? 1 : 2; }
 
 void ManipulationWidget::setEnvironment(std::shared_ptr<const tesseract_environment::Environment> env)
 {
@@ -124,10 +123,7 @@ std::shared_ptr<const tesseract_environment::Environment> ManipulationWidget::ge
   return data_->env;
 }
 
-const tesseract_environment::Environment& ManipulationWidget::environment() const
-{
-  return *data_->env;
-}
+const tesseract_environment::Environment& ManipulationWidget::environment() const { return *data_->env; }
 
 const std::unordered_map<std::string, LinkVisibilityProperties>& ManipulationWidget::getLinkVisibilityProperties() const
 {
@@ -138,7 +134,6 @@ std::unordered_map<std::string, LinkVisibilityProperties>& ManipulationWidget::g
 {
   return data_->link_visibility_properties;
 }
-
 
 void ManipulationWidget::onRender() {}
 void ManipulationWidget::onShowAllLinks()
@@ -343,10 +338,7 @@ void ManipulationWidget::onModeChanged()
   }
 }
 
-void ManipulationWidget::onTCPNameChanged()
-{
-
-}
+void ManipulationWidget::onTCPNameChanged() {}
 
 void ManipulationWidget::onManipulatorTypeChanged()
 {
@@ -363,7 +355,8 @@ void ManipulationWidget::onJointStateSliderChanged(std::unordered_map<std::strin
   Q_EMIT manipulationStateChanged(reduced_scene_state, ui->state_combo_box->currentIndex());
 }
 
-tesseract_scene_graph::SceneState ManipulationWidget::getReducedSceneState(const tesseract_scene_graph::SceneState& scene_state)
+tesseract_scene_graph::SceneState
+ManipulationWidget::getReducedSceneState(const tesseract_scene_graph::SceneState& scene_state)
 {
   tesseract_scene_graph::SceneState reduced_scene_state;
   for (const auto& link_name : data_->kin_group->getActiveLinkNames())
@@ -404,9 +397,9 @@ void ManipulationWidget::onReset()
 
     auto it = std::find(gn_v.begin(), gn_v.end(), current_group_name.toStdString());
     if (it != gn_v.end())
-       ui->group_combo_box->setCurrentText(current_group_name);
+      ui->group_combo_box->setCurrentText(current_group_name);
     else
-       ui->group_combo_box->setCurrentText("");
+      ui->group_combo_box->setCurrentText("");
   }
   else
   {
@@ -442,9 +435,8 @@ void ManipulationWidget::addToolBar()
   data_->hide_axis_all_links_action = data_->toolbar->addAction(
       icons::getHideAxisAllLinksIcon(), "Hide Axis All Links", this, SLOT(onHideAxisAllLinks()));
   data_->toolbar->addSeparator();
-  data_->reset_action = data_->toolbar->addAction(
-      icons::getRestoreIcon(), "Reload Environment", this, SLOT(onReset()));
+  data_->reset_action = data_->toolbar->addAction(icons::getRestoreIcon(), "Reload Environment", this, SLOT(onReset()));
 
   ui->vertical_layout->insertWidget(0, data_->toolbar);
 }
-}
+}  // namespace tesseract_gui

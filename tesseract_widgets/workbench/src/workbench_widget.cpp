@@ -48,7 +48,7 @@ struct WorkbenchWidgetImpl
 
 WorkbenchWidget::WorkbenchWidget(EnvironmentWidget* environment_widget,
                                  JointTrajectoryWidget* joint_trajectory_widget,
-                                 tesseract_gui::ManipulationWidget *manipulation_widget,
+                                 tesseract_gui::ManipulationWidget* manipulation_widget,
                                  QWidget* parent)
   : QWidget(parent), ui(std::make_unique<Ui::WorkbenchWidget>()), data_(std::make_unique<WorkbenchWidgetImpl>())
 {

@@ -11,8 +11,8 @@ qt5_wrap_ui(JOINT_STATE_SLIDER_WIDGET_headers_UI
             include/tesseract_widgets/joint_state_slider/joint_state_slider_widget.ui)
 
 add_library(
-  ${PROJECT_NAME}_joint_state_slider SHARED
-  ${JOINT_STATE_SLIDER_WIDGET_headers_MOC} ${JOINT_STATE_SLIDER_WIDGET_headers_UI} src/joint_state_slider_widget.cpp)
+  ${PROJECT_NAME}_joint_state_slider SHARED ${JOINT_STATE_SLIDER_WIDGET_headers_MOC}
+                                            ${JOINT_STATE_SLIDER_WIDGET_headers_UI} src/joint_state_slider_widget.cpp)
 target_link_libraries(
   ${PROJECT_NAME}_joint_state_slider
   PUBLIC Qt5::Core

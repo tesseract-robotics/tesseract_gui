@@ -204,9 +204,9 @@ void SceneStateModel::clear()
   setColumnCount(2);
   setHorizontalHeaderLabels({ "Name", "Values" });
 
-  data_->values_item = new QStandardItem(icons::getJointVectorIcon(), "Values"); // NOLINT
-  data_->links_item = new QStandardItem(icons::getLinkVectorIcon(), "Links"); // NOLINT
-  data_->joints_item = new QStandardItem(icons::getJointVectorIcon(), "Joints"); // NOLINT
+  data_->values_item = new QStandardItem(icons::getJointVectorIcon(), "Values");  // NOLINT
+  data_->links_item = new QStandardItem(icons::getLinkVectorIcon(), "Links");     // NOLINT
+  data_->joints_item = new QStandardItem(icons::getJointVectorIcon(), "Joints");  // NOLINT
 
   appendRow(data_->values_item);
   appendRow(data_->links_item);

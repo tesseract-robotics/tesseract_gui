@@ -52,7 +52,7 @@ int main(int argc, char** argv)
 
   auto* jt_widget = new tesseract_gui::JointTrajectoryWidget();  // NOLINT
 
-  auto manipulation_widget = new tesseract_gui::ManipulationWidget(); // NOLINT
+  auto manipulation_widget = new tesseract_gui::ManipulationWidget();  // NOLINT
 
   tesseract_gui::WorkbenchWidget widget(env_widget, jt_widget, manipulation_widget);
   env_widget->setConfiguration(std::move(config));

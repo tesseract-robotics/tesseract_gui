@@ -26,7 +26,8 @@
 #include <QWidget>
 #include <memory>
 
-namespace Ui {
+namespace Ui
+{
 class ManipulationWidget;
 }
 
@@ -55,7 +56,7 @@ class ManipulationWidget : public QWidget
   Q_OBJECT
 
 public:
-  explicit ManipulationWidget(bool single_state = true, QWidget *parent = nullptr);
+  explicit ManipulationWidget(bool single_state = true, QWidget* parent = nullptr);
   ~ManipulationWidget();
 
   /**
@@ -117,10 +118,8 @@ private:
   void addToolBar();
 
   tesseract_scene_graph::SceneState getReducedSceneState(const tesseract_scene_graph::SceneState& scene_state);
-
 };
 
-}
+}  // namespace tesseract_gui
 
-
-#endif // TESSERACT_WIDGETS_MANIPULATION_MANIPULATION_WIDGET_H
+#endif  // TESSERACT_WIDGETS_MANIPULATION_MANIPULATION_WIDGET_H

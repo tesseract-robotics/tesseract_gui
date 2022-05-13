@@ -46,6 +46,7 @@ namespace tesseract_gui
 {
 class EnvironmentWidget;
 class JointTrajectoryWidget;
+class ManipulationWidget;
 
 struct WorkbenchWidgetImpl;
 
@@ -56,6 +57,7 @@ class WorkbenchWidget : public QWidget
 public:
   explicit WorkbenchWidget(EnvironmentWidget* environment_widget,
                            JointTrajectoryWidget* joint_trajectory_widget,
+                           ManipulationWidget* manipulation_widget,
                            QWidget* parent = nullptr);
   ~WorkbenchWidget();
 

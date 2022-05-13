@@ -72,7 +72,7 @@ target_link_libraries(
          Qt5::Gui
          ${PROJECT_NAME}_common
          ${PROJECT_NAME}_kinematic_groups
-         ${PROJECT_NAME}_joint_state_slider_widget)
+         ${PROJECT_NAME}_joint_state_slider)
 target_include_directories(
   ${PROJECT_NAME}_groups_joint_states_editor_widget
   PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"

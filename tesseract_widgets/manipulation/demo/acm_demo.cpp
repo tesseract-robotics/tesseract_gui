@@ -20,49 +20,42 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_WIDGETS_JOINT_STATE_SLIDER_WIDGET_H
-#define TESSERACT_WIDGETS_JOINT_STATE_SLIDER_WIDGET_H
-
 #include <tesseract_common/macros.h>
 TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
-#ifndef Q_MOC_RUN
-#include <tesseract_scene_graph/joint.h>
-#include <memory>
-#endif
+#include <QApplication>
+#include <QDebug>
+#include <sstream>
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
-#include <QWidget>
+#include <tesseract_widgets/acm/allowed_collision_matrix_model.h>
+#include <tesseract_widgets/acm/allowed_collision_matrix_widget.h>
 
-namespace Ui
+void onEntrySelected(const tesseract_common::AllowedCollisionEntries& selection)
 {
-class JointStateSliderWidget;
+  std::stringstream ss;
+  ss << "Selected Rows:" << std::endl;
+  for (const auto& s : selection)
+    ss << "     (" << s.first.first << ", " << s.first.second << ", " << s.second << ")" << std::endl;
+
+  qDebug() << QString::fromStdString(ss.str());
 }
 
-namespace tesseract_gui
+int main(int argc, char** argv)
 {
-struct JointStateSliderWidgetPrivate;
-class JointStateSliderWidget : public QWidget
-{
-  Q_OBJECT
+  QApplication app(argc, argv);
 
-public:
-  explicit JointStateSliderWidget(QWidget* parent = nullptr);
-  ~JointStateSliderWidget();
+  std::vector<std::string> links{ "link_1", "link_2", "link_3", "link_4" };
 
-  void setJoints(const std::vector<tesseract_scene_graph::Joint::ConstPtr>& joints);
-  std::unordered_map<std::string, double> getJointState() const;
+  tesseract_gui::AllowedCollisionMatrixModel model;
+  model.add("link_1", "link_2", "Adjacent");
+  model.add("link_2", "link_3", "Adjacent");
+  model.add("link_3", "link_4", "Adjacent");
 
-Q_SIGNALS:
-  void jointValueChanged(QString name, double value);
-  void jointStateChanged(std::unordered_map<std::string, double> state);
+  tesseract_gui::AllowedCollisionMatrixWidget widget;
+  QObject::connect(&widget, &tesseract_gui::AllowedCollisionMatrixWidget::entrySelected, &onEntrySelected);
 
-public Q_SLOTS:
-  void setJointState(const std::unordered_map<std::string, double>& state);
+  widget.setModel(&model);
+  widget.show();
 
-private:
-  std::unique_ptr<Ui::JointStateSliderWidget> ui_;
-  std::unique_ptr<JointStateSliderWidgetPrivate> data_;
-};
-}  // namespace tesseract_gui
-
-#endif  // TESSERACT_WIDGETS_JOINT_STATE_SLIDER_WIDGET_H
+  return app.exec();
+}

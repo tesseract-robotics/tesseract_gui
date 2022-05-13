@@ -230,7 +230,7 @@ void JointTrajectorySet::setDescription(std::string description) { description_ 
 
 const std::string& JointTrajectorySet::getDescription() const { return description_; }
 
-void JointTrajectorySet::setNamespace(std::string ns) { ns_ = std::move(ns_); }
+void JointTrajectorySet::setNamespace(std::string ns) { ns_ = std::move(ns); }
 
 const std::string& JointTrajectorySet::getNamespace() const { return ns_; }
 

@@ -27,6 +27,7 @@
 #include <tesseract_widgets/environment/environment_widget_config.h>
 #include <tesseract_widgets/joint_trajectory/joint_trajectory_widget.h>
 #include <tesseract_widgets/joint_trajectory/joint_trajectory_model.h>
+#include <tesseract_widgets/manipulation/manipulation_widget.h>
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -39,6 +40,7 @@ struct WorkbenchWidgetImpl
   EnvironmentWidget* joint_trajectory_environment_widget;
   JointTrajectoryWidget* joint_trajectory_widget;
   JointTrajectoryModel* joint_trajectory_model;
+  ManipulationWidget* manipulation_widget;
 
   QString current_uuid;
   std::unordered_map<std::string, tesseract_gui::EnvironmentWidgetConfig::Ptr> joint_trajectory_environment_configs;
@@ -46,6 +48,7 @@ struct WorkbenchWidgetImpl
 
 WorkbenchWidget::WorkbenchWidget(EnvironmentWidget* environment_widget,
                                  JointTrajectoryWidget* joint_trajectory_widget,
+                                 tesseract_gui::ManipulationWidget* manipulation_widget,
                                  QWidget* parent)
   : QWidget(parent), ui(std::make_unique<Ui::WorkbenchWidget>()), data_(std::make_unique<WorkbenchWidgetImpl>())
 {
@@ -56,6 +59,7 @@ WorkbenchWidget::WorkbenchWidget(EnvironmentWidget* environment_widget,
   data_->joint_trajectory_widget = joint_trajectory_widget;
   data_->joint_trajectory_model = new JointTrajectoryModel();  // NOLINT
   data_->joint_trajectory_widget->setModel(data_->joint_trajectory_model);
+  data_->manipulation_widget = manipulation_widget;
 
   connect(data_->environment_widget,
           SIGNAL(environmentSet(std::shared_ptr<tesseract_environment::Environment>)),
@@ -76,17 +80,24 @@ WorkbenchWidget::WorkbenchWidget(EnvironmentWidget* environment_widget,
 
   {                                    // Add environment widget
     auto* layout = new QVBoxLayout();  // NOLINT
-    layout->setMargin(0);
+    layout->setMargin(3);
     layout->addWidget(environment_widget);
     ui->environment_tab->setLayout(layout);
   }
 
   {                                    // Add joint trajectory widget
     auto* layout = new QHBoxLayout();  // NOLINT
-    layout->setMargin(0);
+    layout->setMargin(3);
     layout->addWidget(data_->joint_trajectory_environment_widget);
     layout->addWidget(data_->joint_trajectory_widget);
     ui->trajectory_tab->setLayout(layout);
+  }
+
+  {                                    // Add manipulation widget
+    auto* layout = new QHBoxLayout();  // NOLINT
+    layout->setMargin(3);
+    layout->addWidget(data_->manipulation_widget);
+    ui->manipulation_tab->setLayout(layout);
   }
 }
 
@@ -105,6 +116,7 @@ void WorkbenchWidget::onRender()
 {
   data_->environment_widget->onRender();
   data_->joint_trajectory_environment_widget->onRender();
+  data_->manipulation_widget->onRender();
 }
 
 void WorkbenchWidget::onEnable()
@@ -112,11 +124,13 @@ void WorkbenchWidget::onEnable()
   data_->environment_widget->onEnable();
   data_->joint_trajectory_environment_widget->onEnable();
   data_->joint_trajectory_widget->onEnable();
+  data_->manipulation_widget->onEnable();
 }
 
 void WorkbenchWidget::onEnvironmentSet(const std::shared_ptr<tesseract_environment::Environment>& env)
 {
   data_->joint_trajectory_widget->setDefaultEnvironment(env);
+  data_->manipulation_widget->setEnvironment(env);
 }
 
 void WorkbenchWidget::onConfigureJointTrajectorySet(const QString& uuid,

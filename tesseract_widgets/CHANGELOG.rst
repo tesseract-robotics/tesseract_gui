@@ -2,8 +2,8 @@
 Changelog for package tesseract_widgets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.1.0 (2022-05-13)
+------------------
 * Fix incorrect LICENSE files
 * Update readme
 * Add manipulation widget (`#18 <https://github.com/tesseract-robotics/tesseract_gui/issues/18>`_)

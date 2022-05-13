@@ -18,6 +18,10 @@
   <depend>tesseract_common</depend>
   <depend>tesseract_support</depend>
   <depend>tesseract_urdf</depend>
+  <depend>libqt5-core</depend>
+  <depend>libqt5-gui</depend>
+  <depend>libqt5-widgets</depend>
+  <depend>libqt5-svg-dev</depend>
 
   <export>
     <build_type>cmake</build_type>

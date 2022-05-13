@@ -24,6 +24,10 @@
   <depend>tesseract_command_language</depend>
   <depend>tesseract_motion_planners</depend>
   <depend>tesseract_process_managers</depend>
+  <depend>libqt5-core</depend>
+  <depend>libqt5-gui</depend>
+  <depend>libqt5-widgets</depend>
+  <depend>libqt5-svg-dev</depend>
   <depend>qt_advanced_docking</depend>
 
   <export>

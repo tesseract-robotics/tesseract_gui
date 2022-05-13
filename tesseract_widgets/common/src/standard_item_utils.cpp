@@ -84,4 +84,17 @@ QList<QStandardItem*> createStandardItemBool(const QIcon& icon, const std::strin
   value->setData(data, Qt::DisplayRole);
   return { name, value };
 }
+
+QList<QStandardItem*> createStandardItemDateTime(const std::string& text, const QDateTime& data)
+{
+  return createStandardItemDateTime(icons::getDateTimeIcon(), text, data);
+}
+
+QList<QStandardItem*> createStandardItemDateTime(const QIcon& icon, const std::string& text, const QDateTime& data)
+{
+  auto* name = new QStandardItem(icon, QString::fromStdString(text));
+  auto* value = new QStandardItem();  // NOLINT
+  value->setData(data, Qt::DisplayRole);
+  return { name, value };
+}
 }  // namespace tesseract_gui

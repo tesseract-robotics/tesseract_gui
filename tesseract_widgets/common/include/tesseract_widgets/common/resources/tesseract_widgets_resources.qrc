@@ -91,5 +91,6 @@
         <file>png/show-origin.png</file>
         <file>png/tesseract_logo.png</file>
         <file>png/log.png</file>
+        <file>png/datetime.png</file>
     </qresource>
 </RCC>

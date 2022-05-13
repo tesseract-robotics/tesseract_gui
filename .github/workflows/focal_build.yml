@@ -8,6 +8,9 @@ on:
   schedule:
     - cron: '0 5 * * *'
 
+  # allow manually starting this workflow
+  workflow_dispatch:
+
 jobs:
   industrial_ci:
     name: Noetic
@@ -19,7 +22,7 @@ jobs:
       ROS_DISTRO: noetic
       ROS_REPO: main
       UPSTREAM_WORKSPACE: 'dependencies.rosinstall'
-      ROSDEP_SKIP_KEYS: "bullet bullet-extras ros_industrial_cmake_boilerplate fcl iwyu taskflow"
+      ROSDEP_SKIP_KEYS: "bullet bullet-extras fcl iwyu"
       DOCKER_IMAGE: "rosindustrial/tesseract:noetic"
       PARALLEL_TESTS: false
       NOT_TEST_BUILD: true

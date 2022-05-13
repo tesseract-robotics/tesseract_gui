@@ -23,6 +23,12 @@
   <depend>ignition-msgs8</depend>
   <depend>ignition-math6</depend>
   <depend>sdformat12</depend>
+  <depend>glut</depend>
+  <depend>libglew-dev</depend>
+  <depend>libqt5-opengl</depend>
+  <depend>libqt5-quick</depend>
+
+
 
   <export>
     <build_type>cmake</build_type>

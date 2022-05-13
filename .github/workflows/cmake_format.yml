@@ -8,6 +8,9 @@ on:
   schedule:
     - cron: '0 5 * * *'
 
+  # allow manually starting this workflow
+  workflow_dispatch:
+
 jobs:
   cmake_lang:
     name: Format

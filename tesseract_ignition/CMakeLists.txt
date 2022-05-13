@@ -25,6 +25,7 @@ find_package(
   Qt5
   COMPONENTS Core
              Widgets
+             OpenGL
              QuickWidgets
              Quick
              QuickControls2
@@ -136,7 +137,8 @@ target_link_libraries(
          ignition-math6::ignition-math6-eigen3
          sdformat12::sdformat12
          Qt5::Core
-         Qt5::Widgets)
+         Qt5::Widgets
+         Qt5::OpenGL)
 target_include_directories(
   ${PROJECT_NAME}_simple_render_widget PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
                                               "$<INSTALL_INTERFACE:include>")
@@ -219,6 +221,7 @@ install_targets(
 configure_package(
   NAMESPACE tesseract
             DEPENDENCIES
+            "Qt5 COMPONENTS Core Widgets OpenGL QuickWidgets Quick QuickControls2"
             tesseract_common
             tesseract_scene_graph
             tesseract_widgets

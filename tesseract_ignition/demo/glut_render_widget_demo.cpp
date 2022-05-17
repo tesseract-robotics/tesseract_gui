@@ -33,7 +33,7 @@ int main(int argc, char** argv)
 {
   QApplication app(argc, argv);
 
-  Q_INIT_RESOURCE(tesseract_widgets_resources);
+  Q_INIT_RESOURCE(tesseract_qt_resources);
 
   std::string scene_name = "scene";
   tesseract_gui::GlutRenderWidget widget(scene_name);

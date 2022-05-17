@@ -1,5 +1,5 @@
 #include <tesseract_robotics_studio/tesseract_robotics_studio.h>
-#include <tesseract_widgets/common/theme_utils.h>
+#include <tesseract_qt/common/theme_utils.h>
 #include <QString>
 #include <QFile>
 #include <QApplication>
@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
   QApplication::setApplicationName("Tesseract Robotics Studio");
   QApplication::setQuitOnLastWindowClosed(true);
 
-  Q_INIT_RESOURCE(tesseract_widgets_resources);
+  Q_INIT_RESOURCE(tesseract_qt_resources);
   Q_INIT_RESOURCE(qdarkstyle_dark);
   Q_INIT_RESOURCE(qdarkstyle_light);
 

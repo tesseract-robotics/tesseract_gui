@@ -7,7 +7,7 @@ project(${pkg_extracted_name} VERSION ${pkg_extracted_version} LANGUAGES CXX)
 
 find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
 find_package(tesseract_ignition REQUIRED)
-find_package(tesseract_widgets REQUIRED)
+find_package(tesseract_qt REQUIRED)
 find_package(tesseract_common REQUIRED)
 find_package(tesseract_support REQUIRED)
 find_package(tesseract_urdf REQUIRED)
@@ -27,7 +27,7 @@ add_executable(
   src/tesseract_robotics_studio.cpp)
 target_link_libraries(
   ${PROJECT_NAME}
-  PRIVATE tesseract::tesseract_widgets_common
+  PRIVATE tesseract::tesseract_qt_common
           tesseract::tesseract_ignition_environment_widget # for example
           tesseract::tesseract_ignition_simple_render_widget # for example
           tesseract::tesseract_ignition_interactive_view_control # for example

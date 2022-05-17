@@ -11,7 +11,7 @@ endif()
 
 find_package(tesseract_common REQUIRED)
 find_package(tesseract_scene_graph REQUIRED)
-find_package(tesseract_widgets REQUIRED)
+find_package(tesseract_qt REQUIRED)
 
 find_package(ignition-gui6 REQUIRED)
 find_package(ignition-rendering6 REQUIRED)
@@ -37,7 +37,7 @@ tesseract_variables()
 add_library(${PROJECT_NAME}_common SHARED src/conversions.cpp src/gui_events.cpp src/gui_utils.cpp)
 target_link_libraries(
   ${PROJECT_NAME}_common
-  PUBLIC tesseract::tesseract_widgets_common
+  PUBLIC tesseract::tesseract_qt_common
          tesseract::tesseract_common
          tesseract::tesseract_scene_graph
          ignition-common4::ignition-common4-profiler
@@ -190,8 +190,8 @@ add_library(${PROJECT_NAME}_environment_widget SHARED ${IGNITION_ENVIRONMENT_WID
 target_link_libraries(
   ${PROJECT_NAME}_environment_widget
   PUBLIC ${PROJECT_NAME}_common
-         tesseract::tesseract_widgets_environment
-         tesseract::tesseract_widgets_common
+         tesseract::tesseract_qt_environment
+         tesseract::tesseract_qt_common
          ignition-rendering6::ignition-rendering6
          ignition-math6::ignition-math6-eigen3
          ignition-common4::ignition-common4)
@@ -224,7 +224,7 @@ configure_package(
             "Qt5 COMPONENTS Core Widgets OpenGL QuickWidgets Quick QuickControls2"
             tesseract_common
             tesseract_scene_graph
-            tesseract_widgets
+            tesseract_qt
             ignition-gui6
             ignition-rendering6
             "ignition-common4 COMPONENTS profiler events av"

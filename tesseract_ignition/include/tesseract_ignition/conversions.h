@@ -11,7 +11,7 @@
 #include <ignition/rendering/Visual.hh>
 #include <ignition/rendering/Material.hh>
 
-#include <tesseract_widgets/common/entity_container.h>
+#include <tesseract_qt/common/entity_container.h>
 #include <tesseract_scene_graph/graph.h>
 #include <tesseract_scene_graph/link.h>
 #include <tesseract_geometry/geometry.h>

@@ -25,6 +25,7 @@
 
 #include <QWidget>
 #include <memory>
+#include <Eigen/Geometry>
 
 namespace Ui
 {
@@ -109,6 +110,7 @@ private Q_SLOTS:
   void onTCPNameChanged();
   void onManipulatorTypeChanged();
   void onJointStateSliderChanged(std::unordered_map<std::string, double> state);
+  void onCartesianTransformChanged(const Eigen::Isometry3d& transform);
   void onReset();
 
 private:

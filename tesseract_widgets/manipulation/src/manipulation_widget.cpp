@@ -60,13 +60,11 @@ ManipulationWidget::ManipulationWidget(bool single_state, QWidget* parent)
 
   ui->group_combo_box->setModel(&data_->group_names_model);
   ui->tcp_combo_box->setModel(&data_->tcp_names_model);
-  ui->start_state_tree_view->setModel(&data_->state_models[0]);
+  ui->state_tree_view->setModel(&data_->state_models[0]);
 
   addToolBar();
 
-  connect(ui->start_state_tree_view, &QTreeView::expanded, [this]() {
-    ui->start_state_tree_view->resizeColumnToContents(0);
-  });
+  connect(ui->state_tree_view, &QTreeView::expanded, [this]() { ui->state_tree_view->resizeColumnToContents(0); });
 
   connect(ui->group_combo_box, SIGNAL(currentTextChanged(QString)), this, SLOT(onGroupNameChanged()));
   connect(ui->tcp_combo_box, SIGNAL(currentTextChanged(QString)), this, SLOT(onTCPNameChanged()));
@@ -78,28 +76,15 @@ ManipulationWidget::ManipulationWidget(bool single_state, QWidget* parent)
           this,
           &tesseract_gui::ManipulationWidget::onJointStateSliderChanged);
 
+  connect(ui->cartesian_widget,
+          &tesseract_gui::CartesianEditorWidget::transformChanged,
+          this,
+          &tesseract_gui::ManipulationWidget::onCartesianTransformChanged);
+
   if (data_->single_state)
   {
     ui->state_label->hide();
     ui->state_combo_box->hide();
-    ui->tabWidget->setTabText(1, "State");
-    ui->tabWidget->setTabEnabled(2, false);
-  }
-  else
-  {
-    auto* end_state_page = new QFrame();
-    auto* end_state_layout = new QVBoxLayout();
-    end_state_layout->setMargin(3);
-
-    data_->end_state_tree_view = new QTreeView();
-    data_->end_state_tree_view->setModel(&data_->state_models[1]);
-    connect(data_->end_state_tree_view, &QTreeView::expanded, [this]() {
-      data_->end_state_tree_view->resizeColumnToContents(0);
-    });
-
-    end_state_layout->addWidget(data_->end_state_tree_view);
-    end_state_page->setLayout(end_state_layout);
-    ui->tabWidget->addTab(end_state_page, "End State");
   }
 
   ui->tabWidget->setCurrentIndex(0);
@@ -302,6 +287,15 @@ void ManipulationWidget::onGroupNameChanged()
         data_->states[i].clear();
       }
 
+      std::vector<std::string> tcp_names = data_->kin_group->getAllPossibleTipLinkNames();
+      QStringList tcp_sl;
+      for (const auto& tcp_name : tcp_names)
+        tcp_sl.append(tcp_name.c_str());
+      data_->tcp_names_model.setStringList(tcp_sl);
+
+      if (!tcp_names.empty())
+        ui->tcp_combo_box->setCurrentIndex(0);
+
       std::vector<std::string> joint_names = data_->kin_group->getJointNames();
       std::vector<tesseract_scene_graph::Joint::ConstPtr> joints;
       joints.reserve(joint_names.size());
@@ -326,15 +320,13 @@ void ManipulationWidget::onModeChanged()
 {
   if (ui->mode_combo_box->currentIndex() == 0)
   {
-    ui->tcp_combo_box->hide();
-    ui->tcp_label->hide();
-    ui->joint_state_slider->show();
+    ui->joint_tab->setEnabled(true);
+    ui->cartesian_tab->setEnabled(false);
   }
   else
   {
-    ui->tcp_combo_box->show();
-    ui->tcp_label->show();
-    ui->joint_state_slider->hide();
+    ui->joint_tab->setEnabled(false);
+    ui->cartesian_tab->setEnabled(true);
   }
 }
 
@@ -352,6 +344,15 @@ void ManipulationWidget::onJointStateSliderChanged(std::unordered_map<std::strin
   tesseract_scene_graph::SceneState scene_state = data_->state_solvers[ui->state_combo_box->currentIndex()]->getState();
   tesseract_scene_graph::SceneState reduced_scene_state = getReducedSceneState(scene_state);
   data_->state_models[ui->state_combo_box->currentIndex()].setState(reduced_scene_state);
+
+  // Update the cartesian transform details
+  if (ui->mode_combo_box->currentIndex() == 0)
+  {
+    auto it = scene_state.link_transforms.find(ui->tcp_combo_box->currentText().toStdString());
+    if (it != scene_state.link_transforms.end())
+      ui->cartesian_widget->setTransform(it->second);
+  }
+
   Q_EMIT manipulationStateChanged(reduced_scene_state, ui->state_combo_box->currentIndex());
 }
 
@@ -368,6 +369,40 @@ ManipulationWidget::getReducedSceneState(const tesseract_scene_graph::SceneState
     reduced_scene_state.joint_transforms[joint_name] = scene_state.joint_transforms.at(joint_name);
   }
   return reduced_scene_state;
+}
+
+void ManipulationWidget::onCartesianTransformChanged(const Eigen::Isometry3d& transform)
+{
+  if (data_->kin_group != nullptr && ui->mode_combo_box->currentIndex() == 1)
+  {
+    std::vector<std::string> tcp_names = data_->kin_group->getAllPossibleTipLinkNames();
+    auto it = std::find(tcp_names.begin(), tcp_names.end(), ui->tcp_combo_box->currentText().toStdString());
+    if (it != tcp_names.end())
+    {
+      tesseract_kinematics::KinGroupIKInput inputs(transform, data_->kin_group->getBaseLinkName(), *it);
+      Eigen::VectorXd seed{ Eigen::VectorXd::Zero(data_->kin_group->numJoints()) };
+      std::vector<std::string> joint_names = data_->kin_group->getJointNames();
+      Eigen::Index idx{ 0 };
+      for (const auto& jn : joint_names)
+      {
+        auto j_it = data_->states[0].find(jn);
+        if (j_it != data_->states[0].end())
+          seed(idx) = j_it->second;
+
+        ++idx;
+      }
+      tesseract_kinematics::IKSolutions solutions = data_->kin_group->calcInvKin(inputs, seed);
+      if (!solutions.empty())
+      {
+        /** @todo Should sort solutions closest to the seed state */
+        std::unordered_map<std::string, double> state;
+        for (int i = 0; i < joint_names.size(); ++i)
+          state[joint_names[i]] = solutions[ui->state_combo_box->currentIndex()][i];
+
+        ui->joint_state_slider->setJointState(state);
+      }
+    }
+  }
 }
 
 void ManipulationWidget::onReset()

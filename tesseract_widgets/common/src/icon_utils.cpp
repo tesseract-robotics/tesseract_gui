@@ -398,7 +398,7 @@ QIcon getRestoreIcon()
 
 QIcon getDateTimeIcon()
 {
-  static QIcon icon = QIcon(":/tesseract_widgets/png/datetime.png");
+  static QIcon icon = QIcon(LoadSvg(":/tesseract_widgets/svg/datetime.svg"));
   return icon;
 }
 }  // namespace tesseract_gui::icons

@@ -43,15 +43,26 @@ QPixmap LoadSvg(QString filename, QString style_name)
   auto svg_data = file.readAll();
   file.close();
 
+  //  if (style_name.contains("light"))
+  //  {
+  //    svg_data.replace("#000000", "#111111");
+  //    svg_data.replace("#ffffff", "#dddddd");
+  //  }
+  //  else
+  //  {
+  //    svg_data.replace("#000000", "#dddddd");
+  //    svg_data.replace("#ffffff", "#111111");
+  //  }
+
   if (style_name.contains("light"))
   {
-    svg_data.replace("#000000", "#111111");
-    svg_data.replace("#ffffff", "#dddddd");
+    svg_data.replace("#000000", "#2ba5f7");
+    svg_data.replace("#ffffff", "#2ba5f7");
   }
   else
   {
-    svg_data.replace("#000000", "#dddddd");
-    svg_data.replace("#ffffff", "#111111");
+    svg_data.replace("#000000", "#2ba5f7");
+    svg_data.replace("#ffffff", "#2ba5f7");
   }
 
   QByteArray content(svg_data);

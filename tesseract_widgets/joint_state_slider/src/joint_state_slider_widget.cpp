@@ -38,6 +38,7 @@ struct JointStateSliderWidgetPrivate
   QGridLayout* layout;
   std::unordered_map<std::string, double> state;
   std::unordered_map<std::string, QSlider*> sliders;
+  std::unordered_map<std::string, QDoubleSpinBox*> spinboxes;
 };
 
 JointStateSliderWidget::JointStateSliderWidget(QWidget* parent)
@@ -57,6 +58,7 @@ void JointStateSliderWidget::setJoints(const std::vector<tesseract_scene_graph::
 {
   data_->state.clear();
   data_->sliders.clear();
+  data_->spinboxes.clear();
   while (data_->layout->count() > 0)
   {
     QLayoutItem* item = data_->layout->takeAt(0);
@@ -107,6 +109,7 @@ void JointStateSliderWidget::setJoints(const std::vector<tesseract_scene_graph::
     spin->setSingleStep(SLIDER_RESOLUTION);
     spin->setFixedWidth(75);
     data_->layout->addWidget(spin, row, 4);
+    data_->spinboxes[joint->getName()] = spin;
 
     connect(slider, &QSlider::sliderMoved, spin, [this, name, spin](int value) {
       double v = value * SLIDER_RESOLUTION;
@@ -139,7 +142,15 @@ std::unordered_map<std::string, double> JointStateSliderWidget::getJointState() 
 void JointStateSliderWidget::setJointState(const std::unordered_map<std::string, double>& state)
 {
   for (const auto& v : state)
-    data_->sliders[v.first]->setValue(v.second / SLIDER_RESOLUTION);
+  {
+    auto it_slider = data_->sliders.find(v.first);
+    auto it_spinbox = data_->spinboxes.find(v.first);
+    if (it_slider != data_->sliders.end() && it_spinbox != data_->spinboxes.end())
+    {
+      it_slider->second->setValue(v.second / SLIDER_RESOLUTION);
+      it_spinbox->second->setValue(v.second);
+    }
+  }
 }
 
 }  // namespace tesseract_gui

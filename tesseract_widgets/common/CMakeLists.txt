@@ -11,16 +11,23 @@ find_package(
 # Load variable for clang tidy args, compiler options and cxx version
 tesseract_variables()
 
+qt5_wrap_cpp(COMMON_WIDGETS_headers_MOC include/tesseract_widgets/common/cartesian_editor_widget.h)
+
+qt5_wrap_ui(COMMON_WIDGETS_headers_UI include/tesseract_widgets/common/cartesian_editor_widget.ui)
+
 qt5_add_resources(
-  RESOURCES_common_RCC
+  COMMON_WIDGETS_resources_RCC
   include/tesseract_widgets/common/resources/tesseract_widgets_resources.qrc
   include/tesseract_widgets/common/resources/themes/dark/qdarkstyle_dark.qrc
   include/tesseract_widgets/common/resources/themes/light/qdarkstyle_light.qrc)
 
 add_library(
   ${PROJECT_NAME}_common SHARED
-  ${RESOURCES_common_RCC}
+  ${COMMON_WIDGETS_headers_MOC}
+  ${COMMON_WIDGETS_headers_UI}
+  ${COMMON_WIDGETS_resources_RCC}
   src/calibration_info_standard_item.cpp
+  src/cartesian_editor_widget.cpp
   src/collision_margin_data_standard_item.cpp
   src/contact_managers_plugin_info_standard_item.cpp
   src/kinematics_plugin_info_standard_item.cpp

@@ -81,6 +81,11 @@
           <string>Joint</string>
          </property>
         </item>
+        <item>
+         <property name="text">
+          <string>Cartesian</string>
+         </property>
+        </item>
        </widget>
       </item>
       <item row="4" column="0">
@@ -110,11 +115,11 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>2</number>
      </property>
-     <widget class="QWidget" name="manipulation_tab">
+     <widget class="QWidget" name="joint_tab">
       <attribute name="title">
-       <string>Manipulation</string>
+       <string>Joint</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <property name="leftMargin">
@@ -147,9 +152,31 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="start_state_tab">
+     <widget class="QWidget" name="cartesian_tab">
       <attribute name="title">
-       <string>Start State</string>
+       <string>Cartesian</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <property name="leftMargin">
+        <number>3</number>
+       </property>
+       <property name="topMargin">
+        <number>3</number>
+       </property>
+       <property name="rightMargin">
+        <number>3</number>
+       </property>
+       <property name="bottomMargin">
+        <number>3</number>
+       </property>
+       <item>
+        <widget class="tesseract_gui::CartesianEditorWidget" name="cartesian_widget" native="true"/>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="state_tab">
+      <attribute name="title">
+       <string>State</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <property name="leftMargin">
@@ -165,7 +192,7 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="QTreeView" name="start_state_tree_view">
+        <widget class="QTreeView" name="state_tree_view">
          <property name="editTriggers">
           <set>QAbstractItemView::NoEditTriggers</set>
          </property>
@@ -182,6 +209,12 @@
    <class>tesseract_gui::JointStateSliderWidget</class>
    <extends>QWidget</extends>
    <header>tesseract_widgets/joint_state_slider/joint_state_slider_widget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>tesseract_gui::CartesianEditorWidget</class>
+   <extends>QWidget</extends>
+   <header>tesseract_widgets/common/cartesian_editor_widget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

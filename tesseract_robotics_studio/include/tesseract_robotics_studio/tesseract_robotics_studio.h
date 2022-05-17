@@ -34,7 +34,7 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <tesseract_ignition/simple_render_widget.h>
 #include <tesseract_ignition/interactive_view_control.h>
-#include <tesseract_widgets/common/entity_manager.h>
+#include <tesseract_qt/common/entity_manager.h>
 
 namespace Ui
 {

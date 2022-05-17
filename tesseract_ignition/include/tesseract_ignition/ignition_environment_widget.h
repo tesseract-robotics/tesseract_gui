@@ -1,9 +1,9 @@
 #ifndef TESSERACT_WIDGETS_ENVIRONMENT_IGNITION_ENVIRONMENT_WIDGET_H
 #define TESSERACT_WIDGETS_ENVIRONMENT_IGNITION_ENVIRONMENT_WIDGET_H
 
-#include <tesseract_widgets/environment/environment_widget.h>
-#include <tesseract_widgets/common/entity_manager.h>
-#include <tesseract_widgets/common/entity_container.h>
+#include <tesseract_qt/environment/environment_widget.h>
+#include <tesseract_qt/common/entity_manager.h>
+#include <tesseract_qt/common/entity_container.h>
 #include <unordered_map>
 
 namespace tesseract_gui

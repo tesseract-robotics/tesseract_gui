@@ -29,7 +29,7 @@
 #include <tesseract_urdf/urdf_parser.h>
 #include <tesseract_support/tesseract_support_resource_locator.h>
 
-#include <tesseract_widgets/environment/environment_widget_config.h>
+#include <tesseract_qt/environment/environment_widget_config.h>
 
 #include <QSettings>
 #include <QWidgetAction>
@@ -129,9 +129,9 @@ TesseractRoboticsStudio::TesseractRoboticsStudio(QWidget* parent)
   d_->dock_manager->setStyleSheet("");
 
   // Setup actions
-  ui->actionSave_State->setIcon(QIcon(":/tesseract_widgets/png/save.png"));
-  ui->actionRestore_State->setIcon(QIcon(":/tesseract_widgets/png/restore.png"));
-  ui->actionCreate_Perspective->setIcon(QIcon(":/tesseract_widgets/png/layout.png"));
+  ui->actionSave_State->setIcon(QIcon(":/tesseract_qt/png/save.png"));
+  ui->actionRestore_State->setIcon(QIcon(":/tesseract_qt/png/restore.png"));
+  ui->actionCreate_Perspective->setIcon(QIcon(":/tesseract_qt/png/layout.png"));
   connect(ui->actionSave_State, &QAction::triggered, [this]() { d_->saveState(); });
   connect(ui->actionRestore_State, &QAction::triggered, [this]() { d_->restoreState(); });
   connect(ui->actionCreate_Perspective, &QAction::triggered, [this]() { d_->createPerspective(); });

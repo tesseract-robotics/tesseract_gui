@@ -2,7 +2,7 @@
 #include <tesseract_ignition/conversions.h>
 #include <tesseract_ignition/gui_events.h>
 #include <tesseract_ignition/gui_utils.h>
-#include <tesseract_widgets/common/entity_container.h>
+#include <tesseract_qt/common/entity_container.h>
 #include <tesseract_environment/commands.h>
 
 #include <ignition/math/eigen3/Conversions.hh>

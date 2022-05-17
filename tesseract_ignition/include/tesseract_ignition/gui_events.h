@@ -25,7 +25,7 @@
 #include <utility>
 #include <vector>
 #include <memory>
-#include <tesseract_widgets/common/entity.h>
+#include <tesseract_qt/common/entity.h>
 
 #include <ignition/common/KeyEvent.hh>
 #include <ignition/common/MouseEvent.hh>

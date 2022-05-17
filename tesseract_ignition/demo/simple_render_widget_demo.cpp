@@ -39,7 +39,7 @@ int main(int argc, char** argv)
   format.setProfile(QSurfaceFormat::CoreProfile);
   format.setOption(QSurfaceFormat::DebugContext);
 
-  Q_INIT_RESOURCE(tesseract_widgets_resources);
+  Q_INIT_RESOURCE(tesseract_qt_resources);
 
   std::string scene_name = "scene";
   tesseract_gui::SimpleRenderWidget widget(scene_name);

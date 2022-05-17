@@ -13,7 +13,7 @@
 
   <depend>qt_advanced_docking</depend>
   <depend>tesseract_ignition</depend>
-  <depend>tesseract_widgets</depend>
+  <depend>tesseract_qt</depend>
   <depend>tesseract_scene_graph</depend>
   <depend>tesseract_common</depend>
   <depend>tesseract_support</depend>

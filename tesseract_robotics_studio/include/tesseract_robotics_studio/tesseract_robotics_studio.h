@@ -33,7 +33,6 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 #include <QMainWindow>
 
 #include <tesseract_ignition/simple_render_widget.h>
-#include <tesseract_ignition/interactive_view_control.h>
 #include <tesseract_qt/common/entity_manager.h>
 
 namespace Ui
@@ -55,7 +54,6 @@ struct SceneInfo
   std::string scene_name;
   EntityManager::Ptr entity_manager;
   SimpleRenderWidget* render_widget;
-  std::unique_ptr<tesseract_gui::InteractiveViewControl> view_control;
 };
 
 class TesseractRoboticsStudio : public QMainWindow

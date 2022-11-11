@@ -41,9 +41,7 @@ namespace tesseract_gui
 SceneInfo::SceneInfo(std::string scene_name)
   : scene_name(std::move(scene_name))
   , entity_manager(std::make_shared<EntityManager>())
-  , view_control(std::make_unique<tesseract_gui::InteractiveViewControl>(this->scene_name))
 {
-  qobject_cast<QApplication*>(qGuiApp)->installEventFilter(view_control.get());
 }
 
 struct TesseractRoboticsStudioPrivate

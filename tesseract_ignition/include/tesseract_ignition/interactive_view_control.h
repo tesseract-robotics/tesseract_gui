@@ -23,46 +23,61 @@
 
 namespace tesseract_gui
 {
+
+/**  @brief The types of view controllers available  */
+enum class ViewControlType
+{
+  ORBIT,
+  ORTHO
+};
+
+/**
+ * @brief Convert view control type to string
+ * @param type The type to convert to string
+ * @return The string represenation of the view control type
+ */
+inline std::string toString(ViewControlType type) { return ((type == ViewControlType::ORBIT) ? "orbit" : "ortho"); }
+
+/** @brief The InteractiveViewControl private data structure */
 class InteractiveViewControlPrivate;
 
-/// \brief This Plugin allows to control a user camera with the mouse:
-///
-/// * Drag left button to pan
-/// * Drag middle button to orbit
-/// * Drag right button or scroll wheel to zoom
-///
-/// This plugin also supports changing between perspective and orthographic
-/// projections through the `/gui/camera/view_control` service. Perspective
-/// projection is used by default. For example:
-///
-///     ign service -s /gui/camera/view_control
-///         --reqtype ignition.msgs.StringMsg
-///         --reptype ignition.msgs.Boolean
-///         --timeout 2000 --req 'data: "ortho"'
-///
-/// Supported options are:
-///
-/// * `orbit`: perspective projection
-/// * `ortho`: orthographic projection
+/**
+ *  @brief This Plugin allows to control a user camera with the mouse:
+ *  @details
+ *    * Drag left button to pan
+ *    * Drag middle button to orbit
+ *    * Drag right button or scroll wheel to zoom
+ *
+ *    Supported options are:
+ *
+ *    * `orbit`: perspective projection
+ *    * `ortho`: orthographic projection
+ */
 class InteractiveViewControl : public QObject
 {
   Q_OBJECT
 public:
-  /// \brief Constructor
-  InteractiveViewControl(const std::string& scene_name);
+  using Ptr = std::shared_ptr<InteractiveViewControl>;
+  using ConstPtr = std::shared_ptr<const InteractiveViewControl>;
 
-  /// \brief Destructor
+  /** @brief Constructor */
+  InteractiveViewControl(const std::string& scene_name, ViewControlType type = ViewControlType::ORBIT);
+
+  /** @brief Destructor */
   virtual ~InteractiveViewControl();
 
-  //    // Documentation inherited
-  //    virtual void LoadConfig(const tinyxml2::XMLElement *_pluginElem) override;
+  /**
+   * @brief Set the view controller to use
+   * @param type The view controller type
+   */
+  void setViewController(ViewControlType type);
+
 private:
   // Documentation inherited
-  bool eventFilter(QObject* _obj, QEvent* _event) override;
+  bool eventFilter(QObject* obj, QEvent* event) override;
 
-  /// \internal
-  /// \brief Pointer to private data.
-  std::unique_ptr<InteractiveViewControlPrivate> dataPtr;
+  /** @brief Pointer to private data. */
+  std::unique_ptr<InteractiveViewControlPrivate> data_;
 };
 }  // namespace tesseract_gui
 

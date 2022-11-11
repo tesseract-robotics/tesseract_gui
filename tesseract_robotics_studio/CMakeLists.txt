@@ -30,7 +30,6 @@ target_link_libraries(
   PRIVATE tesseract::tesseract_qt_common
           tesseract::tesseract_ignition_environment_widget # for example
           tesseract::tesseract_ignition_simple_render_widget # for example
-          tesseract::tesseract_ignition_interactive_view_control # for example
           tesseract::tesseract_support # for example
           tesseract::tesseract_urdf # for example
           tesseract::tesseract_common

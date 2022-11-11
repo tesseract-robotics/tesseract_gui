@@ -27,7 +27,6 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <tesseract_ignition/simple_render_widget.h>
-#include <tesseract_ignition/interactive_view_control.h>
 
 int main(int argc, char** argv)
 {
@@ -38,21 +37,8 @@ int main(int argc, char** argv)
 
   std::string scene_name = "scene";
   tesseract_gui::SimpleRenderWidget widget(scene_name);
-  widget.SetSkyEnabled(true);
-  //  QSurfaceFormat format(QSurfaceFormat::DeprecatedFunctions);
-  //  format.setDepthBufferSize(24);
-  //  format.setStencilBufferSize(8);
-  //  format.setMajorVersion(4);
-  //  format.setMinorVersion(1);
-  //  format.setProfile(QSurfaceFormat::CoreProfile);
-  //  format.setOption(QSurfaceFormat::DebugContext);
-  //  format.setRenderableType(QSurfaceFormat::OpenGL);
-  //  widget.setFormat(format);
-
+  widget.setSkyEnabled(true);
   widget.show();
-
-  tesseract_gui::InteractiveViewControl view_control(scene_name);
-  app.installEventFilter(&view_control);
 
   return app.exec();
 }

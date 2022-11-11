@@ -207,7 +207,7 @@ InteractiveViewControl::~InteractiveViewControl() = default;
 /////////////////////////////////////////////////
 void InteractiveViewControl::setViewController(ViewControlType type)
 {
-  std::lock_guard<std::mutex> lock(this->mutex);
+  std::lock_guard<std::mutex> lock(this->data_->mutex);
   this->data_->view_control_type = type;
 }
 

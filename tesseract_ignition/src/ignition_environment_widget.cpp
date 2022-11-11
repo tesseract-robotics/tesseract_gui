@@ -2,7 +2,7 @@
 #include <tesseract_ignition/conversions.h>
 #include <tesseract_ignition/gui_events.h>
 #include <tesseract_ignition/gui_utils.h>
-#include <tesseract_widgets/common/entity_container.h>
+#include <tesseract_qt/common/entity_container.h>
 #include <tesseract_environment/commands.h>
 
 #include <ignition/math/eigen3/Conversions.hh>
@@ -206,8 +206,7 @@ bool IgnitionEnvironmentWidget::eventFilter(QObject* _obj, QEvent* _event)
                     break;
                   }
                   case tesseract_environment::CommandType::CHANGE_LINK_COLLISION_ENABLED:
-                  case tesseract_environment::CommandType::ADD_ALLOWED_COLLISION:
-                  case tesseract_environment::CommandType::REMOVE_ALLOWED_COLLISION:
+                  case tesseract_environment::CommandType::MODIFY_ALLOWED_COLLISIONS:
                   case tesseract_environment::CommandType::REMOVE_ALLOWED_COLLISION_LINK:
                   case tesseract_environment::CommandType::CHANGE_JOINT_POSITION_LIMITS:
                   case tesseract_environment::CommandType::CHANGE_JOINT_VELOCITY_LIMITS:

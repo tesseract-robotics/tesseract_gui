@@ -631,29 +631,68 @@ void GlutRenderWidget::paintGL()
   }
   else
   {
-    //    glMatrixMode(GL_PROJECTION);
-    //    glLoadIdentity();
-    //    glMatrixMode(GL_MODELVIEW);
-    //    glLoadIdentity();
-    //    glMatrixMode(GL_TEXTURE);
-    //    glLoadIdentity();
+    //    //    glMatrixMode(GL_PROJECTION);
+    //    //    glLoadIdentity();
+    //    //    glMatrixMode(GL_MODELVIEW);
+    //    //    glLoadIdentity();
+    //    //    glMatrixMode(GL_TEXTURE);
+    //    //    glLoadIdentity();
 
-    //    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    //    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
-    //    glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
-    //    glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
+    //    //    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    //    //    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+    //    //    glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
+    //    //    glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
 
-    //    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    //    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
-    //    glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
-    //    glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
+    //    //    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    //    //    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+    //    //    glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
+    //    //    glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
+
+    //    glPixelZoom(1, -1);
+    //    glRasterPos2f(-1, 1);
+    //    //    glDrawPixels(imgw, imgh, GL_RGB, GL_UNSIGNED_BYTE, data);
+
+    //    glPixelStorei(GL_UNPACK_ROW_LENGTH, qimg_convert.bytesPerLine() / 4);
+    //    glDrawPixels(qimg_convert.width(), qimg_convert.height(), GL_RGBA, GL_UNSIGNED_BYTE, qimg_convert.bits());
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glMatrixMode(GL_TEXTURE);
+    glLoadIdentity();
+
+    glPixelStorei(GL_UNPACK_SWAP_BYTES, GL_FALSE);
+    glPixelStorei(GL_UNPACK_LSB_FIRST, GL_FALSE);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+    glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
+    glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
+    glPixelStorei(GL_UNPACK_IMAGE_HEIGHT, 0);
+    glPixelStorei(GL_UNPACK_SKIP_IMAGES, 0);
+
+    glPixelTransferi(GL_MAP_COLOR, GL_FALSE);
+    glPixelTransferi(GL_MAP_STENCIL, GL_FALSE);
+    glPixelTransferi(GL_INDEX_SHIFT, 0);
+    glPixelTransferi(GL_INDEX_OFFSET, 0);
+    glPixelTransferf(GL_RED_SCALE, 1.0);
+    glPixelTransferf(GL_GREEN_SCALE, 1.0);
+    glPixelTransferf(GL_BLUE_SCALE, 1.0);
+    glPixelTransferf(GL_ALPHA_SCALE, 1.0);
+    glPixelTransferf(GL_DEPTH_SCALE, 1.0);
+    glPixelTransferf(GL_RED_BIAS, 0.0);
+    glPixelTransferf(GL_GREEN_BIAS, 0.0);
+    glPixelTransferf(GL_BLUE_BIAS, 0.0);
+    glPixelTransferf(GL_ALPHA_BIAS, 0.0);
+    glPixelTransferf(GL_DEPTH_BIAS, 0.0);
 
     glPixelZoom(1, -1);
     glRasterPos2f(-1, 1);
-    //    glDrawPixels(imgw, imgh, GL_RGB, GL_UNSIGNED_BYTE, data);
-
-    glPixelStorei(GL_UNPACK_ROW_LENGTH, qimg_convert.bytesPerLine() / 4);
-    glDrawPixels(qimg_convert.width(), qimg_convert.height(), GL_RGBA, GL_UNSIGNED_BYTE, qimg_convert.bits());
+    glDisable(GL_DITHER);
+    glDisable(GL_DEPTH_TEST);
+    glDrawPixels(imgw, imgh, GL_RGB, GL_UNSIGNED_BYTE, data);
+    glEnable(GL_DITHER);
+    glEnable(GL_DEPTH_TEST);
   }
 
   doneCurrent();

@@ -33,7 +33,7 @@ target_link_libraries(
          Qt5::Xml
          tesseract::tesseract_common
          ads::qtadvanceddocking
-         tesseract::tesseract_widgets_common)
+         tesseract::tesseract_qt_common)
 target_include_directories(
   ${PROJECT_NAME}_demo_app PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
                                   "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/demo_app>" "$<INSTALL_INTERFACE:include>")

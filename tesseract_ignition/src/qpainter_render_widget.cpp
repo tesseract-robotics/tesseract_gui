@@ -15,7 +15,7 @@
  *
  */
 
-#include <tesseract_ignition/simple_render_widget.h>
+#include <tesseract_ignition/qpainter_render_widget.h>
 #include <tesseract_ignition/gui_utils.h>
 #include <tesseract_ignition/gui_events.h>
 #include <tesseract_ignition/conversions.h>
@@ -25,6 +25,8 @@
 #include <sstream>
 #include <string>
 #include <vector>
+
+#include <QPainter>
 
 // TODO(louise) Remove these pragmas once ign-rendering
 // is disabling the warnings
@@ -42,18 +44,14 @@
 #include <ignition/common/Console.hh>
 #include <ignition/common/Image.hh>
 
-#include <QOpenGLTexture>
-#include <QOpenGLTextureBlitter>
-#include <QOffscreenSurface>
-
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
 
 namespace tesseract_gui
 {
-// \brief Private data class for SimpleRenderer
-class SimpleRendererImpl
+// \brief Private data class for QPainterRenderer
+class QPainterRendererImpl
 {
 public:
   /// \brief Flag to indicate if mouse event is dirty
@@ -94,13 +92,13 @@ public:
 };
 
 /////////////////////////////////////////////////
-SimpleRenderer::SimpleRenderer() : dataPtr(std::make_unique<SimpleRendererImpl>()) {}
+QPainterRenderer::QPainterRenderer() : dataPtr(std::make_unique<QPainterRendererImpl>()) {}
 
 /////////////////////////////////////////////////
-ignition::rendering::Image SimpleRenderer::Render()
+QImage QPainterRenderer::Render()
 {
   if (!initialized)
-    return ignition::rendering::Image();
+    return {};
 
   if (this->textureDirty)
   {
@@ -111,7 +109,6 @@ ignition::rendering::Image SimpleRenderer::Render()
                                           static_cast<double>(this->textureSize.height()));
     // setting the size should cause the render texture to be rebuilt
     this->dataPtr->camera->PreRender();
-    this->texture_id = this->dataPtr->camera->RenderTextureGLId();
     this->textureDirty = false;
   }
 
@@ -128,7 +125,6 @@ ignition::rendering::Image SimpleRenderer::Render()
     std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
     image = this->dataPtr->camera->CreateImage();
     this->dataPtr->camera->Capture(image);
-    assert(this->texture_id == this->dataPtr->camera->RenderTextureGLId());
   }
 
   if (tesseract_gui::getApp() != nullptr)
@@ -136,10 +132,10 @@ ignition::rendering::Image SimpleRenderer::Render()
     QApplication::sendEvent(tesseract_gui::getApp(), new events::Render(this->sceneName));
   }
 
-  return image;
+  return QImage(image.Data<unsigned char>(), image.Width(), image.Height(), QImage::Format_RGB888);
 }
 
-void SimpleRenderer::Resize(int width, int height)
+void QPainterRenderer::Resize(int width, int height)
 {
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
   this->textureSize = QSize(width, height);
@@ -147,7 +143,7 @@ void SimpleRenderer::Resize(int width, int height)
 }
 
 /////////////////////////////////////////////////
-void SimpleRenderer::HandleMouseEvent()
+void QPainterRenderer::HandleMouseEvent()
 {
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
   this->BroadcastHoverPos();
@@ -163,7 +159,7 @@ void SimpleRenderer::HandleMouseEvent()
 }
 
 ////////////////////////////////////////////////
-void SimpleRenderer::HandleKeyPress(const ignition::common::KeyEvent& _e)
+void QPainterRenderer::HandleKeyPress(const ignition::common::KeyEvent& _e)
 {
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
 
@@ -175,7 +171,7 @@ void SimpleRenderer::HandleKeyPress(const ignition::common::KeyEvent& _e)
 }
 
 ////////////////////////////////////////////////
-void SimpleRenderer::HandleKeyRelease(const ignition::common::KeyEvent& _e)
+void QPainterRenderer::HandleKeyRelease(const ignition::common::KeyEvent& _e)
 {
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
 
@@ -187,7 +183,7 @@ void SimpleRenderer::HandleKeyRelease(const ignition::common::KeyEvent& _e)
 }
 
 /////////////////////////////////////////////////
-void SimpleRenderer::BroadcastDrop()
+void QPainterRenderer::BroadcastDrop()
 {
   if (!this->dataPtr->dropDirty)
     return;
@@ -197,7 +193,7 @@ void SimpleRenderer::BroadcastDrop()
 }
 
 /////////////////////////////////////////////////
-void SimpleRenderer::BroadcastHoverPos()
+void QPainterRenderer::BroadcastHoverPos()
 {
   if (!this->dataPtr->hoverDirty)
     return;
@@ -218,7 +214,7 @@ void SimpleRenderer::BroadcastHoverPos()
 }
 
 /////////////////////////////////////////////////
-void SimpleRenderer::BroadcastDrag()
+void QPainterRenderer::BroadcastDrag()
 {
   if (!this->dataPtr->mouseDirty)
     return;
@@ -234,7 +230,7 @@ void SimpleRenderer::BroadcastDrag()
 }
 
 /////////////////////////////////////////////////
-void SimpleRenderer::BroadcastLeftClick()
+void QPainterRenderer::BroadcastLeftClick()
 {
   if (!this->dataPtr->mouseDirty)
     return;
@@ -255,7 +251,7 @@ void SimpleRenderer::BroadcastLeftClick()
 }
 
 /////////////////////////////////////////////////
-void SimpleRenderer::BroadcastRightClick()
+void QPainterRenderer::BroadcastRightClick()
 {
   if (!this->dataPtr->mouseDirty)
     return;
@@ -276,7 +272,7 @@ void SimpleRenderer::BroadcastRightClick()
 }
 
 /////////////////////////////////////////////////
-void SimpleRenderer::BroadcastMousePress()
+void QPainterRenderer::BroadcastMousePress()
 {
   if (!this->dataPtr->mouseDirty)
     return;
@@ -291,7 +287,7 @@ void SimpleRenderer::BroadcastMousePress()
 }
 
 /////////////////////////////////////////////////
-void SimpleRenderer::BroadcastScroll()
+void QPainterRenderer::BroadcastScroll()
 {
   if (!this->dataPtr->mouseDirty)
     return;
@@ -306,7 +302,7 @@ void SimpleRenderer::BroadcastScroll()
 }
 
 /////////////////////////////////////////////////
-void SimpleRenderer::BroadcastKeyRelease()
+void QPainterRenderer::BroadcastKeyRelease()
 {
   if (this->dataPtr->keyEvent.Type() != ignition::common::KeyEvent::RELEASE)
     return;
@@ -318,7 +314,7 @@ void SimpleRenderer::BroadcastKeyRelease()
 }
 
 /////////////////////////////////////////////////
-void SimpleRenderer::BroadcastKeyPress()
+void QPainterRenderer::BroadcastKeyPress()
 {
   if (this->dataPtr->keyEvent.Type() != ignition::common::KeyEvent::PRESS)
     return;
@@ -330,7 +326,7 @@ void SimpleRenderer::BroadcastKeyPress()
 }
 
 /////////////////////////////////////////////////
-void SimpleRenderer::Initialize()
+void QPainterRenderer::Initialize()
 {
   if (this->initialized)
     return;
@@ -430,9 +426,6 @@ void SimpleRenderer::Initialize()
   root->AddChild(axis);
 
   {
-    this->dataPtr->camera->PreRender();
-    this->texture_id = this->dataPtr->camera->RenderTextureGLId();
-
     auto image = this->dataPtr->camera->CreateImage();
     this->dataPtr->camera->Capture(image);
     auto* data = image.Data<unsigned char>();
@@ -448,7 +441,7 @@ void SimpleRenderer::Initialize()
 }
 
 /////////////////////////////////////////////////
-void SimpleRenderer::Destroy()
+void QPainterRenderer::Destroy()
 {
   auto* engine = ignition::rendering::engine(this->engineName);
   if (engine == nullptr)
@@ -469,7 +462,7 @@ void SimpleRenderer::Destroy()
 }
 
 /////////////////////////////////////////////////
-void SimpleRenderer::NewHoverEvent(const ignition::math::Vector2i& _hoverPos)
+void QPainterRenderer::NewHoverEvent(const ignition::math::Vector2i& _hoverPos)
 {
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
   this->dataPtr->mouseHoverPos = _hoverPos;
@@ -477,7 +470,7 @@ void SimpleRenderer::NewHoverEvent(const ignition::math::Vector2i& _hoverPos)
 }
 
 /////////////////////////////////////////////////
-void SimpleRenderer::NewDropEvent(const std::string& _dropText, const ignition::math::Vector2i& _dropPos)
+void QPainterRenderer::NewDropEvent(const std::string& _dropText, const ignition::math::Vector2i& _dropPos)
 {
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
   this->dataPtr->dropText = _dropText;
@@ -486,7 +479,7 @@ void SimpleRenderer::NewDropEvent(const std::string& _dropText, const ignition::
 }
 
 /////////////////////////////////////////////////
-void SimpleRenderer::NewMouseEvent(const ignition::common::MouseEvent& _e)
+void QPainterRenderer::NewMouseEvent(const ignition::common::MouseEvent& _e)
 {
   std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
   this->dataPtr->mouseEvent = _e;
@@ -494,7 +487,7 @@ void SimpleRenderer::NewMouseEvent(const ignition::common::MouseEvent& _e)
 }
 
 /////////////////////////////////////////////////
-ignition::math::Vector3d SimpleRenderer::ScreenToScene(const ignition::math::Vector2i& _screenPos) const
+ignition::math::Vector3d QPainterRenderer::ScreenToScene(const ignition::math::Vector2i& _screenPos) const
 {
   // TODO(ahcorde): Replace this code with function in ign-rendering
   // Require this commit
@@ -520,466 +513,108 @@ ignition::math::Vector3d SimpleRenderer::ScreenToScene(const ignition::math::Vec
 }
 
 /// \brief Private data class for RenderWindowItem
-class SimpleRenderWidgetImpl
+class QPainterRenderWidgetImpl
 {
 public:
   /// \brief Keep latest mouse event
   ignition::common::MouseEvent mouseEvent;
 
   /// \brief Ign-rendering renderer
-  SimpleRenderer renderer;
+  QPainterRenderer renderer;
 
-  QOpenGLDebugLogger* debug_logger{ nullptr };
-
-  QOpenGLTextureBlitter texture_blitter;
-
-  QOpenGLTexture* qtexture{ nullptr };
-
-  GLuint texture{ 2 };
-
-  int texture_id = 0;
-  void* texturePtr{ nullptr };
-  QOffscreenSurface* surface{ nullptr };
-  QOpenGLContext* context{ nullptr };
+  QImage image;
 
   /// \brief List of our QT connections.
   QList<QMetaObject::Connection> connections;
 };
 
 /////////////////////////////////////////////////
-SimpleRenderWidget::SimpleRenderWidget(const std::string& scene_name, QWidget* _parent)
-  : QOpenGLWidget(_parent), dataPtr(std::make_unique<SimpleRenderWidgetImpl>())
+QPainterRenderWidget::QPainterRenderWidget(const std::string& scene_name, QWidget* _parent)
+  : QOpenGLWidget(_parent), dataPtr(std::make_unique<QPainterRenderWidgetImpl>())
 {
   dataPtr->renderer.sceneName = scene_name;
 
-  QSurfaceFormat format(QSurfaceFormat::DeprecatedFunctions);
-  format.setDepthBufferSize(24);
-  format.setStencilBufferSize(8);
-  format.setMajorVersion(4);
-  format.setMinorVersion(1);
-  //  format.setProfile(QSurfaceFormat::CoreProfile);
-  format.setRenderableType(QSurfaceFormat::OpenGL);
-  setFormat(format);
-  connect(this, &QOpenGLWidget::resized, this, &SimpleRenderWidget::OnResized);
+  connect(this, &QOpenGLWidget::resized, this, &QPainterRenderWidget::OnResized);
 }
 
 /////////////////////////////////////////////////
-SimpleRenderWidget::~SimpleRenderWidget()
+QPainterRenderWidget::~QPainterRenderWidget()
 {
-  this->dataPtr->context->makeCurrent(this->dataPtr->surface);
-
-  //  delete this->renderer;
-  //  this->renderer = nullptr;
-
-  this->dataPtr->context->doneCurrent();
-
-  // schedule this to be deleted only after we're done cleaning up
-  this->dataPtr->surface->deleteLater();
-
-  delete this->dataPtr->context;
-  this->dataPtr->context = nullptr;
-
   // Disconnect our QT connections.
   for (const auto& conn : this->dataPtr->connections)
     QObject::disconnect(conn);
 }
 
-void SimpleRenderWidget::initializeGL()
+void QPainterRenderWidget::initializeGL()
 {
-  initializeOpenGLFunctions();
-  this->dataPtr->texture_blitter.create();
+  //  initializeOpenGLFunctions();
 
-  this->dataPtr->debug_logger = new QOpenGLDebugLogger(context());
-  if (this->dataPtr->debug_logger->initialize())
-  {
-    qDebug() << "GL_DEBUG Debug Logger" << this->dataPtr->debug_logger << "\n";
-    connect(this->dataPtr->debug_logger,
-            SIGNAL(messageLogged(QOpenGLDebugMessage)),
-            this,
-            SLOT(messageLogged(QOpenGLDebugMessage)));
-    this->dataPtr->debug_logger->startLogging();
-  }
+  //  // Initialize renderer
+  //  if (!this->dataPtr->renderer.initialized)
+  //    this->dataPtr->renderer.Initialize();
 
-  {  // Initialize renderer
-    // Some GL implementations requres that the currently bound context is
-    // made non-current before we set up sharing, so we doneCurrent here
-    // and makeCurrent down below while setting up our own context.
-    doneCurrent();
-
-    this->dataPtr->context = new QOpenGLContext();
-
-    // set the surface format (this is managed globally in Main.cpp)
-    // auto surfaceFormat = RenderThread::createSurfaceFormat();
-    // m_renderThread->context->setFormat(surfaceFormat);
-    this->dataPtr->context->setFormat(context()->format());
-
-    this->dataPtr->context->setShareContext(context());
-    this->dataPtr->context->create();
-
-    // Run on the Main (GUI = QML) thread
-    this->dataPtr->surface = new QOffscreenSurface();
-    this->dataPtr->surface->setFormat(this->dataPtr->context->format());
-    this->dataPtr->surface->create();
-
-    // carry out any initialisation before moving to thread
-    this->dataPtr->context->makeCurrent(this->dataPtr->surface);
-
-    // create renderer
-    if (!this->dataPtr->renderer.initialized)
-      this->dataPtr->renderer.Initialize();
-
-    this->dataPtr->context->doneCurrent();
-  }
-
-  // check if engine has been successfully initialized
-  if (!this->dataPtr->renderer.initialized)
-  {
-    ignerr << "Unable to initialize renderer" << std::endl;
-  }
+  //  // check if engine has been successfully initialized
+  //  if (!this->dataPtr->renderer.initialized)
+  //  {
+  //    ignerr << "Unable to initialize renderer" << std::endl;
+  //  }
 }
 
-void SimpleRenderWidget::resizeGL(int w, int h)
-{
-  glViewport(0, 0, w, h);
-  this->dataPtr->renderer.Resize(w, h);
-}
-
-void SimpleRenderWidget::drawOffsreenPaintGL()
-{
-  this->dataPtr->context->makeCurrent(this->dataPtr->surface);
-  ignition::rendering::Image image = this->dataPtr->renderer.Render();
-  this->dataPtr->context->doneCurrent();
-
-  makeCurrent();
-  glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_ACCUM_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-  glBindTexture(GL_TEXTURE_2D, this->dataPtr->renderer.texture_id);
-  glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-  this->dataPtr->texture_blitter.bind(GL_TEXTURE_2D);
-  const QRect targetRect(QPoint(0, 0), size());
-  QMatrix4x4 target =
-      QOpenGLTextureBlitter::targetTransform(targetRect, QRect(QPoint(0, 0), this->dataPtr->renderer.textureSize));
-  target.translate(0, 0, -1);  // If all zeros the scene is randomly visible.
-  this->dataPtr->texture_blitter.blit(this->dataPtr->renderer.texture_id, target, QOpenGLTextureBlitter::OriginTopLeft);
-  this->dataPtr->texture_blitter.release();
-  doneCurrent();
-}
-
-void SimpleRenderWidget::drawStaticImagePaintGL()
+/////////////////////////////////////////////////
+void QPainterRenderWidget::paintEvent(QPaintEvent* event)
 {
   //  makeCurrent();
-  //  ignition::rendering::Image image = this->dataPtr->renderer.Render();
-  //  auto* data = image.Data<unsigned char>();
+  //  this->dataPtr->image = this->dataPtr->renderer.Render();
+  //  this->dataPtr->image.save("/tmp/ign_qimage.png");
   //  doneCurrent();
 
-  //  QImage q_image(data, image.Width(), image.Height(), QImage::Format_RGB888);
-  //  q_image.save("/tmp/ign_qimage.png");
+  QPainter painter;
+  painter.begin(this);
+  painter.setRenderHint(QPainter::Antialiasing);
+  painter.drawImage(QRect(0, 0, width(), height()), this->dataPtr->image);
+  painter.drawImage(QRect(0, 0, width(), height()), QImage("/tmp/ign_qimage.png"));
+  QRectF rectangle(10.0, 20.0, 80.0, 60.0);
+  int startAngle = 30 * 16;
+  int spanAngle = 120 * 16;
 
-  QImage q_image("/tmp/initial_image.png");
-
-  makeCurrent();
-  glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_ACCUM_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
-  glMatrixMode(GL_TEXTURE);
-  glLoadIdentity();
-
-  glDisable(GL_DEPTH_TEST);
-  glEnable(GL_TEXTURE_2D);
-  QOpenGLTexture texture(q_image);
-  texture.setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
-  texture.setMagnificationFilter(QOpenGLTexture::Linear);
-  glBindTexture(GL_TEXTURE_2D, texture.textureId());
-  //  this->dataPtr->texture_blitter.bind(GL_TEXTURE_2D);
-  //  QMatrix4x4 target;
-  //  target.setToIdentity();
-  //  target.translate(0, 0, -1); // If all zeros the scene is randomly visible.
-  //  this->dataPtr->texture_blitter.blit(texture.textureId(), target, QOpenGLTextureBlitter::OriginTopLeft);
-  //  this->dataPtr->texture_blitter.release();
-  glBegin(GL_QUADS);
-  // Bottom left
-  glTexCoord2f(0, 0);
-  glVertex3f(-1, -1, -1);
-
-  // Top left
-  glTexCoord2f(0, 1);
-  glVertex3f(-1, 1, -1);
-
-  // Top right
-  glTexCoord2f(1, 1);
-  glVertex3f(1, 1, -1);
-
-  // Bottom right
-  glTexCoord2f(1, 0);
-  glVertex3f(1, -1, -1);
-  glEnd();
-  texture.release();
-  texture.destroy();
-  glDisable(GL_TEXTURE_2D);
-  doneCurrent();
-}
-
-void SimpleRenderWidget::drawUsingQtPaintGL()
-{
-  makeCurrent();
-  ignition::rendering::Image render_image = this->dataPtr->renderer.Render();
-  doneCurrent();
-  //  auto* render_data = render_image.Data<unsigned char>();
-
-  //  //  ignerr << "Image, w: " << image.Width() << " h: " << image.Height() << std::endl;
-  //  ignition::common::Image tmp;
-  //  tmp.SetFromData(render_data, render_image.Width(), render_image.Height(), ignition::common::Image::RGB_INT8);
-  //  tmp.SavePNG("/tmp/ign_image.png");
-
-  //  QImage q_image(data, image.Width(), image.Height(), QImage::Format_RGB888);
-  //  q_image.save("/tmp/ign_qimage.png");
-  //  ignition::common::Image image("/tmp/ign_image.png");
-  //  ignition::common::Image image("/tmp/initial_image.png");
-  //  unsigned char *data = nullptr;
-  //  unsigned int cnt = 0;
-  //  image.Data(&data, cnt);
-
-  //  QImage q_image(data, image.Width(), image.Height(), QImage::Format_RGB888);
-  //  q_image.save("/tmp/ign_qimage.png");
-
-  //  QOpenGLTexture *texture = new QOpenGLTexture(q_image.mirrored());
-  //  texture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
-  //  texture->setMagnificationFilter(QOpenGLTexture::Linear);
-  //  glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-  //  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_ACCUM_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-
-  //  glMatrixMode(GL_PROJECTION);
-  //  glLoadIdentity();
-  //  glMatrixMode(GL_MODELVIEW);
-  //  glLoadIdentity();
-  //  glMatrixMode(GL_TEXTURE);
-  //  glLoadIdentity();
-
-  makeCurrent();
-  glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_ACCUM_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-  glBindTexture(GL_TEXTURE_2D, this->dataPtr->renderer.texture_id);
-  glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-  this->dataPtr->texture_blitter.bind(GL_TEXTURE_2D);
-  const QRect targetRect(QPoint(0, 0), size());
-  QMatrix4x4 target =
-      QOpenGLTextureBlitter::targetTransform(targetRect, QRect(QPoint(0, 0), this->dataPtr->renderer.textureSize));
-  target.translate(0, 0, -1);  // If all zeros the scene is randomly visible.
-  this->dataPtr->texture_blitter.blit(this->dataPtr->renderer.texture_id, target, QOpenGLTextureBlitter::OriginTopLeft);
-  this->dataPtr->texture_blitter.release();
-  doneCurrent();
-}
-void SimpleRenderWidget::drawPixelsPaintGL()
-{
-  //  ignition::rendering::Image render_image = this->dataPtr->renderer.Render();
-  //  auto* data = image.Data<unsigned char>();
-
-  //  //  ignerr << "Image, w: " << image.Width() << " h: " << image.Height() << std::endl;
-  //  ignition::common::Image tmp;
-  //  tmp.SetFromData(render_data, render_image.Width(), render_image.Height(), ignition::common::Image::RGB_INT8);
-  //  tmp.SavePNG("/tmp/ign_image.png");
-
-  //  QImage q_image(render_data, render_image.Width(), render_image.Height(), QImage::Format_RGB888);
-  //  q_image.save("/tmp/ign_qimage.png");
-
-  ignition::common::Image image("/tmp/ign_image.png");
-  unsigned char* data = nullptr;
-  unsigned int cnt = 0;
-  image.Data(&data, cnt);
-
-  makeCurrent();
-
-  // The next four commands fix the issue with flipping raster position when using glDrawPixels
-  // though there is still an issue with using the texture which works when using glut
-  auto imgw = image.Width();
-  auto imgh = image.Height();
-  glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_ACCUM_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
-  glMatrixMode(GL_TEXTURE);
-  glLoadIdentity();
-
-  //    glDeleteTextures(1, &(this->dataPtr->texture));
-  //    glGenTextures(1, &(this->dataPtr->texture));
-  //    glBindTexture(GL_TEXTURE_2D, this->dataPtr->texture);
-
-  //    glPushMatrix();
-  //    glBegin(GL_QUADS);
-  //    glTexCoord2f (0, 1); glVertex3f (-1, 1, 0);
-  //    glTexCoord2f (0, 0); glVertex3f (-1, -1, 0);
-  //    glTexCoord2f (1, 0); glVertex3f ( 1, -1, 0);
-  //    glTexCoord2f (1, 1); glVertex3f ( 1, 1, 0);
-  //    glEnd();
-  //    glPopMatrix ();
-
-  glPixelStorei(GL_UNPACK_SWAP_BYTES, GL_FALSE);
-  glPixelStorei(GL_UNPACK_LSB_FIRST, GL_FALSE);
-  glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-  glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
-  glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
-  glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
-  glPixelStorei(GL_UNPACK_IMAGE_HEIGHT, 0);
-  glPixelStorei(GL_UNPACK_SKIP_IMAGES, 0);
-
-  glPixelTransferi(GL_MAP_COLOR, GL_FALSE);
-  glPixelTransferi(GL_MAP_STENCIL, GL_FALSE);
-  glPixelTransferi(GL_INDEX_SHIFT, 0);
-  glPixelTransferi(GL_INDEX_OFFSET, 0);
-  glPixelTransferf(GL_RED_SCALE, 1.0);
-  glPixelTransferf(GL_GREEN_SCALE, 1.0);
-  glPixelTransferf(GL_BLUE_SCALE, 1.0);
-  glPixelTransferf(GL_ALPHA_SCALE, 1.0);
-  glPixelTransferf(GL_DEPTH_SCALE, 1.0);
-  glPixelTransferf(GL_RED_BIAS, 0.0);
-  glPixelTransferf(GL_GREEN_BIAS, 0.0);
-  glPixelTransferf(GL_BLUE_BIAS, 0.0);
-  glPixelTransferf(GL_ALPHA_BIAS, 0.0);
-  glPixelTransferf(GL_DEPTH_BIAS, 0.0);
-
-  glPixelZoom(1, -1);
-  glRasterPos2f(-1, 1);
-  glDisable(GL_DITHER);
-  glDisable(GL_DEPTH_TEST);
-  glDrawPixels(imgw, imgh, GL_RGB, GL_UNSIGNED_BYTE, data);
-  glEnable(GL_DITHER);
-  glEnable(GL_DEPTH_TEST);
-
-  doneCurrent();
-}
-
-void SimpleRenderWidget::drawTexturePaintGL()
-{
-  //  ignition::rendering::Image render_image = this->dataPtr->renderer.Render();
-  //  auto* data = image.Data<unsigned char>();
-
-  //  //  ignerr << "Image, w: " << image.Width() << " h: " << image.Height() << std::endl;
-  //  ignition::common::Image tmp;
-  //  tmp.SetFromData(render_data, render_image.Width(), render_image.Height(), ignition::common::Image::RGB_INT8);
-  //  tmp.SavePNG("/tmp/ign_image.png");
-
-  //  QImage q_image(render_data, render_image.Width(), render_image.Height(), QImage::Format_RGB888);
-  //  q_image.save("/tmp/ign_qimage.png");
-
-  ignition::common::Image image("/tmp/ign_image.png");
-  unsigned char* data = nullptr;
-  unsigned int cnt = 0;
-  image.Data(&data, cnt);
-
-  makeCurrent();
-
-  // The next four commands fix the issue with flipping raster position when using glDrawPixels
-  // though there is still an issue with using the texture which works when using glut
-  auto imgw = image.Width();
-  auto imgh = image.Height();
-  glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_ACCUM_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
-  glMatrixMode(GL_TEXTURE);
-  glLoadIdentity();
-
-  glEnable(GL_TEXTURE_2D);
-  glViewport(0, 0, (GLsizei)imgw, (GLsizei)imgh);
-  glDeleteTextures(1, &(this->dataPtr->texture));
-  glGenTextures(1, &(this->dataPtr->texture));
-  glBindTexture(GL_TEXTURE_2D, this->dataPtr->texture);
-
-  glPixelStorei(GL_UNPACK_SWAP_BYTES, GL_FALSE);
-  glPixelStorei(GL_UNPACK_LSB_FIRST, GL_FALSE);
-  glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-  glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
-  glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
-  glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
-  glPixelStorei(GL_UNPACK_IMAGE_HEIGHT, 0);
-  glPixelStorei(GL_UNPACK_SKIP_IMAGES, 0);
-
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, (GLint)imgw, (GLint)imgh, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
-  glBegin(GL_QUADS);
-  // Bottom left
-  glTexCoord2d(imgw, imgh);
-  glVertex2f(-1, -1);
-
-  // Top left
-  glTexCoord2d(0, imgh);
-  glVertex2f(1, -1);
-
-  // Top right
-  glTexCoord2d(0, 0);
-  glVertex2f(1, 1);
-
-  // Bottom right
-  glTexCoord2d(imgw, 0);
-  glVertex2f(-1, 1);
-  glEnd();
-  glDisable(GL_TEXTURE_2D);
-  glFlush();
-
-  doneCurrent();
-}
-/////////////////////////////////////////////////
-void SimpleRenderWidget::paintGL()
-{
-  drawOffsreenPaintGL();
-  //  drawStaticImagePaintGL();
-  //  drawUsingQtPaintGL();
-  //  drawPixelsPaintGL();
-  //  drawTexturePaintGL();
+  painter.drawArc(rectangle, startAngle, spanAngle);
+  painter.end();
 }
 
 /////////////////////////////////////////////////
-void SimpleRenderWidget::SetBackgroundColor(const ignition::math::Color& _color)
+void QPainterRenderWidget::SetBackgroundColor(const ignition::math::Color& _color)
 {
   this->dataPtr->renderer.backgroundColor = _color;
 }
 
 /////////////////////////////////////////////////
-void SimpleRenderWidget::SetAmbientLight(const ignition::math::Color& _ambient)
+void QPainterRenderWidget::SetAmbientLight(const ignition::math::Color& _ambient)
 {
   this->dataPtr->renderer.ambientLight = _ambient;
 }
 
 /////////////////////////////////////////////////
-void SimpleRenderWidget::SetEngineName(const std::string& _name) { this->dataPtr->renderer.engineName = _name; }
+void QPainterRenderWidget::SetEngineName(const std::string& _name) { this->dataPtr->renderer.engineName = _name; }
 
 /////////////////////////////////////////////////
-void SimpleRenderWidget::SetSceneName(const std::string& _name) { this->dataPtr->renderer.sceneName = _name; }
+void QPainterRenderWidget::SetSceneName(const std::string& _name) { this->dataPtr->renderer.sceneName = _name; }
 
 /////////////////////////////////////////////////
-void SimpleRenderWidget::SetCameraPose(const ignition::math::Pose3d& _pose)
+void QPainterRenderWidget::SetCameraPose(const ignition::math::Pose3d& _pose)
 {
   this->dataPtr->renderer.cameraPose = _pose;
 }
 
 /////////////////////////////////////////////////
-void SimpleRenderWidget::SetCameraNearClip(double _near) { this->dataPtr->renderer.cameraNearClip = _near; }
+void QPainterRenderWidget::SetCameraNearClip(double _near) { this->dataPtr->renderer.cameraNearClip = _near; }
 
 /////////////////////////////////////////////////
-void SimpleRenderWidget::SetCameraFarClip(double _far) { this->dataPtr->renderer.cameraFarClip = _far; }
+void QPainterRenderWidget::SetCameraFarClip(double _far) { this->dataPtr->renderer.cameraFarClip = _far; }
 
 /////////////////////////////////////////////////
-void SimpleRenderWidget::SetSkyEnabled(const bool& _sky) { this->dataPtr->renderer.skyEnable = _sky; }
+void QPainterRenderWidget::SetSkyEnabled(const bool& _sky) { this->dataPtr->renderer.skyEnable = _sky; }
 
-void SimpleRenderWidget::SetGridEnabled(bool _grid) { this->dataPtr->renderer.gridEnable = _grid; }
+void QPainterRenderWidget::SetGridEnabled(bool _grid) { this->dataPtr->renderer.gridEnable = _grid; }
 
 /////////////////////////////////////////////////
 // void MinimalScene::LoadConfig(const tinyxml2::XMLElement *_pluginElem)
@@ -1103,23 +738,23 @@ void SimpleRenderWidget::SetGridEnabled(bool _grid) { this->dataPtr->renderer.gr
 //}
 
 /////////////////////////////////////////////////
-void SimpleRenderWidget::OnHovered(int _mouseX, int _mouseY)
+void QPainterRenderWidget::OnHovered(int _mouseX, int _mouseY)
 {
   this->dataPtr->renderer.NewHoverEvent({ _mouseX, _mouseY });
   update();
 }
 
 /////////////////////////////////////////////////
-void SimpleRenderWidget::OnDropped(const QString& _drop, int _mouseX, int _mouseY)
+void QPainterRenderWidget::OnDropped(const QString& _drop, int _mouseX, int _mouseY)
 {
   this->dataPtr->renderer.NewDropEvent(_drop.toStdString(), { _mouseX, _mouseY });
   update();
 }
 
-void SimpleRenderWidget::OnResized() { update(); }
+void QPainterRenderWidget::OnResized() { update(); }
 
 /////////////////////////////////////////////////
-void SimpleRenderWidget::mousePressEvent(QMouseEvent* _e)
+void QPainterRenderWidget::mousePressEvent(QMouseEvent* _e)
 {
   this->dataPtr->mouseEvent = convert(*_e);
   this->dataPtr->mouseEvent.SetPressPos(this->dataPtr->mouseEvent.Pos());
@@ -1129,7 +764,7 @@ void SimpleRenderWidget::mousePressEvent(QMouseEvent* _e)
 }
 
 ////////////////////////////////////////////////
-void SimpleRenderWidget::keyPressEvent(QKeyEvent* _e)
+void QPainterRenderWidget::keyPressEvent(QKeyEvent* _e)
 {
   if (_e->isAutoRepeat())
     return;
@@ -1140,7 +775,7 @@ void SimpleRenderWidget::keyPressEvent(QKeyEvent* _e)
 }
 
 ////////////////////////////////////////////////
-void SimpleRenderWidget::keyReleaseEvent(QKeyEvent* _e)
+void QPainterRenderWidget::keyReleaseEvent(QKeyEvent* _e)
 {
   if (_e->isAutoRepeat())
     return;
@@ -1151,7 +786,7 @@ void SimpleRenderWidget::keyReleaseEvent(QKeyEvent* _e)
 }
 
 ////////////////////////////////////////////////
-void SimpleRenderWidget::mouseReleaseEvent(QMouseEvent* _e)
+void QPainterRenderWidget::mouseReleaseEvent(QMouseEvent* _e)
 {
   // Store values that depend on previous events
   auto pressPos = this->dataPtr->mouseEvent.PressPos();
@@ -1166,7 +801,7 @@ void SimpleRenderWidget::mouseReleaseEvent(QMouseEvent* _e)
 }
 
 ////////////////////////////////////////////////
-void SimpleRenderWidget::mouseMoveEvent(QMouseEvent* _e)
+void QPainterRenderWidget::mouseMoveEvent(QMouseEvent* _e)
 {
   // Store values that depend on previous events
   auto pressPos = this->dataPtr->mouseEvent.PressPos();
@@ -1181,7 +816,7 @@ void SimpleRenderWidget::mouseMoveEvent(QMouseEvent* _e)
 }
 
 ////////////////////////////////////////////////
-void SimpleRenderWidget::wheelEvent(QWheelEvent* _e)
+void QPainterRenderWidget::wheelEvent(QWheelEvent* _e)
 {
   //  this->forceActiveFocus();
 
@@ -1191,18 +826,17 @@ void SimpleRenderWidget::wheelEvent(QWheelEvent* _e)
 }
 
 ////////////////////////////////////////////////
-void SimpleRenderWidget::HandleKeyPress(const ignition::common::KeyEvent& _e)
+void QPainterRenderWidget::HandleKeyPress(const ignition::common::KeyEvent& _e)
 {
   this->dataPtr->renderer.HandleKeyPress(_e);
   update();
 }
 
 ////////////////////////////////////////////////
-void SimpleRenderWidget::HandleKeyRelease(const ignition::common::KeyEvent& _e)
+void QPainterRenderWidget::HandleKeyRelease(const ignition::common::KeyEvent& _e)
 {
   this->dataPtr->renderer.HandleKeyRelease(_e);
   update();
 }
 
-void SimpleRenderWidget::messageLogged(const QOpenGLDebugMessage& debug_msg) { qDebug() << debug_msg; }
 }  // namespace tesseract_gui

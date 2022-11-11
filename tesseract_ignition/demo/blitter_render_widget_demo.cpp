@@ -26,8 +26,7 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <QDebug>
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
-#include <tesseract_ignition/glut_render_widget.h>
-#include <tesseract_ignition/interactive_view_control.h>
+#include <tesseract_ignition/blitter_render_widget.h>
 
 int main(int argc, char** argv)
 {
@@ -35,12 +34,8 @@ int main(int argc, char** argv)
 
   Q_INIT_RESOURCE(tesseract_qt_resources);
 
-  std::string scene_name = "scene";
-  tesseract_gui::GlutRenderWidget widget(scene_name);
+  tesseract_gui::BlitterRenderWidget widget;
   widget.show();
-
-  tesseract_gui::InteractiveViewControl view_control(scene_name);
-  app.installEventFilter(&view_control);
 
   return app.exec();
 }

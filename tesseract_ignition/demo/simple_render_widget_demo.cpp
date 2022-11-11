@@ -31,18 +31,24 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 int main(int argc, char** argv)
 {
+  //  QApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
   QApplication app(argc, argv);
 
-  QSurfaceFormat format;
-  format.setMajorVersion(3);
-  format.setMinorVersion(2);
-  format.setProfile(QSurfaceFormat::CoreProfile);
-  format.setOption(QSurfaceFormat::DebugContext);
-
-  Q_INIT_RESOURCE(tesseract_widgets_resources);
+  Q_INIT_RESOURCE(tesseract_qt_resources);
 
   std::string scene_name = "scene";
   tesseract_gui::SimpleRenderWidget widget(scene_name);
+  widget.SetSkyEnabled(true);
+  //  QSurfaceFormat format(QSurfaceFormat::DeprecatedFunctions);
+  //  format.setDepthBufferSize(24);
+  //  format.setStencilBufferSize(8);
+  //  format.setMajorVersion(4);
+  //  format.setMinorVersion(1);
+  //  format.setProfile(QSurfaceFormat::CoreProfile);
+  //  format.setOption(QSurfaceFormat::DebugContext);
+  //  format.setRenderableType(QSurfaceFormat::OpenGL);
+  //  widget.setFormat(format);
+
   widget.show();
 
   tesseract_gui::InteractiveViewControl view_control(scene_name);

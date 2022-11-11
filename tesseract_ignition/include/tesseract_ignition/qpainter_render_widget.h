@@ -1,5 +1,5 @@
-#ifndef TESSERACT_IGNITION_SIMPLE_RENDER_WIDGET_H
-#define TESSERACT_IGNITION_SIMPLE_RENDER_WIDGET_H
+#ifndef QPAINTER_RENDER_WIDGET_H
+#define QPAINTER_RENDER_WIDGET_H
 
 #include <ignition/common/KeyEvent.hh>
 #include <ignition/common/MouseEvent.hh>
@@ -12,11 +12,10 @@
 #include <QWidget>
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
-#include <QOpenGLDebugMessage>
 
 namespace tesseract_gui
 {
-class SimpleRendererImpl;
+class QPainterRendererImpl;
 
 /// \brief Ign-rendering renderer.
 /// All ign-rendering calls should be performed inside this class as it makes
@@ -24,15 +23,15 @@ class SimpleRendererImpl;
 /// with QtQuick's opengl render operations. The main Render function will
 /// render to an offscreen texture and notify via signal and slots when it's
 /// ready to be displayed.
-class SimpleRenderer
+class QPainterRenderer
 {
 public:
   ///  \brief Constructor
-  SimpleRenderer();
+  QPainterRenderer();
 
   /// \param[in] _renderSync RenderSync to safely
   /// synchronize Qt and worker thread (this)
-  ignition::rendering::Image Render();
+  QImage Render();
 
   /// \brief Resize the camera
   void Resize(int width, int height);
@@ -65,7 +64,7 @@ public:
   void HandleKeyRelease(const ignition::common::KeyEvent& _e);
 
   /// \brief Render engine to use
-  std::string engineName = "ogre2";
+  std::string engineName = "ogre";
 
   /// \brief Unique scene name
   std::string sceneName = "scene";
@@ -90,9 +89,6 @@ public:
 
   /// \brief Render texture size
   QSize textureSize = QSize(1920, 1200);
-
-  /// \brief Render texture size
-  unsigned int texture_id;
 
   /// \brief Flag to indicate texture size has changed.
   bool textureDirty = false;
@@ -142,20 +138,20 @@ private:
 
   /// \internal
   /// \brief Pointer to private data.
-  std::unique_ptr<SimpleRendererImpl> dataPtr;
+  std::unique_ptr<QPainterRendererImpl> dataPtr;
 };
 
-class SimpleRenderWidgetImpl;
+class QPainterRenderWidgetImpl;
 
-class SimpleRenderWidget : public QOpenGLWidget, protected QOpenGLFunctions
+class QPainterRenderWidget : public QOpenGLWidget, protected QOpenGLFunctions
 {
   Q_OBJECT
 public:
   /// \brief Constructor
   /// \param[in] _parent Parent item
-  explicit SimpleRenderWidget(const std::string& scene_name, QWidget* _parent = nullptr);
+  explicit QPainterRenderWidget(const std::string& scene_name, QWidget* _parent = nullptr);
 
-  ~SimpleRenderWidget();
+  ~QPainterRenderWidget();
 
   /// \brief Set background color of render window
   /// \param[in] _color Color of render window background
@@ -216,9 +212,6 @@ public:
   /// \param[in] _e The key event to process.
   void HandleKeyRelease(const ignition::common::KeyEvent& _e);
 
-public Q_SLOTS:
-  void messageLogged(const QOpenGLDebugMessage& debug_msg);
-
 protected:
   // Documentation inherited
   void mousePressEvent(QMouseEvent* _e) override;
@@ -242,24 +235,12 @@ protected:
   void initializeGL() override;
 
   // Documentation inherited
-  void resizeGL(int w, int h) override;
-
-  // Documentation inherited
-  void paintGL() override;
-
-  void drawOffsreenPaintGL();
-
-  void drawStaticImagePaintGL();
-
-  void drawPixelsPaintGL();
-
-  void drawTexturePaintGL();
-
-  void drawUsingQtPaintGL();
+  void paintEvent(QPaintEvent* event) override;
 
   /// \internal
   /// \brief Pointer to private data.
-  std::unique_ptr<SimpleRenderWidgetImpl> dataPtr;
+  std::unique_ptr<QPainterRenderWidgetImpl> dataPtr;
 };
 }  // namespace tesseract_gui
-#endif  // TESSERACT_IGNITION_SIMPLE_RENDER_WIDGET_H
+
+#endif  // QPAINTER_RENDER_WIDGET_H

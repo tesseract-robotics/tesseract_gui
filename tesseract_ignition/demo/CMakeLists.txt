@@ -15,6 +15,30 @@ target_link_libraries(
           Qt5::Core
           Qt5::Widgets)
 
+add_executable(${PROJECT_NAME}_basic_render_widget_demo basic_render_widget_demo.cpp)
+target_link_libraries(
+    ${PROJECT_NAME}_basic_render_widget_demo
+    PRIVATE ${PROJECT_NAME}_basic_render_widget
+            tesseract::tesseract_common
+            Qt5::Core
+            Qt5::Widgets)
+
+add_executable(${PROJECT_NAME}_blitter_render_widget_demo blitter_render_widget_demo.cpp)
+target_link_libraries(
+    ${PROJECT_NAME}_blitter_render_widget_demo
+    PRIVATE ${PROJECT_NAME}_blitter_render_widget
+            tesseract::tesseract_common
+            Qt5::Core
+            Qt5::Widgets)
+
+add_executable(${PROJECT_NAME}_qpainter_render_widget_demo qpainter_render_widget_demo.cpp)
+target_link_libraries(
+    ${PROJECT_NAME}_qpainter_render_widget_demo
+    PRIVATE ${PROJECT_NAME}_qpainter_render_widget
+            tesseract::tesseract_common
+            Qt5::Core
+            Qt5::Widgets)
+
 add_executable(${PROJECT_NAME}_threaded_render_widget_demo threaded_render_widget_demo.cpp)
 target_link_libraries(
   ${PROJECT_NAME}_threaded_render_widget_demo
@@ -35,5 +59,8 @@ install_targets(
   TARGETS
   ${PROJECT_NAME}_qquick_render_widget_demo
   ${PROJECT_NAME}_simple_render_widget_demo
+  ${PROJECT_NAME}_basic_render_widget_demo
+  ${PROJECT_NAME}_qpainter_render_widget_demo
+  ${PROJECT_NAME}_blitter_render_widget_demo
   ${PROJECT_NAME}_glut_render_widget_demo
   ${PROJECT_NAME}_threaded_render_widget_demo)

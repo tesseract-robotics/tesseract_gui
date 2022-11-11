@@ -35,7 +35,7 @@ int main(int argc, char** argv)
 {
   QApplication app(argc, argv);
 
-  Q_INIT_RESOURCE(tesseract_widgets_resources);
+  Q_INIT_RESOURCE(tesseract_qt_resources);
   Q_INIT_RESOURCE(minimal_scene);
 
   qmlRegisterType<tesseract_gui::RenderWindowItem>("RenderWindow", 1, 0, "RenderWindow");
